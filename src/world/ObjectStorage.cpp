@@ -37,7 +37,7 @@ const char * gPvPAreaFormat								= "ush";
 const char * gFishingFormat								= "uuu";
 const char * gWorldMapInfoFormat						= "uuuuufffusuuuuuuufu";
 const char * gZoneGuardsFormat							= "uuu";
-const char * gUnitModelSizeFormat						= "uf";
+const char * gUnitModelSizeFormat						= "ufu";
 // cebernic extended
 const char * gWorldStringTableFormat        = "us"; // p2wow added [for worldserver common message storage]
 const char * gWorldBroadCastFormat          = "usu";// announce message

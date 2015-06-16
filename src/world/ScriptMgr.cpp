@@ -67,7 +67,7 @@ void ScriptMgr::LoadScripts()
 	Log.Notice("Server","Loading External Script Libraries...");
 	sLog.outString("");
 
-	string start_path = Config.MainConfig.GetStringDefault( "Script", "BinaryLocation", "script_bin" ) + "\\";
+	string start_path = Config.MainConfig.GetStringDefault( "Script", "BinaryLocation", "modules" ) + "\\";
 	string search_path = start_path + "*.";
 
 	vector< ScriptingEngine > ScriptEngines;
