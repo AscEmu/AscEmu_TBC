@@ -21,23 +21,21 @@ What are "useful" commits?
 
 Anything else like "fun-content" is NOT useful!
 
-<!---
+
 ## Install
 HowTo install (detailed guides on our wiki)
 * [Windows](http://www.ascemu.org//wiki/index.php?title=3.3.5_Windows)
 * [Ubuntu](http://www.ascemu.org/wiki/index.php?title=3.3.5_Ubuntu) (outdated)
 * [Mac OSX](http://www.ascemu.org/wiki/index.php?title=3.3.5_Mac_OSX) (outdated)
--->
+
 
 ## Links
 * [Web](http://www.ascemu.org)
 * [Forums](http://www.board.ascemu.org)
 * [Wiki](http://www.ascemu.org/wiki/)
-
-<!---
 * [Doxygen](http://www.ascemu.org/doxygen/)
-* [World DB](http://www.board.ascemu.org/filebase/index.php/FileList/1-Database/)
--->
+* [World DB](http://www.board.ascemu.org/filebase/index.php/File/4-AscEmu-full-world-2-4-3/)
+
 
 
 ### Copyright and other Stuff
