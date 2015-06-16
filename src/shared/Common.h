@@ -746,6 +746,9 @@ inline static unsigned int MakeIP(const char * str)
 	return res;
 }
 
+#include "DynLib.hpp"
+#include "FindFiles.hpp"
+
 // warning, by enabling this define you are aware that you are only delaying the inevitable
 // some crashes are not recorable and those will stack up in time and lead to a full crash
 // enabling this define will make windows servers shut down only the map instance in where the crash ocured

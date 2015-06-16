@@ -20,7 +20,7 @@
 
 #include "StdAfx.h"
 #include "AuthCodes.h"
-#include "svn_revision.h"
+#include "git_version.h"
 
 LoginErrorCode VerifyName(const char * name, size_t nlen)
 {
@@ -862,7 +862,7 @@ void WorldSession::FullLogin(Player * plr)
 	// Send revision (if enabled)
 #ifdef WIN32
 	_player->BroadcastMessage("Powered by: %sArcEmu %s r%u/%s-Win-%s %s(Please report ALL bugs to www.ArcEmu.org/forums/)", MSG_COLOR_WHITE, BUILD_TAG,
-		BUILD_REVISION, CONFIG, ARCH, MSG_COLOR_LIGHTBLUE);		
+		BUILD_HASH_STR, CONFIG, ARCH, MSG_COLOR_LIGHTBLUE);		
 #else
 	_player->BroadcastMessage("Powered by: %sArcEmu %s r%u/%s-%s %s(Please report ALL bugs to www.ArcEmu.org/forums/)", MSG_COLOR_WHITE, BUILD_TAG,
 		BUILD_REVISION, PLATFORM_TEXT, ARCH, MSG_COLOR_LIGHTBLUE);

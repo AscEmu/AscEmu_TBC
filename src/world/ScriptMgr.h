@@ -121,7 +121,7 @@ typedef bool(*exp_handle_dummy_aura)(uint32 i, Aura * pAura, bool apply);
 typedef void(*exp_script_register)(ScriptMgr * mgr);
 typedef uint32(*exp_get_script_type)();
 
-typedef uint32(*exp_get_version)();
+typedef const char*(*exp_get_version)();
 
 /* Hashmap typedefs */
 typedef HM_NAMESPACE::hash_map<uint32, exp_create_creature_ai> CreatureCreateMap;
@@ -132,6 +132,7 @@ typedef set<GossipScript*> CustomGossipScripts;
 typedef set<QuestScript*> QuestScripts;
 typedef list<void*> ServerHookList;
 typedef list<SCRIPT_MODULE> LibraryHandleMap;
+typedef std::list< Arcemu::DynLib* > DynamicLibraryMap;
 
 #define VISIBLE_RANGE (26.46f)
 #define MAX_SCRIPTS 1000
@@ -174,6 +175,7 @@ protected:
 	HandleDummyAuraMap _auras;
 	HandleDummySpellMap _spells;
 	LibraryHandleMap _handles;
+    DynamicLibraryMap dynamiclibs;
 	ServerHookList _hooks[NUM_SERVER_HOOKS];
 	GossipScript * DefaultGossipScript;
 	CustomGossipScripts _customgossipscripts;

@@ -5,7 +5,7 @@ file(GLOB_RECURSE sources_Config Config/*.cpp Config/*.h)
 file(GLOB_RECURSE sources_Database Database/*.cpp Database/*.h)
 file(GLOB_RECURSE sources_Network Network/*.cpp Network/*.h)
 file(GLOB_RECURSE sources_Threading Threading/*.cpp Threading/*.h)
-file(GLOB sources_localdir *.cpp *.h)
+file(GLOB sources_localdir *.cpp *.h *.hpp)
 
 set(arcemu_shared_SRCS
   ${arcemu_shared_SRCS}

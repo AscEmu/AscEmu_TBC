@@ -19,7 +19,7 @@
  */
 
 #include "StdAfx.h"
-#include "svn_revision.h"
+#include "git_version.h"
 
 #ifdef CLUSTERING
 
