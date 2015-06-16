@@ -98,6 +98,7 @@ ENDIF( WIN32 )
 
 SET(ASCEMU_SCRIPTLIB_PATH "modules" CACHE PATH "The directory which contains the 'lib' directory that has the script libraries." )
 SET(BUILD_ASCEMUSCRIPTS FALSE CACHE BOOL "Set to false to NOT build script libraries." )
+SET(BUILD_ASCEMULUA FALSE CACHE BOOL "Set to false to NOT build the luaengine." )
 SET(BUILD_TOOLS FALSE CACHE BOOL "Build Ascemu tools" )
 SET(VISUALSTUDIO_COMPILERHEAPLIMIT 400 CACHE STRING "Visual Studio compiler heap limit. Ignore on darwin and unix platforms.")
 
@@ -238,8 +239,8 @@ add_subdirectory(cmake/detour)
 add_subdirectory(src/shared)
 add_subdirectory(src/logonserver)
 add_subdirectory(src/world)
-
-#add_subdirectory(cmake/scripts)
+add_subdirectory(src/scripts)
+add_subdirectory(src/luaengine)
 
 IF( BUILD_TOOLS )
 	add_subdirectory(cmake/tools)
