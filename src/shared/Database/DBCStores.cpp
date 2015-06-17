@@ -103,7 +103,7 @@ const char * durabilitycostsFormat = "uuuuuuuuuuuuuuuuuuuuuuuuuuuuuu";
 const char* bankslotpriceformat = "uu";
 const char* gtfloatformat = "f";
 const char* areatriggerformat = "uuffffffff";
-const char* wmoareaformat = "uiiixxxxxuuxxxxxxxxxxxxxxxxu";
+const char* wmoareaformat = "uiiixxxxxuuxxxxxxxxxxxxxxxxx";
 //const char* chartitleFormat = "uxsxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxu";
 
 template<class T>
