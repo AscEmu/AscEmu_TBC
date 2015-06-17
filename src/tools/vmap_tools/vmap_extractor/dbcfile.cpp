@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2011 MaNGOS <http://getmangos.com/>
+ * Copyright (C) 2005-2015  MaNGOS project <http://getmangos.eu>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -8,26 +8,30 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ *
+ * World of Warcraft, and all World of Warcraft or Warcraft art, images,
+ * and lore are copyrighted by Blizzard Entertainment, Inc.
  */
 
 #include "dbcfile.h"
-#include "mpq_libmpq04.h"
 #undef min
 #undef max
+#include "mpq_libmpq.h"
 
 #include <cstdio>
 
-DBCFile::DBCFile(const std::string &filename) : filename(filename)
+DBCFile::DBCFile(const std::string& filename):
+    filename(filename),
+    data(0)
 {
-    data = NULL;
-}
 
+}
 bool DBCFile::open()
 {
     MPQFile f(filename.c_str());
@@ -35,42 +39,91 @@ bool DBCFile::open()
     // Need some error checking, otherwise an unhandled exception error occurs
     // if people screw with the data path.
     if (f.isEof() == true)
-        return false;
-
-    unsigned char header[4];
-    unsigned int na,nb,es,ss;
-
-    f.read(header,4); // File Header
-
-    if (header[0]!='W' || header[1]!='D' || header[2]!='B' || header[3] != 'C')
     {
         f.close();
         data = NULL;
-        printf("Critical Error: An error occured while trying to read the DBCFile %s.", filename.c_str());
+        printf("Could not open DBCFile %s.\n", filename.c_str());
         return false;
     }
 
-    //assert(header[0]=='W' && header[1]=='D' && header[2]=='B' && header[3] == 'C');
+    unsigned char header[4];
+    unsigned int na, nb, es, ss;
 
-    f.read(&na,4); // Number of records
-    f.read(&nb,4); // Number of fields
-    f.read(&es,4); // Size of a record
-    f.read(&ss,4); // String size
+    if (f.read(header, 4) != 4)                             // Number of records
+    {
+        f.close();
+        data = NULL;
+        printf("Could not read header in DBCFile %s.\n", filename.c_str());
+        return false;
+    }
+
+    if (header[0] != 'W' || header[1] != 'D' || header[2] != 'B' || header[3] != 'C')
+    {
+        f.close();
+        data = NULL;
+        printf("The header in DBCFile %s did not match.\n", filename.c_str());
+        return false;
+    }
+
+    if (f.read(&na, 4) != 4)                                // Number of records
+    {
+        f.close();
+        data = NULL;
+        printf("Could not read number of records from DBCFile %s.\n", filename.c_str());
+        return false;
+    }
+
+    if (f.read(&nb, 4) != 4)                                // Number of fields
+    {
+        f.close();
+        data = NULL;
+        printf("Could not read number of fields from DBCFile %s.\n", filename.c_str());
+        return false;
+    }
+
+    if (f.read(&es, 4) != 4)                                // Size of a record
+    {
+        f.close();
+        data = NULL;
+        printf("Could not read record size from DBCFile %s.\n", filename.c_str());
+        return false;
+    }
+
+    if (f.read(&ss, 4) != 4)                                // String size
+    {
+        f.close();
+        data = NULL;
+        printf("Could not read string block size from DBCFile %s.\n", filename.c_str());
+        return false;
+    }
 
     recordSize = es;
     recordCount = na;
     fieldCount = nb;
     stringSize = ss;
-    //assert(fieldCount*4 == recordSize);
-    assert(fieldCount*4 >= recordSize);
+    if (fieldCount * 4 != recordSize)
+    {
+        f.close();
+        data = NULL;
+        printf("Field count and record size in DBCFile %s do not match.\n", filename.c_str());
+        return false;
+    }
 
-    data = new unsigned char[recordSize*recordCount+stringSize];
-    stringTable = data + recordSize*recordCount;
-    f.read(data,recordSize*recordCount+stringSize);
+    data = new unsigned char[recordSize * recordCount + stringSize];
+    stringTable = data + recordSize * recordCount;
+
+    size_t data_size = recordSize * recordCount + stringSize;
+    if (f.read(data, data_size) != data_size)
+    {
+        f.close();
+        data = NULL;
+        printf("DBCFile %s did not contain expected amount of data for records.\n", filename.c_str());
+        return false;
+    }
+
     f.close();
     return true;
 }
-
 DBCFile::~DBCFile()
 {
     delete [] data;
@@ -79,7 +132,20 @@ DBCFile::~DBCFile()
 DBCFile::Record DBCFile::getRecord(size_t id)
 {
     assert(data);
-    return Record(*this, data + id*recordSize);
+    return Record(*this, data + id * recordSize);
+}
+
+size_t DBCFile::getMaxId()
+{
+    assert(data);
+
+    size_t maxId = 0;
+    for (size_t i = 0; i < getRecordCount(); ++i)
+    {
+        if (maxId < getRecord(i).getUInt(0))
+            { maxId = getRecord(i).getUInt(0); }
+    }
+    return maxId;
 }
 
 DBCFile::Iterator DBCFile::begin()
@@ -87,7 +153,6 @@ DBCFile::Iterator DBCFile::begin()
     assert(data);
     return Iterator(*this, data);
 }
-
 DBCFile::Iterator DBCFile::end()
 {
     assert(data);

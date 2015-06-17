@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2011 MaNGOS <http://getmangos.com/>
+ * Copyright (C) 2005-2015  MaNGOS project <http://getmangos.eu>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -8,12 +8,15 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ *
+ * World of Warcraft, and all World of Warcraft or Warcraft art, images,
+ * and lore are copyrighted by Blizzard Entertainment, Inc.
  */
 
 #include <string>
@@ -21,12 +24,26 @@
 
 #include "TileAssembler.h"
 
+const char* szVMAPMagic = "VMAP_4.0";
+
 //=======================================================
-int main(int argc, char* argv[])
+void Usage(char* prg)
 {
-    if(argc != 3)
+    printf("Usage: %s [OPTION]\n\n", prg);
+    printf("Assemble vmaps from extracted client model information.\n");
+    printf("\n");
+    printf("Example:\n");
+    printf("- provide source and target path:\n");
+    printf("  %s Buildings vmaps\n", prg);
+}
+
+int main(int argc, char** argv)
+{
+    printf("arcemu_tbc vmap (version %s) assembler\n\n", szVMAPMagic);
+
+    if (argc != 3)
     {
-        std::cout << "usage: " << argv[0] << " <raw data dir> <vmap dest dir>" << std::endl;
+        Usage(argv[0]);
         return 1;
     }
 
@@ -37,7 +54,7 @@ int main(int argc, char* argv[])
 
     VMAP::TileAssembler* ta = new VMAP::TileAssembler(src, dest);
 
-    if(!ta->convertWorld2())
+    if (!ta->convertWorld2())
     {
         std::cout << "exit with errors" << std::endl;
         delete ta;

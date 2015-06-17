@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2011 MaNGOS <http://getmangos.com/>
+ * Copyright (C) 2005-2015  MaNGOS project <http://getmangos.eu>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -8,40 +8,71 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ *
+ * World of Warcraft, and all World of Warcraft or Warcraft art, images,
+ * and lore are copyrighted by Blizzard Entertainment, Inc.
  */
 
 #ifndef WDTFILE_H
 #define WDTFILE_H
 
-#include "mpq_libmpq04.h"
+#include "mpq_libmpq.h"
 #include "wmo.h"
 #include <string>
 #include "stdlib.h"
 
 class ADTFile;
 
+/**
+ * @brief
+ *
+ */
 class WDTFile
 {
-public:
-    WDTFile(char* file_name, char* file_name1);
-    ~WDTFile(void);
-    bool init(char *map_id, unsigned int mapID);
+    public:
+        /**
+         * @brief
+         *
+         * @param file_name
+         * @param file_name1
+         */
+        WDTFile(char* file_name, char* file_name1);
+        /**
+         * @brief
+         *
+         */
+        ~WDTFile(void);
+        /**
+         * @brief
+         *
+         * @param map_id
+         * @param mapID
+         * @return bool
+         */
+        bool init(char* map_id, unsigned int mapID);
 
-    string* gWmoInstansName;
-    int gnWMO, nMaps;
+        string* gWmoInstansName; /**< TODO */
+        int gnWMO, nMaps; /**< TODO */
 
-    ADTFile* GetMap(int x, int z);
+        /**
+         * @brief
+         *
+         * @param x
+         * @param z
+         * @return ADTFile
+         */
+        ADTFile* GetMap(int x, int z);
 
-private:
-    MPQFile WDT;
-    bool maps[64][64];
-    string filename;
+    private:
+        MPQFile WDT; /**< TODO */
+        bool maps[64][64]; /**< TODO */
+        string filename; /**< TODO */
 };
 
 #endif

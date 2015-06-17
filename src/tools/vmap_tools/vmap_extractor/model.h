@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2011 MaNGOS <http://getmangos.com/>
+ * Copyright (C) 2005-2015  MaNGOS project <http://getmangos.eu>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -8,12 +8,15 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ *
+ * World of Warcraft, and all World of Warcraft or Warcraft art, images,
+ * and lore are copyrighted by Blizzard Entertainment, Inc.
  */
 
 #ifndef MODEL_H
@@ -21,50 +24,109 @@
 
 #include "loadlib.h"
 #include "vec3d.h"
-//#include "mpq.h"
 #include "modelheaders.h"
 #include <vector>
+#include "vmapexport.h"
 
-class Model;
 class WMOInstance;
 class MPQFile;
 
+/**
+ * @brief
+ *
+ * @param v
+ * @return Vec3D
+ */
 Vec3D fixCoordSystem(Vec3D v);
 
+/**
+ * @brief
+ *
+ */
 class Model
 {
-public:
-    ModelHeader header;
-    uint32 offsBB_vertices, offsBB_indices;
-    Vec3D *BB_vertices, *vertices;
-    uint16 *BB_indices, *indices;
-    size_t nIndices;
+    public:
+        ModelHeader header; /**< TODO */
+        ModelBoundingVertex* boundingVertices; /**< TODO */
+        Vec3D* vertices; /**< TODO */
+        uint16* indices; /**< TODO */
+        size_t nIndices; /**< TODO */
 
-    bool open();
-    bool ConvertToVMAPModel(char * outfilename);
+        /**
+         * @brief
+         *
+         * @param failedPaths
+         * @return bool
+         */
+        bool open(StringSet& failedPaths);
+        /**
+         * @brief
+         *
+         * @param outfilename
+         * @return bool
+         */
+        bool ConvertToVMAPModel(const char* outfilename);
 
-    bool ok;
+        bool ok; /**< TODO */
 
-    Model(std::string &filename);
-    ~Model();
+        /**
+         * @brief
+         *
+         * @param filename
+         */
+        Model(std::string& filename);
+        /**
+         * @brief
+         *
+         */
+        ~Model() {_unload();}
 
-private:
-    std::string filename;
-    char outfilename;
+    private:
+        /**
+         * @brief
+         *
+         */
+        void _unload()
+        {
+            delete[] vertices;
+            delete[] indices;
+            vertices = NULL;
+            indices = NULL;
+        }
+        std::string filename; /**< TODO */
+        char outfilename; /**< TODO */
 };
 
+/**
+ * @brief
+ *
+ */
 class ModelInstance
 {
-public:
-    Model *model;
+    public:
+        Model* model; /**< TODO */
 
-    uint32 id;
-    Vec3D pos, rot;
-    unsigned int d1, scale;
-    float w,sc;
+        uint32 id; /**< TODO */
+        uint16 scale;
+        Vec3D pos, rot; /**< TODO */
+        float sc; /**< TODO */
 
-    ModelInstance() {}
-    ModelInstance(MPQFile &f,const char* ModelInstName, uint32 mapID, uint32 tileX, uint32 tileY, FILE *pDirfile);
+        /**
+         * @brief
+         *
+         */
+        ModelInstance() {}
+        /**
+         * @brief
+         *
+         * @param f
+         * @param ModelInstName
+         * @param mapID
+         * @param tileX
+         * @param tileY
+         * @param pDirfile
+         */
+        ModelInstance(MPQFile& f, const char* ModelInstName, uint32 mapID, uint32 tileX, uint32 tileY, FILE* pDirfile);
 
 };
 

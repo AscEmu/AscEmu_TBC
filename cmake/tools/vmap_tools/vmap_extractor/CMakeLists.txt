@@ -3,7 +3,9 @@ SET( prefix ${ROOT_PATH}/src/tools/vmap_tools/vmap_extractor)
 SET( sources
 adtfile.cpp
 dbcfile.cpp
+gameobject_extract.cpp
 model.cpp
+mpq_libmpq.cpp
 vmapexport.cpp
 wdtfile.cpp
 wmo.cpp
