@@ -4646,7 +4646,7 @@ void Aura::SpellAuraProcTriggerSpell(bool apply)
 			{
 				float mhs = float( mh->GetProto()->Delay );
 				float ohs = float( of->GetProto()->Delay );
-				pts.procChance = FL2UINT( float( mhs * ohs / ( 800.0f * ( mhs + ohs ) ) ) ); // 0.75 ppm
+				pts.procChance = float2int32( float( mhs * ohs / ( 800.0f * ( mhs + ohs ) ) ) ); // 0.75 ppm
 			}
 		}
 
@@ -4663,7 +4663,7 @@ void Aura::SpellAuraProcTriggerSpell(bool apply)
 				Item* itm = static_cast< Player* >( m_target )->GetItemInterface()->GetInventoryItem(EQUIPMENT_SLOT_MAINHAND);
 				if( itm != NULL )
 					weapspeed = float( itm->GetProto()->Delay );
-				pts.procChance = FL2UINT( float(7.0f / (600.0f / weapspeed)) );
+				pts.procChance = float2int32( float(7.0f / (600.0f / weapspeed)) );
 				if( pts.procChance >= 50 )
 					pts.procChance = 50;
 			}

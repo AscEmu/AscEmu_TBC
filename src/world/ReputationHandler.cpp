@@ -210,7 +210,7 @@ void Player::ModStanding( uint32 Faction, int32 Value )
 	if ( pctReputationMod > 0 )
 	{
 		float d = float( float( pctReputationMod ) / 100.0f );
-		Value += FL2UINT( float( float( Value ) * d ) );
+		Value += float2int32( float( float( Value ) * d ) );
 	}
 
 	if ( itr == m_reputation.end() )

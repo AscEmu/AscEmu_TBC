@@ -1,7 +1,7 @@
 /*
  * ArcEmu MMORPG Server
  * Copyright (C) 2005-2007 Ascent Team <http://www.ascentemu.com/>
- * Copyright (C) 2008 <http://www.ArcEmu.org/>
+ * Copyright (C) 2008-2010 <http://www.ArcEmu.org/>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -18,229 +18,340 @@
  *
  */
 
-#ifndef _TERRAINMGR_H
-#define _TERRAINMGR_H
+#ifndef _TERRAIN_H
+#define _TERRAIN_H
 
-typedef struct
+#define TERRAIN_INVALID_HEIGHT -50000
+#define TERRAIN_TILE_SIZE 533.3333333f
+#define TERRAIN_NUM_TILES 64
+#define TERRAIN_MAP_RESOLUTION 128
+
+class TerrainHolder;
+class TerrainTile;
+
+#define MAP_AREA_NO_AREA      0x0001
+
+#define MAP_HEIGHT_NO_HEIGHT  0x0001
+#define MAP_HEIGHT_AS_INT16   0x0002
+#define MAP_HEIGHT_AS_INT8    0x0004
+
+#define MAP_LIQUID_NO_TYPE    0x0001
+#define MAP_LIQUID_NO_HEIGHT  0x0002
+
+
+struct TileMapHeader
 {
-	uint16 AreaID[2][2];
-	uint8 LiquidType[2][2];
-	float LiquidLevel[2][2];
-	float Z[32][32];
-}CellTerrainInformation; 
+	uint32 mapMagic;
+	uint32 versionMagic;
+	uint32 buildMagic;
+	uint32 areaMapOffset;
+	uint32 areaMapSize;
+	uint32 heightMapOffset;
+	uint32 heightMapSize;
+	uint32 liquidMapOffset;
+	uint32 liquidMapSize;
+	uint32 holesOffset;
+	uint32 holesSize;
+};
 
-#define FL2UINT (uint32)
-#define TERRAIN_HEADER_SIZE 1048576	 // size of [512][512] array.
-#define MAP_RESOLUTION 256
+struct TileMapAreaHeader
+{
+	uint32 fourcc;
+	uint16 flags;
+	uint16 gridArea;
+};
 
-/* @class TerrainMgr
-   TerrainMgr maintains the MapCellInfo information for accessing water levels,
-   water types, Z levels, area id's, and walkable graph information.
+struct TileMapHeightHeader
+{
+	uint32 fourcc;
+	uint32 flags;
+	float gridHeight;
+	float gridMaxHeight;
+};
 
-   TerrainMgr can dynamically allocate and un-allocate cell information for main
-   continents as their information is *quite* large and not needed at all times
-   to be loaded. Unloading this in idle times is a nice way to save memory.
+struct TileMapLiquidHeader
+{
+	uint32 fourcc;
+	uint16 flags;
+	uint16 liquidType;
+	uint8 offsetX;
+	uint8 offsetY;
+	uint8 width;
+	uint8 height;
+	float liquidLevel;
+};
 
-   However, on instanced maps, we would want to keep the cell's information
-   loaded at all times as it is a lot smaller and we can have multiple instances
-   wanting to access this information at once.
-  */
-
-class SERVER_DECL TerrainMgr
+class TileMap
 {
 public:
-	/* Initializes the terrain interface, allocates all required arrays, and sets 
-	   all variables.
-	   Parameter 1: The path to the packed map files.
-	   Parameter 2: The map that we'll be retrieving information from.
-	   Parameter 3: Controls whether the map will unload information when it's not
-					in use.
-	   No return value.
-	  */
-	TerrainMgr(string MapPath, uint32 MapId, bool Instanced);
 
-	/* Cleans up all arrays, and unloads any pending cell information.
-	   No parameters.
-	   No return value.
-	  */
-	~TerrainMgr();
+	//Area Map
+	uint16 m_area;
+	uint16* m_areaMap;
 
-	/* If we're a non-instanced map, we'll unload the cell information as it's
-	   not needed.
-	   Parameter 1: The x co-ordinate of the cell that's gone idle.
-	   Parameter 2: The y co-ordinate of the cell that's gone idle.
-	   No return value.
-	  */
-	void CellGoneIdle(uint32 x, uint32 y);
+	//Height Map
+	union
+	{
+		float* m_heightMap8F;
+		uint16* m_heightMap8S;
+		uint8* m_heightMap8B;
+	};
+	union
+	{
+		float* m_heightMap9F;
+		uint16* m_heightMap9S;
+		uint8* m_heightMap9B;
+	};
+	uint32 m_heightMapFlags;
+	float m_heightMapMult;
+	float m_tileHeight;
 
-	/* Loads the cell information if it has not already been loaded.
-	   Parameter 1: The x co-ordinate of the cell that's gone active.
-	   Parameter 2: The y co-ordinate of the cell that's gone active.
-	   No return value.
-	  */
-	void CellGoneActive(uint32 x, uint32 y);
+	//Liquid Map
+	uint8* m_liquidType;
+	float* m_liquidMap;
+	float m_liquidLevel;
+	uint8 m_liquidOffX;
+	uint8 m_liquidOffY;
+	uint8 m_liquidHeight;
+	uint8 m_liquidWidth;
+	uint16 m_defaultLiquidType;
 
-	/* Information retrieval functions
-	   These functions all take the same input values, an x and y global co-ordinate.
-	   They will all return 0 if the cell information is not loaded or does not exist,
-	   apart from the water function which will return '-999999.0'.
-	  */
-	float  GetLandHeight(float x, float y);
-	float  GetWaterHeight(float x, float y);
-	uint8  GetWaterType(float x, float y);
-	uint8  GetWalkableState(float x, float y);
-	uint16 GetAreaID(float x, float y);
+	TileMap()
+	{
+		m_areaMap = NULL;
+		m_area = 0;
+		m_tileHeight = 0;
+		m_heightMapFlags = 0;
+		m_heightMap8F = NULL;
+        m_heightMap9F = NULL;
+		m_heightMapMult = 1;
 
-private:
+		m_liquidType = NULL;
+		m_liquidMap = NULL;
+		m_liquidLevel = 0;
+		m_liquidOffX = 0;
+		m_liquidOffY = 0;
+		m_liquidHeight = 0;
+		m_liquidWidth = 0;
+		m_defaultLiquidType = 0;
+	}
 
-	/// MapPath contains the location of all mapfiles.
-	string mapPath;
+	~TileMap()
+	{
+		delete[] m_areaMap;
+		delete[] m_heightMap8F;
+		delete[] m_heightMap9F;
 
-	/// Map ID
-	uint32 mapId;
+		delete[] m_liquidType;
+		delete[] m_liquidMap;
+	}
 
-	/// Are we an instance?
-	bool Instance;
 
-	/// We don't want to be reading from a file from more than one thread at once
-	Mutex mutex;
+	void Load(char* filename);
 
-#ifndef USE_MEMORY_MAPPING_FOR_MAPS
-	
-	/// Our main file descriptor for accessing the binary terrain file.
-	FILE * FileDescriptor;
+	void LoadLiquidData( FILE* f, TileMapHeader &header );
+	void LoadHeightData( FILE* f, TileMapHeader &header );
+	void LoadAreaData( FILE* f, TileMapHeader &header );
 
-	/// This holds the offsets of the cell information for each cell.
-	uint32 CellOffsets[_sizeX][_sizeY];
+	float GetHeight(float x, float y);
+	float GetHeightB(float x, float y, int x_int, int y_int);
+	float GetHeightS(float x, float y, int x_int, int y_int);
+	float GetHeightF(float x, float y, int x_int, int y_int);
 
-#else
+	float GetLiquidHeight(float x, float y);
+	uint8 GetLiquidType(float x, float y);
 
-	/// Mapped file handle
-	HANDLE hMappedFile;
-	HANDLE hMap;
-	uint32 mFileSize;
+	uint32 GetArea(float x, float y);
+};
 
-	/// This holds the offsets of the cell information for each cell.
-	uint32 CellOffsets[_sizeX][_sizeY];
-	uint8 * m_Memory;
-
-#endif
-
-	/// Our storage array. This contains pointers to all allocated CellInfo's.
-	CellTerrainInformation *** CellInformation;
-	
+class TerrainTile
+{
 public:
-	/* Initializes the file descriptor and readys it for data retreival.
-	   No parameters taken.
-	   Returns true if the index was read successfully, false if not.
-	  */
-	bool LoadTerrainHeader();
+	Arcemu::Threading::AtomicCounter m_refs;
 
-protected:
-	/* Retrieves the cell data for the specified co-ordinates from the file and sets it in
-	   the CellInformation array.
-	   Parameter 1: x co-ordinate of the cell information to load.
-	   Parameter 2: y co-ordinate of the cell information to load.
-	   Returns true if the cell information exists and was loaded, false if not.
-	  */
-	bool LoadCellInformation(uint32 x, uint32 y);
+	TerrainHolder* m_parent;
+	uint32 m_mapid;
+	int32 m_tx;
+	int32 m_ty;
+	
+	//Children
+	TileMap m_map;
 
-	/* Unloads the cell data at the specified co-ordinates and frees the memory.
-	   Parameter 1: x co-ordinate of the cell information to free.
-	   Parameter 2: y co-ordinate of the cell information to free.
-	   Returns true if the free was successful, otherwise false.
-	  */
-	bool UnloadCellInformation(uint32 x, uint32 y);
+	TerrainTile(TerrainHolder* parent, uint32 mapid, int32 x, int32 y);
+	~TerrainTile();
+	void AddRef() { ++m_refs; }
+	void DecRef() { if (--m_refs == 0) delete this; }
 
-	/* Gets the offset for the specified cell from the cached offset index.
-	   Parameter 1: cell x co-ordinate.
-	   Parameter 2: cell y co-ordinate.
-	   Returns the offset in bytes of that cell's information, or 0 if it doesn't exist.
-	  */
-	ARCEMU_INLINE uint32 GetCellInformationOffset(uint32 x, uint32 y)
+	void Load()
 	{
-		return CellOffsets[x][y];
+		char filename[1024];
+
+		//Normal map stuff
+		sprintf(filename, "maps/%03u%02u%02u.map", m_mapid, m_tx, m_ty);
+		m_map.Load(filename);
+	}
+};
+
+class TerrainHolder
+{
+public:
+	uint32 m_mapid;
+	TerrainTile* m_tiles[TERRAIN_NUM_TILES][TERRAIN_NUM_TILES];
+	FastMutex m_lock[TERRAIN_NUM_TILES][TERRAIN_NUM_TILES];
+	Arcemu::Threading::AtomicCounter m_tilerefs[TERRAIN_NUM_TILES][TERRAIN_NUM_TILES];
+
+	TerrainHolder(uint32 mapid)
+	{
+		for (int32 i = 0; i < TERRAIN_NUM_TILES; ++i)
+			for (int32 j = 0; j < TERRAIN_NUM_TILES; ++j)
+				m_tiles[i][j] = NULL;
+		m_mapid = mapid;
 	}
 
-	/* Gets a cell information pointer so that another function can access its data.
-	   Parameter 1: cell x co-ordinate.
-	   Parameter 2: cell y co-ordinate.
-	   Returns the memory address of the information for that cell.
-	  */
-	ARCEMU_INLINE CellTerrainInformation* GetCellInformation(uint32 x, uint32 y)
+	~TerrainHolder()
 	{
-		return CellInformation[x][y];
+		for (int32 i = 0; i < TERRAIN_NUM_TILES; ++i)
+			for (int32 j = 0; j < TERRAIN_NUM_TILES; ++j)
+				UnloadTile(i, j);
 	}
 
-	/* Converts a global x co-ordinate into a cell x co-ordinate.
-	   Parameter 1: global x co-ordinate.
-	   Returns the cell x co-ordinate.
-	  */
-	ARCEMU_INLINE uint32 ConvertGlobalXCoordinate(float x)
+	TerrainTile* GetTile(float x, float y);
+	TerrainTile* GetTile(int32 tx, int32 ty)
 	{
-		return FL2UINT((_maxX-x)/_cellSize);
+		TerrainTile* rv = NULL;
+		m_lock[tx][ty].Acquire();
+		rv = m_tiles[tx][ty];
+		if (rv != NULL)
+			rv->AddRef();
+		m_lock[tx][ty].Release();
+
+		return rv;
+	}
+	
+	void LoadTile(float x, float y)
+	{
+		int32 tx = (int32)(32 - (x / TERRAIN_TILE_SIZE));
+		int32 ty = (int32)(32 - (y / TERRAIN_TILE_SIZE));
+		LoadTile(tx, ty);
+	}
+	void LoadTile(int32 tx, int32 ty)
+	{
+		m_lock[tx][ty].Acquire();
+		++m_tilerefs[tx][ty];
+		if (m_tiles[tx][ty] == NULL)
+		{
+			m_tiles[tx][ty] = new TerrainTile(this, m_mapid, tx, ty);
+			m_tiles[tx][ty]->Load();
+		}
+		m_lock[tx][ty].Release();
+	}
+	void UnloadTile(float x, float y)
+	{
+		int32 tx = (int32)(32 - (x / TERRAIN_TILE_SIZE));
+		int32 ty = (int32)(32 - (y / TERRAIN_TILE_SIZE));
+		UnloadTile(tx, ty);
 	}
 
-	/* Converts a global y co-ordinate into a cell y co-ordinate.
-	   Parameter 1: global y co-ordinate.
-	   Returns the cell y co-ordinate.
-	*/
-	ARCEMU_INLINE uint32 ConvertGlobalYCoordinate(float y)
+	void UnloadTile(int32 tx, int32 ty)
 	{
-		return FL2UINT((_maxY-y)/_cellSize);
+		m_lock[tx][ty].Acquire();
+		if (m_tiles[tx][ty] == NULL)
+		{
+			m_lock[tx][ty].Release();
+ 			return;
+		}
+		m_lock[tx][ty].Release();
+
+		if (--m_tilerefs[tx][ty] == 0)
+		{
+			m_lock[tx][ty].Acquire();
+			if (m_tiles[tx][ty] != NULL)
+				m_tiles[tx][ty]->DecRef();
+			m_tiles[tx][ty] = NULL;
+			m_lock[tx][ty].Release();
+		}
 	}
 
-	/* Converts a global x co-ordinate into a INTERNAL cell x co-ordinate.
-	   Parameter 1: global x co-ordinate.
-	   Parameter 2: the cell x co-ordinate.
-	   Returns the internal x co-ordinate.
-	*/
-	ARCEMU_INLINE float ConvertInternalXCoordinate(float x, uint32 cellx)
+	//test
+	float GetADTLandHeight(float x, float y)
 	{
-		float X = (_maxX - x);
-		X -= (cellx * _cellSize);
-		return X;
+		TerrainTile* tile = GetTile(x, y);
+
+		if (tile == NULL)
+			return TERRAIN_INVALID_HEIGHT;
+		float rv = tile->m_map.GetHeight(x, y);
+		tile->DecRef();
+		return rv;
 	}
 
-	/* Converts a global y co-ordinate into a INTERNAL cell y co-ordinate.
-	   Parameter 1: global y co-ordinate.
-	   Parameter 2: the cell y co-ordinate.
-	   Returns the internal y co-ordinate.
-	*/
-	ARCEMU_INLINE float ConvertInternalYCoordinate(float y, uint32 celly)
+    float GetLandHeight(float x, float y, float z)
 	{
-		float Y = (_maxY - y);
-		Y -= (celly * _cellSize);
-		return Y;
+		float adtheight = GetADTLandHeight(x, y);
+
+		VMAP::IVMapManager* vmgr = VMAP::VMapFactory::createOrGetVMapManager();
+		float vmapheight = vmgr->getHeight(m_mapid, x, y, z + 0.5f, 10000.0f);
+
+        if (adtheight > z)
+			return vmapheight; //underground
+		return std::max(vmapheight, adtheight);
 	}
 
-	/* Checks whether a cell information is loaded or not.
-	  */
-	ARCEMU_INLINE bool CellInformationLoaded(uint32 x, uint32 y)
+	float GetLiquidHeight(float x, float y)
 	{
-		if(CellInformation[x][y] != 0)
+		TerrainTile* tile = GetTile(x, y);
+
+		if (tile == NULL)
+			return TERRAIN_INVALID_HEIGHT;
+		float rv = tile->m_map.GetLiquidHeight(x, y);
+		tile->DecRef();
+		return rv;
+	}
+
+	uint8 GetLiquidType(float x, float y)
+	{
+		TerrainTile* tile = GetTile(x, y);
+
+		if (tile == NULL)
+			return 0;
+		uint8 rv = tile->m_map.GetLiquidType(x, y);
+		tile->DecRef();
+		return rv;
+	}
+
+	uint32 GetAreaFlag(float x, float y)
+	{
+		TerrainTile* tile = GetTile(x, y);
+
+		if (tile == NULL)
+			return 0;
+		uint32 rv = tile->m_map.GetArea(x, y);
+		tile->DecRef();
+		return rv;
+	}
+
+    AreaTable* GetArea(float x, float y, float z);
+
+    bool GetLiquidInfo(float x, float y, float z, float & liquidlevel, uint32 & liquidtype)
+	{
+		VMAP::IVMapManager* vmgr = VMAP::VMapFactory::createOrGetVMapManager();
+
+		float flr;
+		if (vmgr->GetLiquidLevel(m_mapid, x, y, z, 0xFF, liquidlevel, flr, liquidtype))
 			return true;
-		else
-			return false;
-	}
 
-	/* Converts the internal co-ordinate to an index in the 
-	   2 dimension areaid, or liquid type arrays.
-	  */
-	ARCEMU_INLINE uint32 ConvertTo2dArray(float c)
-	{
-		return FL2UINT(c*(16/CellsPerTile/_cellSize));
-	}
+		liquidlevel = GetLiquidHeight(x, y);
+		liquidtype = GetLiquidType(x, y);
 
-	/* Checks that the co-ordinates are within range.
-	  */
-	ARCEMU_INLINE bool AreCoordinatesValid(float x, float y)
-	{
-		if(x > _maxX || x < _minX)
-			return false;
-		if(y > _maxY || y < _minY)
+		if (liquidtype == 0)
 			return false;
 		return true;
+	}
+
+	bool InLineOfSight(float x, float y, float z, float x2, float y2, float z2)
+	{
+		VMAP::IVMapManager* vmgr = VMAP::VMapFactory::createOrGetVMapManager();
+
+		return vmgr->isInLineOfSight(m_mapid, x, y, z, x2, y2, z2);
 	}
 };
 

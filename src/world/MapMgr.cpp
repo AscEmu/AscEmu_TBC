@@ -33,6 +33,7 @@ extern bool bServerShutdown;
 
 MapMgr::MapMgr(Map *map, uint32 mapId, uint32 instanceid) : CellHandler<MapCell>(map), _mapId(mapId), eventHolder(instanceid)
 {
+    _terrain = new TerrainHolder(mapId);
 	_shutdown = false;
 	m_instanceID = instanceid;
 	pMapInfo = WorldMapInfoStorage.LookupEntry(mapId);
@@ -98,6 +99,8 @@ MapMgr::~MapMgr()
 		delete ScriptInterface;
 		ScriptInterface = NULL;
 	}
+
+    delete _terrain;
 	
 	// Remove objects
 	if(_cells)
@@ -1284,6 +1287,7 @@ void MapMgr::UpdateCellActivity(uint32 x, uint32 y, int radius)
 						posX, posY, this->_mapId, m_instanceID);
 					objCell->SetActivity(true);
 					_map->CellGoneActive(posX, posY);
+                    _terrain->LoadTile((int32)posX / 8, (int32)posY / 8);
 
 					ASSERT(!objCell->IsLoaded());
 
@@ -1302,6 +1306,7 @@ void MapMgr::UpdateCellActivity(uint32 x, uint32 y, int radius)
 					sLog.outDetail("Cell [%d,%d] on map %d (instance %d) is now active.", 
 						posX, posY, this->_mapId, m_instanceID);
 					_map->CellGoneActive(posX, posY);
+                    _terrain->LoadTile((int32)posX / 8, (int32)posY / 8);
 					objCell->SetActivity(true);
 
 					if (!objCell->IsLoaded())
@@ -1319,6 +1324,7 @@ void MapMgr::UpdateCellActivity(uint32 x, uint32 y, int radius)
 						posX, posY, this->_mapId, m_instanceID);
 					_map->CellGoneIdle(posX, posY);
 					objCell->SetActivity(false);
+                    _terrain->UnloadTile((int32)posX / 8, (int32)posY / 8);
 				}
 			}
 		}
@@ -2138,4 +2144,15 @@ void MapMgr::SendPvPCaptureMessage(int32 ZoneMask, uint32 ZoneId, const char * M
 
 		plr->GetSession()->SendPacket(&data);
 	}
+}
+
+uint16 MapMgr::GetAreaID( float x, float y )
+{
+	uint32 exploreFlag = _terrain->GetAreaFlag(x, y);
+
+	std::map<uint32, AreaTable*>::iterator itr = sWorld.mAreaIDToTable.find(exploreFlag);
+
+	if (itr == sWorld.mAreaIDToTable.end())
+		return 0;
+	return itr->second->AreaId;
 }

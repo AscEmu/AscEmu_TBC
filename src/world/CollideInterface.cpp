@@ -23,7 +23,7 @@
 #define MAX_MAP 600
 
 CCollideInterface CollideInterface;
-IVMapManager * CollisionMgr;
+//IVMapManager * CollisionMgr;
 Mutex m_loadLock;
 uint32 m_tilesLoaded[MAX_MAP][64][64];
 
@@ -52,9 +52,6 @@ uint32 c_GetNanoSeconds(uint64 t1, uint64 t2)
 #endif	// COLLISION_DEBUG
 #endif	// WIN32
 
-#ifdef WIN32
-#pragma comment(lib, "collision.lib")
-#endif
 
 // Debug functions
 #ifdef COLLISION_DEBUG
@@ -195,14 +192,15 @@ bool CCollideInterface::GetFirstPoint(uint32 mapId, float x1, float y1, float z1
 void CCollideInterface::Init()
 {
 	Log.Notice("CollideInterface", "Init");
-	CollisionMgr = ((IVMapManager*)collision_init());
+	//CollisionMgr = ((IVMapManager*)collision_init());
 }
 
 void CCollideInterface::ActivateTile(uint32 mapId, uint32 tileX, uint32 tileY)
 {
+    VMAP::IVMapManager* mgr = VMAP::VMapFactory::createOrGetVMapManager();
 	m_loadLock.Acquire();
 	if(m_tilesLoaded[mapId][tileX][tileY] == 0)
-		CollisionMgr->loadMap(sWorld.vMapPath.c_str(), mapId, tileY, tileX);
+		mgr->loadMap(sWorld.vMapPath.c_str(), mapId, tileX, tileY);
 
 	++m_tilesLoaded[mapId][tileX][tileY];
 	m_loadLock.Release();
@@ -210,9 +208,10 @@ void CCollideInterface::ActivateTile(uint32 mapId, uint32 tileX, uint32 tileY)
 
 void CCollideInterface::DeactivateTile(uint32 mapId, uint32 tileX, uint32 tileY)
 {
+    VMAP::IVMapManager* mgr = VMAP::VMapFactory::createOrGetVMapManager();
 	m_loadLock.Acquire();
 	if(!(--m_tilesLoaded[mapId][tileX][tileY]))
-		CollisionMgr->unloadMap(mapId, tileY, tileX);
+		mgr->unloadMap(mapId, tileX, tileY);
 
 	m_loadLock.Release();
 }
@@ -220,7 +219,7 @@ void CCollideInterface::DeactivateTile(uint32 mapId, uint32 tileX, uint32 tileY)
 void CCollideInterface::DeInit()
 {
 	Log.Notice("CollideInterface", "DeInit");
-	collision_shutdown();
+	//collision_shutdown();
 }
 
 #endif		// COLLISION_DEBUG
