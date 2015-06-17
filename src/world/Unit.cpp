@@ -1039,7 +1039,7 @@ uint32 Unit::HandleProc( uint32 flag, Unit* victim, SpellEntry* CastingSpell, ui
 			{
 				float mhs = float( mh->GetProto()->Delay );
 				float ohs = float( of->GetProto()->Delay );
-				proc_Chance = FL2UINT( ( mhs + ohs ) * 0.001f * ppm / 0.6f );
+				proc_Chance = float2int32( ( mhs + ohs ) * 0.001f * ppm / 0.6f );
 			}
 			else if( mh != NULL )
 			{
@@ -1053,11 +1053,11 @@ uint32 Unit::HandleProc( uint32 flag, Unit* victim, SpellEntry* CastingSpell, ui
 			{
 				if( static_cast< Player* >( this )->GetShapeShift() == FORM_CAT )
 				{
-					proc_Chance = FL2UINT( ppm / 0.6f );
+					proc_Chance = float2int32( ppm / 0.6f );
 				}
 				else if( static_cast< Player* >( this )->GetShapeShift() == FORM_BEAR || static_cast< Player* >( this )->GetShapeShift() == FORM_DIREBEAR )
 				{
-					proc_Chance = FL2UINT( ppm / 0.24f );
+					proc_Chance = float2int32( ppm / 0.24f );
 				}
 			}
 		}
@@ -1787,7 +1787,7 @@ uint32 Unit::HandleProc( uint32 flag, Unit* victim, SpellEntry* CastingSpell, ui
 						if( mh != NULL)
 						{
 							float mhs = float( mh->GetProto()->Delay );
-							dmg_overwrite = FL2UINT( mhs * 0.001f * (spe->EffectBasePoints[0] + 1)/88 );
+							dmg_overwrite = float2int32( mhs * 0.001f * (spe->EffectBasePoints[0] + 1)/88 );
 						}
 						else
 							continue;

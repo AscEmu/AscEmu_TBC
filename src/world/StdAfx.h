@@ -29,7 +29,10 @@
 #undef max
 #endif
 
+
 #define _GAME
+
+#define DEBUG_LOG(...) sLog.Debug("DEBUG_LOG", __VA_ARGS__)
 
 #include "Definitions.h"
 
@@ -89,6 +92,15 @@
 #include "Object.h"
 #include "LootMgr.h"
 #include "Unit.h"
+
+//VMAP
+#include "ModelInstance.h"
+#include "WorldModel.h"
+#include "MapTree.h"
+#include "BIH.h"
+#include "VMapFactory.h"
+#include "VMapManager2.h"
+#include "VMapDefinitions.h"
 
 #include "AddonMgr.h"
 #include "AIInterface.h"
@@ -181,4 +193,5 @@
 //#define PVP_REALM_MEANS_CONSTANT_PVP
 #include "BufferPools/BufferPools.h"
 #include "ProcCondHandler.h"
+
 #endif

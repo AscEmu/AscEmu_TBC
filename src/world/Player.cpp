@@ -1261,60 +1261,13 @@ void Player::_EventExploration()
 	if(GetMapMgr()->GetCellByCoords(GetPositionX(),GetPositionY()) == NULL) 
 		return;
 
-	uint16 AreaId = GetMapMgr()->GetAreaID(GetPositionX(),GetPositionY());
-	
-	if(!AreaId || AreaId == 0xFFFF)
+	AreaTable* at = GetMapMgr()->GetArea(GetPositionX(), GetPositionY(), GetPositionZ());
+	if (at == NULL)
 		return;
 
-	// AreaId fix for undercity and ironforge.  This will now enable rest for these 2 cities.
-	// since they're both on the same map, only 1 map id check
-	if (GetMapId() == 0) 
-	{
-		// get position
-		float ss_x = m_position.x;
-		float ss_y = m_position.y;
-		float ss_z = m_position.z;
+	Log.Debug("Area", "Test %u %s", at->AreaId, at->name);
 
-		// Check for Undercity, Tirisfal Glades, and Ruins of Lordaeron, if neither, skip
-		if (AreaId == 153 || AreaId == 85 || m_AreaID == 1497) 
-		{
-			// ruins check     
-			if (ss_z < 74) 
-			{
-				// box with coord 1536,174 -> 1858,353; and z < 62.5 for reachable areas   
-				if (ss_y > 174 && ss_y < 353 && ss_x > 1536 && ss_x < 1858) 
-				{
-					AreaId = 1497;
-				}
-			}
-			// inner city check
-			if (ss_z < 38) 
-			{
-				// box with coord 1238, 11 -> 1823, 640; and z < 38 for undeground
-				if (ss_y > 11 && ss_y < 640 && ss_x > 1238 && ss_x < 1823) 
-				{
-					AreaId = 1497;
-				}
-			}
-			// todo bat tunnel, only goes part way, but should be fine for now
-		}
-		// Check for Ironforge, and Gates of IronForge.. if neither skip
-		if (AreaId == 809 || m_AreaID == 1537) {
-			// height check
-			if (ss_z > 480) 
-			{
-				// box with coord -5097.3, -828 -> -4570, -1349.3; and z > 480.
-				if (ss_y > -1349.3 && ss_y < -828 && ss_x > -5097.3 && ss_x < -4570) 
-				{
-					AreaId = 1537;
-				}
-			}
-		}
-	}
-
-	AreaTable * at = dbcArea.LookupEntry(AreaId);
-	if(at == 0)
-		return;
+	uint32 AreaId = at->AreaId;
 
 	/*char areaname[200];
 	if(at)
@@ -4642,9 +4595,9 @@ void Player::RepopAtGraveyard(float ox, float oy, float oz, uint32 mapid)
 	}
 	else
 	{
-		uint32 areaid = sInstanceMgr.GetMap(mapid)->GetAreaID(ox,oy);
+		/*uint32 areaid = sInstanceMgr.GetMap(mapid)->GetAreaID(ox,oy);
 		AreaTable * at = dbcArea.LookupEntry(areaid);
-		if(!at) return;
+		if(!at) return;*/
 
 		//uint32 mzone = ( at->ZoneId ? at->ZoneId : at->AreaId);
 
@@ -7766,7 +7719,7 @@ void Player::ZoneUpdate(uint32 ZoneId)
 	m_playerInfo->lastZone = ZoneId;
 	sHookInterface.OnZone(this, ZoneId);
 
-	AreaTable * at = dbcArea.LookupEntry(GetAreaID());
+	AreaTable * at = GetMapMgr()->GetArea(GetPositionX(), GetPositionY(), GetPositionZ());
 	if(at && at->category == AREAC_SANCTUARY || at->AreaFlags & AREA_SANCTUARY)
 	{
 		Unit * pUnit = (GetSelection() == 0) ? 0 : (m_mapMgr ? m_mapMgr->GetUnit(GetSelection()) : 0);
@@ -11094,7 +11047,9 @@ void Player::_FlyhackCheck()
 {
 	if(!sWorld.antihack_flight || m_TransporterGUID != 0 || GetTaxiState() || (sWorld.no_antihack_on_gm && GetSession()->HasGMPermissions()))
 		return;
-
+    return;
+    //disabled
+	/*
 	MovementInfo * mi = GetSession()->GetMovementInfo();
 	if(!mi) return; //wtf?
 
@@ -11123,6 +11078,7 @@ void Player::_FlyhackCheck()
 			GetSession()->Disconnect();
 		}
 	}
+    */
 }
 
 /************************************************************************/

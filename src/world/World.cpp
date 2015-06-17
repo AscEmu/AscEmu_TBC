@@ -472,6 +472,7 @@ bool World::SetInitialWorldSettings()
 	tl.waitForThreadsToExit();
 	sLog.outString("");
 	LoadNameGenData();
+    LoadWMOAreaData();
 
 	Log.Notice("World", "Object size: %u bytes", sizeof(Object));
 	Log.Notice("World", "Unit size: %u bytes", sizeof(Unit) + sizeof(AIInterface));

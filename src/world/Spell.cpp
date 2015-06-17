@@ -3579,8 +3579,9 @@ uint8 Spell::CanCast(bool tolerate)
 						return SPELL_FAILED_NO_AMMO;
 				}
 
-				if (sWorld.Collision) {
-					if (p_caster->GetMapId() == target->GetMapId() && !CollideInterface.CheckLOS(p_caster->GetMapId(),p_caster->GetPositionNC(),target->GetPositionNC()))
+				if (sWorld.Collision)
+                {
+					if (p_caster->GetMapId() == target->GetMapId() && !p_caster->GetMapMgr()->InLineOfSight(m_caster->GetPositionX(), m_caster->GetPositionY(), m_caster->GetPositionZ() + 2, target->GetPositionX(), target->GetPositionY(), target->GetPositionZ() + 2))
 						return SPELL_FAILED_LINE_OF_SIGHT;
 				}
 
@@ -3904,9 +3905,9 @@ uint8 Spell::CanCast(bool tolerate)
 				if(entry == GO_FISHING_BOBBER)
 				{
 					//uint32 mapid = p_caster->GetMapId();
-					float px=u_caster->GetPositionX();
-					float py=u_caster->GetPositionY();
-					//float pz=u_caster->GetPositionZ();
+					float px = u_caster->GetPositionX();
+					float py = u_caster->GetPositionY();
+					float pz = u_caster->GetPositionZ();
 					float orient = m_caster->GetOrientation();
 					float posx = 0,posy = 0,posz = 0;
 					float co = cos(orient);
@@ -3918,10 +3919,13 @@ uint8 Spell::CanCast(bool tolerate)
 					{
 						posx = px + r * co;
 						posy = py + r * si;
-						/*if(!(map->GetWaterType(posx,posy) & 1))//water
-							continue;*/
-						posz = map->GetWaterHeight(posx,posy);
-						if(posz > map->GetLandHeight(posx,posy))//water
+						uint32 liquidtype;
+						map->GetLiquidInfo(posx, posy, pz + 2, posz, liquidtype);
+						if(!(liquidtype & 1))//water
+							continue;
+						if (!map->InLineOfSight(px, py, pz + 0.5f, posx, posy, posz))
+							continue;
+						if(posz > map->GetLandHeight(posx, posy, pz + 2))
 							break;
 					}
 					if(r<=10)
@@ -5042,7 +5046,7 @@ void ApplyDiminishingReturnTimer(uint32 * Duration, Unit * Target, SpellEntry * 
 
 			// for this group only lower duration to 10s
 			if (status == DIMINISHING_GROUP_NOT_DIMINISHED) {
-				*Duration = FL2UINT(Dur);
+				*Duration = float2int32(Dur);
 				return;
 			}
 		}
@@ -5072,7 +5076,7 @@ void ApplyDiminishingReturnTimer(uint32 * Duration, Unit * Target, SpellEntry * 
 	}
 
 	// Convert back
-	*Duration = FL2UINT(Dur);
+	*Duration = float2int32(Dur);
 
 	// Reset the diminishing return counter, and add to the aura count (we don't decrease the timer till we
 	// have no auras of this type left.

@@ -84,6 +84,7 @@ enum MsTimeVariables
 #  define _WIN32_WINNT 0x0500
 #  define NOMINMAX
 #  include <windows.h>
+#  undef NOMINMAX
 #else
 #  include <string.h>
 #  define MAX_PATH 1024
@@ -469,6 +470,12 @@ Scripting system exports/imports
 // Include all threading files
 #include <assert.h>
 #include "Threading/Threading.h"
+
+#include "Threading/AtomicULong.h"
+#include "Threading/AtomicFloat.h"
+#include "Threading/AtomicCounter.h"
+#include "Threading/AtomicBoolean.h"
+#include "Threading/ConditionVariable.h"
 
 #include "MersenneTwister.h"
 

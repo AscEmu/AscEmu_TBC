@@ -1010,6 +1010,23 @@ struct AreaTriggerEntry
     float     box_o;			// 9 extent rotation by about z axis
 };
 
+struct WMOAreaTableEntry
+{
+	uint32 id; // 0
+	int32 rootId; // 1
+	int32 adtId; // 2
+	int32 groupId; // 3
+	//uint32 field4;
+	//uint32 field5;
+	//uint32 field6;
+	//uint32 field7;
+	//uint32 field8;
+	uint32 flags; // 9
+	uint32 areaId; // 10  ref -> AreaTableEntry
+	//char Name[16];
+	//uint32 nameflags;
+};
+
 /*struct CharTitlesEntry
 {
 	uint32		ID;
@@ -1061,6 +1078,27 @@ class SERVER_DECL DBCStorage
 
 public:
 	
+class iterator
+        {
+            private:
+                T* p;
+            public:
+                iterator(T* ip = 0) : p(ip) { }
+                iterator & operator++() { ++p; return *this; }
+                iterator & operator--() { --p; return *this; }
+                bool operator!=(const iterator & i) { return (p != i.p); }
+                T* operator*() { return p; }
+        };
+
+        iterator begin()
+        {
+            return iterator(&m_heapBlock[0]);
+        }
+        iterator end()
+        {
+            return iterator(&m_heapBlock[m_numrows]);
+        }
+
 	DBCStorage()
 	{
 		m_heapBlock = NULL;
@@ -1368,6 +1406,7 @@ extern SERVER_DECL DBCStorage<gtFloat> dbcManaRegenBase;
 extern SERVER_DECL DBCStorage<gtFloat> dbcHPRegen;
 extern SERVER_DECL DBCStorage<gtFloat> dbcHPRegenBase;
 extern SERVER_DECL DBCStorage<AreaTriggerEntry> dbcAreaTrigger;
+extern SERVER_DECL DBCStorage<WMOAreaTableEntry> dbcWMOAreaTable;
 //extern SERVER_DECL DBCStorage<CharTitlesEntry> dbcCharTitle; // not used yet
 
 bool LoadDBCs();

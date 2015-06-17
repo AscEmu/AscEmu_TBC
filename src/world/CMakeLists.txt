@@ -22,8 +22,8 @@ IF( CMAKE_GENERATOR MATCHES Visual*)
 ENDIF()
 set_target_properties(${PROJECT_NAME} PROPERTIES ENABLE_EXPORTS TRUE)
 
-add_dependencies( ${PROJECT_NAME} arcemu-shared )
-target_link_libraries( ${PROJECT_NAME} arcemu-shared ${PCRE_LIBRARIES} )
+add_dependencies( ${PROJECT_NAME} arcemu-shared g3dlite vmaplib detour recast )
+target_link_libraries( ${PROJECT_NAME} arcemu-shared g3dlite vmaplib detour recast ${PCRE_LIBRARIES} )
 install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION .)
 
 

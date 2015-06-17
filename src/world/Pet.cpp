@@ -854,8 +854,7 @@ uint32 Pet::GetNextLevelXP(uint32 level)
 	{
 		nextLvlXP = ((int)((((double)(((8 * level) + ((level - 30) * 5)) * ((level * 5) + 45)))/100)+0.5))*100;
 	}
-	double xp = double(nextLvlXP) / 6;
-	return FL2UINT(xp);
+	return nextLvlXP / 20;
 }
 
 void Pet::SetDefaultSpells()
@@ -1434,11 +1433,11 @@ void Pet::ApplySummonLevelAbilities()
 	double pet_arm = base_armor + pet_level * mod_armor;
 
 	// Calculate values
-	BaseStats[STAT_STRENGTH] = FL2UINT(pet_str);
-	BaseStats[STAT_AGILITY] = FL2UINT(pet_agi);
-	BaseStats[STAT_STAMINA] = FL2UINT(pet_sta);
-	BaseStats[STAT_INTELLECT] = FL2UINT(pet_int);
-	BaseStats[STAT_SPIRIT] = FL2UINT(pet_spr);
+	BaseStats[STAT_STRENGTH] = (uint32)(pet_str);
+	BaseStats[STAT_AGILITY] = (uint32)(pet_agi);
+	BaseStats[STAT_STAMINA] = (uint32)(pet_sta);
+	BaseStats[STAT_INTELLECT] = (uint32)(pet_int);
+	BaseStats[STAT_SPIRIT] = (uint32)(pet_spr);
 
 	double pet_min_dmg = base_min_dmg + pet_level * mod_min_dmg;
 	double pet_max_dmg = base_max_dmg + pet_level * mod_max_dmg;
@@ -1446,9 +1445,9 @@ void Pet::ApplySummonLevelAbilities()
 	BaseDamage[1] = float(pet_max_dmg);
 
 	// Apply attack power.
-	SetUInt32Value(UNIT_FIELD_ATTACK_POWER, FL2UINT(pet_pwr));
+	SetUInt32Value(UNIT_FIELD_ATTACK_POWER, (uint32)(pet_pwr));
 		
-	BaseResistance[0] = FL2UINT(pet_arm);
+	BaseResistance[0] = (uint32)(pet_arm);
 	CalcResistance(0);
 
 	// Calculate health / mana
@@ -1459,10 +1458,10 @@ void Pet::ApplySummonLevelAbilities()
 		sLog.outError("Pet with entry %u has 0 health !! \n",m_uint32Values[OBJECT_FIELD_ENTRY]);
 		health = 100;
 	}
-	SetUInt32Value(UNIT_FIELD_BASE_HEALTH, FL2UINT(health));
-	SetUInt32Value(UNIT_FIELD_MAXHEALTH, FL2UINT(health));
-	SetUInt32Value(UNIT_FIELD_BASE_MANA, FL2UINT(mana));
-	SetUInt32Value(UNIT_FIELD_MAXPOWER1, FL2UINT(mana));
+	SetUInt32Value(UNIT_FIELD_BASE_HEALTH, (uint32)(health));
+	SetUInt32Value(UNIT_FIELD_MAXHEALTH, (uint32)(health));
+	SetUInt32Value(UNIT_FIELD_BASE_MANA, (uint32)(mana));
+	SetUInt32Value(UNIT_FIELD_MAXPOWER1, (uint32)(mana));
 
 	for(uint32 x = 0; x < 5; ++x)
 		CalcStat(x);
