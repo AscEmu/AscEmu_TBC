@@ -86,7 +86,7 @@ ENDIF()
 
 #Install libmysql.dll required for our core to run.
 IF( WIN32)
-	SET( INSTALLED_DEPENDENCIES ${DEPENDENCY_DLLS}/libmysql.dll ${DEPENDENCY_DLLS}/libeay32.dll ${DEPENDENCY_DLLS}/collision.dll )
+	SET( INSTALLED_DEPENDENCIES ${DEPENDENCY_DLLS}/libmysql.dll ${DEPENDENCY_DLLS}/libeay32.dll )
 ENDIF(WIN32)
 
 #Our configurable variables.
