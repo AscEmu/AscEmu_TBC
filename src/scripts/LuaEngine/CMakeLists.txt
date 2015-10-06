@@ -1,7 +1,7 @@
-if(NOT BUILD_ASCEMULUA )
-  message("\tLuaEngine was skipped because BUILD_ASCEMULUA is unchecked.")
+if(NOT BUILD_LUAENGINE )
+  message("\tLuaEngine was skipped because BUILD_LUAENGINE is unchecked.")
   return()
-endif(NOT BUILD_ASCEMULUA)
+endif()
 
 ############## lualib
 PROJECT(lualib C)
