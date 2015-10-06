@@ -31,14 +31,14 @@ before_install:
   - sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.8 90
   - sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.8 90
 
-addons:
- coverity_scan:
-   project:
-     name: "AscEmu/AscEmu_TBC"
-     description: "2.4.3 World of Warcraft game server"
-   build_command_prepend: "make clean"
-   build_command:   "make -j 4" # use limited workers to avoid running out of memory
-   branch_pattern: coverity_scan
+#addons:
+# coverity_scan:
+#   project:
+#     name: "AscEmu/AscEmu_TBC"
+#     description: "2.4.3 World of Warcraft game server"
+#   build_command_prepend: "make clean"
+#   build_command:   "make -j 4" # use limited workers to avoid running out of memory
+#   branch_pattern: coverity_scan
 
 install:
  - mkdir bin
