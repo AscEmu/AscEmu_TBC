@@ -27,7 +27,6 @@ set(sources
    Threading/Mutex.cpp
    Threading/ThreadPool.cpp
    arcemu_getopt.cpp
-   CallBack.cpp
    CoreMemoryAllocator.cpp
    CoreMemoryAllocator_Core.cpp
    CrashHandler.cpp
@@ -114,7 +113,6 @@ set(headers
    StackBuffer.h
    StackWalker.h
    Storage.h
-   svn_revision.h
    Timer.h
    Util.h
    WorldPacket.h
