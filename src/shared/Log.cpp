@@ -50,18 +50,42 @@ initialiseSingleton( WorldLog );
 
 SERVER_DECL time_t UNIXTIME;
 SERVER_DECL tm g_localTime;
-#ifndef WIN32
-static const char* colorstrings[TBLUE+1] = {
-"",
-"\033[22;31m",
-"\033[22;32m",
-"\033[01;33m",
-//"\033[22;37m",
-"\033[0m",
-"\033[01;37m",
-"\033[22;34m",
-};
+void oLog::SetColor(int color)
+{
+#if PLATFORM != PLATFORM_WIN32
+    static const char* colorstrings[TBLUE+1] = {
+        "",
+        "\033[22;31m",
+        "\033[22;32m",
+        "\033[01;33m",
+        //"\033[22;37m",
+        "\033[0m",
+        "\033[01;37m",
+        "\033[1;34m",
+  };
+    fputs(colorstrings[color], stdout);
+#else
+    SetConsoleTextAttribute(stdout_handle, (WORD)color);
 #endif
+}
+
+void oLog::Time(char* buffer)
+{
+    time_t now;
+    struct tm* timeinfo = NULL;
+
+    time(&now);
+    timeinfo = localtime(&now);
+
+    if(timeinfo != NULL)
+    {
+        strftime(buffer, TIME_FORMAT_LENGTH, TIME_FORMAT, timeinfo);
+    }
+    else
+    {
+        buffer[0] = '\0';
+    }
+}
 
 void oLog::outTime()
 {
@@ -80,136 +104,86 @@ void oLog::outTime()
 
 void oLog::outString( const char * str, ... )
 {
-	va_list ap;
-	char buf[32768];
+    if (m_normalFile == NULL)
+        return;
 
-	if(m_fileLogLevel < 0 && m_screenLogLevel < 0)
-		return;
+    char buf[32768];
+    va_list ap;
 
-	va_start(ap, str);
-	vsnprintf(buf, 32768, str, ap);
-	va_end(ap);
-	
-	if(m_screenLogLevel >= 0)
-	{
-		printf(buf);
-		putc('\n', stdout);
-	}
-	if(m_fileLogLevel >= 0 && m_file)
-	{
-		outTime();
-		fprintf(m_file, buf);
-		putc('\n', m_file);
-	}
+    va_start(ap, str);
+    vsnprintf(buf, 32768, str, ap);
+    va_end(ap);
+    SetColor(TNORMAL);
+    printf("%s\n", buf);
+    outFile(m_normalFile, buf);
 }
 
 void oLog::outError( const char * err, ... )
 {
-	va_list ap;
-	char buf[32768];
+    if (m_errorFile == NULL)
+        return;
 
-	if(m_fileLogLevel < 1 && m_screenLogLevel < 1)
-		return;
+    char buf[32768];
+    va_list ap;
 
-	va_start(ap, err);
-	vsnprintf(buf, 32768, err, ap);
-	va_end(ap);
-
-	if(m_screenLogLevel >= 1)
-	{
-#ifdef WIN32
-		SetConsoleTextAttribute(stderr_handle, FOREGROUND_RED | FOREGROUND_INTENSITY);
-#else
-		puts(colorstrings[TRED]);
-#endif
-		fprintf(stderr, buf);
-		putc('\n', stderr);
-#ifdef WIN32
-		SetConsoleTextAttribute(stderr_handle, FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN);
-#else
-		puts(colorstrings[TNORMAL]);
-#endif
-	}
-	if(m_fileLogLevel >= 1 && m_file)
-	{
-		outTime();
-		fprintf(m_file, buf);
-		putc('\n', m_file);
-	}
+    va_start(ap, err);
+    vsnprintf(buf, 32768, err, ap);
+    va_end(ap);
+    SetColor(TRED);
+    printf("%s\n", buf);
+    SetColor(TNORMAL);
+    outFile(m_errorFile, buf);
 }
 
 void oLog::outBasic( const char * str, ... )
 {
-	va_list ap;
-	char buf[32768];
+    if (m_normalFile == NULL)
+        return;
 
-	if(m_fileLogLevel < 1 && m_screenLogLevel < 1)
-		return;
+    char buf[32768];
+    va_list ap;
 
-	va_start(ap, str);
-	vsnprintf(buf, 32768, str, ap);
-	va_end(ap);
-
-	if(m_screenLogLevel >= 1)
-	{
-		printf(buf);
-		putc('\n', stdout);
-	}
-	if(m_fileLogLevel >= 1 && m_file)
-	{
-		fprintf(m_file, buf);
-		putc('\n', m_file);
-	}
+    va_start(ap, str);
+    vsnprintf(buf, 32768, str, ap);
+    va_end(ap);
+    SetColor(TBLUE);
+    printf("%s\n", buf);
+    SetColor(TNORMAL);
+    outFile(m_normalFile, buf);
 }
 
 void oLog::outDetail( const char * str, ... )
 {
-	va_list ap;
-	char buf[32768];
+    if (m_fileLogLevel < 1 || m_normalFile == NULL)
+        return;
 
-	if(m_fileLogLevel < 2 && m_screenLogLevel < 2)
-		return;
+    char buf[32768];
+    va_list ap;
 
-	va_start(ap, str);
-	vsnprintf(buf, 32768, str, ap);
-	va_end(ap);
-
-	if(m_screenLogLevel >= 2)
-	{
-		printf(buf);
-		putc('\n', stdout);
-	}
-	if(m_fileLogLevel >= 2 && m_file)
-	{
-		outTime();
-		fprintf(m_file, buf);
-		putc('\n', m_file);
-	}
+    va_start(ap, str);
+    vsnprintf(buf, 32768, str, ap);
+    va_end(ap);
+    SetColor(TWHITE);
+    printf("%s\n", buf);
+    SetColor(TNORMAL);
+    outFile(m_normalFile, buf);
 }
 
 void oLog::outDebug( const char * str, ... )
 {
-	va_list ap;
-	char buf[32768];
+    if (m_fileLogLevel < 2 || m_errorFile == NULL)
+        return;
 
-	if(m_fileLogLevel < 3 && m_screenLogLevel < 3)
-		return;
+    char buf[32768];
+    va_list ap;
 
-	va_start(ap, str);
-	vsnprintf(buf, 32768, str, ap);
-	va_end(ap);
-
-	if(m_screenLogLevel >= 3)
-	{
-		printf(buf);
-		putc('\n', stdout);
-	}
-	if(m_fileLogLevel >= 3 && m_file)
-	{
-		outTime();
-		fprintf(m_file, buf);
-		putc('\n', m_file);
-	}
+    va_start(ap, str);
+    vsnprintf(buf, 32768, str, ap);
+    va_end(ap);
+    SetColor(TYELLOW);
+    printf("%s\n", buf);
+    SetColor(TNORMAL);
+    outFile(m_errorFile, buf);
 }
 
 void oLog::outMenu( const char * str, ... )
@@ -221,16 +195,100 @@ void oLog::outMenu( const char * str, ... )
 	fflush(stdout);
 }
 
-void oLog::Init(int32 fileLogLevel, int32 screenLogLevel)
+void oLog::outFile(FILE* file, char* msg, const char* source)
 {
-	m_screenLogLevel = screenLogLevel;
-	m_fileLogLevel = fileLogLevel;
+    char time_buffer[TIME_FORMAT_LENGTH];
+    Time(time_buffer);
 
-	// get error handle
-#ifdef WIN32
-	stderr_handle = GetStdHandle(STD_ERROR_HANDLE);
-	stdout_handle = GetStdHandle(STD_OUTPUT_HANDLE);
+    if (source != NULL)
+    {
+        fprintf(file, "%s %s: %s\n", time_buffer, source, msg);
+        //printf("%s %s: %s\n", time_buffer, source, msg);
+    }
+    else
+    {
+        fprintf(file, "%s %s\n", time_buffer, msg);
+        //printf("%s %s\n", time_buffer, msg);
+    }
+}
+
+/// Prints text to file without showing it to the user. Used for the startup banner.
+void oLog::outFileSilent(FILE* file, char* msg, const char* source)
+{
+    char time_buffer[TIME_FORMAT_LENGTH];
+    Time(time_buffer);
+
+    if (source != NULL)
+    {
+        fprintf(file, "%s %s: %s\n", time_buffer, source, msg);
+        // Don't use printf to prevent text from being shown in the console output.
+    }
+    else
+    {
+        fprintf(file, "%s %s\n", time_buffer, msg);
+        // Don't use printf to prevent text from being shown in the console output.
+    }
+}
+
+/// Writes into the error log without giving console output. Used for the startup banner.
+void oLog::outErrorSilent(const char* err, ...)
+{
+    if (m_errorFile == NULL)
+        return;
+
+    char buf[32768];
+    va_list ap;
+
+    va_start(ap, err);
+    vsnprintf(buf, 32768, err, ap);
+    va_end(ap);
+
+    outFileSilent(m_errorFile, buf); // This uses a function that won't give console output.
+}
+
+void oLog::Init(int32 fileLogLevel, LogType logType)
+{
+#if PLATFORM == PLATFORM_WIN32
+    stdout_handle = GetStdHandle(STD_OUTPUT_HANDLE);
 #endif
+
+    SetFileLoggingLevel(fileLogLevel);
+
+    const char* logNormalFilename = NULL, *logErrorFilename = NULL;
+    switch (logType)
+    {
+        case LOGON_LOG:
+        {
+            logNormalFilename = "logon-normal.log";
+            logErrorFilename = "logon-error.log";
+            break;
+        }
+        case WORLD_LOG:
+        {
+            logNormalFilename = "world-normal.log";
+            logErrorFilename = "world-error.log";
+            break;
+        }
+    }
+
+    m_normalFile = fopen(logNormalFilename, "a");
+    if (m_normalFile == NULL)
+        fprintf(stderr, "%s: Error opening '%s': %s\n", __FUNCTION__, logNormalFilename, strerror(errno));
+    else
+    {
+        tm* aTm = localtime(&UNIXTIME);
+        outBasic("=============[%-4d-%02d-%02d]========[%02d:%02d:%02d]=============", aTm->tm_year + 1900, aTm->tm_mon + 1, aTm->tm_mday, aTm->tm_hour, aTm->tm_min, aTm->tm_sec);
+    }
+
+    m_errorFile = fopen(logErrorFilename, "a");
+    if (m_errorFile == NULL)
+        fprintf(stderr, "%s: Error opening '%s': %s\n", __FUNCTION__, logErrorFilename, strerror(errno));
+    else
+    {
+        tm* aTm = localtime(&UNIXTIME);
+        // We don't echo time and date again because outBasic above just echoed them.
+        outErrorSilent("=============[%-4d-%02d-%02d]========[%02d:%02d:%02d]=============", aTm->tm_year + 1900, aTm->tm_mon + 1, aTm->tm_mday, aTm->tm_hour, aTm->tm_min, aTm->tm_sec);
+    }
 }
 
 void oLog::SetScreenLoggingLevel(int32 level)
@@ -238,19 +296,28 @@ void oLog::SetScreenLoggingLevel(int32 level)
 	m_screenLogLevel = level;
 }
 
+void oLog::Close()
+{
+    if (m_normalFile != NULL)
+    {
+        fflush(m_normalFile);
+        fclose(m_normalFile);
+        m_normalFile = NULL;
+    }
+
+    if (m_errorFile != NULL)
+    {
+        fflush(m_errorFile);
+        fclose(m_errorFile);
+        m_errorFile = NULL;
+    }
+}
+
 void oLog::SetFileLoggingLevel(int32 level)
 {
-	m_fileLogLevel = level;
-
-	if (m_fileLogLevel >= 0)
-	{
-		char *filename = "file.log";
-		m_file = fopen(filename, "w");
-		if (m_file == NULL)
-		{
-			fprintf(stderr, "%s: Error opening '%s': %s\n", __FUNCTION__, filename, strerror(errno));
-		}
-	}
+    //log level -1 is no more allowed
+    if (level >= 0)
+        m_fileLogLevel = level;
 }
 
 void SessionLogWriter::write(const char* format, ...)

@@ -169,7 +169,7 @@ bool Master::Run(int argc, char ** argv)
 
 	if(!do_version && !do_check_conf)
 	{
-		sLog.Init(-1, 3);
+        sLog.Init(0, WORLD_LOG);
 	}
 	else
 	{
@@ -421,7 +421,7 @@ bool Master::Run(int argc, char ** argv)
 	
  
 	/* write pid file */
-	FILE * fPid = fopen( "arcemu.pid", "w" );
+	FILE * fPid = fopen( "worldserver.pid", "w" );
 	if( fPid )
 	{
 		uint32 pid;
@@ -665,7 +665,7 @@ bool Master::Run(int argc, char ** argv)
 	delete Player_Log;
 
 	// remove pid
-	remove( "arcemu.pid" );
+	remove( "worldserver.pid" );
 
 	Log.Notice( "Shutdown", "Shutdown complete." );
 

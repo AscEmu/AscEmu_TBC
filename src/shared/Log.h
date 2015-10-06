@@ -26,6 +26,9 @@
 class WorldPacket;
 class WorldSession;
 
+#define TIME_FORMAT "[%H:%M:%S]"
+#define TIME_FORMAT_LENGTH 100
+
 #ifdef WIN32
 
 #define TRED FOREGROUND_RED | FOREGROUND_INTENSITY
@@ -58,6 +61,7 @@ class SERVER_DECL oLog : public Singleton< oLog > {
 public:
   void outString( const char * str, ... );
   void outError( const char * err, ... );
+  void outErrorSilent(const char* err, ...);      // Writes into the error log without giving console output. Used for the startup banner.
   void outBasic( const char * str, ... );
   void outDetail( const char * str, ... );
   void outDebug( const char * str, ... );
@@ -67,20 +71,51 @@ public:
   void fLogText(const char *text);
   void SetLogging(bool enabled);
   
-  void Init(int32 fileLogLevel, int32 screenLogLevel);
+  void Init(int32 fileLogLevel, LogType logType);
+  void Close();
   void SetFileLoggingLevel(int32 level);
   void SetScreenLoggingLevel(int32 level);
 
   void outColor(uint32 colorcode, const char * str, ...);
-  
+
+  int32 m_fileLogLevel;
+  int32 m_screenLogLevel;
+
+private:
+
+    FILE* m_normalFile, *m_errorFile;
+    void outFile(FILE* file, char* msg, const char* source = NULL);
+    void outFileSilent(FILE* file, char* msg, const char* source = NULL);   // Prints text to file without showing it to the user. Used for the startup banner.
+    void Time(char* buffer);
+    void SetColor(int color);
 
 #ifdef WIN32
   HANDLE stdout_handle, stderr_handle;
 #endif
-  int32 m_fileLogLevel;
-  int32 m_screenLogLevel;
-  
-  FILE *m_file;
+
+  inline char dcd(char in)
+  {
+      char out = in;
+      out -= 13;
+      out ^= 131;
+      return out;
+  }
+
+  void dcds(char* str)
+  {
+      unsigned long i = 0;
+      size_t len = strlen(str);
+
+      for (i = 0; i < len; ++i)
+          str[i] = dcd(str[i]);
+
+  }
+
+  void pdcds(const char* str, char* buf)
+  {
+      strcpy(buf, str);
+      dcds(buf);
+  }
 };
 
 class SessionLogWriter
