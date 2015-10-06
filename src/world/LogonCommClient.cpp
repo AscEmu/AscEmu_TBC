@@ -99,7 +99,7 @@ void LogonCommClientSocket::OnRead()
 
 void LogonCommClientSocket::HandlePacket(WorldPacket & recvData)
 {
-	static logonpacket_handler Handlers[RMSG_COUNT] = {
+    static logonpacket_handler Handlers[LRMSG_MAX_OPCODES] = {
 		NULL,												// RMSG_NULL
 		NULL,												// RCMSG_REGISTER_REALM
 		&LogonCommClientSocket::HandleRegister,				// RSMSG_REALM_REGISTERED
@@ -117,9 +117,12 @@ void LogonCommClientSocket::HandlePacket(WorldPacket & recvData)
 		&LogonCommClientSocket::HandleDisconnectAccount,	// RSMSG_DISCONNECT_ACCOUNT
 		NULL,												// RCMSG_TEST_CONSOLE_LOGIN
 		&LogonCommClientSocket::HandleConsoleAuthResult,	// RSMSG_CONSOLE_LOGIN_RESULT
+        NULL,
+        NULL,
+        &LogonCommClientSocket::HandlePopulationRequest,    // LRSMSG_REALM_POPULATION_REQUEST
 	};
 
-	if(recvData.GetOpcode() >= RMSG_COUNT || Handlers[recvData.GetOpcode()] == 0)
+    if (recvData.GetOpcode() >= LRMSG_MAX_OPCODES || Handlers[recvData.GetOpcode()] == 0)
 	{
 		printf("Got unknwon packet from logoncomm: %u\n", recvData.GetOpcode());
 		return;
@@ -414,6 +417,18 @@ void LogonCommClientSocket::HandleConsoleAuthResult(WorldPacket & recvData)
 	recvData >> requestid >> result;
 
 	ConsoleAuthCallback(requestid, result);
+}
+
+void LogonCommClientSocket::HandlePopulationRequest(WorldPacket& recvData)
+{
+    uint32 realmId;
+    // Grab the realm id
+    recvData >> realmId;
+
+    // Send the result
+    WorldPacket data(LRCMSG_REALM_POPULATION_RESULT, 16);
+    data << realmId << LogonCommHandler::getSingleton().GetServerPopulation();
+    SendPacket(&data, false);
 }
 
 #else

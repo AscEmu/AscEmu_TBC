@@ -1,7 +1,8 @@
 /*
- * ArcEmu MMORPG Server
- * Copyright (C) 2005-2007 Ascent Team <http://www.ascentemu.com/>
+ * AscEmu Framework based on ArcEmu MMORPG Server
+ * Copyright (C) 2014-2015 AscEmu Team <http://www.ascemu.org>
  * Copyright (C) 2008 <http://www.ArcEmu.org/>
+ * Copyright (C) 2005-2007 Ascent Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -10,125 +11,136 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef LOGONCOMMHANDLER_H
-#define LOGONCOMMHANDLER_H
+#ifndef _LOGONCOMMHANDLER_H
+#define _LOGONCOMMHANDLER_H
+//#include "CommonTypes.hpp"
+#include "WorldSocket.h"
+#include <string>
+#include <map>
+#include <set>
 
 typedef struct
 {
-	uint32 ID;
-	string Name;
-	string Address;
-	uint32 Port;
-	uint32 ServerID;
-	uint32 RetryTime;
-	bool   Registered;
-}LogonServer;
+    uint32 ID;
+    std::string Name;
+    std::string Address;
+    uint32 Port;
+    uint32 ServerID;
+    uint32 RetryTime;
+    bool Registered;
+} LogonServer;
 
 typedef struct
 {
-	string Name;
-	string Address;
-	//uint32 Colour;
-	uint8 Icon;
-	uint8 TimeZone;
-	float Population;
-	uint8 Lock;
-}Realm;
+    std::string Name;
+    std::string Address;
+    uint32 flags;
+    uint32 Icon;
+    uint32 TimeZone;
+    float Population;
+    uint8 Lock;
+} Realm;
 
 enum RealmType
 {
-	REALMTYPE_NORMAL = 0,
-	REALMTYPE_PVP	= 3,
-	REALMTYPE_RP	 = 6,
-	REALMTYPE_RPPVP  = 8,
+    REALMTYPE_NORMAL = 0,
+    REALMTYPE_PVP = 3,
+    REALMTYPE_RP = 6,
+    REALMTYPE_RPPVP = 8,
 };
 
-class SocketLoadBalancer;
 
 class LogonCommHandler : public Singleton<LogonCommHandler>
 {
 #ifdef WIN32
-	typedef HM_NAMESPACE::hash_map<string, string> ForcedPermissionMap;
+    typedef HM_NAMESPACE::hash_map<std::string, std::string> ForcedPermissionMap;
 #else
-	typedef map<string, string> ForcedPermissionMap;
+    typedef std::map<std::string, std::string> ForcedPermissionMap;
 #endif
 
-	ForcedPermissionMap forced_permissions;
-	map<LogonServer*, LogonCommClientSocket*> logons;
-	map<uint32, WorldSocket*> pending_logons;
-	set<Realm*> realms;
-	set<LogonServer*> servers;
-	uint32 idhigh;
-	uint32 next_request;
-	Mutex mapLock;
-	Mutex pendingLock;
-	bool pings;
-	uint32 _realmType;
+    ForcedPermissionMap forced_permissions;
+    std::map<LogonServer*, LogonCommClientSocket*> logons;
+    std::map<uint32, WorldSocket*> pending_logons;
+    std::set<Realm*> realms;
+    std::set<LogonServer*> servers;
+    uint32 idhigh;
+    uint32 next_request;
+    Mutex mapLock;
+    Mutex pendingLock;
+    bool pings;
+    uint32 _realmType;
+    uint32 pLimit;
+    float server_population;
 
-public:
-	uint8 sql_passhash[20];
+    public:
 
-	LogonCommHandler();
-	~LogonCommHandler();
+    uint8 sql_passhash[20];
 
-	LogonCommClientSocket * ConnectToLogon(string Address, uint32 Port);
-	void UpdateAccountCount(uint32 account_id, uint8 add);
-	void RequestAddition(LogonCommClientSocket * Socket);
-	void CheckAllServers();
-	void Startup();
-	void ConnectionDropped(uint32 ID);
-	void AdditionAck(uint32 ID, uint32 ServID);
-	void UpdateSockets();
-	void Connect(LogonServer * server);
-	void ConnectAll();
-	//void LogonDatabaseSQLExecute(const char* str, ...);
-	//void LogonDatabaseReloadAccounts();
+    LogonCommHandler();
+    ~LogonCommHandler();
 
-	void Account_SetBanned(const char * account, uint32 banned, const char *reason);
-	void Account_SetGM(const char * account, const char * flags);
-	void Account_SetMute(const char * account, uint32 muted);
-	void IPBan_Add(const char * ip, uint32 duration,const char *reason);
-	void IPBan_Remove(const char * ip);
+    LogonCommClientSocket* ConnectToLogon(std::string Address, uint32 Port);
+    void UpdateAccountCount(uint32 account_id, uint8 add);
+    void RequestAddition(LogonCommClientSocket* Socket);
+    void CheckAllServers();
+    void Startup();
+    void AddForcedPermission(std::string acct, std::string perm);
+    void ConnectionDropped(uint32 ID);
+    void AdditionAck(uint32 ID, uint32 ServID);
+    void UpdateSockets();
+    void Connect(LogonServer* server);
+    void ConnectAll();
+    //void LogonDatabaseSQLExecute(const char* str, ...);
+    //void LogonDatabaseReloadAccounts();
+    void RefreshRealmPop();
 
-	void LoadRealmConfiguration();
-	void AddServer(string Name, string Address, uint32 Port);
+    void Account_SetBanned(const char* account, uint32 banned, const char* reason);
+    void Account_SetGM(const char* account, const char* flags);
+    void Account_SetMute(const char* account, uint32 muted);
+    void Account_CheckExist(const char* account, const char* request_name, const char* additional);
+    void IPBan_Add(const char* ip, uint32 duration, const char* reason);
+    void IPBan_Remove(const char* ip);
+    void AccountChangePassword(const char* old_pw, const char* new_password, const char* account_name);
+    void AccountCreate(const char* name, const char* password, const char* account_name);
 
-	ARCEMU_INLINE uint32 GetRealmType() { return _realmType; }
-	void SetRealmType(uint32 type) { _realmType = type; }
+    void LoadRealmConfiguration();
+    void AddServer(std::string Name, std::string Address, uint32 Port);
 
-	/////////////////////////////
-	// Worldsocket stuff
-	///////
+    inline uint32 GetRealmType() { return _realmType; }
+    void SetRealmType(uint32 type) { _realmType = type; }
+    float GetServerPopulation() { return server_population; }
 
-	uint32 ClientConnected(string AccountName, WorldSocket * Socket);
-	void UnauthedSocketClose(uint32 id);
-	void RemoveUnauthedSocket(uint32 id);
-	WorldSocket* GetSocketByRequest(uint32 id)
-	{
-		//pendingLock.Acquire();
+    /////////////////////////////
+    // Worldsocket stuff
+    ///////
 
-		WorldSocket * sock;
-		map<uint32, WorldSocket*>::iterator itr = pending_logons.find(id);
-		sock = (itr == pending_logons.end()) ? 0 : itr->second;
+    uint32 ClientConnected(std::string AccountName, WorldSocket* Socket);
+    void UnauthedSocketClose(uint32 id);
+    void RemoveUnauthedSocket(uint32 id);
+    WorldSocket* GetSocketByRequest(uint32 id)
+    {
+        //pendingLock.Acquire();
 
-		//pendingLock.Release();
-		return sock;
-	}
-	ARCEMU_INLINE Mutex & GetPendingLock() { return pendingLock; }		
-	const string* GetForcedPermissions(string& username);
+        WorldSocket* sock;
+        std::map<uint32, WorldSocket*>::iterator itr = pending_logons.find(id);
+        sock = (itr == pending_logons.end()) ? 0 : itr->second;
 
-	void TestConsoleLogon(string& username, string& password, uint32 requestnum);
+        //pendingLock.Release();
+        return sock;
+    }
+    inline Mutex & GetPendingLock() { return pendingLock; }
+    const std::string* GetForcedPermissions(std::string & username);
+
+    void TestConsoleLogon(std::string & username, std::string & password, uint32 requestnum);
 };
 
 #define sLogonCommHandler LogonCommHandler::getSingleton()
 
-#endif
-
+#endif // _LOGONCOMMHANDLER_H

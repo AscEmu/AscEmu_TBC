@@ -464,6 +464,11 @@ public:
 
 	uint32 HordePlayers;
 	uint32 AlliancePlayers;
+
+    inline uint32 getHordePlayerCount() { return HordePlayers; }
+    inline uint32 getAlliancePlayerCount() { return AlliancePlayers; }
+    inline uint32 getPlayerCount() { return (HordePlayers + AlliancePlayers); }
+
 	uint32 PeakSessionCount;
 	uint32 ArenaQueueDiff;
 	bool SendStatsOnJoin;
