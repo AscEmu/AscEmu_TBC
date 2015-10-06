@@ -45,6 +45,13 @@ class WorldSession;
 #define TBLUE 6
 
 #endif
+
+enum LogType
+{
+    WORLD_LOG,
+    LOGON_LOG
+};
+
 std::string FormatOutputString(const char * Prefix, const char * Description, bool useTimeStamp);
 
 class SERVER_DECL oLog : public Singleton< oLog > {
@@ -66,6 +73,7 @@ public:
 
   void outColor(uint32 colorcode, const char * str, ...);
   
+
 #ifdef WIN32
   HANDLE stdout_handle, stderr_handle;
 #endif

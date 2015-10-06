@@ -1,6 +1,7 @@
 /*
- * ArcEmu MMORPG Server
- * Copyright (C) 2008 <http://www.ArcEmu.org/>
+ * AscEmu Framework based on ArcEmu MMORPG Server
+ * Copyright (C) 2014-2015 AscEmu Team <http://www.ascemu.org/>
+ * Copyright (C) 2008-2012 ArcEmu Team <http://www.ArcEmu.org/>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -9,11 +10,11 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
 
@@ -23,43 +24,64 @@
 #include "Common.h"
 #include "CThreads.h"
 
-class LogonConsoleThread : public ThreadBase
+enum checkType
 {
-public:
-	bool kill;
-	LogonConsoleThread();
-	~LogonConsoleThread();
-	bool run();
+    CHECK_LOG_NONE = 0,
+    ACC_NAME_DO_EXIST = 1,
+    ACC_NAME_NOT_EXIST = 2
 };
 
-class LogonConsole :  public Singleton < LogonConsole >
+class LogonConsoleThread : public ThreadBase
 {
-	friend class LogonConsoleThread;
+    public:
+    Arcemu::Threading::AtomicBoolean kill;
+    LogonConsoleThread();
+    ~LogonConsoleThread();
+    bool run();
+};
 
-public:						// Public methods:
-	void Kill();
+class LogonConsole : public Singleton < LogonConsole >
+{
+    friend class LogonConsoleThread;
 
-protected:					// Protected methods:
-	LogonConsoleThread *_thread;
+    public:                        // Public methods:
 
-	// Process one command
-	void ProcessCmd(char *cmd);
+        void Kill();
 
-	// quit | exit
-	void TranslateQuit(char *str);
-	void ProcessQuit(int delay);
-	void CancelShutdown(char *str);
+    protected:                    // Protected methods:
 
-	// help | ?
-	void TranslateHelp(char *str);
-	void ProcessHelp(char *command);
+        LogonConsoleThread* _thread;
 
-	void ReloadAccts(char *str);
-	void TranslateRehash(char* str);
+        // Process one command
+        void ProcessCmd(char* cmd);
 
-	void NetworkStatus(char* str);
+        // quit | exit
+        void TranslateQuit(char* str);
+        void ProcessQuit(int delay);
+        void CancelShutdown(char* str);
+
+        // help | ?
+        void TranslateHelp(char* str);
+        void ProcessHelp(char* command);
+
+        void ReloadAccts(char* str);
+        void TranslateRehash(char* str);
+
+        void NetworkStatus(char* str);
+
+        void Info(char* str);
+
+        //AccountHandling
+        void AccountCreate(char* str);
+        void AccountDelete(char* str);
+        void AccountSetGm(char* str);
+        void AccountSetPassword(char* str);
+        void AccountChangePassword(char* str);
+
+        void checkAccountName(std::string name, uint8 type);
 };
 
 #define sLogonConsole LogonConsole::getSingleton()
 
-#endif
+
+#endif      // __LOGONCONSOLE_H

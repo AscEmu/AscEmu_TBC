@@ -21,7 +21,7 @@
 #ifndef __LOGON_COMM_CLIENT_H
 #define __LOGON_COMM_CLIENT_H
 
-#include "LogonOpcodes.h"
+#include "Opcodes/LogonRealmOpcodes.hpp"
 #include <RC4Engine.h>
 
 class LogonCommClientSocket : public Socket
@@ -49,6 +49,8 @@ public:
 	void HandleDisconnectAccount(WorldPacket & recvData);
 	void HandleConsoleAuthResult(WorldPacket & recvData);
     void HandlePopulationRequest(WorldPacket& recvData);
+    void HandleModifyDatabaseResult(WorldPacket& recvData);
+    void HandleResultCheckAccount(WorldPacket& recvData);
 
 	void OnDisconnect();
 	void CompressAndSend(ByteBuffer & uncompressed);

@@ -1,6 +1,7 @@
 /*
- * ArcEmu MMORPG Server
- * Copyright (C) 2008 <http://www.ArcEmu.org/>
+ * AscEmu Framework based on ArcEmu MMORPG Server
+ * Copyright (C) 2014-2015 AscEmu Team <http://www.ascemu.org/>
+ * Copyright (C) 2008-2012 ArcEmu Team <http://www.ArcEmu.org/>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -9,11 +10,11 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
 
@@ -21,43 +22,50 @@
 #define __LOGON_COMM_SERVER_H
 
 #include <RC4Engine.h>
+#include "zlib.h"
 
 class LogonCommServerSocket : public Socket
 {
-	uint32 remaining;
-	uint16 opcode;
-	uint32 seed;
-	RC4Engine sendCrypto;
-	RC4Engine recvCrypto;
-public:
-	uint32 authenticated;
-	bool use_crypto;
+    uint32 remaining;
+    uint16 opcode;
+    uint32 seed;
+    RC4Engine sendCrypto;
+    RC4Engine recvCrypto;
 
-	LogonCommServerSocket(SOCKET fd);
-	~LogonCommServerSocket();
+    public:
 
-	void OnRead();
-	void OnDisconnect();
-	void OnConnect();
-	void SendPacket(WorldPacket * data);
-	void HandlePacket(WorldPacket & recvData);
+        uint32 authenticated;
+        bool use_crypto;
 
-	void HandleRegister(WorldPacket & recvData);
-	void HandlePing(WorldPacket & recvData);
-	void HandleSessionRequest(WorldPacket & recvData);
-	void HandleSQLExecute(WorldPacket & recvData);
-	void HandleReloadAccounts(WorldPacket & recvData);
-	void HandleAuthChallenge(WorldPacket & recvData);
-	void HandleMappingReply(WorldPacket & recvData);
-	void HandleUpdateMapping(WorldPacket & recvData);
-	void HandleTestConsoleLogin(WorldPacket & recvData);
-	void HandleDatabaseModify(WorldPacket& recvData);
+        LogonCommServerSocket(SOCKET fd);
+        ~LogonCommServerSocket();
 
-	uint32 last_ping;
-	bool removed;
-	set<uint32> server_ids;
+        void OnRead();
+        void OnDisconnect();
+        void OnConnect();
+        void SendPacket(WorldPacket* data);
+        void HandlePacket(WorldPacket & recvData);
+
+        void HandleRegister(WorldPacket& recvData);
+        void HandlePing(WorldPacket& recvData);
+        void HandleSessionRequest(WorldPacket& recvData);
+        void HandleSQLExecute(WorldPacket& recvData);
+        void HandleReloadAccounts(WorldPacket& recvData);
+        void HandleAuthChallenge(WorldPacket& recvData);
+        void HandleMappingReply(WorldPacket& recvData);
+        void HandleUpdateMapping(WorldPacket& recvData);
+        void HandleTestConsoleLogin(WorldPacket& recvData);
+        void HandleDatabaseModify(WorldPacket& recvData);
+        void HandlePopulationRespond(WorldPacket& recvData);
+        void HandleRequestCheckAccount(WorldPacket& recvData);
+
+        void RefreshRealmsPop();
+
+        Arcemu::Threading::AtomicCounter last_ping;
+        bool removed;
+        std::set<uint32> server_ids;
 };
 
 typedef void (LogonCommServerSocket::*logonpacket_handler)(WorldPacket&);
 
-#endif
+#endif  // __LOGON_COMM_SERVER_H

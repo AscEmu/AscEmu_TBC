@@ -82,6 +82,7 @@ void LogonCommHandler::RequestAddition(LogonCommClientSocket* Socket)
         data << realm->TimeZone;
         data << float(realm->Population);
         data << uint8(realm->Lock);
+        data << uint32(realm->GameBuild);
         Socket->SendPacket(&data, false);
     }
 }
@@ -394,7 +395,7 @@ void LogonCommHandler::LoadRealmConfiguration()
     uint32 realmcount = Config.RealmConfig.GetIntDefault("LogonServer", "RealmCount", 1);
     if (realmcount == 0)
     {
-        //LOG_ERROR("   >> no realms found. this server will not be online anywhere!");
+        Log.Error("LoadRealmConfiguration", "no realms found. this server will not be online anywhere!");
     }
     else
     {
@@ -407,6 +408,12 @@ void LogonCommHandler::LoadRealmConfiguration()
             realm->TimeZone = Config.RealmConfig.GetIntVA("TimeZone", 1, "Realm%u", i);
             realm->Population = Config.RealmConfig.GetFloatVA("Population", 0, "Realm%u", i);
             realm->Lock = static_cast<uint8>(Config.RealmConfig.GetIntVA("Lock", 0, "Realm%u", i));
+            realm->GameBuild = Config.RealmConfig.GetIntVA("GameBuild", 0, "Realm%u", i);
+            if (realm->GameBuild == 0)
+            {
+                Log.Error("LoadRealmConfiguration", "supported client build not found in realms.config. Update your configs!");
+                return;
+            }
             std::string rt = Config.RealmConfig.GetStringVA("Icon", "Normal", "Realm%u", i);
             uint32 type;
 

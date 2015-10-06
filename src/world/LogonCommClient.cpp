@@ -99,27 +99,31 @@ void LogonCommClientSocket::OnRead()
 
 void LogonCommClientSocket::HandlePacket(WorldPacket & recvData)
 {
-    static logonpacket_handler Handlers[LRMSG_MAX_OPCODES] = {
-		NULL,												// RMSG_NULL
-		NULL,												// RCMSG_REGISTER_REALM
-		&LogonCommClientSocket::HandleRegister,				// RSMSG_REALM_REGISTERED
-		NULL,												// RCMSG_REQUEST_SESSION
-		&LogonCommClientSocket::HandleSessionInfo,			// RSMSG_SESSION_RESULT
-		NULL,												// RCMSG_PING
-		&LogonCommClientSocket::HandlePong,					// RSMSG_PONG
-		NULL,												// RCMSG_SQL_EXECUTE
-		NULL,												// RCMSG_RELOAD_ACCOUNTS
-		NULL,												// RCMSG_AUTH_CHALLENGE
-		&LogonCommClientSocket::HandleAuthResponse,			// RSMSG_AUTH_RESPONSE
-		&LogonCommClientSocket::HandleRequestAccountMapping,// RSMSG_REQUEST_ACCOUNT_CHARACTER_MAPPING
-		NULL,												// RCMSG_ACCOUNT_CHARACTER_MAPPING_REPLY
-		NULL,												// RCMSG_UPDATE_CHARACTER_MAPPING_COUNT
-		&LogonCommClientSocket::HandleDisconnectAccount,	// RSMSG_DISCONNECT_ACCOUNT
-		NULL,												// RCMSG_TEST_CONSOLE_LOGIN
-		&LogonCommClientSocket::HandleConsoleAuthResult,	// RSMSG_CONSOLE_LOGIN_RESULT
+    static logonpacket_handler Handlers[LRMSG_MAX_OPCODES] =
+    {
         NULL,
-        NULL,
-        &LogonCommClientSocket::HandlePopulationRequest,    // LRSMSG_REALM_POPULATION_REQUEST
+        NULL,                                                   // LRCMSG_REALM_REGISTER_REQUEST
+        &LogonCommClientSocket::HandleRegister,                 // LRSMSG_REALM_REGISTER_RESULT
+        NULL,                                                   // LRCMSG_ACC_SESSION_REQUEST
+        &LogonCommClientSocket::HandleSessionInfo,              // LRSMSG_ACC_SESSION_RESULT
+        NULL,                                                   // LRCMSG_LOGON_PING_STATUS
+        &LogonCommClientSocket::HandlePong,                     // LRSMSG_LOGON_PING_RESULT
+        NULL,                                                   // LRCMSG_FREE_01
+        NULL,                                                   // LRSMSG_FREE_02
+        NULL,                                                   // LRCMSG_AUTH_REQUEST
+        &LogonCommClientSocket::HandleAuthResponse,             // LRSMSG_AUTH_RESPONSE
+        &LogonCommClientSocket::HandleRequestAccountMapping,    // LRSMSG_ACC_CHAR_MAPPING_REQUEST
+        NULL,                                                   // LRCMSG_ACC_CHAR_MAPPING_RESULT
+        NULL,                                                   // LRCMSG_ACC_CHAR_MAPPING_UPDATE
+        &LogonCommClientSocket::HandleDisconnectAccount,        // LRSMSG_SEND_ACCOUNT_DISCONNECT
+        NULL,                                                   // LRCMSG_LOGIN_CONSOLE_REQUEST
+        &LogonCommClientSocket::HandleConsoleAuthResult,        // LRSMSG_LOGIN_CONSOLE_RESULT
+        NULL,                                                   // LRCMSG_ACCOUNT_DB_MODIFY_REQUEST
+        &LogonCommClientSocket::HandleModifyDatabaseResult,     // LRSMSG_ACCOUNT_DB_MODIFY_RESULT
+        &LogonCommClientSocket::HandlePopulationRequest,        // LRSMSG_REALM_POPULATION_REQUEST
+        NULL,                                                   // LRCMSG_REALM_POPULATION_RESULT
+        NULL,                                                   // LRCMSG_ACCOUNT_REQUEST
+        &LogonCommClientSocket::HandleResultCheckAccount,       // LRSMSG_ACCOUNT_RESULT
 	};
 
     if (recvData.GetOpcode() >= LRMSG_MAX_OPCODES || Handlers[recvData.GetOpcode()] == 0)
@@ -180,7 +184,7 @@ void LogonCommClientSocket::HandlePong(WorldPacket & recvData)
 void LogonCommClientSocket::SendPing()
 {
 	pingtime = getMSTime();
-	WorldPacket data(RCMSG_PING, 4);
+    WorldPacket data(LRCMSG_LOGON_PING_STATUS, 4);
 	SendPacket(&data,false);
 
 	last_ping = (uint32)UNIXTIME;
@@ -246,7 +250,7 @@ void LogonCommClientSocket::SendChallenge()
 	/* packets are encrypted from now on */
 	use_crypto = true;
 
-	WorldPacket data(RCMSG_AUTH_CHALLENGE, 20);
+    WorldPacket data(LRCMSG_AUTH_REQUEST, 20);
 	data.append(key, 20);
 	SendPacket(&data, true);
 }
@@ -267,7 +271,7 @@ void LogonCommClientSocket::HandleAuthResponse(WorldPacket & recvData)
 
 void LogonCommClientSocket::UpdateAccountCount(uint32 account_id, uint8 add)
 {
-	WorldPacket data(RCMSG_UPDATE_CHARACTER_MAPPING_COUNT, 9);
+    WorldPacket data(LRCMSG_ACC_CHAR_MAPPING_UPDATE, 9);
 	set<uint32>::iterator itr = realm_ids.begin();
 
 	for(; itr != realm_ids.end(); ++itr)
@@ -349,7 +353,7 @@ void LogonCommClientSocket::CompressAndSend(ByteBuffer & uncompressed)
 	size_t destsize = uncompressed.size() + uncompressed.size()/10 + 16;
 
 	// w000t w000t kat000t for gzipped packets
-	WorldPacket data(RCMSG_ACCOUNT_CHARACTER_MAPPING_REPLY, destsize + 4);
+    WorldPacket data(LRCMSG_ACC_CHAR_MAPPING_RESULT, destsize + 4);
 	data.resize(destsize + 4);
 
 	z_stream stream;
@@ -429,6 +433,143 @@ void LogonCommClientSocket::HandlePopulationRequest(WorldPacket& recvData)
     WorldPacket data(LRCMSG_REALM_POPULATION_RESULT, 16);
     data << realmId << LogonCommHandler::getSingleton().GetServerPopulation();
     SendPacket(&data, false);
+}
+
+void LogonCommClientSocket::HandleModifyDatabaseResult(WorldPacket& recvData)
+{
+    uint32 method_id;
+    uint8 result_id;
+    //Get the result/method id for further processing
+    recvData >> method_id;
+    recvData >> result_id;
+
+    switch (method_id)
+    {
+        case Method_Account_Change_PW:
+        {
+            std::string account_name;
+            recvData >> account_name;
+            const char* account_string = account_name.c_str();
+
+            WorldSession* pSession = sWorld.FindSessionByName(account_string);
+            if (pSession == nullptr)
+            {
+                sLog.outError("No session found!");
+                return;
+            }
+
+            if (result_id == Result_Account_PW_wrong)
+            {
+                pSession->SystemMessage("Your entered old password did not match database password!");
+            }
+            else if (result_id == Result_Account_SQL_error)
+            {
+                pSession->SystemMessage("Something went wrong by updating mysql data!");
+            }
+            else if (result_id == Result_Account_Finished)
+            {
+                pSession->SystemMessage("Your password is now updated");
+            }
+            else
+            {
+                sLog.outError("HandleModifyDatabaseResult: Unknown logon result in Method_Account_Change_PW");
+            }
+
+        }break;
+        case Method_Account_Create:
+        {
+            std::string account_name;
+            std::string created_name;
+
+            recvData >> account_name;
+            recvData >> created_name;
+
+            const char* account_string = account_name.c_str();
+            const char* created_string = created_name.c_str();
+
+            WorldSession* pSession = sWorld.FindSessionByName(account_string);
+            if (pSession == nullptr)
+            {
+                sLog.outError("No session found!");
+                return;
+            }
+
+            if (result_id == Result_Account_Exists)
+            {
+                pSession->SystemMessage("Account name: '%s' already in use!", created_string);
+            }
+            else if (result_id == Result_Account_Finished)
+            {
+                pSession->SystemMessage("Account: '%s' created", created_string);
+            }
+            else
+            {
+                sLog.outError("HandleModifyDatabaseResult: Unknown logon result in Method_Account_Create");
+            }
+
+        }break;
+    }
+}
+
+void LogonCommClientSocket::HandleResultCheckAccount(WorldPacket& recvData)
+{
+    uint8 result_id;
+    std::string account_name;
+    std::string request_name;
+
+    recvData >> result_id;      //Get the result id for further processing
+    recvData >> account_name;
+    recvData >> request_name;
+
+    //transform std::string to const char
+    const char* request_string = request_name.c_str();
+    const char* account_string = account_name.c_str();
+
+    auto session_name = sWorld.FindSessionByName(request_string);
+    if (session_name == nullptr)
+    {
+        sLog.outError("Receiver %s not found!", request_string);
+        return;
+    }
+
+    switch (result_id)
+    {
+        case 1:     // Account not available
+        {
+            session_name->SystemMessage("Account: %s not found in database!", account_string);
+        }
+        break;
+        case 2:     // No additional data set
+        {
+            session_name->SystemMessage("No gmlevel set for account: %s !", account_string);
+        }
+        break;
+        case 3:     // Everything is okay
+        {
+            std::string gmlevel;
+            recvData >> gmlevel;
+
+            const char* gmlevel_string = gmlevel.c_str();
+
+            //Update account_forced_permissions
+            CharacterDatabase.Execute("REPLACE INTO account_forced_permissions (`login`, `permissions`) VALUES ('%s', '%s')", account_string, gmlevel_string);
+            session_name->SystemMessage("Forced permissions Account has been updated to '%s' for account '%s'. The change will be effective immediately.", gmlevel_string, account_string);
+
+            //Update forcedpermission map
+            sLogonCommHandler.AddForcedPermission(account_string, gmlevel_string);
+
+            //Write info to gmlog
+            sGMLog.writefromsession(session_name, "set account %s forced_permissions to %s", account_string, gmlevel_string);
+
+            //Send information to updated account
+            auto updated_account_session = sWorld.FindSessionByName(account_string);
+            if (updated_account_session != nullptr)
+            {
+                updated_account_session->SystemMessage("Your permissions has been updated! Please reconnect your account.");
+            }
+        }
+        break;
+    }
 }
 
 #else
