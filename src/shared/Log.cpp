@@ -87,21 +87,6 @@ void oLog::Time(char* buffer)
     }
 }
 
-void oLog::outTime()
-{
-#ifndef WIN32
-	char buf[256];
-	time_t t = time(NULL);
-	struct tm *tm = localtime(&t);
-
-	if (tm)
-	{
-		strftime(buf, 256, "[%Y-%m-%d %T] ", tm);
-		fprintf(m_file, buf);
-	}
-#endif
-}
-
 void oLog::outString( const char * str, ... )
 {
     if (m_normalFile == NULL)
@@ -384,21 +369,6 @@ void WorldLog::Disable()
 WorldLog::~WorldLog()
 {
 
-}
-
-void oLog::outColor(uint32 colorcode, const char * str, ...)
-{
-	if( !str ) return;
-	va_list ap;
-	va_start(ap, str);
-#ifdef WIN32
-	SetConsoleTextAttribute(stdout_handle, colorcode);
-#else
-	printf(colorstrings[colorcode]);
-#endif
-	vprintf( str, ap );
-	fflush(stdout);
-	va_end(ap);
 }
 
 void SessionLogWriter::Open()

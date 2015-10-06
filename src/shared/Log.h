@@ -66,7 +66,6 @@ public:
   void outDetail( const char * str, ... );
   void outDebug( const char * str, ... );
   void outMenu( const char * str, ... );
-  void outTime( );
 
   void fLogText(const char *text);
   void SetLogging(bool enabled);
@@ -75,8 +74,6 @@ public:
   void Close();
   void SetFileLoggingLevel(int32 level);
   void SetScreenLoggingLevel(int32 level);
-
-  void outColor(uint32 colorcode, const char * str, ...);
 
   int32 m_fileLogLevel;
   int32 m_screenLogLevel;

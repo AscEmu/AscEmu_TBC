@@ -406,16 +406,16 @@ void HandleConsoleInput(BaseConsole * pConsole, const char * szInput)
 
 	if( !stricmp(tokens[0], "help") || tokens[0][0] == '?' )
 	{
-		pConsole->Write("=========================================================================================================\r\n");
-		pConsole->Write("| %15s | %30s | %50s |\r\n", "Name", "Arguments", "Description");
-		pConsole->Write("=========================================================================================================\r\n");		
-		for(i = 0; Commands[i].Name != NULL; ++i)
-		{
-			pConsole->Write("| %15s | %30s | %50s |\r\n", Commands[i].Name, Commands[i].ArgumentFormat, Commands[i].Description);
-		}
-		pConsole->Write("=========================================================================================================\r\n");		
-		pConsole->Write("| type 'quit' to terminate a Remote Console Session                                                     |\r\n");
-		pConsole->Write("=========================================================================================================\r\n");		
+        pConsole->Write("===============================================================================\r\n");
+        pConsole->Write("| %15s | %57s |\r\n", "Name", "Arguments");
+        pConsole->Write("===============================================================================\r\n");
+        for (i = 0; Commands[i].Name != NULL; ++i)
+        {
+            pConsole->Write("| %15s | %57s |\r\n", Commands[i].Name, Commands[i].ArgumentFormat);
+        }
+        pConsole->Write("===============================================================================\r\n");
+        pConsole->Write("| type 'quit' to terminate a Remote Console Session                           |\r\n");
+        pConsole->Write("===============================================================================\r\n");
 	}
 	else
 	{

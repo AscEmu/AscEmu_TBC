@@ -30,34 +30,33 @@ extern "C" SCRIPT_DECL void _exp_script_register(ScriptMgr* mgr)
 {
 	if(Config.OptionalConfig.GetBoolDefault("Extra", "Instant70", false))
 	{
-		sLog.outColor(TGREEN,"\n	Instant70 Enabled");
+		sLog.outDetail("	Instant70 Enabled");
 		SetupInstant70(mgr);
 	}
 
 	if(Config.MainConfig.GetBoolDefault("Extra", "L70etc", false))
 	{
-		sLog.outColor(TGREEN,"\n	L70etc Enabled");
+        sLog.outDetail("	L70etc Enabled");
 		SetupL70etc(mgr);
 	}
 
 	if(Config.OptionalConfig.GetBoolDefault("Extra", "Portals", false))
 	{
-		sLog.outColor(TGREEN,"\n	Portals Enabled");
+        sLog.outDetail("	Portals Enabled");
 		SetupPortals(mgr);
 	}
 	if(Config.OptionalConfig.GetBoolDefault("Extra", "PVPToken", false))
 	{
-		sLog.outColor(TGREEN,"\n	PvP Tokens Enabled");
+        sLog.outDetail("	PvP Tokens Enabled");
 		SetupPvPToken(mgr);
 	}
 
 	//if(Config.OptionalConfig.GetBoolDefault("Extra", "WeddingNPC", false))
 	//{
-	//	sLog.outColor(TGREEN,"\n	WeddingNPC Enabled");
+	//	sLog.outDetail("	WeddingNPC Enabled");
 	//	SetupWeddingNPC(mgr);
 	//}
 
-	sLog.outColor(TNORMAL, "\n");
 }
 
 #ifdef WIN32
