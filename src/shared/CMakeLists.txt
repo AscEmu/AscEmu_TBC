@@ -61,10 +61,12 @@ set(headers
    Database/SQLiteDatabase.h
    mysql/mysql.h
    Network/CircularBuffer.h
+   Network/ListenSocketLinux.h
    Network/ListenSocketWin32.h
    Network/Network.h
    Network/Socket.h
    Network/SocketDefines.h
+   Network/SocketMgrLinux.h
    Network/SocketMgrWin32.h
    Network/SocketOps.h
    Threading/AtomicBoolean.h
@@ -122,7 +124,7 @@ set(headers
 if(WIN32)
    set(sources ${sources} Network/SocketMgrWin32.cpp Network/SocketOpsWin32.cpp Network/SocketWin32.cpp StackWalker.cpp)
 else(WIN32)
-   set(sources ${sources} Network/Socket.cpp)
+   set(sources ${sources} Network/SocketMgrLinux.cpp Network/SocketLinux.cpp Network/SocketOpsLinux.cpp)
 endif(WIN32)
 
 foreach(src IN ITEMS ${sources})
