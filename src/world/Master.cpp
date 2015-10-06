@@ -20,7 +20,7 @@
 
 #include "StdAfx.h"
 
-#define BANNER "ArcEmu %s r%u/%s-%s-%s :: World Server"
+#define BANNER "AscEmu %s r%u/%s-%s-%s :: World Server"
 
 #ifndef WIN32
 #include <sched.h>
@@ -100,15 +100,11 @@ struct Addr
 
 #define DEF_VALUE_NOT_SET 0xDEADBEEF
 
-#ifdef WIN32
-        static const char* default_config_file = "configs/world.conf";
-		static const char* default_optional_config_file = "configs/optional.conf";
-        static const char* default_realm_config_file = "configs/realms.conf";
-#else
-        static const char* default_config_file = CONFDIR "/world.conf";
-		static const char* default_optional_config_file = CONFDIR "/optional.conf";
-        static const char* default_realm_config_file = CONFDIR "/realms.conf";
-#endif
+
+static const char* default_config_file = CONFDIR "/world.conf";
+static const char* default_optional_config_file = CONFDIR "/optional.conf";
+static const char* default_realm_config_file = CONFDIR "/realms.conf";
+
 
 bool bServerShutdown = false;
 bool StartConsoleListener();
@@ -186,18 +182,18 @@ bool Master::Run(int argc, char ** argv)
 	printf("\nRepack: %s | Author: %s | %s\n", REPACK, REPACK_AUTHOR, REPACK_WEBSITE);
 #endif
 	Log.Color(TBLUE);
-	printf("\nCopyright (C) 2008 ArcEmu. http://www.arcemu.org/\n");
+	printf("\nCopyright (C) 2014 - 2015 AscEmu. http://www.ascemu.org/\n");
 	printf("This program is free software: you can redistribute it and/or modify\n");
 	printf("it under the terms of the GNU Affero General Public License as published by\n");
 	printf("the Free Software Foundation, either version 3 of the License, or\n");
 	printf("any later version.\n");
 	printf("This program is distributed in the hope that it will be useful,\n");
 	printf("but WITHOUT ANY WARRANTY; without even the implied warranty of\n");
-	printf("MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n");
+	printf("MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the\n");
 	printf("GNU Affero General Public License for more details.\n");
 	printf("                                                \n");
 	printf("                     ``````                     \n");
-	printf("    ArcEmu!        `/o/::-:/-                   \n"); 
+	printf("    AscEmu!        `/o/::-:/-                   \n"); 
 	printf("                   oho/-.-:yN-                  \n"); 
 	printf("                    os+/-.:::                   \n"); 
 	printf("                    :ysyoo+:`                   \n"); 
@@ -220,17 +216,16 @@ bool Master::Run(int argc, char ** argv)
 	printf("    Introducing the emu!     --``-/:`           \n"); 
 	printf("                           .:/+:-.-::.          \n"); 
 	printf("                          `.-///:-.`            \n");
-	printf(" Website: http://www.ArcEmu.org	     			\n");
-	printf(" Forums: http://www.ArcEmu.org/forums/          \n");
-	printf(" Credits: http://www.ArcEmu.org/credits         \n");
-	printf(" SVN: http://arcemu.info/svn/                   \n");
+	printf(" Website: http://www.AscEmu.org	     			\n");
+	printf(" Forums: http://www.board.ascemu.org/           \n");
+	printf(" GIT: https://github.com/AscEmu/AscEmu_TBC      \n");
 	printf(" Have fun!                                      \n");
 	Log.Line();
 #ifdef REPACK
 	Log.Color(TRED);
 	printf("Warning: Using repacks is potentially dangerous. You should always compile\n");
-	printf("from the source yourself at www.arcemu.org.\n");
-	printf("By using this repack, you agree to not visit the arcemu website and ask\nfor support.\n");
+	printf("from the source yourself at www.ascemu.org.\n");
+	printf("By using this repack, you agree to not visit the ascemu website and ask\nfor support.\n");
 	printf("For all support, you should visit the repacker's website at %s\n", REPACK_WEBSITE);
 	Log.Color(TNORMAL);
 	Log.Line();
@@ -248,22 +243,17 @@ bool Master::Run(int argc, char ** argv)
 		else
 			Log.Warning( "Config", "Encountered one or more errors." );
 
-		Log.Notice( "Config", "Checking config file: %s\n", realm_config_file );
+		Log.Notice( "Config", "Checking config file: %s", realm_config_file );
 		if( Config.RealmConfig.SetSource( realm_config_file, true ) )
-			Log.Success( "Config", "Passed without errors.\n" );
+			Log.Success( "Config", "Passed without errors." );
 		else
-			Log.Warning( "Config", "Encountered one or more errors.\n" );
+			Log.Warning( "Config", "Encountered one or more errors." );
 
-		Log.Notice( "Config", "Checking config file:: %s\n", optional_config_file);
+		Log.Notice( "Config", "Checking config file:: %s", optional_config_file);
 		if(Config.OptionalConfig.SetSource(optional_config_file, true) )
-			Log.Success( "Config", "Passed without errors.\n");
+			Log.Success( "Config", "Passed without errors.");
 		else
-			Log.Warning( "Config", "Encountered one or more errors.\n");
-
-		/* test for die variables */
-		string die;
-		if( Config.MainConfig.GetString( "die", "msg", &die) || Config.MainConfig.GetString("die2", "msg", &die ) )
-			Log.Warning( "Config", "Die directive received: %s", die.c_str() );
+			Log.Warning( "Config", "Encountered one or more errors.");
 
 		return true;
 	}
@@ -282,37 +272,31 @@ bool Master::Run(int argc, char ** argv)
 	ThreadPool.Startup();
 	uint32 LoadingTime = getMSTime();
 
-	Log.Notice( "Config", "Loading Config Files...\n" );
-	if( Config.MainConfig.SetSource( config_file ) )
-		Log.Success( "Config", ">> configs/world.conf" );
-	else
-	{
-		Log.Error( "Config", ">> configs/world.conf" );
-		return false;
-	}
+    Log.Success("Config", "Loading Config Files...");
+    if (Config.MainConfig.SetSource(config_file))
+        Log.Notice("Config", ">> " CONFDIR "/world.conf loaded");
+    else
+    {
+        Log.Error("Config", ">> error occurred loading " CONFDIR "/world.conf");
+        return false;
+    }
 
-	if(Config.OptionalConfig.SetSource(optional_config_file))
-		Log.Success( "Config", ">> configs/optional.conf");
-	else
-	{
-		Log.Error("Config", ">> configs/optional.conf");
-		return false;
-	}
+    if (Config.OptionalConfig.SetSource(optional_config_file))
+        Log.Notice("Config", ">> " CONFDIR "/optional.conf loaded");
+    else
+    {
+        Log.Error("Config", ">> error occurred loading " CONFDIR "/optional.conf");
+        return false;
+    }
 
-	string die;
-	if( Config.MainConfig.GetString( "die", "msg", &die) || Config.MainConfig.GetString( "die2", "msg", &die ) )
-	{
-		Log.Warning( "Config", "Die directive received: %s", die.c_str() );
-		return false;
-	}
 
-	if(Config.RealmConfig.SetSource(realm_config_file))
-		Log.Success( "Config", ">> configs/realms.conf" );
-	else
-	{
-		Log.Error( "Config", ">> configs/realms.conf" );
-		return false;
-	}
+    if (Config.RealmConfig.SetSource(realm_config_file))
+        Log.Notice("Config", ">> " CONFDIR "/realms.conf loaded");
+    else
+    {
+        Log.Error("Config", ">> error occurred loading " CONFDIR "/realms.conf");
+        return false;
+    }
 
 #if !defined(WIN32) && defined(__DEBUG__)
 	if (Config.MainConfig.GetIntDefault( "LogLevel", "DisableCrashdumpReport", 0) == 0)
