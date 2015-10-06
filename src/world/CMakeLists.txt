@@ -1,4 +1,4 @@
-PROJECT(arcemu-world)
+PROJECT(world)
 
 file(GLOB_RECURSE sources_BufferPools BufferPools/*.cpp BufferPools/*.h)
 file(GLOB sources_localdir *.cpp *.h)
@@ -22,8 +22,8 @@ IF( CMAKE_GENERATOR MATCHES Visual*)
 ENDIF()
 set_target_properties(${PROJECT_NAME} PROPERTIES ENABLE_EXPORTS TRUE)
 
-add_dependencies( ${PROJECT_NAME} arcemu-shared g3dlite vmaplib detour recast )
-target_link_libraries( ${PROJECT_NAME} arcemu-shared g3dlite vmaplib detour recast ${PCRE_LIBRARIES} )
+add_dependencies( ${PROJECT_NAME} shared g3dlite vmaplib detour recast )
+target_link_libraries( ${PROJECT_NAME} shared g3dlite vmaplib detour recast ${PCRE_LIBRARIES} )
 install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION .)
 
 

@@ -19,8 +19,8 @@ add_library( ${PROJECT_NAME} SHARED ${ascemu_serverstatusplugin_SRCS} )
 #common include directories that script libraries might include.
 SET( include_dirs ${GLOBAL_INCLUDE_DIRS} )
 
-add_dependencies( ${PROJECT_NAME} arcemu-shared arcemu-world )
+add_dependencies( ${PROJECT_NAME} shared world )
 add_definitions( -DSCRIPTLIB -DSKIP_ALLOCATOR_SHARING )
-target_link_libraries( ${PROJECT_NAME} arcemu-world )
+target_link_libraries( ${PROJECT_NAME} world )
 
 install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION ${ASCEMU_SCRIPTLIB_PATH} LIBRARY DESTINATION ${ASCEMU_SCRIPTLIB_PATH})

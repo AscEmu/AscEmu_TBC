@@ -45,7 +45,7 @@ ENDIF()
 
 
 add_library(${PROJECT_NAME} SHARED ${ascemu_luaengine_SRCS})
-add_dependencies( ${PROJECT_NAME} lualib arcemu-shared arcemu-world)
-target_link_libraries( ${PROJECT_NAME} lualib arcemu-world)
+add_dependencies( ${PROJECT_NAME} lualib shared world)
+target_link_libraries( ${PROJECT_NAME} lualib world)
 install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION ${ASCEMU_SCRIPTLIB_PATH} LIBRARY DESTINATION ${ASCEMU_SCRIPTLIB_PATH})
 

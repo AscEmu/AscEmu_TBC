@@ -1,4 +1,4 @@
-PROJECT(arcemu-logon)
+PROJECT(logon)
 
 file(GLOB sources_localdir *.cpp *.h)
 
@@ -25,7 +25,7 @@ IF( CMAKE_GENERATOR MATCHES Visual*)
 	ADD_NATIVE_PRECOMPILED_HEADER(${PROJECT_NAME} LogonStdAfx.h ${sources_localdir}/LogonStdAfx.cpp)
 ENDIF()
 #Link our shared lib.
-target_link_libraries( ${PROJECT_NAME} arcemu-shared ${ZLIB_LIBRARIES} ${PCRE_LIBRARIES} )
+target_link_libraries( ${PROJECT_NAME} shared ${ZLIB_LIBRARIES} ${PCRE_LIBRARIES} )
 #Provide make install rules.
 install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION .)
 

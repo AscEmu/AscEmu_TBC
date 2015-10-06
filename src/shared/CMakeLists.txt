@@ -1,4 +1,4 @@
-PROJECT(arcemu-shared)
+PROJECT(shared)
 
 file(GLOB_RECURSE sources_Auth Auth/*.cpp Auth/*.h)
 file(GLOB_RECURSE sources_Config Config/*.cpp Config/*.h)
