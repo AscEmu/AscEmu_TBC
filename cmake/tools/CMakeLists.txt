@@ -1,3 +1,9 @@
+if(MSVC)
+  add_definitions(/W0)
+else()
+  add_definitions(-w)
+endif()
+
 SET(ASCEMU_TOOLS_PATH "tools" CACHE PATH "The directory where you want the tools installed." )
 SET(BUILD_TOOLS_MAP_EXTRACTOR TRUE CACHE BOOL "Build DBC and Map extractors." )
 SET(BUILD_TOOLS_VMAPS TRUE CACHE BOOL "Build VMAP extractor tools." )
