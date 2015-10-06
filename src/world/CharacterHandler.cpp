@@ -859,20 +859,20 @@ void WorldSession::FullLogin(Player * plr)
 	// Send MOTD
 	_player->BroadcastMessage(sWorld.GetMotd());
 
-	// Send revision (if enabled)
 #ifdef WIN32
-	_player->BroadcastMessage("Powered by: %sArcEmu %s r%u/%s-Win-%s %s(Please report ALL bugs to www.ArcEmu.org/forums/)", MSG_COLOR_WHITE, BUILD_TAG,
-		BUILD_HASH_STR, CONFIG, ARCH, MSG_COLOR_LIGHTBLUE);		
+    _player->BroadcastMessage("Server: %sAscEmu - %s-Windows-%s", MSG_COLOR_WHITE, CONFIG, ARCH);
 #else
-	_player->BroadcastMessage("Powered by: %sArcEmu %s r%u/%s-%s %s(Please report ALL bugs to www.ArcEmu.org/forums/)", MSG_COLOR_WHITE, BUILD_TAG,
-		BUILD_REVISION, PLATFORM_TEXT, ARCH, MSG_COLOR_LIGHTBLUE);
+    _player->BroadcastMessage("Server: %sAscEmu - %s-%s", MSG_COLOR_WHITE, PLATFORM_TEXT, ARCH);
 #endif
 
-	if(sWorld.SendStatsOnJoin || HasGMPermissions() )
-	{
-		_player->BroadcastMessage("Online Players: %s%u |rPeak: %s%u|r Accepted Connections: %s%u",
-			MSG_COLOR_WHITE, sWorld.GetSessionCount(), MSG_COLOR_WHITE, sWorld.PeakSessionCount, MSG_COLOR_WHITE, sWorld.mAcceptedConnections);
-	}
+    // Revision
+    _player->BroadcastMessage("Build hash: %s%s", MSG_COLOR_CYAN, BUILD_HASH_STR);
+    // Shows Online players, and connection peak
+    _player->BroadcastMessage("Online Players: %s%u |rPeak: %s%u|r Accepted Connections: %s%u",
+                              MSG_COLOR_GREEN, sWorld.GetSessionCount(), MSG_COLOR_BLUE, sWorld.PeakSessionCount, MSG_COLOR_BLUE, sWorld.mAcceptedConnections);
+
+    // Shows Server uptime
+    _player->BroadcastMessage("Server Uptime: |r%s", sWorld.GetUptimeString().c_str());
 
 	//Set current RestState
 	if( plr->m_isResting) 		// We are resting at an inn , turn on Zzz

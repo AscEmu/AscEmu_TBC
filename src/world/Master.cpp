@@ -20,7 +20,7 @@
 
 #include "StdAfx.h"
 
-#define BANNER "AscEmu %s r%u/%s-%s-%s :: World Server"
+#define BANNER "<< AscEmu %s/%s-%s (%s) :: World Server >>"
 
 #ifndef WIN32
 #include <sched.h>
@@ -177,7 +177,7 @@ bool Master::Run(int argc, char ** argv)
 		sLog.m_screenLogLevel = 1;
 	}
 
-	printf(BANNER, BUILD_TAG, BUILD_HASH_STR, CONFIG, PLATFORM_TEXT, ARCH);
+	printf(BANNER, BUILD_HASH_STR, CONFIG, PLATFORM_TEXT, ARCH);
 #ifdef REPACK
 	printf("\nRepack: %s | Author: %s | %s\n", REPACK, REPACK_AUTHOR, REPACK_WEBSITE);
 #endif
