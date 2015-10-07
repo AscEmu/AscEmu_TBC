@@ -139,6 +139,8 @@ extern SessionLogWriter * Player_Log;
 #define sGMLog (*GMCommand_Log)
 #define sPlrLog (*Player_Log)
 
+#define Log sLog
+
 class WorldLog : public Singleton<WorldLog>
 {
 public:

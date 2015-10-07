@@ -14,7 +14,7 @@ set(ascemu_luaengine_SRCS
   ${sources_localdir}
 )
 
-include_directories( ${include_dirs} ${ascemu_luaengine_SRCS} ${GLOBAL_INCLUDE_DIRS} )
+include_directories( ${include_dirs} ${ascemu_luaengine_SRCS} ${GLOBAL_INCLUDE_DIRS} ${DEPENDENCY_ROOT}/zlib)
 add_definitions( -DSCRIPTLIB -DSKIP_ALLOCATOR_SHARING )
 IF( IS_LINUX )
 	add_definitions(-Wno-deprecated)

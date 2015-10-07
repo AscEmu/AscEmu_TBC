@@ -20,10 +20,12 @@
 #ifndef __LUAENGINE_H
 #define __LUAENGINE_H
 
-extern "C" {		// we're C++, and LUA is C, so the compiler needs to know to use C function names.
-#include "lua/lua.h"
-#include "lua/lauxlib.h"
-#include "lua/lualib.h"
+extern "C"
+{
+    // we're C++, and LUA is C, so the compiler needs to know to use C function names.
+#include "../lualib/lua.h"
+#include "../lualib/lauxlib.h"
+#include "../lualib/lualib.h"
 };
 
 class LuaEngine;

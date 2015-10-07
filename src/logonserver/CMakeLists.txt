@@ -38,7 +38,11 @@ endforeach(src)
 
 include_directories(
    ${CMAKE_CURRENT_SOURCE_DIR}
-   ${GLOBAL_INCLUDE_DIRS}
+   ${CMAKE_CURRENT_SOURCE_DIR}/Opcodes
+   ${ROOT_PATH}/src/shared
+   ${DEPENDENCY_ROOT}/zlib
+   ${DEPENDENCY_ROOT}/openssl
+   ${DEPENDENCY_ROOT}/pcre/include
    )
 link_directories(${EXTRA_LIBS_PATH} ${DEPENDENCY_LIBS})
 

@@ -56,7 +56,7 @@
 #include "crc32.h"
 #include "LocationVector.h"
 
-#include <zlib.h>
+//#include <zlib.h>
 
 #include "Database/DatabaseEnv.h"
 #include "Database/DBCStores.h"

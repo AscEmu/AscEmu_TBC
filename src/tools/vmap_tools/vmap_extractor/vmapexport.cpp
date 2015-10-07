@@ -547,7 +547,7 @@ int main(int argc, char** argv)
         delete [] map_ids;
         //nError = ERROR_SUCCESS;
         // Extract models, listed in DameObjectDisplayInfo.dbc
-        ExtractGameobjectModels();
+        //ExtractGameobjectModels();
     }
 
     printf("\n");

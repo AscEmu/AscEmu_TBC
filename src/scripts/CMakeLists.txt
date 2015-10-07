@@ -29,7 +29,6 @@ add_subdirectory( ExtraScripts )
 add_subdirectory( GossipScripts )
 add_subdirectory( QuestScripts )
 add_subdirectory( LuaEngine )
-add_subdirectory( LuaEngine/lua )
 add_subdirectory( MiscScripts )
 
 unset(SCRIPTS_PATH)

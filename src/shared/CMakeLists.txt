@@ -89,6 +89,9 @@ set(headers
    CallBack.h
    CircularQueue.h
    Common.h
+   CommonDefines.hpp
+   CommonHelpers.hpp
+   CommonTypes.hpp
    CrashHandler.h
    crc32.h
    CThreads.h

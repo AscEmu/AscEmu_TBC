@@ -14,7 +14,7 @@ set(ascemu_questscripts_SRCS
   ${sources_EAS}
 )
 
-include_directories( ${GLOBAL_INCLUDE_DIRS} ${ascemu_questscripts_SRCS} )
+include_directories( ${GLOBAL_INCLUDE_DIRS} ${ascemu_questscripts_SRCS} ${DEPENDENCY_ROOT}/zlib )
 
 add_library( ${PROJECT_NAME} SHARED ${ascemu_questscripts_SRCS} )
 

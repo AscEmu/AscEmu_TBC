@@ -67,20 +67,5 @@ void strToLower(char* str);
  */
 bool ExtractSingleWmo(std::string& fname);
 
-/**
- * @brief
- *
- * @param origPath original path of the model, cleaned with fixnamen and fixname2
- * @param fixedName will store the translated name (if changed)
- * @param failedPaths Set to collect errors
- * @return bool
- */
-bool ExtractSingleModel(std::string& origPath, std::string& fixedName, StringSet& failedPaths);
-
-/**
- * @brief
- *
- */
-void ExtractGameobjectModels();
 
 #endif

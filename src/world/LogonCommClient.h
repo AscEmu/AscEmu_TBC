@@ -21,8 +21,9 @@
 #ifndef __LOGON_COMM_CLIENT_H
 #define __LOGON_COMM_CLIENT_H
 
-#include "Opcodes/LogonRealmOpcodes.hpp"
+#include "../logonserver/Opcodes/LogonRealmOpcodes.hpp"
 #include <RC4Engine.h>
+#include "zlib.h"
 
 class LogonCommClientSocket : public Socket
 {

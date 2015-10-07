@@ -12,7 +12,7 @@ set(ascemu_miscscripts_SRCS
   ${sources_localdir}
 )
 
-include_directories( ${GLOBAL_INCLUDE_DIRS} ${ascemu_miscscripts_SRCS} )
+include_directories( ${GLOBAL_INCLUDE_DIRS} ${ascemu_miscscripts_SRCS} ${DEPENDENCY_ROOT}/zlib )
 
 add_library( ${PROJECT_NAME} SHARED ${ascemu_miscscripts_SRCS} )
 
@@ -25,7 +25,7 @@ target_link_libraries( ${PROJECT_NAME} world )
 
 include(PCHSupport)
 IF( CMAKE_GENERATOR MATCHES Visual*)
-	ADD_NATIVE_PRECOMPILED_HEADER(${PROJECT_NAME} Setup.h ${sources_localdir}/Setup.cpp)
+	ADD_NATIVE_PRECOMPILED_HEADER(${PROJECT_NAME} Setup.h ${ascemu_miscscripts_SRCS}/Setup.cpp)
 ENDIF()
 
 install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION ${ASCEMU_SCRIPTLIB_PATH} LIBRARY DESTINATION ${ASCEMU_SCRIPTLIB_PATH})
