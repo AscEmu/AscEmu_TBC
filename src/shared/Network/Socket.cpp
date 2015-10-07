@@ -10,127 +10,138 @@
 
 initialiseSingleton(SocketGarbageCollector);
 
-Socket::Socket(SOCKET fd, uint32 sendbuffersize, uint32 recvbuffersize) : m_fd(fd), m_connected(false),	m_deleted(false)
+Socket::Socket(SOCKET fd, uint32 sendbuffersize, uint32 recvbuffersize) : m_fd(fd), m_connected(false),    m_deleted(false), m_writeLock(0)
 {
-	// Allocate Buffers
-	readBuffer.Allocate(recvbuffersize);
-	writeBuffer.Allocate(sendbuffersize);
+    // Allocate Buffers
+    readBuffer.Allocate(recvbuffersize);
+    writeBuffer.Allocate(sendbuffersize);
 
-	// IOCP Member Variables
+    m_BytesSent = 0;
+    m_BytesRecieved = 0;
+
+    // IOCP Member Variables
 #ifdef CONFIG_USE_IOCP
-	m_writeLock = 0;
-	m_completionPort = 0;
-#else
-	m_writeLock = 0;
+    m_completionPort = 0;
 #endif
 
-	// Check for needed fd allocation.
-	if(m_fd == 0)
-		m_fd = SocketOps::CreateTCPFileDescriptor();
+    // Check for needed fd allocation.
+    if(m_fd == 0)
+    {
+        m_fd = SocketOps::CreateTCPFileDescriptor();
+    }
+
+    sLog.outDebug("Created Socket %u", m_fd);
 }
 
 Socket::~Socket()
 {
-
 }
 
-bool Socket::Connect(const char * Address, uint32 Port)
+bool Socket::Connect(const char* Address, uint32 Port)
 {
-	struct hostent * ci = gethostbyname(Address);
-	if(ci == 0)
-		return false;
+    struct hostent* ci = gethostbyname(Address);
+    if(ci == 0)
+        return false;
 
-	m_client.sin_family = ci->h_addrtype;
-	m_client.sin_port = ntohs((u_short)Port);
-	memcpy(&m_client.sin_addr.s_addr, ci->h_addr_list[0], ci->h_length);
+    m_client.sin_family = ci->h_addrtype;
+    m_client.sin_port = ntohs((u_short)Port);
+    memcpy(&m_client.sin_addr.s_addr, ci->h_addr_list[0], ci->h_length);
 
-	SocketOps::Blocking(m_fd);
-	if(connect(m_fd, (const sockaddr*)&m_client, sizeof(m_client)) == -1)
-		return false;
+    SocketOps::Blocking(m_fd);
+    if(connect(m_fd, (const sockaddr*)&m_client, sizeof(m_client)) == -1)
+        return false;
 
-	// at this point the connection was established
+    // at this point the connection was established
 #ifdef CONFIG_USE_IOCP
-	m_completionPort = sSocketMgr.GetCompletionPort();
+    m_completionPort = sSocketMgr.GetCompletionPort();
 #endif
-	_OnConnect();
-	return true;
+    _OnConnect();
+    return true;
 }
 
-void Socket::Accept(sockaddr_in * address)
+void Socket::Accept(sockaddr_in* address)
 {
-	memcpy(&m_client, address, sizeof(*address));
-	_OnConnect();
+    memcpy(&m_client, address, sizeof(*address));
+    _OnConnect();
 }
 
 void Socket::_OnConnect()
 {
-	// set common parameters on the file descriptor
-	SocketOps::Nonblocking(m_fd);
-	SocketOps::DisableBuffering(m_fd);
-/*	SocketOps::SetRecvBufferSize(m_fd, m_writeBufferSize);
-	SocketOps::SetSendBufferSize(m_fd, m_writeBufferSize);*/
-	m_connected = true;
+    // set common parameters on the file descriptor
+    SocketOps::Nonblocking(m_fd);
+    SocketOps::DisableBuffering(m_fd);
+    /*    SocketOps::SetRecvBufferSize(m_fd, m_writeBufferSize);
+        SocketOps::SetSendBufferSize(m_fd, m_writeBufferSize);*/
+    m_connected.SetVal(true);
 
-	// IOCP stuff
+    // IOCP stuff
 #ifdef CONFIG_USE_IOCP
-	AssignToCompletionPort();
-	SetupReadEvent();
+    AssignToCompletionPort();
+    SetupReadEvent();
 #endif
-	sSocketMgr.AddSocket(this);
+    sSocketMgr.AddSocket(this);
 
-	// Call virtual onconnect
-	OnConnect();
+    // Call virtual onconnect
+    OnConnect();
 }
 
-bool Socket::Send(const uint8 * Bytes, uint32 Size)
+bool Socket::Send(const uint8* Bytes, uint32 Size)
 {
-	bool rv;
+    bool rv;
 
-	// This is really just a wrapper for all the burst stuff.
-	BurstBegin();
-	rv = BurstSend(Bytes, Size);
-	if(rv)
-		BurstPush();
-	BurstEnd();
+    // This is really just a wrapper for all the burst stuff.
+    BurstBegin();
+    rv = BurstSend(Bytes, Size);
+    if(rv)
+        BurstPush();
+    BurstEnd();
 
-	return rv;
+    return rv;
 }
 
-bool Socket::BurstSend(const uint8 * Bytes, uint32 Size)
+bool Socket::BurstSend(const uint8* Bytes, uint32 Size)
 {
-	return writeBuffer.Write(Bytes, Size);
+    return writeBuffer.Write(Bytes, Size);
 }
 
-string Socket::GetRemoteIP()
+std::string Socket::GetRemoteIP()
 {
-	char* ip = (char*)inet_ntoa( m_client.sin_addr );
-	if( ip != NULL )
-		return string( ip );
-	else
-		return string( "noip" );
+    char* ip = (char*)inet_ntoa(m_client.sin_addr);
+    if(ip != NULL)
+        return std::string(ip);
+    else
+        return std::string("noip");
 }
 
 void Socket::Disconnect()
 {
-	m_connected = false;
+    //if returns false it means it's already disconnected
+    if(!m_connected.SetVal(false))
+        return;
 
-	// remove from mgr
-	sSocketMgr.RemoveSocket(this);
+    sLog.outDetail("Socket::Disconnect on socket %u", m_fd);
 
-	SocketOps::CloseSocket(m_fd);
+    // remove from mgr
+    sSocketMgr.RemoveSocket(this);
 
-	// Call virtual ondisconnect
-	OnDisconnect();
+    // Call virtual ondisconnect
+    OnDisconnect();
 
-	if(!m_deleted) Delete();
+    if(!IsDeleted())
+        Delete();
 }
 
 void Socket::Delete()
 {
-	if(m_deleted) return;
-	m_deleted = true;
+    //if returns true it means it's already delete
+    if(m_deleted.SetVal(true))
+        return;
 
-	if(m_connected) Disconnect();
-	sSocketGarbageCollector.QueueSocket(this);
+    sLog.outDebug("Socket::Delete() on socket %u", m_fd);
+
+    if(IsConnected()) Disconnect();
+
+    SocketOps::CloseSocket(m_fd);
+
+    sSocketGarbageCollector.QueueSocket(this);
 }
-
