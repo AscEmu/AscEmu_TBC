@@ -19,7 +19,7 @@
 
 #include "DBCStores.h"
 #include "DataStore.h"
-#include "NGLog.h"
+#include "Log.h"
 
 SERVER_DECL DBCStorage<GemPropertyEntry> dbcGemProperty;
 SERVER_DECL DBCStorage<ItemSetEntry> dbcItemSet;

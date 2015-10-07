@@ -18,7 +18,7 @@
  */
 
 #include "DBC.h"
-#include "../NGLog.h"
+#include "../Log.h"
 #include <math.h>
 
 class DBC;

@@ -79,7 +79,7 @@ void HandleReadComplete(Socket * s, uint32 len)
 		s->m_readEvent.Unmark();
 		if(len)
 		{
-			s->GetReadBuffer().IncrementWritten(len);
+            s->readBuffer.IncrementWritten(len);
 			s->OnRead();
 			s->SetupReadEvent();
 		}
@@ -94,8 +94,8 @@ void HandleWriteComplete(Socket * s, uint32 len)
 	{
 		s->m_writeEvent.Unmark();
 		s->BurstBegin();					// Lock
-		s->GetWriteBuffer().Remove(len);
-		if( s->GetWriteBuffer().GetContiguiousBytes() > 0 )
+        s->writeBuffer.Remove(len);
+        if (s->writeBuffer.GetContiguiousBytes() > 0)
 			s->WriteCallback();
 		else
 			s->DecSendLock();

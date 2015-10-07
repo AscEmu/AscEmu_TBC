@@ -20,7 +20,6 @@
 #include "Common.h"
 #include "Config/ConfigEnv.h"
 #include "Log.h"
-#include "NGLog.h"
 #include <stdarg.h>
 
 string FormatOutputString(const char * Prefix, const char * Description, bool useTimeStamp)
@@ -45,11 +44,11 @@ string FormatOutputString(const char * Prefix, const char * Description, bool us
 }
 
 createFileSingleton( oLog );
-createFileSingleton(CLog);
 initialiseSingleton( WorldLog );
 
 SERVER_DECL time_t UNIXTIME;
 SERVER_DECL tm g_localTime;
+
 void oLog::SetColor(int color)
 {
 #if PLATFORM != PLATFORM_WIN32
@@ -304,6 +303,133 @@ void oLog::SetFileLoggingLevel(int32 level)
     if (level >= 0)
         m_fileLogLevel = level;
 }
+
+void oLog::Notice(const char* source, const char* format, ...)
+{
+    if (m_fileLogLevel < 1 || m_normalFile == NULL)
+        return;
+
+    char buf[32768];
+    va_list ap;
+
+    va_start(ap, format);
+    vsnprintf(buf, 32768, format, ap);
+    va_end(ap);
+    SetColor(TGREEN);
+    printf("%s: %s\n", source, buf);
+    SetColor(TNORMAL);
+    outFile(m_normalFile, buf, source);
+}
+
+void oLog::Warning(const char* source, const char* format, ...)
+{
+    if (m_fileLogLevel < 1 || m_normalFile == NULL)
+        return;
+
+    char buf[32768];
+    va_list ap;
+
+    va_start(ap, format);
+    vsnprintf(buf, 32768, format, ap);
+    va_end(ap);
+    SetColor(TWHITE);
+    printf("%s: %s\n", source, buf);
+    SetColor(TNORMAL);
+    outFile(m_normalFile, buf, source);
+}
+
+void oLog::Success(const char* source, const char* format, ...)
+{
+    if (m_normalFile == NULL)
+        return;
+
+    char buf[32768];
+    va_list ap;
+
+    va_start(ap, format);
+    vsnprintf(buf, 32768, format, ap);
+    va_end(ap);
+    SetColor(TNORMAL);
+    printf("%s: %s\n", source, buf);
+    outFile(m_normalFile, buf, source);
+}
+
+void oLog::Error(const char* source, const char* format, ...)
+{
+    if (m_errorFile == NULL)
+        return;
+
+    char buf[32768];
+    va_list ap;
+
+    va_start(ap, format);
+    vsnprintf(buf, 32768, format, ap);
+    va_end(ap);
+    SetColor(TRED);
+    printf("%s: %s\n", source, buf);
+    SetColor(TNORMAL);
+    outFile(m_errorFile, buf, source);
+}
+
+void oLog::Debug(const char* source, const char* format, ...)
+{
+    if (m_fileLogLevel < 2 || m_errorFile == NULL)
+        return;
+
+    char buf[32768];
+    va_list ap;
+
+    va_start(ap, format);
+    vsnprintf(buf, 32768, format, ap);
+    va_end(ap);
+    SetColor(TYELLOW);
+    printf("%s: %s\n", source, buf);
+    SetColor(TNORMAL);
+    outFile(m_errorFile, buf, source);
+}
+
+void oLog::LargeErrorMessage(const char* source, ...)
+{
+    std::vector<char*> lines;
+    char* pointer;
+    va_list ap;
+    va_start(ap, source);
+
+    pointer = const_cast<char*>(source);
+    lines.push_back(pointer);
+
+    size_t i, j, k;
+    pointer = va_arg(ap, char*);
+    while (pointer != NULL)
+    {
+        lines.push_back(pointer);
+        pointer = va_arg(ap, char*);
+    }
+
+    va_end(ap);
+
+    outError("*********************************************************************");
+    outError("*                        MAJOR ERROR/WARNING                        *");
+    outError("*                        ===================                        *");
+
+    for (std::vector<char*>::iterator itr = lines.begin(); itr != lines.end(); ++itr)
+    {
+        std::stringstream sstext;
+        i = strlen(*itr);
+        j = (i <= 65) ? 65 - i : 0;
+        sstext << "* " << *itr;
+        for (k = 0; k < j; ++k)
+        {
+            sstext << " ";
+        }
+
+        sstext << " *";
+        outError(sstext.str().c_str());
+    }
+
+    outError("*********************************************************************");
+}
+
 
 void SessionLogWriter::write(const char* format, ...)
 {

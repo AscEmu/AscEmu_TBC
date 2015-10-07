@@ -491,7 +491,7 @@ void EyeOfTheStorm::OnCreate()
 		goi = GameObjectNameStorage.LookupEntry( EOTSTowerIds[i] );
 		if( goi == NULL )
 		{
-			Log.LargeErrorMessage(LARGERRORMESSAGE_ERROR, "EOTS is being created and you are missing gameobjects. Terminating.");
+			Log.LargeErrorMessage("EOTS is being created and you are missing gameobjects. Terminating.", NULL);
 			abort();
 			return;
 		}
@@ -503,7 +503,7 @@ void EyeOfTheStorm::OnCreate()
 		goi = GameObjectNameStorage.LookupEntry( EOTS_BANNER_NEUTRAL );
 		if( goi == NULL )
 		{
-			Log.LargeErrorMessage(LARGERRORMESSAGE_ERROR, "EOTS is being created and you are missing gameobjects. Terminating.");
+			Log.LargeErrorMessage("EOTS is being created and you are missing gameobjects. Terminating.", NULL);
 			abort();
 			return;
 		}
@@ -519,7 +519,7 @@ void EyeOfTheStorm::OnCreate()
 		m_bubbles[i] = m_mapMgr->CreateGameObject((uint32)EOTSBubbleLocations[i][0]);
 		if( !m_bubbles[i]->CreateFromProto( (uint32)EOTSBubbleLocations[i][0], m_mapMgr->GetMapId(), EOTSBubbleLocations[i][1], EOTSBubbleLocations[i][2], EOTSBubbleLocations[i][3], EOTSBubbleLocations[i][4] ) )
 		{
-			Log.LargeErrorMessage(LARGERRORMESSAGE_ERROR, "EOTS is being created and you are missing gameobjects. Terminating.");
+			Log.LargeErrorMessage("EOTS is being created and you are missing gameobjects. Terminating.", NULL);
 			abort();
 			return;
 		}

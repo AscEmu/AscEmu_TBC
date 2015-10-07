@@ -49,7 +49,6 @@
 #include "MersenneTwister.h"
 #include "WorldPacket.h"
 #include "Log.h"
-#include "NGLog.h"
 #include "ByteBuffer.h"
 #include "StackBuffer.h"
 #include "Config/ConfigEnv.h"

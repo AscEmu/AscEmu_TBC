@@ -10,6 +10,15 @@
 #define SOCKET_H
 
 #include "SocketDefines.h"
+#include "NetworkIncludes.hpp"
+#include "CircularBuffer.h"
+#include "Singleton.h"
+#include "Log.h"
+#include <string>
+#include <mutex>
+#include <atomic>
+#include <map>
+#include <set>
 
 class SERVER_DECL Socket
 {
@@ -73,13 +82,14 @@ public:
 	ARCEMU_INLINE bool IsDeleted() { return m_deleted; }
 	ARCEMU_INLINE bool IsConnected() { return m_connected; }
 	ARCEMU_INLINE sockaddr_in & GetRemoteStruct() { return m_client; }
-	ARCEMU_INLINE CircularBuffer& GetReadBuffer() { return readBuffer; }
-	ARCEMU_INLINE CircularBuffer& GetWriteBuffer() { return writeBuffer; }
 
-/* Deletion */
 	void Delete();
 
 	ARCEMU_INLINE in_addr GetRemoteAddress() { return m_client.sin_addr; }
+
+
+    CircularBuffer readBuffer;
+    CircularBuffer writeBuffer;
 
 protected:
 
@@ -87,9 +97,6 @@ protected:
 	void _OnConnect();
   
 	SOCKET m_fd;
-
-	CircularBuffer readBuffer;
-	CircularBuffer writeBuffer;
 
 	Mutex m_writeMutex;
 	Mutex m_readMutex;

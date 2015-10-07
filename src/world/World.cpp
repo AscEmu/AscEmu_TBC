@@ -271,7 +271,6 @@ void ApplyNormalFixes();
 
 bool World::SetInitialWorldSettings()
 {
-	Log.Line();
 	Player::InitVisibleUpdateBits();
 
 	CharacterDatabase.WaitExecute("UPDATE characters SET online = 0 WHERE online = 1");
@@ -334,7 +333,7 @@ bool World::SetInitialWorldSettings()
 	Log.Notice( "World", "Loading DBC files..." );
 	if( !LoadDBCs() )
 	{
-		Log.LargeErrorMessage(LARGERRORMESSAGE_ERROR, "One or more of the DBC files are missing.", "These are absolutely necessary for the server to function.", "The server will not start without them.", NULL);
+		Log.LargeErrorMessage("One or more of the DBC files are missing.", "These are absolutely necessary for the server to function.", "The server will not start without them.", NULL);
 		return false;
 	}
 
@@ -1071,9 +1070,7 @@ void TaskList::spawn()
 	else
 		threadcount = 1;
 
-	Log.Line();
 	Log.Notice("World", "Beginning %s server startup with %u threads.", (threadcount == 1) ? "progressive" : "parallel", threadcount);
-	Log.Line();
 
 	for(uint32 x = 0; x < threadcount; ++x)
 		ThreadPool.ExecuteTask(new TaskExecutor(this));
@@ -1206,7 +1203,6 @@ void World::Rehash(bool load)
 	SetKickAFKPlayerTime(Config.MainConfig.GetIntDefault("Server", "KickAFKPlayers", 0));
 	sLog.SetScreenLoggingLevel(Config.MainConfig.GetIntDefault("LogLevel", "Screen", 1));
 	sLog.SetFileLoggingLevel(Config.MainConfig.GetIntDefault("LogLevel", "File", -1));
-	Log.log_level = Config.MainConfig.GetIntDefault("LogLevel", "Screen", 1);
 	gm_skip_attunement = Config.MainConfig.GetBoolDefault("Server", "SkipAttunementsForGM", true);
 	Collision = Config.MainConfig.GetBoolDefault("Server", "Collision", 0);
 	DisableFearMovement = Config.MainConfig.GetBoolDefault("Server", "DisableFearMovement", 0);

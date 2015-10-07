@@ -63,6 +63,7 @@ set(headers
    Network/ListenSocketLinux.h
    Network/ListenSocketWin32.h
    Network/Network.h
+   Network/NetworkIncludes.hpp
    Network/Socket.h
    Network/SocketDefines.h
    Network/SocketMgrLinux.h
@@ -106,7 +107,6 @@ set(headers
    MemoryLeaks.h
    MersenneTwister.h
    New-Bytebuffer.h
-   NGLog.h
    PacketLog.h
    PreallocatedQueue.h
    RC4Engine.h

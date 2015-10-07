@@ -1412,7 +1412,7 @@ void ObjectMgr::LoadSpellFixes()
 	{
 		if( result->GetFieldCount() != 8 )
 		{
-			Log.LargeErrorMessage(LARGERRORMESSAGE_WARNING, "Incorrect column count at spellfixes, skipping, please fix it.",
+			Log.LargeErrorMessage("Incorrect column count at spellfixes, skipping, please fix it.",
 				"arcemu has skipped loading this table in order to avoid crashing.", NULL);
 			return;
 		}
@@ -1863,7 +1863,7 @@ void ObjectMgr::LoadTrainers()
 		}
 		if(result2->GetFieldCount() != 10)
 		{
-			Log.LargeErrorMessage(LARGERRORMESSAGE_WARNING, "Trainers table format is invalid. Please update your database.");
+			Log.LargeErrorMessage("Trainers table format is invalid. Please update your database.");
 			return;
 		}
 		else
@@ -3011,7 +3011,7 @@ void ObjectMgr::LoadGroups()
 	{
 		if(result->GetFieldCount() != 51)
 		{
-			Log.LargeErrorMessage(LARGERRORMESSAGE_WARNING, "groups table format is invalid. Please update your database.");
+			Log.LargeErrorMessage("groups table format is invalid. Please update your database.");
 			return;
 		}
 		do 
@@ -3032,7 +3032,7 @@ void ObjectMgr::LoadArenaTeams()
 	{
 		if(result->GetFieldCount() != 22)
 		{
-			Log.LargeErrorMessage(LARGERRORMESSAGE_WARNING, "arenateams table format is invalid. Please update your database.");
+			Log.LargeErrorMessage("arenateams table format is invalid. Please update your database.");
 			return;
 		}
 		do 

@@ -55,6 +55,9 @@ enum LogType
     LOGON_LOG
 };
 
+extern SERVER_DECL time_t UNIXTIME;        //update this every loop to avoid the time() syscall!
+extern SERVER_DECL tm g_localTime;
+
 std::string FormatOutputString(const char * Prefix, const char * Description, bool useTimeStamp);
 
 class SERVER_DECL oLog : public Singleton< oLog > {
@@ -74,6 +77,14 @@ public:
   void Close();
   void SetFileLoggingLevel(int32 level);
   void SetScreenLoggingLevel(int32 level);
+
+  //NGLog.h stuff
+  void Success(const char* source, const char* format, ...); //
+  void Error(const char* source, const char* format, ...); //
+  void LargeErrorMessage(const char* str, ...); //
+  void Notice(const char* source, const char* format, ...);
+  void Warning(const char* source, const char* format, ...);
+  void Debug(const char* source, const char* format, ...); //
 
   int32 m_fileLogLevel;
   int32 m_screenLogLevel;

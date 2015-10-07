@@ -82,7 +82,7 @@ bool CheckResultLengthCreatures(QueryResult * res)
 		if( first_table_warning )
 		{
 			first_table_warning = false;
-			Log.LargeErrorMessage(LARGERRORMESSAGE_WARNING, "One of your creature_spawns table has the wrong column count.",
+			Log.LargeErrorMessage("One of your creature_spawns table has the wrong column count.",
 				"arcemu has skipped loading this table in order to avoid crashing.",
 				"Please correct this, if you do not no spawns will show.", NULL);
 		}
@@ -101,7 +101,7 @@ bool CheckResultLengthGameObject(QueryResult * res)
 		if( first_table_warningg )
 		{
 			first_table_warningg = false;
-			Log.LargeErrorMessage(LARGERRORMESSAGE_WARNING, "One of your gameobject_spawns table has the wrong column count.",
+			Log.LargeErrorMessage("One of your gameobject_spawns table has the wrong column count.",
 				"arcemu has skipped loading this table in order to avoid crashing.",
 				"Please correct this, if you do not no spawns will show.", NULL);
 		}

@@ -20,7 +20,7 @@
 
 #include "DatabaseEnv.h"
 #include "../CrashHandler.h"
-#include "../NGLog.h"
+#include "../Log.h"
 
 #if defined(ENABLE_DATABASE_MYSQL)
 

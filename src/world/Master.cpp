@@ -177,60 +177,49 @@ bool Master::Run(int argc, char ** argv)
 		sLog.m_screenLogLevel = 1;
 	}
 
-	printf(BANNER, BUILD_HASH_STR, CONFIG, PLATFORM_TEXT, ARCH);
-#ifdef REPACK
-	printf("\nRepack: %s | Author: %s | %s\n", REPACK, REPACK_AUTHOR, REPACK_WEBSITE);
-#endif
-	Log.Color(TBLUE);
-	printf("\nCopyright (C) 2014 - 2015 AscEmu. http://www.ascemu.org/\n");
-	printf("This program is free software: you can redistribute it and/or modify\n");
-	printf("it under the terms of the GNU Affero General Public License as published by\n");
-	printf("the Free Software Foundation, either version 3 of the License, or\n");
-	printf("any later version.\n");
-	printf("This program is distributed in the hope that it will be useful,\n");
-	printf("but WITHOUT ANY WARRANTY; without even the implied warranty of\n");
-	printf("MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the\n");
-	printf("GNU Affero General Public License for more details.\n");
-	printf("                                                \n");
-	printf("                     ``````                     \n");
-	printf("    AscEmu!        `/o/::-:/-                   \n"); 
-	printf("                   oho/-.-:yN-                  \n"); 
-	printf("                    os+/-.:::                   \n"); 
-	printf("                    :ysyoo+:`                   \n"); 
-	printf("					`ohdys/.                    \n"); 
-	printf("                     oyho/-`   ``               \n"); 
-	printf("                   `shyo+:./ssmdsyo:`           \n"); 
-	printf("                    .shss+:yNMMNNMNmms.         \n"); 
-	printf("                    :ysss+:mNMMMMNNmmds.        \n"); 
-	printf("                `-//sssoo/:NMNMMMNMNNdy-        \n"); 
-	printf("    -`/`       `omhyyhyyyshNMMNNNMMMNmy:        \n"); 
-	printf("    :/::-`     `sdmdmmNMNMMMMMMNMNNNNms-        \n"); 
-	printf("     /+++/-.....shdmmNMMNMMMMMMMMMNNNd+         \n");
-	printf("     ./+oshyhhhddmhdmNMMMMMMMMMMMMNNds.         \n"); 
-	printf("       `:/:.`````.:+ymmNMMNMMMNMMNNd/           \n"); 
-	printf("                     -+shmNNMMMNmhy/            \n"); 
-	printf("                          `..-ods:.             \n");
-	printf("                               o:.`             \n");
-	printf("                               :-.              \n");
-	printf("                              `/-...            \n"); 
-	printf("    Introducing the emu!     --``-/:`           \n"); 
-	printf("                           .:/+:-.-::.          \n"); 
-	printf("                          `.-///:-.`            \n");
-	printf(" Website: http://www.AscEmu.org	     			\n");
-	printf(" Forums: http://www.board.ascemu.org/           \n");
-	printf(" GIT: https://github.com/AscEmu/AscEmu_TBC      \n");
-	printf(" Have fun!                                      \n");
-	Log.Line();
-#ifdef REPACK
-	Log.Color(TRED);
-	printf("Warning: Using repacks is potentially dangerous. You should always compile\n");
-	printf("from the source yourself at www.ascemu.org.\n");
-	printf("By using this repack, you agree to not visit the ascemu website and ask\nfor support.\n");
-	printf("For all support, you should visit the repacker's website at %s\n", REPACK_WEBSITE);
-	Log.Color(TNORMAL);
-	Log.Line();
-#endif
-	Log.log_level = 3;
+    sLog.outBasic(BANNER, BUILD_HASH_STR, CONFIG, PLATFORM_TEXT, ARCH);
+    sLog.outBasic("========================================================");
+    sLog.outErrorSilent(BANNER, BUILD_HASH_STR, CONFIG, PLATFORM_TEXT, ARCH); // Echo off.
+    sLog.outErrorSilent("========================================================"); // Echo off.
+
+    sLog.outBasic("Copyright (C) 2014 - 2015 AscEmu. http://www.ascemu.org/");
+	sLog.outBasic("This program is free software: you can redistribute it and/or modify");
+	sLog.outBasic("it under the terms of the GNU Affero General Public License as published by");
+	sLog.outBasic("the Free Software Foundation, either version 3 of the License, or");
+	sLog.outBasic("any later version.");
+	sLog.outBasic("This program is distributed in the hope that it will be useful,");
+	sLog.outBasic("but WITHOUT ANY WARRANTY; without even the implied warranty of");
+	sLog.outBasic("MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the");
+	sLog.outBasic("GNU Affero General Public License for more details.");
+	sLog.outBasic("                                                ");
+	sLog.outBasic("                     ``````                     ");
+	sLog.outBasic("    AscEmu!        `/o/::-:/-                   "); 
+	sLog.outBasic("                   oho/-.-:yN-                  "); 
+	sLog.outBasic("                    os+/-.:::                   "); 
+	sLog.outBasic("                    :ysyoo+:`                   "); 
+	sLog.outBasic("                    `ohdys/.                    "); 
+	sLog.outBasic("                     oyho/-`   ``               "); 
+	sLog.outBasic("                   `shyo+:./ssmdsyo:`           "); 
+	sLog.outBasic("                    .shss+:yNMMNNMNmms.         "); 
+	sLog.outBasic("                    :ysss+:mNMMMMNNmmds.        "); 
+	sLog.outBasic("                `-//sssoo/:NMNMMMNMNNdy-        "); 
+	sLog.outBasic("    -`/`       `omhyyhyyyshNMMNNNMMMNmy:        "); 
+	sLog.outBasic("    :/::-`     `sdmdmmNMNMMMMMMNMNNNNms-        "); 
+	sLog.outBasic("     /+++/-.....shdmmNMMNMMMMMMMMMNNNd+         ");
+	sLog.outBasic("     ./+oshyhhhddmhdmNMMMMMMMMMMMMNNds.         "); 
+	sLog.outBasic("       `:/:.`````.:+ymmNMMNMMMNMMNNd/           "); 
+	sLog.outBasic("                     -+shmNNMMMNmhy/            "); 
+	sLog.outBasic("                          `..-ods:.             ");
+	sLog.outBasic("                               o:.`             ");
+	sLog.outBasic("                               :-.              ");
+	sLog.outBasic("                              `/-...            "); 
+	sLog.outBasic("    Introducing the emu!     --``-/:`           "); 
+	sLog.outBasic("                           .:/+:-.-::.          "); 
+	sLog.outBasic("                          `.-///:-.`            ");
+	sLog.outBasic(" Website: http://www.AscEmu.org                 ");
+	sLog.outBasic(" Forums: http://www.board.ascemu.org/           ");
+	sLog.outBasic(" GIT: https://github.com/AscEmu/AscEmu_TBC      ");
+	sLog.outBasic(" Have fun!                                      ");
 
 	if(do_version)
 		return true;
@@ -258,8 +247,7 @@ bool Master::Run(int argc, char ** argv)
 		return true;
 	}
 
-	printf( "The key combination <Ctrl-C> will safely shut down the server at any time.\n" );
-	Log.Line();
+    sLog.outBasic("The key combination <Ctrl-C> will safely shut down the server at any time.");
     
 #ifndef WIN32
 	if(geteuid() == 0 || getegid() == 0)
@@ -318,18 +306,12 @@ bool Master::Run(int argc, char ** argv)
 
 	if(do_database_clean)
 	{
-		printf( "\nEntering database maintenance mode.\n\n" );
+        sLog.outDebug("Entering database maintenance mode." );
 		new DatabaseCleaner;
 		DatabaseCleaner::getSingleton().Run();
 		delete DatabaseCleaner::getSingletonPtr();
-		Log.Color(TYELLOW);
-		printf( "\nMaintenence finished. Take a moment to review the output, and hit space to continue startup." );
-		Log.Color(TNORMAL);
-		fflush(stdout);
+        sLog.outDebug("Maintenance finished.");
 	}
-
-	Log.Line();
-	sLog.outString( "" );
 
 #ifdef GM_SCRIPT
 	ScriptSystem = new ScriptEngine;
