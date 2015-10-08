@@ -111,8 +111,8 @@ public:
 	GameObject ** m_GOStorage;
 	GameObject * CreateGameObject(uint32 entry);
 
-	ARCEMU_INLINE uint32 GenerateGameobjectGuid() { return ++m_GOHighGuid; }
-	ARCEMU_INLINE GameObject * GetGameObject(uint32 guid)
+	uint32 GenerateGameobjectGuid() { return ++m_GOHighGuid; }
+	GameObject * GetGameObject(uint32 guid)
 	{
 		if(guid > m_GOHighGuid)
 			return 0;
@@ -142,7 +142,7 @@ public:
 	DynamicObjectStorageMap m_DynamicObjectStorage;
 	DynamicObject * CreateDynamicObject();
 	
-	ARCEMU_INLINE DynamicObject * GetDynamicObject(uint32 guid)
+	DynamicObject * GetDynamicObject(uint32 guid)
 	{
 		DynamicObjectStorageMap::iterator itr = m_DynamicObjectStorage.find(guid);
 		return (itr != m_DynamicObjectStorage.end()) ? itr->second : 0;
@@ -153,7 +153,7 @@ public:
 ///////////////////////////////////////////
 	typedef HM_NAMESPACE::hash_map<uint32, Pet*> PetStorageMap;
 	PetStorageMap m_PetStorage;
-	__inline Pet * GetPet(uint32 guid)
+	Pet* GetPet(uint32 guid)
 	{
 		PetStorageMap::iterator itr = m_PetStorage.find(guid);
 		return (itr != m_PetStorage.end()) ? itr->second : 0;
@@ -166,7 +166,7 @@ public:
     // double typedef lolz// a compile breaker..
 	typedef HM_NAMESPACE::hash_map<uint32, Player*>                     PlayerStorageMap;
 	PlayerStorageMap m_PlayerStorage;
-	__inline Player * GetPlayer(uint32 guid)
+	Player* GetPlayer(uint32 guid)
 	{
 		PlayerStorageMap::iterator itr = m_PlayerStorage.find(guid);
 		return (itr != m_PlayerStorage.end()) ? itr->second : 0;
@@ -220,20 +220,20 @@ public:
 
 	void PushToProcessed(Player* plr);
 
-	ARCEMU_INLINE bool HasPlayers() { return (m_PlayerStorage.size() > 0); }
-	ARCEMU_INLINE bool IsCombatInProgress() { return (_combatProgress.size() > 0); }
+	bool HasPlayers() { return (m_PlayerStorage.size() > 0); }
+	bool IsCombatInProgress() { return (_combatProgress.size() > 0); }
 	void TeleportPlayers();
 
-	ARCEMU_INLINE uint32 GetInstanceID() { return m_instanceID; }
-	ARCEMU_INLINE MapInfo *GetMapInfo() { return pMapInfo; }
+	uint32 GetInstanceID() { return m_instanceID; }
+	MapInfo *GetMapInfo() { return pMapInfo; }
 
 	bool _shutdown;
 
-	ARCEMU_INLINE MapScriptInterface * GetInterface() { return ScriptInterface; }
+	MapScriptInterface * GetInterface() { return ScriptInterface; }
 	virtual int32 event_GetInstanceID() { return m_instanceID; }
 
 	void LoadAllCells();
-	ARCEMU_INLINE size_t GetPlayerCount() { return m_PlayerStorage.size(); }
+	size_t GetPlayerCount() { return m_PlayerStorage.size(); }
 	uint32 GetTeamPlayersCount(uint32 teamId);
 
 	void _PerformObjectDuties();
@@ -256,8 +256,8 @@ public:
 	void BeginInstanceExpireCountdown();
 	void HookOnAreaTrigger(Player * plr, uint32 id);
 
-	ARCEMU_INLINE void SetWorldState(uint32 state, uint32 value);
-	ARCEMU_INLINE uint32 GetWorldState(uint32 state);
+	void SetWorldState(uint32 state, uint32 value);
+	uint32 GetWorldState(uint32 state);
 	
 	// better hope to clear any references to us when calling this :P
 	void InstanceShutdown()
@@ -294,7 +294,7 @@ private:
 	//! Objects that exist on map
  
 	uint32 _mapId;
-	set<Object*> _mapWideStaticObjects;
+    std::set<Object*> _mapWideStaticObjects;
 
 	std::map<uint32,uint32> _worldStateSet;
 
@@ -334,14 +334,14 @@ public:
 	CreatureSet activeCreatures;
 	EventableObjectHolder eventHolder;
 	CBattleground * m_battleground;
-	set<Corpse*> m_corpses;
+    std::set<Corpse*> m_corpses;
 	CreatureSqlIdMap _sqlids_creatures;
 	GameObjectSqlIdMap _sqlids_gameobjects;
 
 	Creature * GetSqlIdCreature(uint32 sqlid);
 	GameObject * GetSqlIdGameObject(uint32 sqlid);
-	deque<uint32> _reusable_guids_gameobject;
-	deque<uint32> _reusable_guids_creature;
+    std::deque<uint32> _reusable_guids_gameobject;
+    std::deque<uint32> _reusable_guids_creature;
 
 	bool forced_expire;
 	bool thread_kill_only;

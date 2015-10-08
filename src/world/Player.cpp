@@ -642,7 +642,8 @@ bool Player::Create(WorldPacket& data )
 	}
 
 	m_mapId = info->mapId;
-	m_zoneId = info->zoneId;
+    SetZoneId(info->zoneId);
+	//m_zoneId = info->zoneId;
 	m_position.ChangeCoords(info->positionX, info->positionY, info->positionZ);
 	m_bind_pos_x = info->positionX;
 	m_bind_pos_y = info->positionY;
@@ -718,7 +719,10 @@ bool Player::Create(WorldPacket& data )
 
 	SetUInt32Value(UNIT_FIELD_BYTES_0, ( ( race ) | ( class_ << 8 ) | ( gender << 16 ) | ( powertype << 24 ) ) );
 	//UNIT_FIELD_BYTES_1	(standstate) | (unk1) | (unk2) | (attackstate)
-	SetUInt32Value(UNIT_FIELD_BYTES_2, (0x28 << 8) );
+	//SetUInt32Value(UNIT_FIELD_BYTES_2, (0x28 << 8) );
+
+    SetUInt32Value(UNIT_FIELD_BYTES_2, (0x01 << 8));
+
 	if(class_ == WARRIOR)
 		SetShapeShift(FORM_BATTLESTANCE);
 
@@ -742,6 +746,10 @@ bool Player::Create(WorldPacket& data )
 	//SetFloatValue(UNIT_FIELD_MINDAMAGE, info->mindmg );
 	//SetFloatValue(UNIT_FIELD_MAXDAMAGE, info->maxdmg );
 	SetUInt32Value(UNIT_FIELD_ATTACK_POWER, info->attackpower );
+
+    //Sanctuary bug
+    //SetUInt32Value(UNIT_FIELD_BYTES_2, (0x01 << 8));
+
 	SetUInt32Value(PLAYER_BYTES, ((skin) | (face << 8) | (hairStyle << 16) | (hairColor << 24)));
 	//PLAYER_BYTES_2							   GM ON/OFF	 BANKBAGSLOTS   RESTEDSTATE
    // SetUInt32Value(PLAYER_BYTES_2, (facialHair | (0xEE << 8) | (0x01 << 16) | (0x02 << 24)));
@@ -1261,7 +1269,7 @@ void Player::_EventExploration()
     if (GetMapMgr()->GetCellByCoords(GetPositionX(), GetPositionY()) == NULL)
         return;
 
-    auto at = this->GetArea();
+    auto at = GetArea();
     if (at == NULL)
         return;
 
@@ -8421,7 +8429,7 @@ void Player::SetGuildRank(uint32 guildRank)
 void Player::UpdatePvPArea()
 {
     auto at = this->GetArea();
-	if(at == 0)
+	if(at == nullptr)
         return;
 
 #ifdef PVP_REALM_MEANS_CONSTANT_PVP
@@ -8483,9 +8491,10 @@ void Player::UpdatePvPArea()
         
 		// I just walked into either an enemies town, or a contested zone.
 		// Force flag me if i'm not already.
-        if (at->team == AREAC_SANCTUARY || at->team & AREA_SANCTUARY)
+        if (at->team == AREAC_SANCTUARY || at->flags & AREA_SANCTUARY)
         {
-            if(IsPvPFlagged()) RemovePvPFlag();
+            if(IsPvPFlagged())
+                RemovePvPFlag();
 
 			RemoveFlag(PLAYER_FLAGS, PLAYER_FLAG_FREE_FOR_ALL_PVP);
 
@@ -8493,11 +8502,15 @@ void Player::UpdatePvPArea()
         }
         else
         {
+            SetFlag(PLAYER_FLAGS, PLAYER_FLAG_FREE_FOR_ALL_PVP);
+
             //contested territory
             if(sWorld.GetRealmType() == REALM_PVP)
             {
                 //automaticaly sets pvp flag on contested territorys.
-                if(!IsPvPFlagged()) SetPvPFlag();
+                if(!IsPvPFlagged())
+                    SetPvPFlag();
+
                 StopPvPTimer();
             }
 
@@ -8505,7 +8518,8 @@ void Player::UpdatePvPArea()
             {
                 if(HasFlag(PLAYER_FLAGS, PLAYER_FLAG_PVP_TOGGLE))
                 {
-                    if(!IsPvPFlagged()) SetPvPFlag();
+                    if(!IsPvPFlagged())
+                        SetPvPFlag();
                 }
                 else if(!HasFlag(PLAYER_FLAGS, PLAYER_FLAG_PVP_TOGGLE) && IsPvPFlagged() && !m_pvpTimer)
                 {

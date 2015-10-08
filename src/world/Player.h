@@ -1645,23 +1645,23 @@ public:
 	uint32 m_pvpTimer;
 	
 	//! Is PVP flagged?
-	ARCEMU_INLINE bool IsPvPFlagged() { return HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PVP); }
-	ARCEMU_INLINE void SetPvPFlag()
+	bool IsPvPFlagged() { return HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PVP); }
+	void SetPvPFlag()
 	{
 		// reset the timer as well..
 		StopPvPTimer();
 		SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PVP);
 	}
 	//! Removal
-	ARCEMU_INLINE void RemovePvPFlag()
+	void RemovePvPFlag()
 	{
 		StopPvPTimer();
 		RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PVP);
 	}
 	//! Do this on /pvp off
-	ARCEMU_INLINE void ResetPvPTimer();
+	void ResetPvPTimer();
 	//! Stop the timer for pvp off
-	ARCEMU_INLINE void StopPvPTimer() { m_pvpTimer = 0; }
+	void StopPvPTimer() { m_pvpTimer = 0; }
 	
 	//! Called at login to add the honorless buff, etc.
 	void LoginPvPSetup();
