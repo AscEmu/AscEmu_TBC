@@ -1249,100 +1249,97 @@ void Player::EventAttackStop()
 
 void Player::_EventExploration()
 {
-	if (isDead())
-		return;
+    if (isDead())
+        return;
 
-	if (!IsInWorld())
-		return;
+    if (!IsInWorld())
+        return;
 
-	if(m_position.x > _maxX || m_position.x < _minX || m_position.y > _maxY || m_position.y < _minY)
-		return;
+    if (m_position.x > _maxX || m_position.x < _minX || m_position.y > _maxY || m_position.y < _minY)
+        return;
 
-	if(GetMapMgr()->GetCellByCoords(GetPositionX(),GetPositionY()) == NULL) 
-		return;
+    if (GetMapMgr()->GetCellByCoords(GetPositionX(), GetPositionY()) == NULL)
+        return;
 
-	AreaTable* at = GetMapMgr()->GetArea(GetPositionX(), GetPositionY(), GetPositionZ());
-	if (at == NULL)
-		return;
+    auto at = this->GetArea();
+    if (at == NULL)
+        return;
 
-	Log.Debug("Area", "Test %u %s", at->AreaId, at->name);
+    uint32 AreaId = at->id;
 
-	uint32 AreaId = at->AreaId;
-
-	/*char areaname[200];
-	if(at)
-	{
-		strcpy(areaname, sAreaStore.LookupString((uint32)at->name));
-	}
-	else
-	{
-		strcpy(areaname, "UNKNOWN");
-	}
+    /*char areaname[200];
+    if (at)
+    {
+    strcpy(areaname, sAreaStore.LookupString((uint32)at->name));
+    }
+    else
+    {
+    strcpy(areaname, "UNKNOWN");
+    }
     sChatHandler.BlueSystemMessageToPlr(this,areaname);*/
 
-	int offset = at->explorationFlag / 32;
-	offset += PLAYER_EXPLORED_ZONES_1;
+    int offset = at->explore_flag / 32;
+    offset += PLAYER_EXPLORED_ZONES_1;
 
-	uint32 val = (uint32)(1 << (at->explorationFlag % 32));
-	uint32 currFields = GetUInt32Value(offset);
+    uint32 val = (uint32)(1 << (at->explore_flag % 32));
+    uint32 currFields = GetUInt32Value(offset);
 
-	if(AreaId != m_AreaID)
-	{
-		m_AreaID = AreaId;
-		UpdatePvPArea();
-		if(GetGroup())
-            GetGroup()->UpdateOutOfRangePlayer(this, 128, true, NULL);
-	}
+    if (AreaId != m_AreaID)
+    {
+        m_AreaID = AreaId;
+        UpdatePvPArea();
 
-	// Zone update, this really should update to a parent zone if one exists.
-	//  Will show correct location on your character screen, as well zoneid in DB will have correct value
-	//  for any web sites that access that data.
-	if(at->ZoneId == 0 && m_zoneId != AreaId) 
-	{
-		ZoneUpdate(AreaId);
-	}
-	else if (at->ZoneId != 0 && m_zoneId != at->ZoneId) 
-	{
-		ZoneUpdate(at->ZoneId);
-	}
+    }
+
+    // Zone update, this really should update to a parent zone if one exists.
+    //  Will show correct location on your character screen, as well zoneid in DB will have correct value
+    //  for any web sites that access that data.
+    if (at->zone == 0 && m_zoneId != AreaId)
+    {
+        ZoneUpdate(AreaId);
+    }
+    else if (at->zone != 0 && m_zoneId != at->zone)
+    {
+        ZoneUpdate(at->zone);
+    }
 
 
-	if(at->ZoneId != 0 && m_zoneId != at->ZoneId)
-		ZoneUpdate(at->ZoneId);
+    if (at->zone != 0 && m_zoneId != at->zone)
+        ZoneUpdate(at->zone);
 
-	bool rest_on = false;
-	// Check for a restable area
-    if(at->AreaFlags & AREA_CITY_AREA || at->AreaFlags & AREA_CITY)
-	{
-		// check faction
-		if((at->category == AREAC_ALLIANCE_TERRITORY && GetTeam() == 0) || (at->category == AREAC_HORDE_TERRITORY && GetTeam() == 1) )
-		{
-			rest_on = true;
-		}
-		else if(at->category != AREAC_ALLIANCE_TERRITORY && at->category != AREAC_HORDE_TERRITORY)
-		{
-			rest_on = true;
-		}
-	}
-	else
-	{
-        //second AT check for subzones.
-        if(at->ZoneId)
+    bool rest_on = false;
+    // Check for a restable area
+    if (at->flags & AREA_CITY_AREA || at->flags & AREA_CITY)
+    {
+        // check faction
+        if ((at->team == AREAC_ALLIANCE_TERRITORY && GetTeam() == 0) || (at->team == AREAC_HORDE_TERRITORY && GetTeam() == 1))
         {
-            AreaTable * at2 = dbcArea.LookupEntry(at->ZoneId);
-            if(at2 && at2->AreaFlags & AREA_CITY_AREA || at2 && at2->AreaFlags & AREA_CITY)
+            rest_on = true;
+        }
+        else if (at->team != AREAC_ALLIANCE_TERRITORY && at->team != AREAC_HORDE_TERRITORY)
+        {
+            rest_on = true;
+        }
+    }
+    else
+    {
+        //second AT check for subzones.
+        if (at->zone)
+        {
+            auto at2 = MapManagement::AreaManagement::AreaStorage::GetAreaById(at->zone);
+            if (at2 && (at2->flags & AREA_CITY_AREA || at2->flags & AREA_CITY))
             {
-                if((at2->category == AREAC_ALLIANCE_TERRITORY && GetTeam() == 0) || (at2->category == AREAC_HORDE_TERRITORY && GetTeam() == 1) )
-				{
-					rest_on = true;
-				}
-				else if(at2->category != AREAC_ALLIANCE_TERRITORY && at2->category != AREAC_HORDE_TERRITORY)
-				{
-					rest_on = true;
-				}
+                if ((at2->team == AREAC_ALLIANCE_TERRITORY && GetTeam() == 0) || (at2->team == AREAC_HORDE_TERRITORY && GetTeam() == 1))
+                {
+                    rest_on = true;
+                }
+                else if (at2->team != AREAC_ALLIANCE_TERRITORY && at2->team != AREAC_HORDE_TERRITORY)
+                {
+                    rest_on = true;
+                }
             }
-		}
-	}
+        }
+    }
 
 	if (rest_on)
 	{
@@ -1366,11 +1363,11 @@ void Player::_EventExploration()
 	{
 		SetUInt32Value(offset, (uint32)(currFields | val));
 
-		uint32 explore_xp = at->level * 10;
+        uint32 explore_xp = at->area_level * 10;
 		explore_xp *= float2int32(sWorld.getRate(RATE_EXPLOREXP));
 
 		WorldPacket data(SMSG_EXPLORATION_EXPERIENCE, 8);
-		data << at->AreaId << explore_xp;
+        data << at->id << explore_xp;
 		m_session->SendPacket(&data);
 
 		if(getLevel() < GetUInt32Value(PLAYER_FIELD_MAX_LEVEL) && explore_xp)
@@ -7719,8 +7716,8 @@ void Player::ZoneUpdate(uint32 ZoneId)
 	m_playerInfo->lastZone = ZoneId;
 	sHookInterface.OnZone(this, ZoneId);
 
-	AreaTable * at = GetMapMgr()->GetArea(GetPositionX(), GetPositionY(), GetPositionZ());
-	if(at && at->category == AREAC_SANCTUARY || at->AreaFlags & AREA_SANCTUARY)
+    auto at = GetMapMgr()->GetArea(GetPositionX(), GetPositionY(), GetPositionZ());
+    if (at && (at->team == AREAC_SANCTUARY || at->flags & AREA_SANCTUARY))
 	{
 		Unit * pUnit = (GetSelection() == 0) ? 0 : (m_mapMgr ? m_mapMgr->GetUnit(GetSelection()) : 0);
 		if(pUnit && DuelingWith != pUnit)
@@ -8353,12 +8350,12 @@ void Player::ForceZoneUpdate()
 {
 	if(!GetMapMgr()) return;
 
-	uint16 areaId = GetMapMgr()->GetAreaID(GetPositionX(), GetPositionY());
-	AreaTable * at = dbcArea.LookupEntry(areaId);
-	if(!at) return;
+    auto at = this->GetArea();
+	if(!at)
+        return;
 
-	if(at->ZoneId && at->ZoneId != m_zoneId)
-		ZoneUpdate(at->ZoneId);
+	if(at->zone && at->zone != m_zoneId)
+		ZoneUpdate(at->zone);
 }
 
 void Player::SafeTeleport(MapMgr * mgr, const LocationVector & vec)
@@ -8423,7 +8420,7 @@ void Player::SetGuildRank(uint32 guildRank)
 
 void Player::UpdatePvPArea()
 {
-	AreaTable * at = dbcArea.LookupEntry(m_AreaID);
+    auto at = this->GetArea();
 	if(at == 0)
         return;
 
@@ -8437,7 +8434,7 @@ void Player::UpdatePvPArea()
 #endif
 
 	// This is where all the magic happens :P
-    if((at->category == AREAC_ALLIANCE_TERRITORY && GetTeam() == 0) || (at->category == AREAC_HORDE_TERRITORY && GetTeam() == 1))
+    if ((at->team == AREAC_ALLIANCE_TERRITORY && GetTeam() == 0) || (at->team == AREAC_HORDE_TERRITORY && GetTeam() == 1))
 	{
 		if(!HasFlag(PLAYER_FLAGS, PLAYER_FLAG_PVP_TOGGLE) && !m_pvpTimer)
 		{
@@ -8449,9 +8446,9 @@ void Player::UpdatePvPArea()
 	else
 	{
         //Enemy city check
-        if(at->AreaFlags & AREA_CITY_AREA || at->AreaFlags & AREA_CITY)
+        if (at->flags & AREA_CITY_AREA || at->flags & AREA_CITY)
         {
-            if((at->category == AREAC_ALLIANCE_TERRITORY && GetTeam() == 1) || (at->category == AREAC_HORDE_TERRITORY && GetTeam() == 0))
+            if ((at->team == AREAC_ALLIANCE_TERRITORY && GetTeam() == 1) || (at->team == AREAC_HORDE_TERRITORY && GetTeam() == 0))
             {
                 if(!IsPvPFlagged()) SetPvPFlag();
                     StopPvPTimer();
@@ -8460,10 +8457,10 @@ void Player::UpdatePvPArea()
         }
 
         //fix for zone areas.
-        if(at->ZoneId)
+        if (at->zone)
         {
-            AreaTable * at2 = dbcArea.LookupEntry(at->ZoneId);
-            if(at2 && (at2->category == AREAC_ALLIANCE_TERRITORY && GetTeam() == 0) || at2 && (at2->category == AREAC_HORDE_TERRITORY && GetTeam() == 1))
+            auto at2 = MapManagement::AreaManagement::AreaStorage::GetAreaById(at->zone);
+            if (at2 && (at2->team == AREAC_ALLIANCE_TERRITORY && GetTeam() == 0) || at2 && (at2->team == AREAC_HORDE_TERRITORY && GetTeam() == 1))
             {
                 if(!HasFlag(PLAYER_FLAGS, PLAYER_FLAG_PVP_TOGGLE) && !m_pvpTimer)
 		        {
@@ -8473,9 +8470,9 @@ void Player::UpdatePvPArea()
                 return;
             }
             //enemy territory check
-            if(at2 && at2->AreaFlags & AREA_CITY_AREA || at2 && at2->AreaFlags & AREA_CITY)
+            if (at2 && at2->flags & AREA_CITY_AREA || at2 && at2->flags & AREA_CITY)
             {
-                if(at2 && (at2->category == AREAC_ALLIANCE_TERRITORY && GetTeam() == 1) || at2 && (at2->category == AREAC_HORDE_TERRITORY && GetTeam() == 0))
+                if (at2 && (at2->team == AREAC_ALLIANCE_TERRITORY && GetTeam() == 1) || at2 && (at2->team == AREAC_HORDE_TERRITORY && GetTeam() == 0))
                 {
                    if(!IsPvPFlagged()) SetPvPFlag();
                        StopPvPTimer();
@@ -8486,7 +8483,7 @@ void Player::UpdatePvPArea()
         
 		// I just walked into either an enemies town, or a contested zone.
 		// Force flag me if i'm not already.
-        if(at->category == AREAC_SANCTUARY || at->AreaFlags & AREA_SANCTUARY)
+        if (at->team == AREAC_SANCTUARY || at->team & AREA_SANCTUARY)
         {
             if(IsPvPFlagged()) RemovePvPFlag();
 
@@ -8516,7 +8513,7 @@ void Player::UpdatePvPArea()
                 }
             }
 
-            if(at->AreaFlags & AREA_PVP_ARENA)			/* ffa pvp arenas will come later */
+            if (at->flags & AREA_PVP_ARENA)			/* ffa pvp arenas will come later */
             {
                 if(!IsPvPFlagged()) SetPvPFlag();
 
@@ -8559,9 +8556,9 @@ void Player::LoginPvPSetup()
 	// Make sure we know our area ID.
 	_EventExploration();
 
-	AreaTable * at = dbcArea.LookupEntry( ( m_AreaID != 0 ) ? m_AreaID : m_zoneId );
+    auto at = this->GetArea();
 
-	if ( at != NULL && isAlive() && ( at->category == AREAC_CONTESTED || ( GetTeam() == 0 && at->category == AREAC_HORDE_TERRITORY ) || ( GetTeam() == 1 && at->category == AREAC_ALLIANCE_TERRITORY ) ) )
+    if (at != NULL && isAlive() && (at->team == AREAC_CONTESTED || (GetTeam() == 0 && at->team == AREAC_HORDE_TERRITORY) || (GetTeam() == 1 && at->team == AREAC_ALLIANCE_TERRITORY)))
 		CastSpell(this, PLAYER_HONORLESS_TARGET_SPELL, true);
 
 #ifdef PVP_REALM_MEANS_CONSTANT_PVP
@@ -8591,10 +8588,10 @@ void Player::PvPToggle()
 	    {
 		    if(IsPvPFlagged())
 		    {
-                AreaTable * at = dbcArea.LookupEntry(m_AreaID);
-                if(at && at->AreaFlags & AREA_CITY_AREA || at && at->AreaFlags & AREA_CITY)
+                auto at = this->GetArea();
+                if(at && at->flags & AREA_CITY_AREA || at && at->flags & AREA_CITY)
                 {
-                    if(at && (at->category == AREAC_ALLIANCE_TERRITORY && GetTeam() == 1) || at && (at->category == AREAC_HORDE_TERRITORY && GetTeam() == 0))
+                    if(at && (at->team == AREAC_ALLIANCE_TERRITORY && GetTeam() == 1) || at && (at->team == AREAC_HORDE_TERRITORY && GetTeam() == 0))
                     {
                     }
                     else
@@ -8630,12 +8627,12 @@ void Player::PvPToggle()
 #else
     else if(sWorld.GetRealmType() == REALM_PVP)
     {
-        AreaTable * at = dbcArea.LookupEntry(m_AreaID);
+        auto at = this->GetArea();
 	    if(at == 0)
             return;
 
 	    // This is where all the magic happens :P
-        if((at->category == AREAC_ALLIANCE_TERRITORY && GetTeam() == 0) || (at->category == AREAC_HORDE_TERRITORY && GetTeam() == 1))
+        if((at->team == AREAC_ALLIANCE_TERRITORY && GetTeam() == 0) || (at->team == AREAC_HORDE_TERRITORY && GetTeam() == 1))
 	    {
             if(m_pvpTimer > 0)
 	        {
@@ -8667,10 +8664,10 @@ void Player::PvPToggle()
         }
         else
         {
-            if(at->ZoneId)
+            if(at->zone)
             {
-                AreaTable * at2 = dbcArea.LookupEntry(at->ZoneId);
-                if(at2 && (at2->category == AREAC_ALLIANCE_TERRITORY && GetTeam() == 0) || at2 && (at2->category == AREAC_HORDE_TERRITORY && GetTeam() == 1))
+                auto at2 = MapManagement::AreaManagement::AreaStorage::GetAreaById(at->zone);
+                if (at2 && (at2->team == AREAC_ALLIANCE_TERRITORY && GetTeam() == 0) || at2 && (at2->team == AREAC_HORDE_TERRITORY && GetTeam() == 1))
                 {
                     if(m_pvpTimer > 0)
 	                {

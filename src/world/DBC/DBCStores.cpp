@@ -18,8 +18,10 @@
  */
 
 #include "DBCStores.h"
-#include "DataStore.h"
 #include "Log.h"
+#include "DBC/DBCGlobals.hpp"
+
+typedef std::map<WMOAreaTableTripple, WMOAreaTableEntry const*> WMOAreaInfoByTripple;
 
 SERVER_DECL DBCStorage<GemPropertyEntry> dbcGemProperty;
 SERVER_DECL DBCStorage<ItemSetEntry> dbcItemSet;
@@ -30,7 +32,8 @@ SERVER_DECL DBCStorage<SpellRange> dbcSpellRange;
 SERVER_DECL DBCStorage<emoteentry> dbcEmoteEntry;
 SERVER_DECL DBCStorage<SpellRadius> dbcSpellRadius;
 SERVER_DECL DBCStorage<SpellCastTime> dbcSpellCastTime;
-SERVER_DECL DBCStorage<AreaTable> dbcArea;
+SERVER_DECL DBC::DBCStorage<DBC::Structures::AreaTableEntry> sAreaStore(DBC::Structures::area_table_entry_format);
+static WMOAreaInfoByTripple sWMOAreaInfoByTripple;
 SERVER_DECL DBCStorage<FactionTemplateDBC> dbcFactionTemplate;
 SERVER_DECL DBCStorage<FactionDBC> dbcFaction;
 SERVER_DECL DBCStorage<EnchantEntry> dbcEnchant;
@@ -117,6 +120,10 @@ bool loader_stub(const char * filename, const char * format, bool ind, T& l, boo
 
 bool LoadDBCs()
 {
+    uint32 available_dbc_locales = 0xFFFFFFFF;
+    DBC::StoreProblemList bad_dbc_files;
+    std::string dbc_path = "./dbc/";
+
 	LOAD_DBC("DBC/ItemSet.dbc", ItemSetFormat, true, dbcItemSet, true);
 	LOAD_DBC("DBC/Lock.dbc", LockFormat, true, dbcLock, false);
 	LOAD_DBC("DBC/EmotesText.dbc", EmoteEntryFormat, true, dbcEmoteEntry, false);
@@ -133,7 +140,10 @@ bool LoadDBCs()
 	LOAD_DBC("DBC/SpellRange.dbc", spellrangeFormat, true, dbcSpellRange, false);
 	LOAD_DBC("DBC/SpellDuration.dbc", spelldurationFormat, true, dbcSpellDuration, false);
 	LOAD_DBC("DBC/ItemRandomProperties.dbc", randompropsFormat, true, dbcRandomProps, false);
-	LOAD_DBC("DBC/AreaTable.dbc", areatableFormat, true, dbcArea, true);
+	
+    DBC::LoadDBC(available_dbc_locales, bad_dbc_files, sAreaStore, dbc_path, "AreaTable.dbc");
+    MapManagement::AreaManagement::AreaStorage::Initialise(&sAreaStore);
+
 	LOAD_DBC("DBC/FactionTemplate.dbc", factiontemplatedbcFormat, true, dbcFactionTemplate, false);
 	LOAD_DBC("DBC/Faction.dbc", factiondbcFormat, true, dbcFaction, true);
 	LOAD_DBC("DBC/TaxiNodes.dbc", dbctaxinodeFormat, false, dbcTaxiNode, false);
@@ -162,8 +172,24 @@ bool LoadDBCs()
 	LOAD_DBC("DBC/gtOCTRegenHP.dbc", gtfloatformat, false, dbcHPRegen, false); //it's not a mistake.
 	LOAD_DBC("DBC/AreaTrigger.dbc", areatriggerformat, true, dbcAreaTrigger, true);
     LOAD_DBC("DBC/WMOAreaTable.dbc", wmoareaformat, true, dbcWMOAreaTable, false );
+    auto rowCount = dbcWMOAreaTable.GetNumRows();
+    for (auto i = 0; i < 51119; ++i) // This is a hack, dbc loading needs rework
+    {
+        if (auto entry = dbcWMOAreaTable.LookupEntry(i))
+        {
+            sWMOAreaInfoByTripple.insert(WMOAreaInfoByTripple::value_type(WMOAreaTableTripple(entry->rootId, entry->adtId, entry->groupId), entry));
+        }
+    }
 //	LOAD_DBC("DBC/CharTitles.dbc", chartitleFormat, true, dbcCharTitle, true);
 	return true;
 }
 
+
+const WMOAreaTableEntry* GetWMOAreaTableEntryByTriple(int32 root_id, int32 adt_id, int32 group_id)
+{
+    auto iter = sWMOAreaInfoByTripple.find(WMOAreaTableTripple(root_id, adt_id, group_id));
+    if (iter == sWMOAreaInfoByTripple.end())
+        return 0;
+    return iter->second;
+}
 

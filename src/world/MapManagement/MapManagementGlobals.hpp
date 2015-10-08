@@ -1,6 +1,6 @@
-/*
- * ArcEmu MMORPG Server
- * Copyright (C) 2008 <http://www.ArcEmu.org/>
+/**
+ * AscEmu Framework based on ArcEmu MMORPG Server
+ * Copyright (C) 2014-2015 AscEmu Team <http://www.ascemu.org>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -9,21 +9,21 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __DATASTORE_H
-#define __DATASTORE_H
+#ifndef _MAP_MANAGEMENT_MAP_MANAGEMENT_GLOBALS_H
+#define _MAP_MANAGEMENT_MAP_MANAGEMENT_GLOBALS_H
 
-#include "Common.h"
-#include "Singleton.h"
-#include "DBC.h"
+#include "AreaManagement/AreaManagementGlobals.hpp"
 
+namespace MapManagement
+{
 
+} // </ MapManagementNamespace>
 
-#endif
+#endif // _MAP_MANAGEMENT_MAP_MANAGEMENT_GLOBALS_H

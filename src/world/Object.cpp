@@ -183,6 +183,21 @@ Object::~Object( )
 	sEventMgr.RemoveEvents( this );
 }
 
+::DBC::Structures::AreaTableEntry const* Object::GetArea()
+{
+    if (!this->IsInWorld()) return nullptr;
+    
+        auto map_mgr = this->GetMapMgr();
+    if (!map_mgr) return nullptr;
+    
+        auto area_flag = map_mgr->GetAreaFlag(this->GetPositionX(), this->GetPositionY(), this->GetPositionZ());
+    auto at = MapManagement::AreaManagement::AreaStorage::GetAreaByFlag(area_flag);
+    if (!at)
+        at = MapManagement::AreaManagement::AreaStorage::GetAreaByMapId(this->GetMapId());
+    
+        return at;
+}
+
 
 void Object::_Create( uint32 mapid, float x, float y, float z, float ang )
 {
@@ -2126,8 +2141,11 @@ void Object::DealDamage(Unit *pVictim, uint32 damage, uint32 targetEvent, uint32
 					    teamId = 1;
 				    else
 					    teamId = 0;
-				    uint32 AreaID = pVictim->GetMapMgr()->GetAreaID(pVictim->GetPositionX(), pVictim->GetPositionY());
-				    if(!AreaID)
+                    auto area = pVictim->GetArea();
+
+                    uint32 AreaID = 0;
+
+				    if(!area)
 					    AreaID = pAttacker->GetZoneId(); // Failsafe for a shitty TerrainMgr
 
 				    if(AreaID)

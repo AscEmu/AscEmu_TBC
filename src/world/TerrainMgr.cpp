@@ -28,29 +28,6 @@ TerrainTile* TerrainHolder::GetTile( float x, float y )
 	return GetTile(tx, ty);
 }
 
-AreaTable* TerrainHolder::GetArea( float x, float y, float z )
-{
-	VMAP::IVMapManager* vmgr = VMAP::VMapFactory::createOrGetVMapManager();
-
-	uint32 flags;
-	int32 adtid, rootid, groupid;
-
-	if (vmgr->getAreaInfo(m_mapid, x, y, z, flags, adtid, rootid, groupid))
-	{
-		WMOAreaTableEntry* wmoArea = sWorld.GetWMOAreaData(rootid, adtid, groupid);
-		if (wmoArea != NULL)
-			return dbcArea.LookupEntryForced(wmoArea->areaId);
-	}
-
-	uint32 exploreFlag = GetAreaFlag(x, y);
-
-	std::map<uint32, AreaTable*>::iterator itr = sWorld.mAreaIDToTable.find(exploreFlag);
-
-	if (itr == sWorld.mAreaIDToTable.end())
-		return NULL;
-	return dbcArea.LookupEntryForced(itr->second->AreaId);
-}
-
 TerrainTile::~TerrainTile()
 {
 	m_parent->m_tiles[m_tx][m_ty] = NULL;
@@ -405,4 +382,34 @@ uint32 TileMap::GetArea( float x, float y )
 	int lx = (int)x & 15;
 	int ly = (int)y & 15;
 	return m_areaMap[lx * 16 + ly];
+}
+
+const bool TerrainHolder::GetAreaInfo(float x, float y, float z, uint32 &mogp_flags, int32 &adt_id, int32 &root_id, int32 &group_id)
+{
+    float vmap_z = z;
+    auto vmap_manager = VMAP::VMapFactory::createOrGetVMapManager();
+    if (vmap_manager->getAreaInfo(m_mapid, x, y, vmap_z, mogp_flags, adt_id, root_id, group_id))
+    {
+        if (auto tile = this->GetTile(x, y))
+        {
+            float map_height = tile->m_map.GetHeight(x, y);
+            if (z + 2.0f > map_height && map_height > vmap_z)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+    return false;
+}
+
+uint16 TerrainHolder::GetAreaFlagWithoutAdtId(float x, float y)
+{
+    auto tile = this->GetTile(x, y);
+    if (tile)
+    {
+        return tile->m_map.GetArea(x, y);
+    }
+
+    return 0;
 }

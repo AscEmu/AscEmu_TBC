@@ -25,6 +25,8 @@
 #ifndef __MAPMGR_H
 #define __MAPMGR_H
 
+#include "MapManagement/MapManagementGlobals.hpp"
+
 #define IS_PERSISTENT_INSTANCE(p) ( ((p)->m_mapInfo->type == INSTANCE_MULTIMODE && (p)->m_difficulty >= MODE_HEROIC) || (p)->m_mapInfo->type == INSTANCE_RAID )
 #define IS_RESETABLE_INSTANCE(p) ( !(p)->m_persistent && ((p)->m_mapInfo->type == INSTANCE_NONRAID || ((p)->m_mapInfo->type == INSTANCE_MULTIMODE && (p)->m_difficulty == MODE_NORMAL)) )
 #define CHECK_INSTANCE_GROUP(p,g) ( (p)->m_creatorGroup == 0 || ((g) && (p)->m_creatorGroup == (g)->GetID()) )
@@ -88,7 +90,9 @@ class SERVER_DECL MapMgr : public CellHandler <MapCell>, public EventableObject,
 	friend class MapCell;
 	friend class MapScriptInterface;
 public:
-		
+
+    const uint16 GetAreaFlag(float x, float y, float z, bool *is_outdoors = nullptr);
+
 	//This will be done in regular way soon
 	std::set< MapCell * > m_forcedcells;
 
@@ -210,11 +214,8 @@ public:
     bool GetLiquidInfo(float x, float y, float z, float & liquidlevel, uint32 & liquidtype) { return _terrain->GetLiquidInfo(x, y, z, liquidlevel, liquidtype); }
 	float  GetLiquidHeight(float x, float y) { return _terrain->GetLiquidHeight(x, y); }
 	uint8  GetLiquidType(float x, float y) { return _terrain->GetLiquidType(x, y); }
-	uint16 GetAreaID(float x, float y);
     bool InLineOfSight(float x, float y, float z, float x2, float y2, float z2) { return _terrain->InLineOfSight(x, y, z, x2, y2, z2); }
-
-    AreaTable* GetArea(float x, float y, float z) { return _terrain->GetArea(x, y, z); }
-
+    const ::DBC::Structures::AreaTableEntry* GetArea(float x, float y, float z);
 	uint32 GetMapId() { return _mapId; }
 
 	void PushToProcessed(Player* plr);

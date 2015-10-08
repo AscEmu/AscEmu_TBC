@@ -146,7 +146,6 @@ enum REALM_TYPE
     REALM_PVE = 0,
     REALM_PVP = 1,
 };
-struct AreaTable;
 
 class BasicTaskExecutor : public ThreadBase
 {
@@ -406,30 +405,27 @@ public:
 	vector<NameGenData> _namegendata[3];
 	void LoadNameGenData();
 
-	void LoadWMOAreaData()
-	{
-		for (DBCStorage<WMOAreaTableEntry>::iterator itr = dbcWMOAreaTable.begin(); itr != dbcWMOAreaTable.end(); ++itr)
-		{
-			WMOAreaTableTripple tmp((*itr)->rootId, (*itr)->adtId, (*itr)->groupId);
-			
-			m_WMOAreaTableTripples.insert(std::make_pair(tmp, (*itr)));
-		}
-	}
+    void LoadWMOAreaData()
+    {
+        for (DBCStorage<WMOAreaTableEntry>::iterator itr = dbcWMOAreaTable.begin(); itr != dbcWMOAreaTable.end(); ++itr)
+        {
+            WMOAreaTableTripple tmp((*itr)->rootId, (*itr)->adtId, (*itr)->groupId);
 
-	WMOAreaTableEntry* GetWMOAreaData(int32 rootid, int32 adtid, int32 groupid)
-	{
-		WMOAreaTableTripple tmp(rootid, adtid, groupid);
-		std::map<WMOAreaTableTripple, WMOAreaTableEntry*>::iterator itr = m_WMOAreaTableTripples.find(tmp);
+            m_WMOAreaTableTripples.insert(std::make_pair(tmp, (*itr)));
+        }
+    }
 
-		if (itr != m_WMOAreaTableTripples.end())
-			return itr->second;
-		return NULL;
-	}
+    WMOAreaTableEntry* GetWMOAreaData(int32 rootid, int32 adtid, int32 groupid)
+    {
+        WMOAreaTableTripple tmp(rootid, adtid, groupid);
+        std::map<WMOAreaTableTripple, WMOAreaTableEntry*>::iterator itr = m_WMOAreaTableTripples.find(tmp);
+
+        if (itr != m_WMOAreaTableTripples.end())
+            return itr->second;
+        return NULL;
+    }
 
 	std::string GenerateName(uint32 type = 0);
-
-	std::map<uint32, AreaTable*> mAreaIDToTable;
-	std::map<uint32, AreaTable*> mZoneIDToTable;
 
 	std::map<uint32,uint32> TeachingSpellMap;
 	uint32 GetTeachingSpell(uint32 NormalSpellId)

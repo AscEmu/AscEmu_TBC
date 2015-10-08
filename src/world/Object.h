@@ -199,6 +199,8 @@ public:
 	ARCEMU_INLINE const float& GetSpawnZ( ) const { return m_spawnLocation.z; }
 	ARCEMU_INLINE const float& GetSpawnO( ) const { return m_spawnLocation.o; }
 
+    ::DBC::Structures::AreaTableEntry const* GetArea();
+
 	ARCEMU_INLINE const LocationVector & GetPosition() { return m_position; }
 	ARCEMU_INLINE LocationVector & GetPositionNC() { return m_position; }
 	ARCEMU_INLINE LocationVector * GetPositionV() { return &m_position; }

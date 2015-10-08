@@ -322,14 +322,15 @@ public:
 	{
 		TerrainTile* tile = GetTile(x, y);
 
-		if (tile == NULL)
-			return 0;
+        if (tile == NULL)
+        {
+            // No generated map for this area (usually instances)
+            return 0;
+        }
 		uint32 rv = tile->m_map.GetArea(x, y);
 		tile->DecRef();
 		return rv;
 	}
-
-    AreaTable* GetArea(float x, float y, float z);
 
     bool GetLiquidInfo(float x, float y, float z, float & liquidlevel, uint32 & liquidtype)
 	{
@@ -353,6 +354,9 @@ public:
 
 		return vmgr->isInLineOfSight(m_mapid, x, y, z, x2, y2, z2);
 	}
+
+    uint16 GetAreaFlagWithoutAdtId(float x, float y);
+    const bool GetAreaInfo(float x, float y, float z, uint32 &mogp_flags, int32 &adt_id, int32 &root_id, int32 &group_id);
 };
 
 #endif

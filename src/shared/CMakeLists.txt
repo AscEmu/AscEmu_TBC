@@ -11,12 +11,8 @@ set(sources
    Config/Config.cpp
    Database/CreateInterface.cpp
    Database/Database.cpp
-   Database/DBC.cpp
    Database/dbcfile.cpp
-   Database/DBCStores.cpp
    Database/MySQLDatabase.cpp
-   Database/PostgresDatabase.cpp
-   Database/SQLiteDatabase.cpp
    Network/CircularBuffer.cpp
    Network/Socket.cpp
    Threading/AtomicBoolean.cpp
@@ -50,14 +46,9 @@ set(headers
    Config/ConfigEnv.h
    Database/Database.h
    Database/DatabaseEnv.h
-   Database/DataStore.h
-   Database/DBC.h
    Database/dbcfile.h
-   Database/DBCStores.h
    Database/Field.h
    Database/MySQLDatabase.h
-   Database/PostgresDatabase.h
-   Database/SQLiteDatabase.h
    mysql/mysql.h
    Network/CircularBuffer.h
    Network/ListenSocketLinux.h

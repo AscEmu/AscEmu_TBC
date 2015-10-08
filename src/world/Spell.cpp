@@ -3148,8 +3148,8 @@ uint8 Spell::CanCast(bool tolerate)
 		// check for duel areas
 		if(GetProto()->Id == 7266)
 		{
-			AreaTable* at = dbcArea.LookupEntry( p_caster->GetAreaID() );
-			if(at->AreaFlags & AREA_CITY_AREA)
+            auto at = p_caster->GetArea();
+			if(at->flags & AREA_CITY_AREA)
 				return SPELL_FAILED_NO_DUELING;
 			// instance & stealth checks
 			if ( p_caster->GetMapMgr() && p_caster->GetMapMgr()->GetMapInfo() && p_caster->GetMapMgr()->GetMapInfo()->type != INSTANCE_NULL )
@@ -3344,7 +3344,7 @@ uint8 Spell::CanCast(bool tolerate)
 				return SPELL_FAILED_REQUIRES_SPELL_FOCUS;
 		}
 
-		if (GetProto()->RequiresAreaId && GetProto()->RequiresAreaId != p_caster->GetMapMgr()->GetAreaID(p_caster->GetPositionX(),p_caster->GetPositionY()))
+		if (GetProto()->RequiresAreaId && GetProto()->RequiresAreaId != p_caster->GetArea()->id)
 			return SPELL_FAILED_REQUIRES_AREA;
 
 		// aurastate check
@@ -3600,9 +3600,9 @@ uint8 Spell::CanCast(bool tolerate)
 					// allow attacks in duels
 					if( p_caster->DuelingWith != target && !isFriendly( p_caster, target ) )
 					{
-						AreaTable* atCaster = dbcArea.LookupEntry( p_caster->GetAreaID() );
-						AreaTable* atTarget = dbcArea.LookupEntry( static_cast< Player* >( target )->GetAreaID() );
-						if( atCaster->AreaFlags & 0x800 || atTarget->AreaFlags & 0x800 )
+                        auto atCaster = p_caster->GetArea();
+                        auto atTarget = target->GetArea();
+						if( atCaster->flags & 0x800 || atTarget->flags & 0x800 )
 							return SPELL_FAILED_NOT_HERE;
 					}
 				}

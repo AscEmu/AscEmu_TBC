@@ -17,11 +17,11 @@
  *
  */
 
-#include "DBC.h"
-#include "../Log.h"
-#include <math.h>
+//#include "DBC.h"
+//#include "../Log.h"
+//#include <math.h>
 
-class DBC;
+/*class DBC;
 
 DBC::DBC() {
 	tbl = NULL;
@@ -60,7 +60,7 @@ void DBC::Load(const char *filename) {
 	fread(db,dblength,1,f);
 
 #ifdef USING_BIG_ENDIAN
-	/* burlex: this is a real hack. it'll mess up floats. i'm gonna rewrite the dbc interface soon :P */
+	// burlex: this is a real hack. it'll mess up floats. i'm gonna rewrite the dbc interface soon :P
 	for(int i = 0; i < (rows*cols); ++i)
 		tbl[i] = swap32((uint32)tbl[i]);
 #endif
@@ -140,10 +140,10 @@ void DBC::FormatCSV(const char* filename, bool info)
 	{
 		for(int j=0; j < cols; j++)
 		{
-			/*char* str = new char[512];
-			LookupFormat(str,i,j);
-			fprintf(f,"%s,",str);
-			delete [] str;*/ // Old code -> too slow. keeping it for reference
+			//char* str = new char[512];
+			//LookupFormat(str,i,j);
+			//fprintf(f,"%s,",str);
+			//delete [] str; // Old code -> too slow. keeping it for reference
 			fst = tbl[i*cols+j];
 			if(format[j] == F_STRING)
 				fprintf(f,"\"%s\"",(char*)(db+fst));
@@ -241,4 +241,4 @@ DBC::~DBC() {
 	if(tbl) delete [] tbl;
 	if(db) delete [] db;
 	if(format) delete [] format;
-}
+}*/

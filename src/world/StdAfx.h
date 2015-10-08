@@ -72,7 +72,7 @@ extern SERVER_DECL SessionLogWriter* Player_Log;
 //#include <zlib.h>
 
 #include "Database/DatabaseEnv.h"
-#include "Database/DBCStores.h"
+#include "DBC/DBCStores.h"
 #include "Database/dbcfile.h"
 
 #include <Network/Network.h>
@@ -199,5 +199,7 @@ extern SERVER_DECL SessionLogWriter* Player_Log;
 //#define PVP_REALM_MEANS_CONSTANT_PVP
 #include "BufferPools/BufferPools.h"
 #include "ProcCondHandler.h"
+
+#include "MapManagement/MapManagementGlobals.hpp"
 
 #endif

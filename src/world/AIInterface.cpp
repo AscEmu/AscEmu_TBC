@@ -1946,12 +1946,11 @@ bool AIInterface::FindFriends(float dist)
 	if(family == HUMANOID && civilian && getMSTime() > m_guardTimer && !IS_INSTANCE(m_Unit->GetMapId()))
 	{
 		m_guardTimer = getMSTime() + 15000;
-		uint16 AreaId = m_Unit->GetMapMgr()->GetAreaID(m_Unit->GetPositionX(),m_Unit->GetPositionY());
-		AreaTable * at = dbcArea.LookupEntry(AreaId);
+        auto at = m_Unit->GetArea();
 		if(!at)
 			return result;
 
-		ZoneGuardEntry * zoneSpawn = ZoneGuardStorage.LookupEntry(at->ZoneId);
+        ZoneGuardEntry * zoneSpawn = ZoneGuardStorage.LookupEntry(at->zone);
 		if(!zoneSpawn) return result;
 
 		uint32 team = 1; // horde default

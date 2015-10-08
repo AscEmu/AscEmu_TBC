@@ -91,16 +91,11 @@ bool isHostile(Object* objA, Object* objB)// B is hostile for A?
 	}*/
 
 	// anway,this place won't fight
-	AreaTable *atA = NULL;
-	AreaTable *atB = NULL;
 
-	if( objA->IsPlayer() )
-		atA = dbcArea.LookupEntry( static_cast< Player* >( objA )->GetAreaID() );
+    auto atA = static_cast< Player* >( objA )->GetArea();
+    auto atB = static_cast< Player* >( objB )->GetArea();
 
-	if( objB->IsPlayer() )
-		atB = dbcArea.LookupEntry( static_cast< Player* >( objB )->GetAreaID() );
-
-	if( ( atA && atA->AreaFlags & 0x800) || (atB && atB->AreaFlags & 0x800) ) // cebernic: fix older logic error
+    if (((atA && atA->flags & 0x800) != 0) || ((atB && atB->flags & 0x800) != 0))
 		return false;
 
 		
@@ -381,27 +376,26 @@ bool isAttackable(Object* objA, Object* objB, bool CheckStealth)// A can attack 
 
 	// do not let people attack each other in sanctuary
 	// Dueling is already catered for
-	AreaTable *atA = NULL;
-	AreaTable *atB = NULL;
+
 
   // cebernic: don't forget totem
 
 	if ( objA->IsCreature() )
 	{
 		if( static_cast<Creature *>(objA)->IsTotem() && static_cast< Creature* >( objA )->GetTotemOwner() )
-			atA = dbcArea.LookupEntry( static_cast< Creature* >( objA )->GetTotemOwner()->GetAreaID() );
+			auto atA = static_cast< Creature* >( objA )->GetTotemOwner()->GetArea();
 		else
 		if( objA->IsPet() && static_cast< Pet* >( objA )->GetPetOwner() )
-			atA = dbcArea.LookupEntry( static_cast< Pet* >( objA )->GetPetOwner()->GetAreaID() );
+			auto atA = static_cast< Pet* >( objA )->GetPetOwner()->GetArea();
 	}
 	
 	if ( objB->IsCreature() )
 	{
 		if( static_cast<Creature *>(objB)->IsTotem() && static_cast< Creature* >( objB )->GetTotemOwner() )
-			atB = dbcArea.LookupEntry( static_cast< Creature* >( objB )->GetTotemOwner()->GetAreaID() );
+			auto atB = static_cast< Creature* >( objB )->GetTotemOwner()->GetArea();
 		else
 		if( objB->IsPet() && static_cast< Pet* >( objB )->GetPetOwner() )
-			atB = dbcArea.LookupEntry( static_cast< Pet* >( objB )->GetPetOwner()->GetAreaID() );
+			auto atB = static_cast< Pet* >( objB )->GetPetOwner()->GetArea();
 /*		if ( atB==NULL ) {
 			Unit *_creator = objB->GetMapMgr()->GetUnit( objB->GetUInt64Value( UNIT_FIELD_CREATEDBY ) );
 			if( _creator!=NULL && _creator->IsCreature() && _creator->GetMapMgr() ){
@@ -411,15 +405,12 @@ bool isAttackable(Object* objA, Object* objB, bool CheckStealth)// A can attack 
 //		}
 	}			
 		
-	if( objA->IsPlayer() )
-		atA = dbcArea.LookupEntry( static_cast< Player* >( objA )->GetAreaID() );
-
-	if( objB->IsPlayer() )
-		atB = dbcArea.LookupEntry( static_cast< Player* >( objB )->GetAreaID() );
+    auto atA = static_cast< Player* >( objA )->GetArea();
+    auto atB = static_cast< Player* >( objB )->GetArea();
 
 	// We have the area codes
 	// We know they aren't dueling
-	if( ( atA && atA->AreaFlags & 0x800) || (atB && atB->AreaFlags & 0x800) ) // cebernic: fix older logic error
+    if (((atA && atA->flags & 0x800) != 0) || ((atB && atB->flags & 0x800) != 0))
 		return false;
 
 	if(objA->m_faction == objB->m_faction)  // same faction can't kill each other unless in ffa pvp/duel

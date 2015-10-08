@@ -338,6 +338,8 @@ bool World::SetInitialWorldSettings()
 	}
 
 	/* Convert area table ids/flags */
+    /* TODO: Why are we doing this? Is it still necessary after DBC rework? */
+    /*
 	DBCFile area;
 
 	if( !area.open( "DBC/AreaTable.dbc" ) )
@@ -367,7 +369,7 @@ bool World::SetInitialWorldSettings()
 		{
 			mZoneIDToTable[zone_] = mAreaIDToTable[flag_];
 		}
-	}
+	}*/
 
 	new ObjectMgr;
 	new QuestMgr;

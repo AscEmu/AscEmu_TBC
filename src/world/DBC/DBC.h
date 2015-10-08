@@ -20,9 +20,9 @@
 #ifndef __DBC_H
 #define __DBC_H
 
-#include "../Common.h"
+#include "Common.h"
 
-enum DBCFmat
+/*enum DBCFmat
 {
 	F_STRING = 0,
 	F_INT = 1,
@@ -53,6 +53,6 @@ public:
 	int GetCols() { return cols; }
 	int GetDBSize() { return dblength; }
 	~DBC();
-};
+};*/
 			
 #endif

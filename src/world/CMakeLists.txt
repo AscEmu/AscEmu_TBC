@@ -4,12 +4,18 @@
 project(world)
 
 file(GLOB_RECURSE sources_BufferPools BufferPools/*.cpp BufferPools/*.h)
+file(GLOB_RECURSE sources_DBC DBC/*.cpp DBC/*.h DBC/*.hpp)
+file(GLOB_RECURSE sources_MapManagement MapManagement/*.cpp MapManagement/*.hpp)
+file(GLOB_RECURSE sources_MapMgAreaMananagement MapManagement/AreaMananagement/*.cpp MapManagement/AreaMananagement/*.hpp)
 file(GLOB sources_localdir *.cpp *.h *.hpp)
 
 set(prefix ${ROOT_PATH}/src/world)
 set(ascemu_world_SRCS
   ${ascemu_world_SRCS} 
   ${sources_BufferPools}
+  ${sources_DBC}
+  ${sources_MapManagement}
+  ${sources_MapMgAreaMananagement}
   ${sources_localdir}
 )
 
