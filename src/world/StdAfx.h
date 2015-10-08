@@ -43,17 +43,31 @@
 #include <map>
 #include <sstream>
 #include <string>
-//#include <fstream>
+#include <fstream>
 
-#include "Common.h"
-#include "MersenneTwister.h"
-#include "WorldPacket.h"
-#include "Log.h"
-#include "ByteBuffer.h"
-#include "StackBuffer.h"
-#include "Config/ConfigEnv.h"
-#include "crc32.h"
-#include "LocationVector.h"
+#ifdef WIN32
+#include <array>
+#else
+#include <tr1/array>
+#endif
+
+#include "../shared/Common.h"
+#include "../shared/MersenneTwister.h"
+#include "../shared/WorldPacket.h"
+#include "../shared/Log.h"
+#include "../shared/ByteBuffer.h"
+#include "../shared/StackBuffer.h"
+#include "../shared/Config/ConfigEnv.h"
+#include "../shared/crc32.h"
+#include "../shared/LocationVector.h"
+
+extern SERVER_DECL SessionLogWriter* Anticheat_Log;
+extern SERVER_DECL SessionLogWriter* GMCommand_Log;
+extern SERVER_DECL SessionLogWriter* Player_Log;
+
+#define sCheatLog (*Anticheat_Log)
+#define sGMLog (*GMCommand_Log)
+#define sPlrLog (*Player_Log)
 
 //#include <zlib.h>
 
@@ -63,16 +77,16 @@
 
 #include <Network/Network.h>
 
-#include "Auth/MD5.h"
-#include "Auth/BigNumber.h"
-#include "Auth/Sha1.h"
-#include "Auth/WowCrypt.h"
-#include "CrashHandler.h"
-#include "FastQueue.h"
-#include "CircularQueue.h"
-#include "Threading/RWLock.h"
-#include "Threading/Condition.h"
-#include "arcemu_getopt.h"
+#include "../shared/Auth/MD5.h"
+#include "../shared/Auth/BigNumber.h"
+#include "../shared/Auth/Sha1.h"
+#include "../shared/Auth/WowCrypt.h"
+#include "../shared/CrashHandler.h"
+#include "../shared/FastQueue.h"
+#include "../shared/CircularQueue.h"
+#include "../shared/Threading/RWLock.h"
+#include "../shared/Threading/Condition.h"
+#include "../shared/arcemu_getopt.h"
 
 #include "UpdateFields.h"
 #include "UpdateMask.h"
@@ -152,23 +166,17 @@
 #include "ItemInterface.h"
 #include "Stats.h"
 #include "WorldCreator.h"
-
-
 #include "ObjectMgr.h"
-
 #include "CThreads.h"
 #include "ScriptMgr.h"
-
 #include "Channel.h"
 #include "ChannelMgr.h"
 #include "ArenaTeam.h"
 #include "Arenas.h"
-
 #include "LogonCommClient.h"
 #include "LogonCommHandler.h"
 #include "MainServerDefines.h"
 #include "WorldRunnable.h"
-
 #include "Storage.h"
 #include "ObjectStorage.h"
 #include "DatabaseCleaner.h"
@@ -183,7 +191,6 @@
 #endif
 
 #include "CollideInterface.h"
-
 #include "Master.h"
 #include "BaseConsole.h"
 #include "CConsole.h"
