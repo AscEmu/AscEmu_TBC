@@ -23,6 +23,8 @@
 //
 
 #include "StdAfx.h"
+#include <CrashHandler.h>
+
 #define WORLD_UPDATE_DELAY 50
 
 WorldRunnable::WorldRunnable() : CThread()

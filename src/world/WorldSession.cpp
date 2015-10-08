@@ -21,7 +21,9 @@
 //
 // WorldSession.cpp
 //
-
+#include "FastQueue.h"
+#include "Threading/Mutex.h"
+#include "WorldPacket.h"
 #include "StdAfx.h"
 
 #define WORLDSOCKET_TIMEOUT		 120
