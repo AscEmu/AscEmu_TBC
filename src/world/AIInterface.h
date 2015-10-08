@@ -21,6 +21,8 @@
 #ifndef WOWSERVER_AIINTERFACE_H
 #define WOWSERVER_AIINTERFACE_H
 
+#include <G3D/Vector3.h>
+
 /* platforms that already define M_PI in math.h */
 #ifdef M_PI
 #undef M_PI
