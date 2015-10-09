@@ -394,6 +394,25 @@ float TileMap::GetHeight( float x, float y )
 	return GetHeightF(x, y, x_int, y_int);
 }
 
+const bool TerrainHolder::GetAreaInfo(float x, float y, float z, uint32 &mogp_flags, int32 &adt_id, int32 &root_id, int32 &group_id)
+{
+    float vmap_z = z;
+    auto vmap_manager = VMAP::VMapFactory::createOrGetVMapManager();
+    if (vmap_manager->getAreaInfo(m_mapid, x, y, vmap_z, mogp_flags, adt_id, root_id, group_id))
+    {
+        if (auto tile = this->GetTile(x, y))
+        {
+            float map_height = tile->m_map.GetHeight(x, y);
+            if (z + 2.0f > map_height && map_height > vmap_z)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+    return false;
+}
+
 void TileMap::Load( char* filename )
 {
 	Log.Debug("Terrain", "Loading %s", filename);
@@ -409,9 +428,9 @@ void TileMap::Load( char* filename )
 
 	fread(&header, 1, sizeof(header), f);
 
-	if (header.buildMagic != 12340) //wow version
+	if (header.buildMagic != 8606) //wow version
 	{
-        Log.Error("Terrain", "%s: from incorrect client (you: %u us: %u)", filename, header.buildMagic, 12340);
+        Log.Error("Terrain", "%s: from incorrect client (you: %u us: %u)", filename, header.buildMagic, 8606);
 		fclose(f);
 		return;
 	}
@@ -549,23 +568,3 @@ uint32 TileMap::GetArea( float x, float y )
 	int ly = (int)y & 15;
 	return m_areaMap[lx * 16 + ly];
 }
-
-const bool TerrainHolder::GetAreaInfo(float x, float y, float z, uint32 &mogp_flags, int32 &adt_id, int32 &root_id, int32 &group_id)
-{
-    float vmap_z = z;
-    auto vmap_manager = VMAP::VMapFactory::createOrGetVMapManager();
-    if (vmap_manager->getAreaInfo(m_mapid, x, y, vmap_z, mogp_flags, adt_id, root_id, group_id))
-    {
-        if (auto tile = this->GetTile(x, y))
-        {
-            float map_height = tile->m_map.GetHeight(x, y);
-            if (z + 2.0f > map_height && map_height > vmap_z)
-            {
-                return false;
-            }
-        }
-        return true;
-    }
-    return false;
-}
-

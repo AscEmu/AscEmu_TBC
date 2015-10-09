@@ -214,8 +214,20 @@ public:
     bool GetLiquidInfo(float x, float y, float z, float & liquidlevel, uint32 & liquidtype) { return _terrain->GetLiquidInfo(x, y, z, liquidlevel, liquidtype); }
 	float  GetLiquidHeight(float x, float y) { return _terrain->GetLiquidHeight(x, y); }
 	uint8  GetLiquidType(float x, float y) { return _terrain->GetLiquidType(x, y); }
+    const ::DBC::Structures::AreaTableEntry* GetArea(float x, float y, float z)
+    {
+        uint32 mogp_flags;
+
+        int32 adt_id, root_id, group_id;
+        bool have_area_info = _terrain->GetAreaInfo(x, y, z, mogp_flags, adt_id, root_id, group_id);
+        auto area_flag_without_adt_id = _terrain->GetAreaFlagWithoutAdtId(x, y);
+        auto area_flag = MapManagement::AreaManagement::AreaStorage::GetFlagByPosition(area_flag_without_adt_id, have_area_info, mogp_flags, adt_id, root_id, group_id, _mapId, x, y, z, nullptr);
+        if (area_flag)
+            return MapManagement::AreaManagement::AreaStorage::GetAreaByFlag(area_flag);
+        else
+            return MapManagement::AreaManagement::AreaStorage::GetAreaByMapId(_mapId);
+    }
     bool InLineOfSight(float x, float y, float z, float x2, float y2, float z2) { return _terrain->InLineOfSight(x, y, z, x2, y2, z2); }
-    const ::DBC::Structures::AreaTableEntry* GetArea(float x, float y, float z);
 	uint32 GetMapId() { return _mapId; }
 
 	void PushToProcessed(Player* plr);

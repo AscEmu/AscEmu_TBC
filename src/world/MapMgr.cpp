@@ -2146,19 +2146,6 @@ void MapMgr::SendPvPCaptureMessage(int32 ZoneMask, uint32 ZoneId, const char * M
 	}
 }
 
-const ::DBC::Structures::AreaTableEntry* MapMgr::GetArea(float x, float y, float z)
-{
-    uint32 mogp_flags;
-    int32 adt_id, root_id, group_id;
-    bool have_area_info = _terrain->GetAreaInfo(x, y, z, mogp_flags, adt_id, root_id, group_id);
-    auto area_flag_without_adt_id = _terrain->GetAreaFlagWithoutAdtId(x, y);
-    auto area_flag = MapManagement::AreaManagement::AreaStorage::GetFlagByPosition(area_flag_without_adt_id, have_area_info, mogp_flags, adt_id, root_id, group_id, _mapId, x, y, z, nullptr);
-    if (area_flag)
-        return MapManagement::AreaManagement::AreaStorage::GetAreaByFlag(area_flag);
-    else
-        return MapManagement::AreaManagement::AreaStorage::GetAreaByMapId(_mapId);
-}
-
 const uint16 MapMgr::GetAreaFlag(float x, float y, float z, bool *is_outdoors /* = nullptr */)
 {
     uint32 mogp_flags;

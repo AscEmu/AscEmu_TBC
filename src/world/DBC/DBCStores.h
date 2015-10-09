@@ -799,128 +799,22 @@ struct CreatureFamilyEntry
 struct MapEntry
 {
     uint32 id;
-    char* name_internal;
+    const char* name_internal;
     uint32 map_type;
-    //uint32 unk;
-    char* real_name;
-    //uint32 unk_1;
-    //uint32 unk1;
-    //uint32 unk2;
-    //uint32 unk3;
-    //uint32 unk4;
-    //uint32 unk5;
-    //uint32 unk6;
-    //uint32 unk7;
-    //uint32 unk8;
-    //uint32 unk9;
-    //uint32 unk10;
-    //uint32 unk11;
-    //uint32 unk12;
-    //uint32 unk13;
-    //uint32 unk14;
-    //uint32 unk15;
-    //uint32 unk16;
-    //uint32 unk17;
-    //uint32 unk18;
-    //uint32 unk19;
-    //uint32 unk20;
-    //uint32 unk21;
-    //uint32 unk22;
-    //uint32 unk23;
-    //uint32 unk24;
-    //uint32 unk25;
-    //uint32 unk26;
-    //uint32 unk27;
-    //uint32 unk28;
-    //uint32 unk29;
-    //uint32 unk30;
-    //uint32 unk31;
-    //uint32 unk32;
-    //uint32 unk33;
-    //uint32 unk34;
-    //uint32 unk35;
-    //uint32 unk36;
-    //uint32 unk37;
-    //uint32 unk38;
-    //uint32 unk39;
-    //uint32 unk40;
-    //uint32 unk41;
-    //uint32 unk42;
-    //uint32 unk43;
-    //uint32 unk44;
-    //uint32 unk45;
-    //uint32 unk46;
-    //uint32 unk47;
-    //uint32 unk48;
-    //uint32 unk49;
-    //uint32 unk50;
-    //uint32 unk51;
-    //uint32 unk52;
-    //uint32 unk53;
-    //uint32 unk54;
-    //uint32 unk55;
-    //uint32 unk56;
-    //uint32 unk57;
-    //uint32 unk58;
-    //uint32 unk59;
-    //uint32 unk60;
-    //uint32 unk61;
-    //uint32 unk62;
-    //uint32 unk63;
-    //uint32 unk64;
-    //uint32 unk65;
-    //uint32 unk66;
-    //uint32 unk67;
-    //uint32 unk68;
-    //uint32 unk69;
-    //uint32 aunk1;
-    //uint32 aunk2;
-    //uint32 aunk3;
-    //uint32 aunk4;
-    //uint32 aunk5;
-    //uint32 aunk6;
-    //uint32 aunk7;
-    //uint32 aunk8;
-    //uint32 aunk9;
-    //uint32 aunk10;
-    //uint32 aunk11;
-    //uint32 aunk12;
-    //uint32 aunk13;
-    //uint32 aunk14;
-    //uint32 aunk15;
-    //uint32 aunk16;
-    //uint32 aunk17;
-    //uint32 aunk18;
-    //uint32 aunk19;
-    //uint32 aunk20;
-    //uint32 aunk21;
-    //uint32 aunk22;
-    //uint32 aunk23;
-    //uint32 aunk24;
-    //uint32 bunk1;
-    //uint32 bunk2;
-    //uint32 bunk3;
-    //uint32 bunk4;
-    //uint32 bunk5;
-    //uint32 bunk6;
-    //uint32 bunk7;
-    //uint32 bunk8;
-    //uint32 bunk9;
-    //uint32 bunk10;
-    //uint32 bunk11;
-    //uint32 bunk12;
-    //uint32 bunk13;
-    //uint32 bunk14;
-    //uint32 bunk15;
-    //uint32 bunk16;
-    //uint32 bunk17;
-    //uint32 bunk18;
-    //uint32 bunk19;
-    //uint32 bunk20;
-    //uint32 bunk21;
-    //uint32 bunk22;
-    //uint32 bunk23;
-    //uint32 bunk24;
+    uint32 is_pvp_zone;
+    const char* real_name;
+    uint32 linked_zone;             /// common zone for instance and continent map
+    const char* hordeIntro;         /// text for PvP Zones
+    const char* allianceIntro;      /// text for PvP Zones
+    uint32 multimap_id;
+    const char* normalReqText;      /// normal mode requirement text
+    const char* heroicReqText;      /// heroic mode requirement text
+    int32 parent_map;               /// map_id of parent map
+    float start_x;                  /// enter x coordinate (if exist single entry)
+    float start_y;                  /// enter y coordinate (if exist single entry)
+    //uint32 resetTimeRaid;         /// REMOVED IN 3.2.0
+    //uint32 resetTimeHeroic;       /// REMOVED IN 3.2.0
+    uint32 addon;                   /// 0-original maps, 1-tbc addon, 2-wotlk addon
 };
 
 struct ItemRandomSuffixEntry

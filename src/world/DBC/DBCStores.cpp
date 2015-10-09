@@ -98,7 +98,26 @@ const char* creaturespelldataFormat = "uuuuuuuuu";
 const char* charraceFormat = "uxxxxxxxuxxxxusxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
 const char* charclassFormat = "uxuxsxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
 const char* creaturefamilyFormat = "ufufuuuusxxxxxxxxxxxxxxxxx";
-const char* mapentryFormat = "usuxsxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
+const char* mapentryFormat = 
+"u"                 // 0 id
+"s"                 // 1 name
+"u"                 // 2 map_type
+"u"                 // 3 is_pvp_zone
+"x"                 // 4
+"lxxxxxxxxxxxxxxxx" // 5 - 21 name
+"u"                 // 22 linked zone
+"xxxxxxxxxxxxxxxxx" // 23 - 39 horde_intro
+"xxxxxxxxxxxxxxxxx" // 40 - 56 alliance intro
+"u"                 // 57 multimap_id
+"x"                 // 58 unk_float (all 1 but arathi 1.25)
+"u"                 // 59 parent_map
+"u"                 // 60 start_x
+"u"                 // 61 start_y
+"x"                 // 62 unk
+"u"                 // 63 addon (0 classic, 1 tbc)
+"x"                 // 64 unk
+"x"                 // 65 unk, but as it is always one of the following ones, it could be a max. player count: 0, 5, 10, 20, 25, 40
+"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
 const char* itemrandomsuffixformat = "uxxxxxxxxxxxxxxxxxxuuuuuu";
 const char* chatchannelformat = "uuxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
 const char * durabilityqualityFormat = "uf";
@@ -142,7 +161,6 @@ bool LoadDBCs()
 	LOAD_DBC("DBC/ItemRandomProperties.dbc", randompropsFormat, true, dbcRandomProps, false);
 	
     DBC::LoadDBC(available_dbc_locales, bad_dbc_files, sAreaStore, dbc_path, "AreaTable.dbc");
-    MapManagement::AreaManagement::AreaStorage::Initialise(&sAreaStore);
 
 	LOAD_DBC("DBC/FactionTemplate.dbc", factiontemplatedbcFormat, true, dbcFactionTemplate, false);
 	LOAD_DBC("DBC/Faction.dbc", factiondbcFormat, true, dbcFaction, true);
@@ -172,12 +190,25 @@ bool LoadDBCs()
 	LOAD_DBC("DBC/gtOCTRegenHP.dbc", gtfloatformat, false, dbcHPRegen, false); //it's not a mistake.
 	LOAD_DBC("DBC/AreaTrigger.dbc", areatriggerformat, true, dbcAreaTrigger, true);
     LOAD_DBC("DBC/WMOAreaTable.dbc", wmoareaformat, true, dbcWMOAreaTable, false );
-    auto rowCount = dbcWMOAreaTable.GetNumRows();
+    //LOAD_DBC("DBC/SummonProperties.dbc", summonpropertiesformat, true, dbcSummonProperties, false);
+    //LOAD_DBC("DBC/NameGen.dbc", namegenentryformat, true, dbcNameGen, true);
+    //LOAD_DBC("DBC/LFGDungeons.dbc", LFGDungeonEntryformat, true, dbcLFGDungeon, false); //Is it not important to handle it?
+    //LOAD_DBC("DBC/Vehicle.dbc", VehicleEntryfmt, true, dbcVehicle, true);
+    //LOAD_DBC("DBC/VehicleSeat.dbc", VehicleSeatEntryfmt, true, dbcVehicleSeat, false);
+
+    MapManagement::AreaManagement::AreaStorage::Initialise(&sAreaStore);
+    auto area_map_collection = MapManagement::AreaManagement::AreaStorage::GetMapCollection();
+    for (auto map_object : dbcMap)
+    {
+        area_map_collection->insert(std::pair<uint32, uint32>(map_object->id, map_object->linked_zone));
+    }
+    //auto wmo_row_count = dbcWMOAreaTable.GetNumRows();
     for (auto i = 0; i < 51119; ++i) // This is a hack, dbc loading needs rework
     {
         if (auto entry = dbcWMOAreaTable.LookupEntry(i))
         {
             sWMOAreaInfoByTripple.insert(WMOAreaInfoByTripple::value_type(WMOAreaTableTripple(entry->rootId, entry->adtId, entry->groupId), entry));
+            MapManagement::AreaManagement::AreaStorage::AddWMOTripleEntry(entry->groupId, entry->rootId, entry->adtId, entry->areaId);
         }
     }
 //	LOAD_DBC("DBC/CharTitles.dbc", chartitleFormat, true, dbcCharTitle, true);
