@@ -28,7 +28,7 @@ namespace DBC
     {
         namespace
         {
-            char const area_table_entry_format[] = "iiinixxxxxissssssssssssssssxiiiiixxx";
+            char const area_table_entry_format[] = "iiinixxxxxissssssssssssssssxiixxxxx";
         }
 
         #pragma pack(push, 1)
@@ -44,7 +44,7 @@ namespace DBC
             char*   area_name[16];                                  // 11-26
             // 27, string flags, unused
             uint32  team;                                           // 28
-            uint32  liquid_type_override[4];                          // 29-32 liquid override by type
+            uint32  liquid_type_override;                          // 29-32 liquid override by type
         };
         #pragma pack(pop)
     }

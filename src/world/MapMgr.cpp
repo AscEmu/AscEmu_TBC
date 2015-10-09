@@ -1678,53 +1678,23 @@ void MapMgr::AddObject(Object *obj)
 	m_objectinsertlock.Release();//>>>>>>>>>>>>
 }
 
-
 Unit* MapMgr::GetUnit(const uint64 & guid)
 {
-/*#ifdef USING_BIG_ENDIAN
-	switch (((uint32*)&guid)[0])
-#else
-	switch (((uint32*)&guid)[1])
-#endif
-	{
-	case	HIGHGUID_PLAYER:
-		return GetPlayer((uint32)guid);
-		break;
-	case	HIGHGUID_UNIT:
-		return GetCreature((uint32)guid);
-		break;
-	case	HIGHGUID_PET:
-		return GetPet((uint32)guid);
-		break;
-	default:
-		return NULL;
-	}*/
-
-	/*uint32 highguid = GUID_HIPART(guid);
-	if( highguid & HIGHGUID_UNIT )
-		return GetCreature( ((uint32)guid&LOWGUID_UNIT_MASK) );
-	else if( highguid == HIGHGUID_PLAYER )			// players are always zero
-		return GetPlayer( (uint32)guid );
-	else if( highguid & HIGHGUID_PET )
-		return GetPet( (uint32)guid );
-	else
-		return NULL;*/
-
-	if ( guid == 0 )
+	if (guid == 0)
 		return NULL;
 
 	switch(GET_TYPE_FROM_GUID(guid))
 	{
 	case HIGHGUID_TYPE_UNIT:
-		return GetCreature( GET_LOWGUID_PART(guid) );
+		return GetCreature(GET_LOWGUID_PART(guid));
 		break;
 
 	case HIGHGUID_TYPE_PLAYER:
-		return GetPlayer( (uint32)guid );
+        return GetPlayer(GUID_LOPART(guid));
 		break;
 
 	case HIGHGUID_TYPE_PET:
-		return GetPet( (uint32)guid );
+        return GetPet(GET_LOWGUID_PART(guid));
 		break;
 	}
 
