@@ -194,169 +194,46 @@ public:
 
 class TerrainHolder
 {
-public:
-	uint32 m_mapid;
-	TerrainTile* m_tiles[TERRAIN_NUM_TILES][TERRAIN_NUM_TILES];
-	FastMutex m_lock[TERRAIN_NUM_TILES][TERRAIN_NUM_TILES];
-	Arcemu::Threading::AtomicCounter m_tilerefs[TERRAIN_NUM_TILES][TERRAIN_NUM_TILES];
+    public:
 
-	TerrainHolder(uint32 mapid)
-	{
-		for (int32 i = 0; i < TERRAIN_NUM_TILES; ++i)
-			for (int32 j = 0; j < TERRAIN_NUM_TILES; ++j)
-				m_tiles[i][j] = NULL;
-		m_mapid = mapid;
-	}
+        const bool GetAreaInfo(float x, float y, float z, uint32 &mogp_flags, int32 &adt_id, int32 &root_id, int32 &group_id);
 
-	~TerrainHolder()
-	{
-		for (int32 i = 0; i < TERRAIN_NUM_TILES; ++i)
-			for (int32 j = 0; j < TERRAIN_NUM_TILES; ++j)
-				UnloadTile(i, j);
-	}
+	    uint32 m_mapid;
+	    TerrainTile* m_tiles[TERRAIN_NUM_TILES][TERRAIN_NUM_TILES];
+	    FastMutex m_lock[TERRAIN_NUM_TILES][TERRAIN_NUM_TILES];
+	    Arcemu::Threading::AtomicCounter m_tilerefs[TERRAIN_NUM_TILES][TERRAIN_NUM_TILES];
 
-	TerrainTile* GetTile(float x, float y);
-	TerrainTile* GetTile(int32 tx, int32 ty)
-	{
-		TerrainTile* rv = NULL;
-		m_lock[tx][ty].Acquire();
-		rv = m_tiles[tx][ty];
-		if (rv != NULL)
-			rv->AddRef();
-		m_lock[tx][ty].Release();
+        TerrainHolder(uint32 mapid);
+        ~TerrainHolder();
 
-		return rv;
-	}
-	
-	void LoadTile(float x, float y)
-	{
-		int32 tx = (int32)(32 - (x / TERRAIN_TILE_SIZE));
-		int32 ty = (int32)(32 - (y / TERRAIN_TILE_SIZE));
-		LoadTile(tx, ty);
-	}
-	void LoadTile(int32 tx, int32 ty)
-	{
-		m_lock[tx][ty].Acquire();
-		++m_tilerefs[tx][ty];
-		if (m_tiles[tx][ty] == NULL)
-		{
-			m_tiles[tx][ty] = new TerrainTile(this, m_mapid, tx, ty);
-			m_tiles[tx][ty]->Load();
-		}
-		m_lock[tx][ty].Release();
-	}
-	void UnloadTile(float x, float y)
-	{
-		int32 tx = (int32)(32 - (x / TERRAIN_TILE_SIZE));
-		int32 ty = (int32)(32 - (y / TERRAIN_TILE_SIZE));
-		UnloadTile(tx, ty);
-	}
+        uint16 GetAreaFlagWithoutAdtId(float x, float y);
+	    TerrainTile* GetTile(float x, float y);
+        TerrainTile* GetTile(int32 tx, int32 ty);
 
-	void UnloadTile(int32 tx, int32 ty)
-	{
-		m_lock[tx][ty].Acquire();
-		if (m_tiles[tx][ty] == NULL)
-		{
-			m_lock[tx][ty].Release();
- 			return;
-		}
-		m_lock[tx][ty].Release();
 
-		if (--m_tilerefs[tx][ty] == 0)
-		{
-			m_lock[tx][ty].Acquire();
-			if (m_tiles[tx][ty] != NULL)
-				m_tiles[tx][ty]->DecRef();
-			m_tiles[tx][ty] = NULL;
-			m_lock[tx][ty].Release();
-		}
-	}
+        void LoadTile(float x, float y);
 
-	//test
-	float GetADTLandHeight(float x, float y)
-	{
-		TerrainTile* tile = GetTile(x, y);
+        void LoadTile(int32 tx, int32 ty);
 
-		if (tile == NULL)
-			return TERRAIN_INVALID_HEIGHT;
-		float rv = tile->m_map.GetHeight(x, y);
-		tile->DecRef();
-		return rv;
-	}
+        void UnloadTile(float x, float y);
 
-    float GetLandHeight(float x, float y, float z)
-	{
-		float adtheight = GetADTLandHeight(x, y);
+        void UnloadTile(int32 tx, int32 ty);
 
-		VMAP::IVMapManager* vmgr = VMAP::VMapFactory::createOrGetVMapManager();
-		float vmapheight = vmgr->getHeight(m_mapid, x, y, z + 0.5f, 10000.0f);
+	    //test
+        float GetADTLandHeight(float x, float y);
 
-        if (adtheight > z)
-			return vmapheight; //underground
-		return std::max(vmapheight, adtheight);
-	}
+        float GetLandHeight(float x, float y, float z);
 
-	float GetLiquidHeight(float x, float y)
-	{
-		TerrainTile* tile = GetTile(x, y);
+        float GetLiquidHeight(float x, float y);
 
-		if (tile == NULL)
-			return TERRAIN_INVALID_HEIGHT;
-		float rv = tile->m_map.GetLiquidHeight(x, y);
-		tile->DecRef();
-		return rv;
-	}
+        uint8 GetLiquidType(float x, float y);
 
-	uint8 GetLiquidType(float x, float y)
-	{
-		TerrainTile* tile = GetTile(x, y);
+        uint32 GetAreaFlag(float x, float y);
 
-		if (tile == NULL)
-			return 0;
-		uint8 rv = tile->m_map.GetLiquidType(x, y);
-		tile->DecRef();
-		return rv;
-	}
+        bool GetLiquidInfo(float x, float y, float z, float & liquidlevel, uint32 & liquidtype);
 
-	uint32 GetAreaFlag(float x, float y)
-	{
-		TerrainTile* tile = GetTile(x, y);
+        bool InLineOfSight(float x, float y, float z, float x2, float y2, float z2);
 
-        if (tile == NULL)
-        {
-            // No generated map for this area (usually instances)
-            return 0;
-        }
-		uint32 rv = tile->m_map.GetArea(x, y);
-		tile->DecRef();
-		return rv;
-	}
-
-    bool GetLiquidInfo(float x, float y, float z, float & liquidlevel, uint32 & liquidtype)
-	{
-		VMAP::IVMapManager* vmgr = VMAP::VMapFactory::createOrGetVMapManager();
-
-		float flr;
-		if (vmgr->GetLiquidLevel(m_mapid, x, y, z, 0xFF, liquidlevel, flr, liquidtype))
-			return true;
-
-		liquidlevel = GetLiquidHeight(x, y);
-		liquidtype = GetLiquidType(x, y);
-
-		if (liquidtype == 0)
-			return false;
-		return true;
-	}
-
-	bool InLineOfSight(float x, float y, float z, float x2, float y2, float z2)
-	{
-		VMAP::IVMapManager* vmgr = VMAP::VMapFactory::createOrGetVMapManager();
-
-		return vmgr->isInLineOfSight(m_mapid, x, y, z, x2, y2, z2);
-	}
-
-    uint16 GetAreaFlagWithoutAdtId(float x, float y);
-    const bool GetAreaInfo(float x, float y, float z, uint32 &mogp_flags, int32 &adt_id, int32 &root_id, int32 &group_id);
 };
 
 #endif

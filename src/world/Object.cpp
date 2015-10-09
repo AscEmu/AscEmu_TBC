@@ -1128,6 +1128,7 @@ void Object::AddToWorld(MapMgr * pMapMgr)
 
 	// correct incorrect instance id's
 	m_instanceId = pMapMgr->GetInstanceID();
+    m_mapId = m_mapMgr->GetMapId();
 
 	mSemaphoreTeleport = false;
 }
@@ -1136,10 +1137,13 @@ void Object::AddToWorld(MapMgr * pMapMgr)
 //this can only be called from the thread of mapmgr!!!
 void Object::PushToWorld(MapMgr*mgr)
 {
-	if(!mgr/* || (m_mapMgr != NULL && m_mapCell != NULL) */)
-		return; //instance add failed
+    if (mgr == NULL)
+    {
+        Log.outError("Invalid push to world of Object");
+        return; //instance add failed
+    }
 
-	m_mapId=mgr->GetMapId();
+	m_mapId = mgr->GetMapId();
 	m_instanceId = mgr->GetInstanceID();
 
 	m_mapMgr = mgr;

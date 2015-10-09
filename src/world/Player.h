@@ -1546,7 +1546,7 @@ public:
 	bool PowerCheat;
 	bool FlyCheat;
 	void ZoneUpdate(uint32 ZoneId);
-	ARCEMU_INLINE uint32 GetAreaID() { return m_AreaID; }
+	uint32 GetAreaID() { return m_AreaID; }
 	void SetAreaID(uint32 area) { m_AreaID = area; }
 	
 	// Instance IDs

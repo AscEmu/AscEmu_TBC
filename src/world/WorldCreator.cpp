@@ -514,23 +514,22 @@ MapMgr * InstanceMgr::GetInstance(Object* obj)
 
 MapMgr * InstanceMgr::_CreateInstance(uint32 mapid, uint32 instanceid)
 {
-	MapInfo * inf = WorldMapInfoStorage.LookupEntry(mapid);
-	MapMgr * ret;
+	MapInfo* inf = WorldMapInfoStorage.LookupEntry(mapid);
 
 	ASSERT(inf && inf->type == INSTANCE_NULL);
 	ASSERT(mapid < NUM_MAPS && m_maps[mapid] != NULL);
 
 	Log.Notice("InstanceMgr", "Creating continent %s.", m_maps[mapid]->GetName());
 
-	ret = new MapMgr(m_maps[mapid], mapid, instanceid);
-	ASSERT(ret);
+    MapMgr* newMap = new MapMgr(m_maps[mapid], mapid, instanceid);
+    ASSERT(newMap);
 
 	// start its thread
-	ThreadPool.ExecuteTask(ret);
+    ThreadPool.ExecuteTask(newMap);
     
 	// assign pointer
-	m_singleMaps[mapid] = ret;
-	return ret;
+    m_singleMaps[mapid] = newMap;
+    return newMap;
 }
 
 MapMgr * InstanceMgr::_CreateInstance(Instance * in)
