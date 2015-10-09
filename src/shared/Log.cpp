@@ -1,6 +1,7 @@
 /*
- * ArcEmu MMORPG Server
- * Copyright (C) 2008 <http://www.ArcEmu.org/>
+ * AscEmu Framework based on ArcEmu MMORPG Server
+ * Copyright (C) 2014-2015 AscEmu Team <http://www.ascemu.org/>
+ * Copyright (C) 2008-2012 ArcEmu Team <http://www.ArcEmu.org/>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -9,12 +10,11 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include "Common.h"
@@ -302,6 +302,67 @@ void oLog::SetFileLoggingLevel(int32 level)
     //log level -1 is no more allowed
     if (level >= 0)
         m_fileLogLevel = level;
+}
+
+void oLog::logDetail(const char* file, int line, const char* fncname, const char* msg, ...)
+{
+    if ((m_fileLogLevel < 1) || (m_normalFile == NULL))
+        return;
+
+    char buf[32768];
+    char message[32768];
+
+    snprintf(message, 32768, "[DTL] %s %s", fncname, msg);
+    //snprintf(message, 32768, "[DTL] %s:%d %s %s", file, line, fncname, msg);
+    va_list ap;
+
+    va_start(ap, msg);
+    vsnprintf(buf, 32768, message, ap);
+    va_end(ap);
+    SetColor(TWHITE);
+    printf("%s\n", buf);
+    SetColor(TNORMAL);
+    outFile(m_normalFile, buf);
+}
+
+void oLog::logError(const char* file, int line, const char* fncname, const char* msg, ...)
+{
+    if (m_errorFile == NULL)
+        return;
+
+    char buf[32768];
+    char message[32768];
+
+    snprintf(message, 32768, "[ERR] %s %s", fncname, msg);
+    //snprintf(message, 32768, "[ERR] %s:%d %s %s", file, line, fncname, msg);
+    va_list ap;
+
+    va_start(ap, msg);
+    vsnprintf(buf, 32768, message, ap);
+    va_end(ap);
+    SetColor(TRED);
+    printf("%s\n", buf);
+    SetColor(TNORMAL);
+    outFile(m_errorFile, buf);
+}
+
+void oLog::logDebug(const char* file, int line, const char* fncname, const char* msg, ...)
+{
+    if ((m_fileLogLevel < 2) || (m_errorFile == NULL))
+        return;
+
+    char buf[32768];
+    char message[32768];
+
+    snprintf(message, 32768, "[DBG] %s %s", fncname, msg);
+    //snprintf(message, 32768, "[DBG] %s:%d %s %s", file, line, fncname, msg);
+    va_list ap;
+
+    va_start(ap, msg);
+    vsnprintf(buf, 32768, message, ap);
+    va_end(ap);
+
+    outFile(m_errorFile, buf);
 }
 
 void oLog::Notice(const char* source, const char* format, ...)

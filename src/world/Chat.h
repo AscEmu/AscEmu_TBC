@@ -204,6 +204,15 @@ protected:
 
 	ChatCommand* getCommandTable();
 
+    // AccountCommands
+    bool HandleAccountCreate(const char* args, WorldSession* m_session);
+    bool HandleAccountChangePassword(const char* args, WorldSession* m_session);
+    bool HandleAccountBannedCommand(const char* args, WorldSession* m_session);
+    bool HandleAccountSetGMCommand(const char* args, WorldSession* m_session);
+    bool HandleAccountUnbanCommand(const char* args, WorldSession* m_session);
+    bool HandleAccountMuteCommand(const char* args, WorldSession* m_session);
+    bool HandleAccountUnmuteCommand(const char* args, WorldSession* m_session);
+
 	// Level 0 commands
 	bool HandleHelpCommand(const char* args, WorldSession *m_session);
 	bool HandleCommandsCommand(const char* args, WorldSession *m_session);
@@ -360,8 +369,7 @@ protected:
 	bool HandlePlaySoundCommand(const char* args, WorldSession *m_session);
 	bool HandleSetBattlefieldStatusCommand(const char* args, WorldSession *m_session);
 	bool HandleNpcReturnCommand(const char* args, WorldSession* m_session);
-	bool HandleAccountBannedCommand(const char * args, WorldSession * m_session);
-	bool HandleAccountLevelCommand(const char * args, WorldSession * m_session);
+
 	bool HandleResetTalentsCommand(const char* args, WorldSession *m_session);
 	bool HandleResetSpellsCommand(const char* args, WorldSession *m_session);
 	bool HandleNpcFollowCommand(const char* args, WorldSession * m_session);
@@ -476,7 +484,6 @@ protected:
 	// bans
 	bool HandleIPBanCommand(const char * args, WorldSession * m_session);
 	bool HandleIPUnBanCommand(const char * args, WorldSession * m_session);
-	bool HandleAccountUnbanCommand(const char * args, WorldSession * m_session);
 
 	//
 	bool HandleRemoveItemCommand(const char * args, WorldSession * m_session);
@@ -541,8 +548,7 @@ protected:
 	bool HandleCollisionTestLOS(const char * args, WorldSession * m_session);
 	bool HandleRenameAllCharacter(const char * args, WorldSession * m_session);
 	bool HandleCollisionGetHeight(const char * args, WorldSession * m_session);
-	bool HandleAccountMuteCommand(const char * args, WorldSession * m_session);
-	bool HandleAccountUnmuteCommand(const char * args, WorldSession * m_session);
+
 	/* For skill related GM commands */
 	SkillNameMgr *SkillNameManager;
 

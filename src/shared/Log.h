@@ -1,6 +1,7 @@
 /*
- * ArcEmu MMORPG Server
- * Copyright (C) 2008 <http://www.ArcEmu.org/>
+ * AscEmu Framework based on ArcEmu MMORPG Server
+ * Copyright (C) 2014-2015 AscEmu Team <http://www.ascemu.org>
+ * Copyright (C) 2008-2012 ArcEmu Team <http://www.ArcEmu.org/>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -9,12 +10,11 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #ifndef WOWSERVER_LOG_H
@@ -69,6 +69,11 @@ public:
   void outDetail( const char * str, ... );
   void outDebug( const char * str, ... );
   void outMenu( const char * str, ... );
+
+  void logError(const char* file, int line, const char* fncname, const char* msg, ...);
+  void logDebug(const char* file, int line, const char* fncname, const char* msg, ...);
+  void logBasic(const char* file, int line, const char* fncname, const char* msg, ...);
+  void logDetail(const char* file, int line, const char* fncname, const char* msg, ...);
 
   void fLogText(const char *text);
   void SetLogging(bool enabled);
@@ -145,6 +150,10 @@ public:
 
 #define sLog oLog::getSingleton()
 
+#define LOG_BASIC(msg, ...) sLog.logBasic(__FILE__, __LINE__, __FUNCTION__, msg, ##__VA_ARGS__)
+#define LOG_DETAIL(msg, ...) sLog.logDetail(__FILE__, __LINE__, __FUNCTION__, msg, ##__VA_ARGS__)
+#define LOG_ERROR(msg, ...) sLog.logError(__FILE__, __LINE__, __FUNCTION__, msg, ##__VA_ARGS__)
+#define LOG_DEBUG(msg, ...) sLog.logDebug(__FILE__, __LINE__, __FUNCTION__, msg, ##__VA_ARGS__)
 
 #define Log sLog
 
