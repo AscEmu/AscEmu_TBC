@@ -532,7 +532,7 @@ char* SpellAuraNames[TOTAL_SPELL_AURAS] = {
 
 
 /*
-ARCEMU_INLINE void ApplyFloatSM(float ** m,float v,uint32 mask, float def)
+inline void ApplyFloatSM(float ** m,float v,uint32 mask, float def)
 {
 	if(*m == 0)
 	{
@@ -555,7 +555,7 @@ ARCEMU_INLINE void ApplyFloatSM(float ** m,float v,uint32 mask, float def)
 	}
 }*/
 /*
-ARCEMU_INLINE void ApplyFloatPSM(float ** m,int32 v,uint32 mask, float def)
+inline void ApplyFloatPSM(float ** m,int32 v,uint32 mask, float def)
 {
 	if(*m == 0)
 	{

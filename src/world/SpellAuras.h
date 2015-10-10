@@ -382,24 +382,24 @@ public:
     void Expire();
     void AddMod(uint32 t, int32 a,uint32 miscValue,uint32 i);
 
-    ARCEMU_INLINE SpellEntry* GetSpellProto() const { return m_spellProto; }
-    ARCEMU_INLINE uint32 GetSpellId() const {return m_spellProto->Id; }
-    ARCEMU_INLINE bool IsPassive(){ if(!m_spellProto) return false; return (m_spellProto->Attributes & ATTRIBUTES_PASSIVE && !m_areaAura);}
+    inline SpellEntry* GetSpellProto() const { return m_spellProto; }
+    inline uint32 GetSpellId() const {return m_spellProto->Id; }
+    inline bool IsPassive(){ if(!m_spellProto) return false; return (m_spellProto->Attributes & ATTRIBUTES_PASSIVE && !m_areaAura);}
 
-    ARCEMU_INLINE int32 GetDuration() const { return m_duration; }
+    inline int32 GetDuration() const { return m_duration; }
     void SetDuration(int32 duration) { m_duration = duration; }
 
-    ARCEMU_INLINE uint16 GetAuraSlot() const { return m_auraSlot; }
+    inline uint16 GetAuraSlot() const { return m_auraSlot; }
 	void SetAuraSlot( uint16 slot ) { m_auraSlot = slot; }
 
-	ARCEMU_INLINE bool IsPositive() { return m_positive>0; }
+	inline bool IsPositive() { return m_positive>0; }
 	void SetNegative(signed char value=1) { m_positive -= value; }
 	void SetPositive(signed char value=1) { m_positive += value; }
 
 	Object* GetCaster();
-	ARCEMU_INLINE uint64 GetCasterGUID(){return m_casterGuid;}
+	inline uint64 GetCasterGUID(){return m_casterGuid;}
 	Unit* GetUnitCaster();
-	ARCEMU_INLINE Unit* GetTarget() { return m_target; }
+	inline Unit* GetTarget() { return m_target; }
 
 	Aura* StrongerThat(Aura *aur);
 	void ApplyModifiers(bool apply);
@@ -409,7 +409,7 @@ public:
 	void EventUpdateAA(float r);
 	void RemoveAA();
 		
-	ARCEMU_INLINE uint32 GetTimeLeft()//in sec
+	inline uint32 GetTimeLeft()//in sec
 	{
 		if(m_duration==-1)return (uint32)-1;
 		int32 n=int32((UNIXTIME-time_t(timeleft))*1000);
@@ -643,7 +643,7 @@ public:
 	void RelocateEvents();
 	int32 event_GetInstanceID();
 
-	ARCEMU_INLINE void SendPeriodicHealAuraLog(uint32 amt)
+	inline void SendPeriodicHealAuraLog(uint32 amt)
 	{
 		WorldPacket data(32);
 		data.SetOpcode(SMSG_PERIODICAURALOG);
@@ -656,7 +656,7 @@ public:
 		m_target->SendMessageToSet(&data,true);
 	}
 	// log message's
-	ARCEMU_INLINE void SendPeriodicAuraLog(Unit * Caster, Unit * Target, uint32 SpellID, uint32 School, uint32 Amount, uint32 abs_dmg, uint32 resisted_damage, uint32 Flags)
+	inline void SendPeriodicAuraLog(Unit * Caster, Unit * Target, uint32 SpellID, uint32 School, uint32 Amount, uint32 abs_dmg, uint32 resisted_damage, uint32 Flags)
 	{
 		WorldPacket data(SMSG_PERIODICAURALOG, 46);
 		data << Target->GetNewGUID();		   // target guid
@@ -703,7 +703,7 @@ public:
 	uint32 pSpellId; //this represents the triggering spell id
 
 	// this stuff can be cached in spellproto.
-	ARCEMU_INLINE bool IsCombatStateAffecting()
+	inline bool IsCombatStateAffecting()
 	{
 		for(uint32 x = 0; x < 3; ++x) {
 			if(m_spellProto->EffectApplyAuraName[x] == SPELL_AURA_PERIODIC_DAMAGE || 
@@ -731,7 +731,7 @@ private:
 	uint32 GetCasterFaction() { return m_casterfaction; }
 	void SetCasterFaction(uint32 faction){ m_casterfaction = faction; }
 
-	ARCEMU_INLINE bool IsInrange(float x1,float y1, float z1, Object * o,float square_r)
+	inline bool IsInrange(float x1,float y1, float z1, Object * o,float square_r)
 	{
 		float t;
 		float r;
@@ -767,7 +767,7 @@ public:
 	int16 m_interrupted;
 	bool m_ignoreunapply; // \\\"special\\\" case, for unapply
 
-	ARCEMU_INLINE bool IsInterrupted() { return ( m_interrupted >= 0 ); }
+	inline bool IsInterrupted() { return ( m_interrupted >= 0 ); }
 };
 
 typedef void(Aura::*pSpellAura)(bool apply);

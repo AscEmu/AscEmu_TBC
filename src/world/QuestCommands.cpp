@@ -16,14 +16,14 @@
 
 class ChatHandler;
 
-ARCEMU_INLINE std::string MyConvertIntToString(const int arg)
+inline std::string MyConvertIntToString(const int arg)
 {
 	stringstream out;
 	out << arg;
 	return out.str();
 }
 
-ARCEMU_INLINE std::string MyConvertFloatToString(const float arg)
+inline std::string MyConvertFloatToString(const float arg)
 {
 	stringstream out;
 	out << arg;

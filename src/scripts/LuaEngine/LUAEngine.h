@@ -136,7 +136,7 @@ public:
 	void Restart();
 	void RegisterCoreFunctions();
 
-	ARCEMU_INLINE Mutex& GetLock() { return m_Lock; }
+	inline Mutex& GetLock() { return m_Lock; }
 
 	void OnUnitEvent(Unit * pUnit, const char * FunctionName, uint32 EventType, Unit * pMiscUnit, uint32 Misc, int32 Misc2, float Misc3, bool Yes, ItemPrototype * Misc4);
 	void OnQuestEvent(Player * QuestOwner, const char * FunctionName, uint32 QuestID, uint32 EventType, Object * QuestStarter,uint32 Misc, uint32 Misc2);

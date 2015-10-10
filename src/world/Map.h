@@ -93,11 +93,11 @@ public:
 	Map(uint32 mapid, MapInfo * inf);
 	~Map();
 
-	ARCEMU_INLINE string GetNameString() { return name; }
-	ARCEMU_INLINE const char* GetName() { return name.c_str(); }
-	ARCEMU_INLINE MapEntry* GetDBCEntry() { return me; }
+	inline string GetNameString() { return name; }
+	inline const char* GetName() { return name.c_str(); }
+	inline MapEntry* GetDBCEntry() { return me; }
 
-	ARCEMU_INLINE CellSpawns *GetSpawnsList(uint32 cellx,uint32 celly)
+	inline CellSpawns *GetSpawnsList(uint32 cellx,uint32 celly)
 	{
 		ASSERT(cellx < _sizeX);
 		ASSERT(celly < _sizeY);
@@ -105,7 +105,7 @@ public:
 
 		return spawns[cellx][celly];
 	}
-	ARCEMU_INLINE CellSpawns * GetSpawnsListAndCreate(uint32 cellx, uint32 celly)
+	inline CellSpawns * GetSpawnsListAndCreate(uint32 cellx, uint32 celly)
 	{
 		ASSERT(cellx < _sizeX);
 		ASSERT(celly < _sizeY);
@@ -125,11 +125,11 @@ public:
 	uint32 GameObjectSpawnCount;
 
 
-	ARCEMU_INLINE void CellGoneActive(uint32 x, uint32 y)
+	inline void CellGoneActive(uint32 x, uint32 y)
 	{
 	}
 
-	ARCEMU_INLINE void CellGoneIdle(uint32 x,uint32 y)
+	inline void CellGoneIdle(uint32 x,uint32 y)
 	{
 	}
 

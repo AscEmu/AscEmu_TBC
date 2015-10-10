@@ -667,14 +667,14 @@ public:
 
 	void OnRemoveFromWorld();										// called when we are removed from world, kills all references to us.
 	
-	ARCEMU_INLINE void Vanished()
+	inline void Vanished()
 	{
 		ClearAttackers();
 		ClearHealers();
 	}
 
-	ARCEMU_INLINE const uint64& GetPrimaryAttackTarget() { return m_primaryAttackTarget; }
-	ARCEMU_INLINE void SetUnit(Unit * p) { m_Unit = p; }
+	inline const uint64& GetPrimaryAttackTarget() { return m_primaryAttackTarget; }
+	inline void SetUnit(Unit * p) { m_Unit = p; }
 	void TryToClearAttackTargets();									// for pvp timeout
 	void AttackersForgetHate();										// used right now for Feign Death so attackers go home
 
@@ -721,7 +721,7 @@ public:
     void setAttackTimer(int32 time, bool offhand);
 	bool isAttackReady(bool offhand);
 
-	ARCEMU_INLINE void SetDualWield(bool enabled)
+	inline void SetDualWield(bool enabled)
 	{
 		m_dualWield = enabled;
 	}
@@ -731,21 +731,21 @@ public:
   //void StrikeWithAbility( Unit* pVictim, Spell* spell, uint32 addspelldmg, uint32 weapon_damage_type );
 
 	/// State flags are server-only flags to help me know when to do stuff, like die, or attack
-	ARCEMU_INLINE void addStateFlag(uint32 f) { m_state |= f; };
-	ARCEMU_INLINE bool hasStateFlag(uint32 f) { return (m_state & f ? true : false); }
-	ARCEMU_INLINE void clearStateFlag(uint32 f) { m_state &= ~f; };
+	inline void addStateFlag(uint32 f) { m_state |= f; };
+	inline bool hasStateFlag(uint32 f) { return (m_state & f ? true : false); }
+	inline void clearStateFlag(uint32 f) { m_state &= ~f; };
 
 	/// Stats
-	ARCEMU_INLINE uint32 getLevel() { return m_uint32Values[ UNIT_FIELD_LEVEL ]; };
-	ARCEMU_INLINE uint8 getRace() { return GetByte(UNIT_FIELD_BYTES_0,0); }
-	ARCEMU_INLINE uint8 getClass() { return GetByte(UNIT_FIELD_BYTES_0,1); }
-	ARCEMU_INLINE void setRace(uint8 race) { SetByte(UNIT_FIELD_BYTES_0,0,race); }
-	ARCEMU_INLINE void setClass(uint8 class_) { SetByte(UNIT_FIELD_BYTES_0,1, class_ ); }
-	ARCEMU_INLINE uint32 getClassMask() { return 1 << (getClass() - 1); }
-	ARCEMU_INLINE uint32 getRaceMask() { return 1 << (getRace() - 1); }
-	ARCEMU_INLINE uint8 getGender() { return GetByte(UNIT_FIELD_BYTES_0,2); }
-	ARCEMU_INLINE void setGender(uint8 gender) { SetByte(UNIT_FIELD_BYTES_0,2,gender); }
-	ARCEMU_INLINE uint8 getStandState() { return ((uint8)m_uint32Values[UNIT_FIELD_BYTES_1]); }
+	inline uint32 getLevel() { return m_uint32Values[ UNIT_FIELD_LEVEL ]; };
+	inline uint8 getRace() { return GetByte(UNIT_FIELD_BYTES_0,0); }
+	inline uint8 getClass() { return GetByte(UNIT_FIELD_BYTES_0,1); }
+	inline void setRace(uint8 race) { SetByte(UNIT_FIELD_BYTES_0,0,race); }
+	inline void setClass(uint8 class_) { SetByte(UNIT_FIELD_BYTES_0,1, class_ ); }
+	inline uint32 getClassMask() { return 1 << (getClass() - 1); }
+	inline uint32 getRaceMask() { return 1 << (getRace() - 1); }
+	inline uint8 getGender() { return GetByte(UNIT_FIELD_BYTES_0,2); }
+	inline void setGender(uint8 gender) { SetByte(UNIT_FIELD_BYTES_0,2,gender); }
+	inline uint8 getStandState() { return ((uint8)m_uint32Values[UNIT_FIELD_BYTES_1]); }
  
 	//// Combat
    // void DealDamage(Unit *pVictim, uint32 damage, uint32 targetEvent, uint32 unitEvent, uint32 spellId = 0);   // to stop from falling, etc
@@ -777,9 +777,9 @@ public:
     void CalculateResistanceReduction(Unit *pVictim,dealdamage *dmg,SpellEntry* ability) ;
 	void RegenerateHealth();
 	void RegeneratePower(bool isinterrupted);
-	ARCEMU_INLINE void setHRegenTimer(uint32 time) {m_H_regenTimer = time; }
-	ARCEMU_INLINE void setPRegenTimer(uint32 time) {m_P_regenTimer = time; }
-	ARCEMU_INLINE void DelayPowerRegeneration(uint32 time) { m_P_regenTimer = time; if (!m_interruptedRegenTime) m_interruptedRegenTime = 2000; }
+	inline void setHRegenTimer(uint32 time) {m_H_regenTimer = time; }
+	inline void setPRegenTimer(uint32 time) {m_P_regenTimer = time; }
+	inline void DelayPowerRegeneration(uint32 time) { m_P_regenTimer = time; if (!m_interruptedRegenTime) m_interruptedRegenTime = 2000; }
 	void DeMorph();
 	uint32 ManaShieldAbsorb(uint32 dmg);
 	void smsg_AttackStart(Unit* pVictim);
@@ -791,15 +791,15 @@ public:
 	float get_chance_to_daze(Unit *target);
 
 	// Stealth  
-	ARCEMU_INLINE int32 GetStealthLevel() { return m_stealthLevel; }
-	ARCEMU_INLINE int32 GetStealthDetectBonus() { return m_stealthDetectBonus; }
-	ARCEMU_INLINE void SetStealth(uint32 id) { m_stealth = id; }
-	ARCEMU_INLINE bool IsStealth() { return (m_stealth!=0 ? true : false); }
+	inline int32 GetStealthLevel() { return m_stealthLevel; }
+	inline int32 GetStealthDetectBonus() { return m_stealthDetectBonus; }
+	inline void SetStealth(uint32 id) { m_stealth = id; }
+	inline bool IsStealth() { return (m_stealth!=0 ? true : false); }
 	float detectRange;
 
 	// Invisibility
-	ARCEMU_INLINE void SetInvisibility(uint32 id) { m_invisibility = id; }
-	ARCEMU_INLINE bool IsInvisible() { return (m_invisible!=0 ? true : false); }
+	inline void SetInvisibility(uint32 id) { m_invisibility = id; }
+	inline bool IsInvisible() { return (m_invisible!=0 ? true : false); }
 	uint32 m_invisibility;
 	bool m_invisible;
 	uint8 m_invisFlag;
@@ -814,8 +814,8 @@ public:
 	void GiveGroupXP(Unit *pVictim, Player *PlayerInGroup);
 
 	/// Combat / Death Status
-	ARCEMU_INLINE bool isAlive() { return m_deathState == ALIVE; };
-	ARCEMU_INLINE bool isDead() { return  m_deathState !=ALIVE; };
+	inline bool isAlive() { return m_deathState == ALIVE; };
+	inline bool isDead() { return  m_deathState !=ALIVE; };
 	virtual void setDeathState(DeathState s) {
 		m_deathState = s;
 		if ( m_deathState==JUST_DIED ) DropAurasOnDeath();
@@ -884,8 +884,8 @@ public:
 	std::map<uint32,struct SpellCharge> m_chargeSpells;
 	deque<uint32> m_chargeSpellRemoveQueue;
 	bool m_chargeSpellsInUse;
-	ARCEMU_INLINE void SetOnMeleeSpell(uint32 spell ) { m_meleespell = spell; }
-	ARCEMU_INLINE uint32 GetOnMeleeSpell() { return m_meleespell; }
+	inline void SetOnMeleeSpell(uint32 spell ) { m_meleespell = spell; }
+	inline uint32 GetOnMeleeSpell() { return m_meleespell; }
 
 	uint32 DoDamageSplitTarget(uint32 res, uint32 school_type, bool melee_dmg);
 
@@ -898,7 +898,7 @@ public:
 	void ClearHateList();
 	void WipeHateList();
 	void WipeTargetList();
-	ARCEMU_INLINE void setAItoUse(bool value){m_useAI = value;}
+	inline void setAItoUse(bool value){m_useAI = value;}
 
 	virtual Group *GetGroup();
 
@@ -908,17 +908,17 @@ public:
 	void ModGeneratedThreatModifyer(uint32 school, int32 mod) { m_generatedThreatModifyer[school] += mod; }
 
 	void SetHitFromMeleeSpell(float value) { m_hitfrommeleespell = value; }
-	ARCEMU_INLINE float GetHitFromMeleeSpell() { return m_hitfrommeleespell; }
+	inline float GetHitFromMeleeSpell() { return m_hitfrommeleespell; }
 	float m_hitfrommeleespell;
 
 	// DK:Affect
-	ARCEMU_INLINE uint32 IsPacified() { return m_pacified; }
-	ARCEMU_INLINE uint32 IsStunned() { return m_stunned; }
-	ARCEMU_INLINE uint32 IsFeared() { return m_fearmodifiers; }
-	ARCEMU_INLINE uint32 GetResistChanceMod() { return m_resistChance; }
-	ARCEMU_INLINE void SetResistChanceMod(uint32 amount) { m_resistChance=amount; }
+	inline uint32 IsPacified() { return m_pacified; }
+	inline uint32 IsStunned() { return m_stunned; }
+	inline uint32 IsFeared() { return m_fearmodifiers; }
+	inline uint32 GetResistChanceMod() { return m_resistChance; }
+	inline void SetResistChanceMod(uint32 amount) { m_resistChance=amount; }
 	
-	ARCEMU_INLINE uint16 HasNoInterrupt() { return m_noInterrupt; }
+	inline uint16 HasNoInterrupt() { return m_noInterrupt; }
 	bool setDetectRangeMod(uint64 guid, int32 amount);
 	void unsetDetectRangeMod(uint64 guid);
 	int32 getDetectRangeMod(uint64 guid);
@@ -997,8 +997,8 @@ public:
 	void Emote (EmoteType emote);
 	void EventAddEmote(EmoteType emote, uint32 time);
 	void EmoteExpire();
-	ARCEMU_INLINE void setEmoteState(uint8 emote) { m_emoteState = emote; };
-	ARCEMU_INLINE uint32 GetOldEmote() { return m_oldEmote; }
+	inline void setEmoteState(uint8 emote) { m_emoteState = emote; };
+	inline uint32 GetOldEmote() { return m_oldEmote; }
 	void EventSummonPetExpire();
 	void EventAurastateExpire(uint32 aurastateflag){RemoveFlag(UNIT_FIELD_AURASTATE,aurastateflag);} //hmm this looks like so not necesary :S
 	void EventHealthChangeSinceLastUpdate();
@@ -1051,7 +1051,7 @@ public:
 
 	void SetStandState (uint8 standstate);
 
-	ARCEMU_INLINE StandState GetStandState()
+	inline StandState GetStandState()
 	{
 		uint32 bytes1 = GetUInt32Value (UNIT_FIELD_BYTES_1);
 		return StandState (uint8 (bytes1));
@@ -1062,7 +1062,7 @@ public:
 	void SendChatMessageAlternateEntry(uint32 entry, uint8 type, uint32 lang, const char * msg);
 	void RegisterPeriodicChatMessage(uint32 delay, uint32 msgid, std::string message, bool sendnotify);
 
-	ARCEMU_INLINE int GetHealthPct()
+	inline int GetHealthPct()
 	{
 		//shitty db? pet/guardian bug?
 		if (GetUInt32Value(UNIT_FIELD_HEALTH) == 0 || GetUInt32Value(UNIT_FIELD_MAXHEALTH) == 0)
@@ -1071,9 +1071,9 @@ public:
 		return (int)(GetUInt32Value(UNIT_FIELD_HEALTH) * 100 / GetUInt32Value(UNIT_FIELD_MAXHEALTH));
 	};
 
-    ARCEMU_INLINE void SetHealthPct(uint32 val) { if (val>0) SetUInt32Value(UNIT_FIELD_HEALTH,float2int32(val*0.01f*GetUInt32Value(UNIT_FIELD_MAXHEALTH))); };
+    inline void SetHealthPct(uint32 val) { if (val>0) SetUInt32Value(UNIT_FIELD_HEALTH,float2int32(val*0.01f*GetUInt32Value(UNIT_FIELD_MAXHEALTH))); };
 
-	ARCEMU_INLINE int GetManaPct()
+	inline int GetManaPct()
 	{
 		if (GetUInt32Value(UNIT_FIELD_POWER1) == 0 || GetUInt32Value(UNIT_FIELD_MAXPOWER1) == 0)
 			return 0;
@@ -1084,19 +1084,19 @@ public:
 	uint32 GetResistance(uint32 type);	
 	
 	//Pet
-	ARCEMU_INLINE void SetIsPet(bool chck) { m_isPet = chck; }
+	inline void SetIsPet(bool chck) { m_isPet = chck; }
 	
 	//In-Range
 	virtual void AddInRangeObject(Object* pObj);
 	virtual void OnRemoveInRangeObject(Object* pObj);
 	void ClearInRangeSet();
 
-	ARCEMU_INLINE Spell * GetCurrentSpell(){return m_currentSpell;}
-	ARCEMU_INLINE void SetCurrentSpell(Spell* cSpell) { m_currentSpell = cSpell; }
+	inline Spell * GetCurrentSpell(){return m_currentSpell;}
+	inline void SetCurrentSpell(Spell* cSpell) { m_currentSpell = cSpell; }
 
 	uint32 m_CombatUpdateTimer;
 
-	ARCEMU_INLINE void setcanperry(bool newstatus){can_parry=newstatus;}
+	inline void setcanperry(bool newstatus){can_parry=newstatus;}
 		
 	std::map<uint32,Aura*> tmpAura;
 
@@ -1117,7 +1117,7 @@ public:
 
 	int32 PctRegenModifier;
 	float PctPowerRegenModifier[4];
-	ARCEMU_INLINE uint32 GetPowerType(){ return (GetUInt32Value(UNIT_FIELD_BYTES_0)>> 24);}
+	inline uint32 GetPowerType(){ return (GetUInt32Value(UNIT_FIELD_BYTES_0)>> 24);}
 	void RemoveSoloAura(uint32 type);
 
 	void RemoveAurasByInterruptFlag(uint32 flag);
@@ -1201,19 +1201,19 @@ public:
 	Creature *critterPet;
 	Creature *summonPet;
 
-	ARCEMU_INLINE uint32 GetCharmTempVal() { return m_charmtemp; }
-	ARCEMU_INLINE void SetCharmTempVal(uint32 val) { m_charmtemp = val; }
+	inline uint32 GetCharmTempVal() { return m_charmtemp; }
+	inline void SetCharmTempVal(uint32 val) { m_charmtemp = val; }
 	set<uint32> m_SpellList;
 
-	ARCEMU_INLINE void DisableAI() { m_useAI = false; }
-	ARCEMU_INLINE void EnableAI() { m_useAI = true; }
+	inline void DisableAI() { m_useAI = false; }
+	inline void EnableAI() { m_useAI = true; }
 
-	ARCEMU_INLINE void SetPowerType(uint8 type)
+	inline void SetPowerType(uint8 type)
 	{
 		SetByte(UNIT_FIELD_BYTES_0,3,type);
 	}
 
-	ARCEMU_INLINE bool IsSpiritHealer()
+	inline bool IsSpiritHealer()
 	{
 		switch(GetEntry())
 		{
@@ -1302,9 +1302,9 @@ public:
 
 	void RemoveFieldSummon();
 
-	ARCEMU_INLINE float GetBlockFromSpell() { return m_blockfromspell; }
-	ARCEMU_INLINE float GetParryFromSpell() { return m_parryfromspell; }
-	ARCEMU_INLINE float GetDodgeFromSpell() { return m_dodgefromspell; }
+	inline float GetBlockFromSpell() { return m_blockfromspell; }
+	inline float GetParryFromSpell() { return m_parryfromspell; }
+	inline float GetDodgeFromSpell() { return m_dodgefromspell; }
 	void SetBlockFromSpell(float value) { m_blockfromspell = value; }
 	void SetParryFromSpell(float value) { m_parryfromspell = value; }
 	void SetDodgeFromSpell(float value) { m_dodgefromspell = value; }

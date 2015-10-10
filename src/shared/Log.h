@@ -141,7 +141,7 @@ public:
 
 	void write(const char* format, ...);
 	void writefromsession(WorldSession* session, const char* format, ...);
-	ARCEMU_INLINE bool IsOpen() { return (m_file != NULL); }
+	inline bool IsOpen() { return (m_file != NULL); }
 	void Open();
 	void Close();
 };

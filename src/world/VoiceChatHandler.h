@@ -62,8 +62,8 @@ public:
 	void SocketDisconnected();
 	void OnRead(WorldPacket* pck);
 
-	ARCEMU_INLINE uint32 GetVoiceServerIP() { return ip; }
-	ARCEMU_INLINE uint16 GetVoiceServerPort() { return port; }
+	inline uint32 GetVoiceServerIP() { return ip; }
+	inline uint16 GetVoiceServerPort() { return port; }
 	void CreateVoiceChannel(Channel * chn);
 	void DestroyVoiceChannel(Channel * chn);
 	bool CanCreateVoiceChannel(Channel * chn);

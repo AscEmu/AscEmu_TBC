@@ -19,7 +19,7 @@ public:
 	SocketMgr();
 	~SocketMgr();
 
-	ARCEMU_INLINE HANDLE GetCompletionPort() { return m_completionPort; }
+	inline HANDLE GetCompletionPort() { return m_completionPort; }
 	void SpawnWorkerThreads();
 	void CloseAll();
 	void ShowStatus();

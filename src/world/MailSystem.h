@@ -103,9 +103,9 @@ public:
 
 	WorldPacket * BuildMailboxListingPacket();
 	void CleanupExpiredMessages();
-	ARCEMU_INLINE size_t MessageCount() { return Messages.size(); }
+	inline size_t MessageCount() { return Messages.size(); }
 	void FillTimePacket(WorldPacket& data);
-	ARCEMU_INLINE uint64 GetOwner() { return owner; }
+	inline uint64 GetOwner() { return owner; }
 	void Load(QueryResult * result);
 };
 
@@ -121,7 +121,7 @@ public:
 	void SendAutomatedMessage(uint32 type, uint64 sender, uint64 receiver, string subject, string body, uint32 money,
 		uint32 cod, uint64 item_guid, uint32 stationary);
 
-	ARCEMU_INLINE bool MailOption(uint32 flag)
+	inline bool MailOption(uint32 flag)
 	{
 		return (config_flags & flag) ? true : false;
 	}

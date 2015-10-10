@@ -122,7 +122,7 @@ public:
 	int8 GetInternalBankSlotFromPlayer(int8 islot); //converts inventory slots into 0-x numbers
 
 	//buyback stuff
-	ARCEMU_INLINE Item* GetBuyBack(int32 slot) 
+	inline Item* GetBuyBack(int32 slot) 
 	{ 
 		if(slot >= 0 && slot < MAX_BUYBACK_SLOT)
 			return m_pBuyBack[slot];
@@ -246,8 +246,8 @@ public:
 		m_currentItem=NULL;
 	}
 
-	ARCEMU_INLINE Item* Grab() { return m_currentItem; }
-	ARCEMU_INLINE bool End() { return m_atEnd; }
+	inline Item* Grab() { return m_currentItem; }
+	inline bool End() { return m_atEnd; }
 };
 
 #endif

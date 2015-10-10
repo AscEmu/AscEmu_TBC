@@ -282,29 +282,29 @@ public:
 	void RemoveGlobalSession(WorldSession *session);
 	void DeleteSession(WorldSession *session);
 
-	ARCEMU_INLINE size_t GetSessionCount() const { return m_sessions.size(); }
+	inline size_t GetSessionCount() const { return m_sessions.size(); }
 	uint32 GetNonGmSessionCount();
-	ARCEMU_INLINE size_t GetQueueCount() { return mQueuedSessions.size(); }
+	inline size_t GetQueueCount() { return mQueuedSessions.size(); }
 	void GetStats(uint32 * GMCount, float * AverageLatency);
 
-	ARCEMU_INLINE uint32 GetPlayerLimit() const { return m_playerLimit; }
+	inline uint32 GetPlayerLimit() const { return m_playerLimit; }
 	void SetPlayerLimit(uint32 limit) { m_playerLimit = limit; }
 
-	ARCEMU_INLINE bool getAllowMovement() const { return m_allowMovement; }
+	inline bool getAllowMovement() const { return m_allowMovement; }
 	void SetAllowMovement(bool allow) { m_allowMovement = allow; }
-	ARCEMU_INLINE bool getGMTicketStatus() { return m_gmTicketSystem; };
+	inline bool getGMTicketStatus() { return m_gmTicketSystem; };
 	bool toggleGMTicketStatus()
 	{
 		m_gmTicketSystem = !m_gmTicketSystem;
 		return m_gmTicketSystem;
 	};
 
-	ARCEMU_INLINE std::string getGmClientChannel() { return GmClientChannel; }
+	inline std::string getGmClientChannel() { return GmClientChannel; }
 
 	void SetMotd(const char *motd) { m_motd = motd; }
-	ARCEMU_INLINE const char* GetMotd() const { return m_motd.c_str(); }
+	inline const char* GetMotd() const { return m_motd.c_str(); }
 
-	ARCEMU_INLINE time_t GetGameTime() const { return m_gameTime; }
+	inline time_t GetGameTime() const { return m_gameTime; }
 
 	bool SetInitialWorldSettings();
 
@@ -319,12 +319,12 @@ public:
 	void SendBCMessageByID(uint32 id);
 	void SendLocalizedWorldText(bool wide,const char * format, ...);
 
-	ARCEMU_INLINE void SetStartTime(uint32 val) { m_StartTime = val; }
-	ARCEMU_INLINE uint32 GetUptime(void) { return (uint32)UNIXTIME - m_StartTime; }
-	ARCEMU_INLINE uint32 GetStartTime(void) { return m_StartTime; }
+	inline void SetStartTime(uint32 val) { m_StartTime = val; }
+	inline uint32 GetUptime(void) { return (uint32)UNIXTIME - m_StartTime; }
+	inline uint32 GetStartTime(void) { return m_StartTime; }
 	std::string GetUptimeString();
 	// cebernic: textfilter,no fast,but works:D ...
-	ARCEMU_INLINE std::string SessionLocalizedTextFilter(WorldSession* _session,const char*text)
+	inline std::string SessionLocalizedTextFilter(WorldSession* _session,const char*text)
 	{
 			std::string opstr=string(text);
 			std::string::iterator t= opstr.begin();
@@ -365,22 +365,22 @@ public:
    
 	void UpdateSessions(uint32 diff);
 
-	ARCEMU_INLINE void setRate(int index,float value)
+	inline void setRate(int index,float value)
 	{
 		regen_values[index]=value;
 	}
 
-	ARCEMU_INLINE float getRate(int index)
+	inline float getRate(int index)
 	{
 		return regen_values[index];
 	}
 	
-	ARCEMU_INLINE uint32 getIntRate(int index)
+	inline uint32 getIntRate(int index)
 	{
 		return int_rates[index];
 	}
 
-	ARCEMU_INLINE void setIntRate(int index, uint32 value)
+	inline void setIntRate(int index, uint32 value)
 	{
 		int_rates[index] = value;
 	}
@@ -395,7 +395,7 @@ public:
 	typedef std::map< uint32, uint32> SpellPricesMap;
 	SpellPricesMap mPrices;
 
-	ARCEMU_INLINE uint32 GetTimeOut(){return TimeOut;}
+	inline uint32 GetTimeOut(){return TimeOut;}
 
 	struct NameGenData
 	{

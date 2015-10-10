@@ -27,7 +27,7 @@ class RWLock
 {
 public: 
   
-	ARCEMU_INLINE void AcquireReadLock()
+	inline void AcquireReadLock()
 	{
 		//_lock.Acquire();
 		_cond.BeginSynchronized();
@@ -36,7 +36,7 @@ public:
 		_cond.EndSynchronized();
 	}
 	
-	ARCEMU_INLINE void ReleaseReadLock()
+	inline void ReleaseReadLock()
 	{
 		//_lock.Acquire();
 		_cond.BeginSynchronized();
@@ -47,7 +47,7 @@ public:
 		_cond.EndSynchronized();
 	}
 
-	ARCEMU_INLINE void AcquireWriteLock()
+	inline void AcquireWriteLock()
 	{
 		//_lock.Acquire();
 		_cond.BeginSynchronized();
@@ -56,14 +56,14 @@ public:
 			_cond.Wait();
 	}
 
-	ARCEMU_INLINE void ReleaseWriteLock()
+	inline void ReleaseWriteLock()
 	{
 		if(--_writers)
 			_cond.Signal();
 		//_lock.Release();
 		_cond.EndSynchronized();
 	}
-	ARCEMU_INLINE RWLock() : _cond(&_lock) {_readers=0;_writers=0;}
+	inline RWLock() : _cond(&_lock) {_readers=0;_writers=0;}
   
 	private:
 		Mutex _lock;

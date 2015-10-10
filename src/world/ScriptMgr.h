@@ -167,7 +167,7 @@ public:
 	void register_item_gossip_script(uint32 entry, GossipScript * gs);
 	void register_quest_script(uint32 entry, QuestScript * qs);
 
-	ARCEMU_INLINE GossipScript * GetDefaultGossipScript() { return DefaultGossipScript; }
+	inline GossipScript * GetDefaultGossipScript() { return DefaultGossipScript; }
 
 protected:
 	CreatureCreateMap _creatures;

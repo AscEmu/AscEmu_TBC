@@ -49,7 +49,7 @@ protected:
 	void event_ModifyTimeAndTimeLeft(uint32 EventType, uint32 Time);
 	bool event_HasEvent(uint32 EventType);
 	void event_RemoveByPointer(TimedEvent * ev);
-	ARCEMU_INLINE int32 event_GetCurrentInstanceId() { return m_event_Instanceid; }
+	inline int32 event_GetCurrentInstanceId() { return m_event_Instanceid; }
 	bool event_GetTimeLeft(uint32 EventType, uint32 * Time);
 
 public:
@@ -59,7 +59,7 @@ public:
 	virtual ~EventableObject();
 	void Virtual_Destructor();
 
-	ARCEMU_INLINE bool event_HasEvents() { return m_events.size() > 0 ? true : false; }
+	inline bool event_HasEvents() { return m_events.size() > 0 ? true : false; }
 	void event_AddEvent(TimedEvent * ptr);
 	void event_Relocate();
 	
@@ -100,7 +100,7 @@ public:
 	void AddEvent(TimedEvent * ev);
 	void AddObject(EventableObject * obj);
 
-	ARCEMU_INLINE uint32 GetInstanceID() { return mInstanceId; }
+	inline uint32 GetInstanceID() { return mInstanceId; }
 
 protected:
 	int32 mInstanceId;

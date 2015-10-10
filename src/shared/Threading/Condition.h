@@ -151,7 +151,7 @@ protected:
 			return entry.count==0;
 		}
 
-		ARCEMU_INLINE void shift_generations_down()
+		inline void shift_generations_down()
 		{
 			if(std::remove_if(generations,generations+MAX_AWAITING_THREADS,no_waiters)==generations+MAX_AWAITING_THREADS)
 			{
@@ -171,7 +171,7 @@ protected:
 			dispose_entry(entry);
 		}
 
-		ARCEMU_INLINE void dispose_entry(list_entry& entry)
+		inline void dispose_entry(list_entry& entry)
 		{
 			ASSERT(entry.count==0);
 			if(entry.semaphore)
@@ -182,7 +182,7 @@ protected:
 			entry.notified=false;
 		}
 
-		ARCEMU_INLINE HANDLE duplicate_handle(HANDLE source)
+		inline HANDLE duplicate_handle(HANDLE source)
 		{
 			HANDLE const current_process=GetCurrentProcess();
 
@@ -205,7 +205,7 @@ protected:
 class Condition
 {
 public:
-	ARCEMU_INLINE Condition(Mutex * mutex) : m_nLockCount(0), m_externalMutex(mutex)
+	inline Condition(Mutex * mutex) : m_nLockCount(0), m_externalMutex(mutex)
 	{
 		  ::InitializeCriticalSection(&m_critsecWaitSetProtection);
 	}
@@ -216,13 +216,13 @@ public:
 		assert(m_deqWaitSet.empty());
 	}
 
-	ARCEMU_INLINE void BeginSynchronized()
+	inline void BeginSynchronized()
 	{
 		m_externalMutex->Acquire();
 		++m_nLockCount;
 	}
 
-	ARCEMU_INLINE void EndSynchronized()
+	inline void EndSynchronized()
 	{
 		assert(LockHeldByCallingThread());
 		--m_nLockCount;
@@ -476,29 +476,29 @@ private:
 class Condition
 {
 public:
-	ARCEMU_INLINE Condition(Mutex *m)
+	inline Condition(Mutex *m)
 	{
 		mut=m;
 		pthread_cond_init(&cond,NULL);
 	}
-	ARCEMU_INLINE ~Condition()
+	inline ~Condition()
 	{
 		pthread_cond_destroy(&cond);
 	}
 
-	ARCEMU_INLINE void Signal()
+	inline void Signal()
 	{
 		pthread_cond_signal(&cond);
 	}
-	ARCEMU_INLINE void Broadcast()
+	inline void Broadcast()
 	{
 		pthread_cond_broadcast(&cond);
 	}
-	ARCEMU_INLINE void Wait()
+	inline void Wait()
 	{
 		pthread_cond_wait(&cond,&mut->mutex);
 	}
-	ARCEMU_INLINE bool Wait(time_t seconds)
+	inline bool Wait(time_t seconds)
 	{
 		timespec tv;
 		tv.tv_nsec = 0;
@@ -508,11 +508,11 @@ public:
 		else
 			return false;
 	}
-	ARCEMU_INLINE void BeginSynchronized()
+	inline void BeginSynchronized()
 	{
 		mut->Acquire();
 	}
-	ARCEMU_INLINE void EndSynchronized()
+	inline void EndSynchronized()
 	{
 		mut->Release();
 	}

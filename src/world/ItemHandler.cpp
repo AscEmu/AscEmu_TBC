@@ -1649,7 +1649,7 @@ void WorldSession::HandleReadItemOpcode(WorldPacket &recvPacket)
 	}
 }
 
-ARCEMU_INLINE uint32 RepairItemCost(Player * pPlayer, Item * pItem)
+inline uint32 RepairItemCost(Player * pPlayer, Item * pItem)
 {
 	DurabilityCostsEntry * dcosts = dbcDurabilityCosts.LookupEntry(pItem->GetProto()->ItemLevel);
 	if(!dcosts)
@@ -1670,7 +1670,7 @@ ARCEMU_INLINE uint32 RepairItemCost(Player * pPlayer, Item * pItem)
 	return cost;
 }
 
-ARCEMU_INLINE bool RepairItem(Player * pPlayer, Item * pItem)
+inline bool RepairItem(Player * pPlayer, Item * pItem)
 {
 	//int32 cost = (int32)pItem->GetUInt32Value( ITEM_FIELD_MAXDURABILITY ) - (int32)pItem->GetUInt32Value( ITEM_FIELD_DURABILITY );
 	int32 cost = RepairItemCost(pPlayer, pItem);

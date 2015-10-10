@@ -126,13 +126,13 @@ public:
 
 	void Create( uint32 itemid, Player* owner );
 
-	ARCEMU_INLINE ItemPrototype* GetProto() const { return m_itemProto; }
-	ARCEMU_INLINE void SetProto( ItemPrototype* pr ) { m_itemProto = pr; }
+	inline ItemPrototype* GetProto() const { return m_itemProto; }
+	inline void SetProto( ItemPrototype* pr ) { m_itemProto = pr; }
 
-	ARCEMU_INLINE Player* GetOwner() const { return m_owner; }
+	inline Player* GetOwner() const { return m_owner; }
 	void SetOwner( Player* owner );
 
-	ARCEMU_INLINE bool IsContainer(){ return ( m_objectTypeId == TYPEID_CONTAINER ) ? true : false; }
+	inline bool IsContainer(){ return ( m_objectTypeId == TYPEID_CONTAINER ) ? true : false; }
 	
 	//! DB Serialization
 	void LoadFromDB( Field *fields, Player* plr, bool light );
@@ -141,17 +141,17 @@ public:
 	void DeleteFromDB();
 	void DeleteMe();
 	
-	ARCEMU_INLINE void SoulBind()
+	inline void SoulBind()
 	{
 		this->SetFlag( ITEM_FIELD_FLAGS, ITEM_FLAG_SOULBOUND );
 	}
 
-	ARCEMU_INLINE bool IsSoulbound()
+	inline bool IsSoulbound()
 	{
 		return this->HasFlag( ITEM_FIELD_FLAGS, ITEM_FLAG_QUEST | ITEM_FLAG_SOULBOUND );
 	}
 
-	ARCEMU_INLINE uint32 GetChargesLeft()
+	inline uint32 GetChargesLeft()
 	{
 		for( uint32 x = 0; x < 5; x++ )
 			if( m_itemProto->Spells[x].Id )
@@ -159,7 +159,7 @@ public:
 		return 0;
 	}
 
-	ARCEMU_INLINE time_t GetEnchantmentApplytime( uint32 slot )
+	inline time_t GetEnchantmentApplytime( uint32 slot )
 	{
 		EnchantmentMap::iterator itr = Enchantments.find( slot );
 		if( itr == Enchantments.end() )
@@ -217,12 +217,12 @@ public:
 	// gets the itemlink for a message to the player
 	string GetItemLink(uint32 language);
 
-	ARCEMU_INLINE void SetCount( uint32 amt ) { SetUInt32Value( ITEM_FIELD_STACK_COUNT, amt ); }
-	ARCEMU_INLINE void SetDurability( uint32 Value ) { SetUInt32Value(ITEM_FIELD_DURABILITY, Value ); };
-	ARCEMU_INLINE void SetDurabilityToMax() { SetUInt32Value( ITEM_FIELD_DURABILITY, GetUInt32Value( ITEM_FIELD_MAXDURABILITY ) ); }
-	ARCEMU_INLINE uint32 GetDurability() { return GetUInt32Value( ITEM_FIELD_DURABILITY ); }
-	ARCEMU_INLINE uint32 GetDurabilityMax() { return GetUInt32Value( ITEM_FIELD_MAXDURABILITY ); }
-	ARCEMU_INLINE bool IsAmmoBag() { return (m_itemProto->Class == ITEM_CLASS_QUIVER); }
+	inline void SetCount( uint32 amt ) { SetUInt32Value( ITEM_FIELD_STACK_COUNT, amt ); }
+	inline void SetDurability( uint32 Value ) { SetUInt32Value(ITEM_FIELD_DURABILITY, Value ); };
+	inline void SetDurabilityToMax() { SetUInt32Value( ITEM_FIELD_DURABILITY, GetUInt32Value( ITEM_FIELD_MAXDURABILITY ) ); }
+	inline uint32 GetDurability() { return GetUInt32Value( ITEM_FIELD_DURABILITY ); }
+	inline uint32 GetDurabilityMax() { return GetUInt32Value( ITEM_FIELD_MAXDURABILITY ); }
+	inline bool IsAmmoBag() { return (m_itemProto->Class == ITEM_CLASS_QUIVER); }
 
 	void RemoveFromWorld();
 
@@ -233,17 +233,17 @@ public:
 	EnchantmentInstance* GetEnchantment( uint32 slot );
 	bool IsGemRelated( EnchantEntry* Enchantment );
 
-	ARCEMU_INLINE uint32 GetItemRandomPropertyId() const { return m_uint32Values[ITEM_FIELD_RANDOM_PROPERTIES_ID]; }
-	ARCEMU_INLINE uint32 GetItemRandomSuffixFactor() { return m_uint32Values[ITEM_FIELD_PROPERTY_SEED]; }
+	inline uint32 GetItemRandomPropertyId() const { return m_uint32Values[ITEM_FIELD_RANDOM_PROPERTIES_ID]; }
+	inline uint32 GetItemRandomSuffixFactor() { return m_uint32Values[ITEM_FIELD_PROPERTY_SEED]; }
 	static uint32 GenerateRandomSuffixFactor( ItemPrototype* m_itemProto );
 
-	ARCEMU_INLINE void SetRandomProperty( uint32 id )
+	inline void SetRandomProperty( uint32 id )
 	{
 		SetUInt32Value( ITEM_FIELD_RANDOM_PROPERTIES_ID, id );
 		random_prop = id;
 	}
 
-	ARCEMU_INLINE void SetRandomSuffix( uint32 id )
+	inline void SetRandomSuffix( uint32 id )
 	{
 		int32 r_id = -(int32(id));
 		uint32 v = Item::GenerateRandomSuffixFactor( m_itemProto );

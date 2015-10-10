@@ -55,12 +55,12 @@ public:
 	Class *CreateByCoords(float x, float y);
 	void Remove(uint32 x, uint32 y);
 
-	ARCEMU_INLINE bool Allocated(uint32 x, uint32 y) { return _cells[x][y] != NULL; }
+	inline bool Allocated(uint32 x, uint32 y) { return _cells[x][y] != NULL; }
 
 	static uint32 GetPosX(float x); 
 	static uint32 GetPosY(float y);
 
-	ARCEMU_INLINE Map *GetBaseMap() { return _map; }
+	inline Map *GetBaseMap() { return _map; }
 
 protected:
 	void _Init();

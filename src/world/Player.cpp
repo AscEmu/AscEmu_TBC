@@ -542,7 +542,7 @@ Player::~Player ( )
 	delayedPackets.clear();
 }
 
-ARCEMU_INLINE uint32 GetSpellForLanguage(uint32 SkillID)
+inline uint32 GetSpellForLanguage(uint32 SkillID)
 {
 	switch(SkillID)
 	{
