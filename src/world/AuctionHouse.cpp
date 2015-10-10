@@ -28,7 +28,7 @@ void Auction::DeleteFromDB()
 
 void Auction::SaveToDB(uint32 AuctionHouseId)
 {
-	CharacterDatabase.Execute("INSERT INTO auctions VALUES(%u, %u, "I64FMTD", %u, %u, %u, %u, %u, %u)",
+	CharacterDatabase.Execute("INSERT INTO auctions VALUES(%u, %u, " I64FMTD ", %u, %u, %u, %u, %u, %u)",
 		Id, AuctionHouseId, pItem->GetGUID(), Owner, BuyoutPrice, ExpiryTime, HighestBidder, HighestBid,
 		DepositAmount);
 }

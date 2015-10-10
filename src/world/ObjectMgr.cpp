@@ -2658,7 +2658,7 @@ void Charter::Destroy()
 void Charter::SaveToDB()
 {
 	/*CharacterDatabase.Execute(
-		"REPLACE INTO charters VALUES(%u,%u,'%s',"I64FMTD",%u,%u,%u,%u,%u,%u,%u,%u,%u)",
+		"REPLACE INTO charters VALUES(%u,%u,'%s'," I64FMTD ",%u,%u,%u,%u,%u,%u,%u,%u,%u)",
 		CharterId,LeaderGuid,GuildName.c_str(),ItemGuid,Signatures[0],Signatures[1],
 		Signatures[2],Signatures[3],Signatures[4],Signatures[5],
 		Signatures[6],Signatures[7],Signatures[8]);*/
