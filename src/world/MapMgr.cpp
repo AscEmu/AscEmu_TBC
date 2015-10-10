@@ -121,7 +121,7 @@ MapMgr::~MapMgr()
 		}
 	}
 
-	for(set<Object*>::iterator itr = _mapWideStaticObjects.begin(); itr != _mapWideStaticObjects.end(); ++itr)
+    for (std::set<Object*>::iterator itr = _mapWideStaticObjects.begin(); itr != _mapWideStaticObjects.end(); ++itr)
 	{
 		if((*itr)->IsInWorld())
 			(*itr)->RemoveFromWorld(false);
@@ -139,7 +139,7 @@ MapMgr::~MapMgr()
 	}
 
 	Corpse * pCorpse;
-	for(set<Corpse*>::iterator itr = m_corpses.begin(); itr != m_corpses.end();)
+    for (std::set<Corpse*>::iterator itr = m_corpses.begin(); itr != m_corpses.end();)
 	{
 		pCorpse = *itr;
 		++itr;
@@ -175,7 +175,7 @@ void MapMgr::SetWorldState(uint32 state, uint32 value)
 {
 	if(_worldStateSet.find(state) == _worldStateSet.end())
 	{
-		_worldStateSet.insert( make_pair(state, value) );
+        _worldStateSet.insert(std::make_pair(state, value));
 	}
 	else
 	{
@@ -379,7 +379,7 @@ void MapMgr::PushObject(Object *obj)
 				m_CreatureStorage[obj->GetUIdFromGUID()] = (Creature*)obj;
 				if(((Creature*)obj)->m_spawn != NULL)
 				{
-					_sqlids_creatures.insert(make_pair( ((Creature*)obj)->m_spawn->id, ((Creature*)obj) ) );
+                    _sqlids_creatures.insert(std::make_pair(((Creature*)obj)->m_spawn->id, ((Creature*)obj)));
 				}
 			}break;
 
@@ -388,7 +388,7 @@ void MapMgr::PushObject(Object *obj)
 				m_GOStorage[obj->GetUIdFromGUID()] = (GameObject*)obj;
 				if(((GameObject*)obj)->m_spawn != NULL)
 				{
-					_sqlids_gameobjects.insert(make_pair( ((GameObject*)obj)->m_spawn->id, ((GameObject*)obj) ) );
+                    _sqlids_gameobjects.insert(std::make_pair(((GameObject*)obj)->m_spawn->id, ((GameObject*)obj)));
 				}
 			}break;
 
@@ -416,7 +416,7 @@ void MapMgr::PushObject(Object *obj)
 			if(!buf)
 				buf = new ByteBuffer(300);
 
-			for(set<Object*>::iterator itr = _mapWideStaticObjects.begin(); itr != _mapWideStaticObjects.end(); ++itr)
+            for (std::set<Object*>::iterator itr = _mapWideStaticObjects.begin(); itr != _mapWideStaticObjects.end(); ++itr)
 			{
 				count = (*itr)->BuildCreateUpdateBlockForPlayer(buf, plObj);
 				plObj->PushCreationData(buf, count);
@@ -605,7 +605,7 @@ void MapMgr::RemoveObject(Object *obj, bool free_guid)
 	// Remove the session from our set if it is a player.
 	if(plObj)
 	{
-		for(set<Object*>::iterator itr = _mapWideStaticObjects.begin(); itr != _mapWideStaticObjects.end(); ++itr)
+        for (std::set<Object*>::iterator itr = _mapWideStaticObjects.begin(); itr != _mapWideStaticObjects.end(); ++itr)
 		{
 			plObj->PushOutOfRange((*itr)->GetNewGUID());
 		}
@@ -1553,7 +1553,7 @@ bool MapMgr::Do()
 	}
 
 	/* add static objects */
-	for(set<Object*>::iterator itr = _mapWideStaticObjects.begin(); itr != _mapWideStaticObjects.end(); ++itr)
+    for (std::set<Object*>::iterator itr = _mapWideStaticObjects.begin(); itr != _mapWideStaticObjects.end(); ++itr)
 		PushStaticObject(*itr);
 
 	/* load corpses */

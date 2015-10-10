@@ -96,7 +96,7 @@ private:
 	uint32 _latency;
 	bool mQueued;
 	bool m_nagleEanbled;
-	string * m_fullAccountName;
+    std::string * m_fullAccountName;
 };
 
 #endif

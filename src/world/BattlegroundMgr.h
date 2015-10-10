@@ -137,7 +137,7 @@ static inline uint32 GetLevelGrouping(uint32 level)
 class CBattlegroundManager : public Singleton<CBattlegroundManager>, public EventableObject
 {
 	/* Battleground Instance Map */
-	map<uint32, CBattleground*> m_instances[BATTLEGROUND_NUM_TYPES];
+    std::map<uint32, CBattleground*> m_instances[BATTLEGROUND_NUM_TYPES];
 	Mutex m_instanceLock;
 
 	/* Max Id */
@@ -145,10 +145,10 @@ class CBattlegroundManager : public Singleton<CBattlegroundManager>, public Even
 	
 	/* Queue System */
 	// Instance Id -> list<Player guid> [ BattlegroundType ] (instance 0 - first available)
-	list<uint32> m_queuedPlayers[BATTLEGROUND_NUM_TYPES][MAX_LEVEL_GROUP];
+    std::list<uint32> m_queuedPlayers[BATTLEGROUND_NUM_TYPES][MAX_LEVEL_GROUP];
 
 	// Instance Id -> list<Group id> [BattlegroundType][LevelGroup]
-	list<uint32> m_queuedGroups[BATTLEGROUND_NUM_TYPES];
+    std::list<uint32> m_queuedGroups[BATTLEGROUND_NUM_TYPES];
 
 	Mutex m_queueLock;
 
@@ -199,10 +199,10 @@ public:
 	int CreateArenaType(int type, Group * group1, Group * group2);
 
 	/* Add player to bg team */
-	void AddPlayerToBgTeam(CBattleground * bg, deque<uint32> *playerVec, uint32 i, uint32 j, int Team);
+    void AddPlayerToBgTeam(CBattleground * bg, std::deque<uint32> *playerVec, uint32 i, uint32 j, int Team);
 
 	/* Add player to bg */
-	void AddPlayerToBg(CBattleground * bg, deque<uint32> *playerVec, uint32 i, uint32 j);
+    void AddPlayerToBg(CBattleground * bg, std::deque<uint32> *playerVec, uint32 i, uint32 j);
 
 	/* Add a group to an arena */
 	void AddGroupToArena(CBattleground * bg, Group * group, int nteam);
@@ -224,17 +224,17 @@ protected:
 
 public:
 	/* Team->Player Map */
-	set<Player*> m_players[2];
+    std::set<Player*> m_players[2];
 	void Lock() { m_mainLock.Acquire(); }
 	void Unlock() { m_mainLock.Release(); }
 	void AddInvisGM() {Lock(); m_invisGMs++; Unlock();}
 	void RemoveInvisGM() {Lock(); m_invisGMs--; Unlock();}
 protected:
 	/* World States. This should be moved to mapmgr instead for world pvp :/ */
-	map<uint32, uint32> m_worldStates;
+    std::map<uint32, uint32> m_worldStates;
 
 	/* PvP Log Data Map */
-	map<uint32, BGScore> m_pvpData;
+    std::map<uint32, BGScore> m_pvpData;
 
 	/* Lock for all player data */
 	Mutex m_mainLock;
@@ -243,7 +243,7 @@ protected:
 	uint32 m_playerCountPerTeam;
 
 	/* "pending" players */
-	set<uint32> m_pendPlayers[2];
+    std::set<uint32> m_pendPlayers[2];
 
 	/* starting time */
 	uint32 m_startTime;
@@ -257,7 +257,7 @@ protected:
 	uint8 m_winningteam;
 
 	/* resurrect queue */
-	map<Creature*, set<uint32> > m_resurrectMap;
+    std::map<Creature*, std::set<uint32> > m_resurrectMap;
 	uint32 m_lastResurrect;
 
 	bool m_isWeekend;

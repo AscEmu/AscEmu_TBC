@@ -33,7 +33,7 @@ bool ChatHandler::HandleAnnounceCommand(const char* args, WorldSession *m_sessio
 	}
 
 	char msg[1024];
-	string input2;
+    std::string input2;
 	input2 = sWorld.ann_tagcolor;
 	input2 += "[";
 	input2 += sWorld.announce_tag;
@@ -80,7 +80,7 @@ bool ChatHandler::HandleWAnnounceCommand(const char* args, WorldSession *m_sessi
 		return false;
 
 	char pAnnounce[1024];
-	string input3;
+    std::string input3;
 	input3 = sWorld.ann_tagcolor;
 	input3 += "[";
 	input3 += sWorld.announce_tag;

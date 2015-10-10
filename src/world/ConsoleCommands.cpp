@@ -113,7 +113,7 @@ bool HandleOnlinePlayersCommand(BaseConsole * pConsole, int argc, const char * a
 	return true;
 }
 
-void ConcatArgs(string & outstr, int argc, int startoffset, const char * argv[])
+void ConcatArgs(std::string & outstr, int argc, int startoffset, const char * argv[])
 {
 	for(int i = startoffset + 1; i < argc; ++i)
 	{
@@ -125,7 +125,7 @@ void ConcatArgs(string & outstr, int argc, int startoffset, const char * argv[])
 bool HandleAnnounceCommand(BaseConsole * pConsole, int argc, const char * argv[])
 {
 	char pAnnounce[1024];
-	string outstr;
+    std::string outstr;
 	if(argc < 2)
 		return false;
 
@@ -139,7 +139,7 @@ bool HandleAnnounceCommand(BaseConsole * pConsole, int argc, const char * argv[]
 bool HandleWAnnounceCommand(BaseConsole * pConsole, int argc, const char * argv[])
 {
 	char pAnnounce[1024];
-	string outstr;
+    std::string outstr;
 
 	if(argc < 2)
 		return false;
@@ -154,7 +154,7 @@ bool HandleWhisperCommand(BaseConsole * pConsole, int argc, const char * argv[])
 {
 	char pAnnounce[1024];
 	Player * pPlayer;
-	string outstr;
+    std::string outstr;
 
 	if(argc < 3)
 		return false;
@@ -182,7 +182,7 @@ bool HandleKickCommand(BaseConsole * pConsole, int argc, const char * argv[])
 
 	char pAnnounce[1024];
 	Player * pPlayer;
-	string outstr;
+    std::string outstr;
 
 	pPlayer = objmgr.GetPlayer(argv[1]);
 	if( pPlayer == NULL )
@@ -312,7 +312,7 @@ bool HandleMOTDCommand(BaseConsole * pConsole, int argc, const char * argv[])
 	}else
 	{
 		char set_motd[1024];
-		string outstr;
+        std::string outstr;
 		ConcatArgs( outstr, argc, 0, argv );
 		snprintf( set_motd, 1024, "%s", outstr.c_str() );
 
@@ -343,7 +343,7 @@ bool HandlePlayerInfoCommand(BaseConsole * pConsole, int argc, const char * argv
 	return true;
 }
 
-void TestConsoleLogin(string& username, string& password, uint32 requestno)
+void TestConsoleLogin(std::string& username, std::string& password, uint32 requestno)
 {
 	sLogonCommHandler.TestConsoleLogon(username, password, requestno);
 }
@@ -383,7 +383,7 @@ bool HandleNameHashCommand(BaseConsole * pConsole, int argc, const char * argv[]
 {
 	if( !argc )
 		return false;
-	string spname;
+    std::string spname;
 		ConcatArgs(spname, argc, 0, argv);
 	pConsole->Write( "Name Hash for %s is 0x%X" , spname.c_str() , crc32((const unsigned char*)spname.c_str(), (unsigned int)spname.length()) );
 	sWorld.Rehash(true);

@@ -21,7 +21,6 @@
 #ifndef WOWSERVER_QUEST_H
 #define WOWSERVER_QUEST_H
 
-using namespace std;
 /*
 2.3.0 research
 not available because low level = 1

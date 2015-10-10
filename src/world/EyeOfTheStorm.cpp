@@ -151,10 +151,10 @@ EyeOfTheStorm::~EyeOfTheStorm()
 
 void EyeOfTheStorm::RepopPlayersOfTeam(int32 team, Creature * sh)
 {
-	map<Creature*,set<uint32> >::iterator itr = m_resurrectMap.find(sh);
+    std::map<Creature*, std::set<uint32> >::iterator itr = m_resurrectMap.find(sh);
 	if( itr != m_resurrectMap.end() )
 	{
-		for( set<uint32>::iterator it2 = itr->second.begin(); it2 != itr->second.end(); ++it2 )
+        for (std::set<uint32>::iterator it2 = itr->second.begin(); it2 != itr->second.end(); ++it2)
 		{
 			Player* r_plr = m_mapMgr->GetPlayer( *it2 );
 			if( r_plr != NULL && (team < 0 || (int32)r_plr->GetTeam() == team) && r_plr->isDead() )
@@ -339,7 +339,7 @@ void EyeOfTheStorm::HookFlagDrop(Player * plr, GameObject * obj)
 	if( !m_dropFlag->IsInWorld() )
 		return;
 
-	map<uint32,uint32>::iterator itr = plr->m_forcedReactions.find(1059);
+    std::map<uint32, uint32>::iterator itr = plr->m_forcedReactions.find(1059);
 	if (itr != plr->m_forcedReactions.end()) {
 		return;
 	}
@@ -563,7 +563,7 @@ void EyeOfTheStorm::RespawnCPFlag(uint32 i, uint32 id)
 void EyeOfTheStorm::UpdateCPs()
 {
 	uint32 i;
-	set<Player*>::iterator itr, itrend;
+    std::set<Player*>::iterator itr, itrend;
 	Player * plr;
 	GameObject * go;
 	int32 delta = 0;
@@ -793,7 +793,7 @@ bool EyeOfTheStorm::GivePoints(uint32 team, uint32 points)
 
 		for(uint32 i = 0; i < 2; ++i)
 		{
-			for(set<Player*>::iterator itr = m_players[i].begin(); itr != m_players[i].end(); ++itr)
+            for (std::set<Player*>::iterator itr = m_players[i].begin(); itr != m_players[i].end(); ++itr)
 			{
 				(*itr)->Root();
 				
@@ -912,7 +912,8 @@ LocationVector EyeOfTheStorm::GetStartingCoords(uint32 Team)
 void EyeOfTheStorm::OnStart()
 {
 	for(uint32 i = 0; i < 2; ++i) {
-		for(set<Player*>::iterator itr = m_players[i].begin(); itr != m_players[i].end(); ++itr) {
+        for (std::set<Player*>::iterator itr = m_players[i].begin(); itr != m_players[i].end(); ++itr)
+        {
 			(*itr)->RemoveAura(BG_PREPARATION);
 		}
 	}

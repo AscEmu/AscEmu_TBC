@@ -20,7 +20,6 @@
 
 #include "StdAfx.h"
 #include "Unit.h"
-using namespace std;
 
 //#define DEG2RAD (M_PI/180.0)
 #define M_PI		3.14159265358979323846
@@ -735,7 +734,7 @@ void Object::_BuildValuesUpdate(ByteBuffer * data, UpdateMask *updateMask, Playe
 	if( m_valuesCount > ( 2 * 0x20 ) )//if number of blocks > 2->  unit and player+item container
 	{
 		bc = updateMask->GetUpdateBlockCount();
-		values_count = min<uint32>( bc * 32, m_valuesCount );
+        values_count = std::min<uint32>(bc * 32, m_valuesCount);
 
 	}
 	else
@@ -3085,12 +3084,12 @@ void Object::PlaySoundToSet(uint32 sound_entry)
 	SendMessageToSet(&data, true);
 }
 
-void Object::_SetExtension(const string& name, void* ptr)
+void Object::_SetExtension(const std::string& name, void* ptr)
 {
 	if( m_extensions == NULL )
 		m_extensions = new ExtensionSet;
 
-	m_extensions->insert( make_pair( name, ptr ) );
+    m_extensions->insert(std::make_pair(name, ptr));
 }
 
 bool Object::IsInBg()

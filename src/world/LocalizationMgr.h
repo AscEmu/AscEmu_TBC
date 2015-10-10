@@ -80,11 +80,11 @@ public:
 	void Shutdown();
 
 	void Reload(bool first);
-	void Lower(string& conv);
+    void Lower(std::string& conv);
 	uint32 GetLanguageId(uint32 full);
-	uint32 GetLanguageId(string langstr)
+    uint32 GetLanguageId(std::string langstr)
 	{
-		string ns = langstr;
+        std::string ns = langstr;
 		Lower(ns);
 
 		uint32 lid = *(uint32*)ns.c_str();
@@ -105,7 +105,7 @@ public:
 		void CopyHashMap(HM_NAMESPACE::hash_map<uint32,T> * src, HM_NAMESPACE::hash_map<uint32,T> * dest)
 	{
 		for(typename HM_NAMESPACE::hash_map<uint32,T>::iterator itr = src->begin(); itr != src->end(); ++itr)
-			dest->insert(make_pair(itr->first,itr->second));
+            dest->insert(std::make_pair(itr->first, itr->second));
 	}
 
 private:
@@ -119,7 +119,7 @@ private:
 	HM_NAMESPACE::hash_map<uint32, LocalizedWorldBroadCast>			* m_WorldBroadCast;
 	HM_NAMESPACE::hash_map<uint32, LocalizedWorldMapInfo>			* m_WorldMapInfo;
 
-	vector<pair<uint32,uint32> >								  m_languages;
+    std::vector<std::pair<uint32, uint32> >								  m_languages;
 	bool														  m_disabled;
 };
 

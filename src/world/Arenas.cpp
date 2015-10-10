@@ -240,7 +240,7 @@ void Arena::OnCreate()
 	}
 
 	/* push gates into world */
-	for(set<GameObject*>::iterator itr = m_gates.begin(); itr != m_gates.end(); ++itr)
+    for (std::set<GameObject*>::iterator itr = m_gates.begin(); itr != m_gates.end(); ++itr)
 		(*itr)->PushToWorld(m_mapMgr);
 
 	SetWorldState(0x08D4	,0x0000);
@@ -340,7 +340,8 @@ void Arena::OnStart()
 
 	/* remove arena readyness buff */
 	for(i = 0; i < 2; ++i) {
-		for(set<Player*>::iterator itr = m_players[i].begin(); itr != m_players[i].end(); ++itr) {
+        for (std::set<Player*>::iterator itr = m_players[i].begin(); itr != m_players[i].end(); ++itr)
+        {
 			Player *plr = *itr;
 			plr->RemoveAura(ARENA_PREPARATION);
 			m_players2[i].insert(plr->GetLowGUID());
@@ -368,7 +369,7 @@ void Arena::OnStart()
 	}
 
 	/* open gates */
-	for(set<GameObject*>::iterator itr = m_gates.begin(); itr != m_gates.end(); ++itr)
+    for (std::set<GameObject*>::iterator itr = m_gates.begin(); itr != m_gates.end(); ++itr)
 	{
 		(*itr)->SetUInt32Value(GAMEOBJECT_FLAGS, 64);
 		(*itr)->SetUInt32Value(GAMEOBJECT_STATE, 0);
@@ -473,7 +474,8 @@ void Arena::Finish()
 			m_teams[i]->m_stat_rating += m_deltaRating[i];
 			if (m_teams[i]->m_stat_rating < 0) m_teams[i]->m_stat_rating = 0;
 
-			for(set<uint32>::iterator itr = m_players2[i].begin(); itr != m_players2[i].end(); ++itr) {
+            for (std::set<uint32>::iterator itr = m_players2[i].begin(); itr != m_players2[i].end(); ++itr)
+            {
 				PlayerInfo * info = objmgr.GetPlayerInfo(*itr);
 				if (info) {
 					ArenaTeamMember * tp = m_teams[i]->GetMember(info);
@@ -506,7 +508,7 @@ void Arena::Finish()
 	for(int i = 0; i < 2; i++)
 	{
 		bool victorious = (i == m_winningteam);
-		set<Player*>::iterator itr = m_players[i].begin();
+        std::set<Player*>::iterator itr = m_players[i].begin();
 		for(; itr != m_players[i].end(); itr++)
 		{
 			Player * plr = (Player *)(*itr);

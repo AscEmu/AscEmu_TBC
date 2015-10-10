@@ -149,13 +149,13 @@ void EncodeHex(const char* source, char* dest, uint32 size);
 void DecodeHex(const char* source, char* dest, uint32 size);
 
 extern OpcodeHandler WorldPacketHandlers[NUM_MSG_TYPES];
-void CapitalizeString(string& arg);
+void CapitalizeString(std::string& arg);
 
 class SERVER_DECL WorldSession
 {
 	friend class WorldSocket;
 public:
-	WorldSession(uint32 id, string Name, WorldSocket *sock);
+	WorldSession(uint32 id, std::string Name, WorldSocket *sock);
 	~WorldSession();
 
 	Player * m_loggingInPlayer;
@@ -271,7 +271,7 @@ public:
 
 	inline void SetInstance(uint32 Instance) { instanceId = Instance; }
 	inline uint32 GetLatency() { return _latency; }
-	inline string GetAccountName() { return _accountName; }
+    inline std::string GetAccountName() { return _accountName; }
 	inline const char * GetAccountNameS() { return _accountName.c_str(); }
 	const char * LocalizedWorldSrv(uint32 id);
 	const char * LocalizedMapName(uint32 id);
@@ -703,7 +703,7 @@ private:
 	
 	uint32 _accountId;
 	uint32 _accountFlags;
-	string _accountName;
+    std::string _accountName;
 	int8 _side;
 
 	WoWGuid m_MoverWoWGuid;

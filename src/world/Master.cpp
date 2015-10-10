@@ -343,7 +343,7 @@ bool Master::Run(int argc, char ** argv)
 	// Initialize Opcode Table
 	WorldSession::InitPacketHandlerTable();
 
-	string host = Config.MainConfig.GetStringDefault( "Listen", "Host", DEFAULT_HOST );
+    std::string host = Config.MainConfig.GetStringDefault("Listen", "Host", DEFAULT_HOST);
 	int wsport = Config.MainConfig.GetIntDefault( "Listen", "WorldServerPort", DEFAULT_WORLDSERVER_PORT );
 
 	new ScriptMgr;
@@ -668,7 +668,7 @@ bool Master::_StartDB()
 {
 	Database_World=NULL;
 	Database_Character=NULL;
-	string hostname, username, password, database;
+    std::string hostname, username, password, database;
 	int port = 0;
 
 	// Configure Main Database

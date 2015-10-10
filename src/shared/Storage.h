@@ -299,7 +299,7 @@ public:
 #else
 		T * n = new T;
 #endif
-		_map.insert( make_pair( Entry, n ) );
+        _map.insert(std::make_pair(Entry, n));
 		return n;
 	}
 

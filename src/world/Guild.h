@@ -314,12 +314,12 @@ struct SERVER_DECL GuildBankTab
 	char * szTabName;
 	char * szTabIcon;
 	Item * pSlots[MAX_GUILD_BANK_SLOTS];
-	list<GuildBankEvent*> lLog;
+    std::list<GuildBankEvent*> lLog;
 };
 
 class Charter;
 
-typedef map<PlayerInfo*, GuildMember*> GuildMemberMap;
+typedef std::map<PlayerInfo*, GuildMember*> GuildMemberMap;
 
 class SERVER_DECL Guild
 {
@@ -549,7 +549,7 @@ protected:
 	uint32 m_bankTabCount;
 	uint32 m_bankBalance;
 
-	typedef vector<GuildBankTab*> GuildBankTabVector;
+    typedef std::vector<GuildBankTab*> GuildBankTabVector;
 	GuildBankTabVector m_bankTabs;
 
 	char * m_guildName;
@@ -567,9 +567,9 @@ protected:
 
 	/** Guild log. Ordered in first event -> last event.
 	 */
-	typedef list<GuildLogEvent*> GuildLogList;
+    typedef std::list<GuildLogEvent*> GuildLogList;
 	GuildLogList m_log;
-	list<GuildBankEvent*> m_moneyLog;
+    std::list<GuildBankEvent*> m_moneyLog;
 
 	/** Guild lock.
 	 */

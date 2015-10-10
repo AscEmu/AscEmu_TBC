@@ -215,7 +215,7 @@ public:
 	void RemoveSocketBonusEnchant();
 
 	// gets the itemlink for a message to the player
-	string GetItemLink(uint32 language);
+    std::string GetItemLink(uint32 language);
 
 	inline void SetCount( uint32 amt ) { SetUInt32Value( ITEM_FIELD_STACK_COUNT, amt ); }
 	inline void SetDurability( uint32 Value ) { SetUInt32Value(ITEM_FIELD_DURABILITY, Value ); };
@@ -274,6 +274,6 @@ uint32 GetBuyPriceForItem( ItemPrototype* proto, uint32 count, Player* plr, Crea
 uint32 GetSellPriceForItem( uint32 itemid, uint32 count);
 uint32 GetBuyPriceForItem( uint32 itemid, uint32 count, Player* plr, Creature* vendor );
 
-string GetItemLinkByProto(ItemPrototype * iProto, uint32 language);
+std::string GetItemLinkByProto(ItemPrototype * iProto, uint32 language);
 
 #endif

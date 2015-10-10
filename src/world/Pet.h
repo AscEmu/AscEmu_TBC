@@ -108,7 +108,7 @@ enum AutoCastEvents
 #define DEFAULT_SPELL_STATE 0x8100
 #define AUTOCAST_SPELL_STATE 0xC100
 
-typedef map<SpellEntry*, uint16> PetSpellMap;
+typedef std::map<SpellEntry*, uint16> PetSpellMap;
 struct PlayerPet;
 
 class SERVER_DECL Pet : public Creature
@@ -208,8 +208,8 @@ public:
 	inline bool IsSummon() { return Summon; }
 
 	void __fastcall SetAutoCastSpell(AI_Spell * sp);
-	void Rename(string NewName);
-	inline string& GetName() { return m_name; }
+    void Rename(std::string NewName);
+    inline std::string& GetName() { return m_name; }
 	void AddPetSpellToOwner(uint32 spellId);
 	uint16 SpellTP(uint32 spellId);
 	uint16 GetUsedTP();
@@ -252,13 +252,13 @@ protected:
 	uint32 reset_cost;
 	bool bExpires;
 	bool Summon;
-	string m_name;
+    std::string m_name;
 	uint8 GetLoyaltyLevel(){return ((GetUInt32Value(UNIT_FIELD_BYTES_1) >> 8) & 0xff);};
 	HappinessState GetHappinessState();
 	uint32 GetHighestRankSpell(uint32 spellId);
 	bool UpdateLoyalty(char pts);
 
-	list<AI_Spell*> m_autoCastSpells[AUTOCAST_EVENT_COUNT];
+    std::list<AI_Spell*> m_autoCastSpells[AUTOCAST_EVENT_COUNT];
 };
 
 #define PET_LOYALTY_UPDATE_TIMER 120000

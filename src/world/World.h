@@ -186,7 +186,7 @@ public:
 
 class TaskList
 {
-	set<Task*> tasks;
+    std::set<Task*> tasks;
 	Mutex queueLock;
 public:
 	Task * GetTask();
@@ -260,7 +260,7 @@ class WorldSocket;
 
 // Slow for remove in middle, oh well, wont get done much.
 typedef std::list<WorldSocket*> QueueSet;
-typedef set<WorldSession*> SessionSet;
+typedef std::set<WorldSession*> SessionSet;
 
 class SERVER_DECL World : public Singleton<World>, public EventableObject
 {
@@ -326,7 +326,7 @@ public:
 	// cebernic: textfilter,no fast,but works:D ...
 	inline std::string SessionLocalizedTextFilter(WorldSession* _session,const char*text)
 	{
-			std::string opstr=string(text);
+        std::string opstr = std::string(text);
 			std::string::iterator t= opstr.begin();
 			std::string temp;
 			int found = 0;
@@ -399,10 +399,10 @@ public:
 
 	struct NameGenData
 	{
-		string name;
+        std::string name;
 		uint32 type;
 	};
-	vector<NameGenData> _namegendata[3];
+    std::vector<NameGenData> _namegendata[3];
 	void LoadNameGenData();
 
     void LoadWMOAreaData()
@@ -430,7 +430,7 @@ public:
 	std::map<uint32,uint32> TeachingSpellMap;
 	uint32 GetTeachingSpell(uint32 NormalSpellId)
 	{
-		map<uint32,uint32>::iterator i = TeachingSpellMap.find(NormalSpellId);
+        std::map<uint32, uint32>::iterator i = TeachingSpellMap.find(NormalSpellId);
 		if(i!=TeachingSpellMap.end())
 			return i->second;
 		return 0;
@@ -448,8 +448,8 @@ public:
 
 	void SaveAllPlayers();
 
-	string MapPath;
-	string vMapPath;
+    std::string MapPath;
+    std::string vMapPath;
 	bool UnloadMapFiles;
 	bool BreathingEnabled;
 	bool SpeedhackProtection;
@@ -519,10 +519,10 @@ public:
 	int announce_gmtagcolor;
 	int announce_namecolor;
 	int announce_msgcolor;
-	string ann_namecolor;
-	string ann_gmtagcolor;
-	string ann_tagcolor;
-	string ann_msgcolor;
+    std::string ann_namecolor;
+    std::string ann_gmtagcolor;
+    std::string ann_tagcolor;
+    std::string ann_msgcolor;
 	void AnnounceColorChooser(int tagcolor, int gmtagcolor, int namecolor, int msgcolor);
 
 	int start_level;
@@ -612,7 +612,7 @@ public:
 	std::string GmClientChannel;
 	bool m_reqGmForCommands;
 	bool m_lfgForNonLfg;
-	list<SpellEntry*> dummyspells;
+    std::list<SpellEntry*> dummyspells;
 	uint32 m_levelCap;
 	uint32 m_genLevelCap;
 	bool m_limitedNames;

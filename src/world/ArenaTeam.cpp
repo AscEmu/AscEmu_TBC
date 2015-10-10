@@ -118,7 +118,7 @@ void ArenaTeam::Destroy()
 {
 	char buffer[1024];
 	WorldPacket * data;
-	vector<PlayerInfo*> tokill;
+    std::vector<PlayerInfo*> tokill;
 	uint32 i;
 	tokill.reserve(m_memberCount);
 	snprintf(buffer,1024, "The arena team, '%s', disbanded.", m_name.c_str());
@@ -132,7 +132,7 @@ void ArenaTeam::Destroy()
 			tokill.push_back(m_members[i].Info);
 	}
 
-	for(vector<PlayerInfo*>::iterator itr = tokill.begin(); itr != tokill.end(); ++itr)
+    for (std::vector<PlayerInfo*>::iterator itr = tokill.begin(); itr != tokill.end(); ++itr)
 	{
 		RemoveMember(*itr);
 	}
@@ -380,7 +380,7 @@ void WorldSession::HandleArenaTeamQueryOpcode(WorldPacket & recv_data)
 void WorldSession::HandleArenaTeamAddMemberOpcode(WorldPacket & recv_data)
 {
 	WorldPacket data(SMSG_ARENA_TEAM_INVITE, 40);
-	string player_name;
+    std::string player_name;
 	uint32 teamId;
 	recv_data >> teamId >> player_name;
 
@@ -442,7 +442,7 @@ void WorldSession::HandleArenaTeamRemoveMemberOpcode(WorldPacket & recv_data)
 	ArenaTeam * team;
 	uint8 slot;
 	uint32 teamId;
-	string name;
+    std::string name;
 	PlayerInfo * inf;
 	recv_data >> teamId >> name;
 
@@ -631,7 +631,7 @@ void WorldSession::HandleArenaTeamPromoteOpcode(WorldPacket & recv_data)
 {
 	uint32 teamId;
 	uint8 slot;
-	string name;
+    std::string name;
 	ArenaTeam * team;
 	PlayerInfo * inf;
 	recv_data >> teamId >> name;

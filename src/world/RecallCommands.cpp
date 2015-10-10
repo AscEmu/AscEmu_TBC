@@ -90,7 +90,7 @@ bool ChatHandler::HandleRecallAddCommand(const char* args, WorldSession *m_sessi
 	Player* plr = m_session->GetPlayer();
 	std::stringstream ss;
 	
-	string rc_locname = string(args);
+    std::string rc_locname = std::string(args);
 
 	ss << "INSERT INTO recall (name, mapid, positionX, positionY, positionZ) VALUES ('"
 	<< WorldDatabase.EscapeString(rc_locname).c_str() << "' , "

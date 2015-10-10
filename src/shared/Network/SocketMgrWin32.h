@@ -42,7 +42,7 @@ public:
 
 private:
 	HANDLE m_completionPort;
-	set<Socket*> _sockets;
+    std::set<Socket*> _sockets;
 	Mutex socketLock;
 };
 

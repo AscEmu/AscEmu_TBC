@@ -128,10 +128,10 @@ typedef HM_NAMESPACE::hash_map<uint32, exp_create_creature_ai> CreatureCreateMap
 typedef HM_NAMESPACE::hash_map<uint32, exp_create_gameobject_ai> GameObjectCreateMap;
 typedef HM_NAMESPACE::hash_map<uint32, exp_handle_dummy_aura> HandleDummyAuraMap;
 typedef HM_NAMESPACE::hash_map<uint32, exp_handle_dummy_spell> HandleDummySpellMap;
-typedef set<GossipScript*> CustomGossipScripts;
-typedef set<QuestScript*> QuestScripts;
-typedef list<void*> ServerHookList;
-typedef list<SCRIPT_MODULE> LibraryHandleMap;
+typedef std::set<GossipScript*> CustomGossipScripts;
+typedef std::set<QuestScript*> QuestScripts;
+typedef std::list<void*> ServerHookList;
+typedef std::list<SCRIPT_MODULE> LibraryHandleMap;
 typedef std::list< Arcemu::DynLib* > DynamicLibraryMap;
 
 #define VISIBLE_RANGE (26.46f)

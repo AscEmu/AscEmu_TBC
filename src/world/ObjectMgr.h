@@ -133,10 +133,10 @@ struct GossipMenuItem
 	uint32		IntId;
 	uint8		Icon;
 	uint8		Extra;
-	string		Text;
+    std::string		Text;
 	uint32      m_gSender;
 	uint32      m_gAction;
-	string		m_gBoxMessage;
+    std::string		m_gBoxMessage;
     uint32      m_gBoxMoney;
 };
 struct SpellEntry;
@@ -157,7 +157,7 @@ struct TrainerSpell
 struct Trainer
 {
 	uint32 SpellCount;
-	vector<TrainerSpell> Spells;
+    std::vector<TrainerSpell> Spells;
 	char*	UIMessage;
     uint32 RequiredSkill;
 	uint32 RequiredSkillLine;
@@ -195,13 +195,13 @@ struct InstanceReputationMod
 struct ReputationModifier
 {
 	uint32 entry;
-	vector<ReputationMod> mods;
+    std::vector<ReputationMod> mods;
 };
 
 struct InstanceReputationModifier
 {
 	uint32 mapid;
-	vector<InstanceReputationMod> mods;
+    std::vector<InstanceReputationMod> mods;
 };
 
 struct NpcMonsterSay
@@ -310,7 +310,7 @@ public:
 	uint32 LeaderGuid;
 	uint64 ItemGuid;
 	uint32 CharterId;
-	string GuildName;
+    std::string GuildName;
 
 	Charter(Field * fields);
 	Charter(uint32 id, uint32 leader, uint32 type) : CharterType(type), LeaderGuid(leader), CharterId(id)
@@ -372,7 +372,7 @@ typedef HM_NAMESPACE::hash_map<string, PlayerInfo*> PlayerNameStringIndexMap;
 #else
 
 // vc++ has the type for a string hash already, so we don't need to do anything special
-typedef HM_NAMESPACE::hash_map<string, PlayerInfo*> PlayerNameStringIndexMap;
+typedef HM_NAMESPACE::hash_map<std::string, PlayerInfo*> PlayerNameStringIndexMap;
 
 #endif
 
@@ -407,10 +407,10 @@ public:
     
     // Map typedef's
     typedef std::map<uint32, LevelInfo*>                                LevelMap;
-	typedef std::map<pair<uint32, uint32>, LevelMap* >                  LevelInfoMap;
+    typedef std::map<std::pair<uint32, uint32>, LevelMap* >                  LevelInfoMap;
     typedef std::map<uint32, std::list<ItemPrototype*>* >               ItemSetContentMap;
 	typedef std::map<uint32, uint32>                                    NpcToGossipTextMap;
-	typedef std::map<uint32, set<SpellEntry*> >                         PetDefaultSpellMap;
+    typedef std::map<uint32, std::set<SpellEntry*> >                         PetDefaultSpellMap;
 	typedef std::map<uint32, uint32>                                    PetSpellCooldownMap;
 	typedef std::map<uint32, SpellEntry*>                               TotemSpellMap;
 	typedef std::multimap <uint32,uint32>                               BCEntryStorage;
@@ -459,7 +459,7 @@ public:
 	void AddGroup(Group* group)
 	{
 		m_groupLock.AcquireWriteLock();
-		m_groups.insert(make_pair(group->GetID(), group));
+        m_groups.insert(std::make_pair(group->GetID(), group));
 		m_groupLock.ReleaseWriteLock();
 	}
 
@@ -597,7 +597,7 @@ public:
 	LevelInfo * GetLevelInfo(uint32 Race, uint32 Class, uint32 Level);
 	void GenerateLevelUpInfo();
 	void LoadDefaultPetSpells();
-	set<SpellEntry*>* GetDefaultPetSpells(uint32 Entry);
+    std::set<SpellEntry*>* GetDefaultPetSpells(uint32 Entry);
 	uint32 GetPetSpellCooldown(uint32 SpellId);
 	void LoadPetSpellCooldowns();
 	WayPointMap * GetWayPointMap(uint32 spawnid);
@@ -628,11 +628,11 @@ public:
 	Charter * GetCharter(uint32 CharterId, CharterTypes Type);
 	void RemoveCharter(Charter *);
 	void LoadGuildCharters();
-	Charter * GetCharterByName(string &charter_name, CharterTypes Type);
+    Charter * GetCharterByName(std::string &charter_name, CharterTypes Type);
 	Charter * GetCharterByItemGuid(uint64 guid);
 	Charter * GetCharterByGuid(uint64 playerguid, CharterTypes type);
 
-	ArenaTeam * GetArenaTeamByName(string & name, uint32 Type);
+    ArenaTeam * GetArenaTeamByName(std::string & name, uint32 Type);
 	ArenaTeam * GetArenaTeamById(uint32 id);
 	ArenaTeam * GetArenaTeamByGuid(uint32 guid, uint32 Type);
 	void UpdateArenaTeamRankings();
@@ -680,7 +680,7 @@ public:
 		if ( m_BCEntryStorage.empty() ) return -1;
 	  uint32 RandomCap = (uint32)sWorld.BCTriggerPercentCap;
 		
-		vector<uint32> Entries;
+      std::vector<uint32> Entries;
 		BCEntryStorage::iterator it = m_BCEntryStorage.upper_bound( RandomUInt(RandomCap)+1 );
 		while( it!=m_BCEntryStorage.end() )
 		{
@@ -715,7 +715,7 @@ protected:
 
 	HM_NAMESPACE::hash_map<uint32, Charter*> m_charters[NUM_CHARTER_TYPES];
 	
-	set<uint32> m_disabled_spells;
+    std::set<uint32> m_disabled_spells;
 
 	uint64 TransportersCount;
 	HM_NAMESPACE::hash_map<uint32,PlayerInfo*> m_playersinfo;

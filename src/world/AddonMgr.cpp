@@ -170,12 +170,12 @@ void AddonMgr::SendAddonInfoPacket(WorldPacket *source, uint32 pos, WorldSession
 	m_session->SendPacket(&returnpacket);
 }
 
-bool AddonMgr::AppendPublicKey(WorldPacket& data, string AddonName, uint32 CRC)
+bool AddonMgr::AppendPublicKey(WorldPacket& data, std::string AddonName, uint32 CRC)
 {
 	if(CRC == 0x4C1C776D)
 	{
 		// Open public key file with that addon
-		map<string, ByteBuffer>::iterator itr = AddonData.find(AddonName);
+        std::map<std::string, ByteBuffer>::iterator itr = AddonData.find(AddonName);
 		if(itr != AddonData.end())
 			data.append(itr->second);
 		else

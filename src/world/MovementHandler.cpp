@@ -454,7 +454,7 @@ void WorldSession::HandleMovementOpcodes( WorldPacket & recv_data )
 		/************************************************************************/
 		/* Distribute to all inrange players.                                   */
 		/************************************************************************/
-		for(set<Player*>::iterator itr = _player->m_inRangePlayers.begin(); itr != _player->m_inRangePlayers.end(); ++itr)
+        for (std::set<Player*>::iterator itr = _player->m_inRangePlayers.begin(); itr != _player->m_inRangePlayers.end(); ++itr)
 		{
 #ifdef USING_BIG_ENDIAN
 			*(uint32*)&movement_packet[pos+5] = swap32(move_time + (*itr)->GetSession()->m_moveDelayTime);

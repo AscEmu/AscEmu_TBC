@@ -3093,7 +3093,7 @@ public:
     {
 		//despawn voids
 		Creature *creature = NULL;
-		for(set<Object*>::iterator itr = _unit->GetInRangeSetBegin(); itr != _unit->GetInRangeSetEnd(); ++itr)
+        for (std::set<Object*>::iterator itr = _unit->GetInRangeSetBegin(); itr != _unit->GetInRangeSetEnd(); ++itr)
 		{
 			if((*itr)->GetTypeId() == TYPEID_UNIT)
 			{
@@ -3266,7 +3266,7 @@ public:
 		if(_unit->GetCurrentSpell() == NULL && _unit->GetAIInterface()->GetNextTarget())
         {
 			std::vector<Player *> TargetTable;
-			for(set<Player*>::iterator itr = _unit->GetInRangePlayerSetBegin(); itr != _unit->GetInRangePlayerSetEnd(); ++itr) 
+            for (std::set<Player*>::iterator itr = _unit->GetInRangePlayerSetBegin(); itr != _unit->GetInRangePlayerSetEnd(); ++itr)
 			{ 
 				Player* RandomTarget = NULL;
 				RandomTarget = (Player*)(*itr);

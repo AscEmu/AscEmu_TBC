@@ -1254,7 +1254,7 @@ class KilJaedenAI : public ArcScriptBossAI
 
 	void BlueShild()
 	{
-		for (set<Player*>::iterator itr = _unit->GetInRangePlayerSetBegin(); itr != _unit->GetInRangePlayerSetEnd(); ++itr) 
+        for (std::set<Player*>::iterator itr = _unit->GetInRangePlayerSetBegin(); itr != _unit->GetInRangePlayerSetEnd(); ++itr)
 			{
 				Player *pPlayer = static_cast<Player*>(*itr);
 				if (pPlayer->isAlive() && _unit->CalcDistance(pPlayer) <= 16.0f)

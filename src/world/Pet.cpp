@@ -468,7 +468,7 @@ AI_Spell * Pet::CreateAISpell(SpellEntry * info)
 	ASSERT( info != NULL ); 
 
 	// Create an AI_Spell
-	map<uint32,AI_Spell*>::iterator itr = m_AISpellStore.find(info->Id);
+    std::map<uint32, AI_Spell*>::iterator itr = m_AISpellStore.find(info->Id);
 	if(itr != m_AISpellStore.end())
 		return itr->second;
 
@@ -662,7 +662,7 @@ void Pet::InitializeMe(bool first)
 				SpellEntry* spell = dbcSpell.LookupEntry( f[2].GetUInt32() );
 				uint16 flags = f[3].GetUInt16();
 				if( spell != NULL && mSpells.find( spell ) == mSpells.end() )
-					mSpells.insert( make_pair( spell, flags ) );
+                    mSpells.insert(std::make_pair(spell, flags));
 
 			} while(query->NextRow());
 		}
@@ -862,8 +862,8 @@ void Pet::SetDefaultSpells()
 	if(Summon)
 	{
 		// this one's easy :p we just pull em from the owner.
-		map<uint32, set<uint32> >::iterator it1;
-		set<uint32>::iterator it2;
+        std::map<uint32, std::set<uint32> >::iterator it1;
+        std::set<uint32>::iterator it2;
 		it1 = m_Owner->SummonSpells.find(GetEntry());
 		if(it1 != m_Owner->SummonSpells.end())
 		{
@@ -1058,10 +1058,10 @@ void Pet::WipeSpells()
 void Pet::RemoveSpell(SpellEntry * sp)
 {
 	mSpells.erase(sp);
-	map<uint32, AI_Spell*>::iterator itr = m_AISpellStore.find(sp->Id);
+    std::map<uint32, AI_Spell*>::iterator itr = m_AISpellStore.find(sp->Id);
 	if(itr != m_AISpellStore.end())
 	{
-		for(list<AI_Spell*>::iterator it = m_aiInterface->m_spells.begin(); it != m_aiInterface->m_spells.end(); ++it)
+        for (std::list<AI_Spell*>::iterator it = m_aiInterface->m_spells.begin(); it != m_aiInterface->m_spells.end(); ++it)
 		{
 			if((*it) == itr->second)
 			{
@@ -1069,7 +1069,7 @@ void Pet::RemoveSpell(SpellEntry * sp)
 					m_autoCastSpells[(*it)->autocast_type].remove((*it));*/
 				if((*it)->autocast_type > 0)
 				{
-					for(list<AI_Spell*>::iterator i3 = m_autoCastSpells[(*it)->autocast_type].begin();
+                    for (std::list<AI_Spell*>::iterator i3 = m_autoCastSpells[(*it)->autocast_type].begin();
 						i3 != m_autoCastSpells[(*it)->autocast_type].end(); ++i3)
 					{
 						if( (*i3) == itr->second )
@@ -1091,7 +1091,7 @@ void Pet::RemoveSpell(SpellEntry * sp)
 	}
 	else
 	{
-		for(list<AI_Spell*>::iterator it = m_aiInterface->m_spells.begin(); it != m_aiInterface->m_spells.end(); ++it)
+        for (std::list<AI_Spell*>::iterator it = m_aiInterface->m_spells.begin(); it != m_aiInterface->m_spells.end(); ++it)
 		{
 			if((*it)->spell == sp)
 			{
@@ -1112,7 +1112,7 @@ void Pet::RemoveSpell(SpellEntry * sp)
 	UpdateTP();
 }
 
-void Pet::Rename(string NewName)
+void Pet::Rename(std::string NewName)
 {
 	m_name = NewName;
 	// update petinfo
@@ -1825,7 +1825,7 @@ bool Pet::UpdateLoyalty( char pts )
 
 AI_Spell * Pet::HandleAutoCastEvent()
 {
-	list<AI_Spell*>::iterator itr,itr2;
+    std::list<AI_Spell*>::iterator itr, itr2;
 	bool chance = true;
 	uint32 size = 0;
 	
@@ -1858,7 +1858,7 @@ AI_Spell * Pet::HandleAutoCastEvent()
 
 void Pet::HandleAutoCastEvent( AutoCastEvents Type )
 {
-	list<AI_Spell*>::iterator itr, it2;
+    std::list<AI_Spell*>::iterator itr, it2;
 	AI_Spell * sp;
 	if( m_Owner == NULL )
 		return;
@@ -1932,7 +1932,7 @@ void Pet::SetAutoCast(AI_Spell * sp, bool on)
 	{
 		if(!on)
 		{
-			for(list<AI_Spell*>::iterator itr = m_autoCastSpells[sp->autocast_type].begin();
+            for (std::list<AI_Spell*>::iterator itr = m_autoCastSpells[sp->autocast_type].begin();
 				itr != m_autoCastSpells[sp->autocast_type].end(); ++itr)
 			{
 				if( (*itr) == sp )
@@ -1944,7 +1944,7 @@ void Pet::SetAutoCast(AI_Spell * sp, bool on)
 		}
 		else
 		{
-			for(list<AI_Spell*>::iterator itr = m_autoCastSpells[sp->autocast_type].begin();
+            for (std::list<AI_Spell*>::iterator itr = m_autoCastSpells[sp->autocast_type].begin();
 				itr != m_autoCastSpells[sp->autocast_type].end(); ++itr)
 			{
 				if((*itr) == sp)

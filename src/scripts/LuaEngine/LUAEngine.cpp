@@ -598,8 +598,8 @@ LuaEngine::~LuaEngine()
 
 void LuaEngine::LoadScripts()
 {
-	set<string> luaFiles;
-	set<string> luaBytecodeFiles;
+    std::set<std::string> luaFiles;
+    std::set<std::string> luaBytecodeFiles;
 
 #ifdef WIN32
 	WIN32_FIND_DATA fd;
@@ -616,9 +616,9 @@ void LuaEngine::LoadScripts()
 			fn=fd.cFileName;
         char * ext = strrchr(fd.cFileName, '.');
 		if(!stricmp(ext, ".lua"))
-			luaFiles.insert(string(fn));
+            luaFiles.insert(std::string(fn));
 		else if(!stricmp(ext, ".luc"))
-			luaBytecodeFiles.insert(string(fn));
+            luaBytecodeFiles.insert(std::string(fn));
 	} while(FindNextFile(h, &fd));
 	FindClose(h);
 #else
@@ -647,9 +647,9 @@ void LuaEngine::LoadScripts()
 #endif
 
 	// we prefer precompiled code.
-	for(set<string>::iterator itr = luaBytecodeFiles.begin(); itr != luaBytecodeFiles.end(); ++itr)
+    for (std::set<std::string>::iterator itr = luaBytecodeFiles.begin(); itr != luaBytecodeFiles.end(); ++itr)
 	{
-		set<string>::iterator it2 = luaFiles.find(*itr);
+        std::set<std::string>::iterator it2 = luaFiles.find(*itr);
 		if(it2 == luaFiles.end())
 			luaFiles.erase(it2);
 	}
@@ -662,7 +662,7 @@ void LuaEngine::LoadScripts()
 
 	char filename[200];
 
-	for(set<string>::iterator itr = luaFiles.begin(); itr != luaFiles.end(); ++itr)
+    for (std::set<std::string>::iterator itr = luaFiles.begin(); itr != luaFiles.end(); ++itr)
 	{
 #ifdef WIN32
 			snprintf(filename, 200, "scripts\\%s", itr->c_str());
@@ -1363,7 +1363,7 @@ void LuaEngineMgr::RegisterUnitEvent(uint32 Id, uint32 Event, const char * Funct
 		LuaUnitBinding ub;
 		memset(&ub,0,sizeof(LuaUnitBinding));
 		ub.Functions[Event] = strdup(FunctionName);
-		m_unitBinding.insert(make_pair(Id,ub));
+        m_unitBinding.insert(std::make_pair(Id, ub));
 	}
 	else
 	{
@@ -1382,7 +1382,7 @@ void LuaEngineMgr::RegisterQuestEvent(uint32 Id, uint32 Event, const char * Func
 		LuaQuestBinding qb;
 		memset(&qb,0,sizeof(LuaQuestBinding));
 		qb.Functions[Event] = strdup(FunctionName);
-		m_questBinding.insert(make_pair(Id,qb));
+        m_questBinding.insert(std::make_pair(Id, qb));
 	}
 	else
 	{
@@ -1400,7 +1400,7 @@ void LuaEngineMgr::RegisterGameObjectEvent(uint32 Id, uint32 Event, const char *
 		LuaGameObjectBinding ub;
 		memset(&ub,0,sizeof(LuaGameObjectBinding));
 		ub.Functions[Event] = strdup(FunctionName);
-		m_gameobjectBinding.insert(make_pair(Id,ub));
+        m_gameobjectBinding.insert(std::make_pair(Id, ub));
 	}
 	else
 	{
@@ -1420,7 +1420,7 @@ void LuaEngineMgr::RegisterUnitGossipEvent(uint32 Id, uint32 Event, const char *
 		LuaUnitGossipBinding gb;
 		memset(&gb, 0, sizeof(LuaUnitGossipBinding));
 		gb.Functions[Event] = strdup(FunctionName);
-		m_unit_gossipBinding.insert(make_pair(Id, gb));
+        m_unit_gossipBinding.insert(std::make_pair(Id, gb));
 	}
 	else
 	{
@@ -1438,7 +1438,7 @@ void LuaEngineMgr::RegisterItemGossipEvent(uint32 Id, uint32 Event, const char *
 		LuaItemGossipBinding gb;
 		memset(&gb, 0, sizeof(LuaItemGossipBinding));
  		gb.Functions[Event] = strdup(FunctionName);
-		m_item_gossipBinding.insert(make_pair(Id, gb));
+        m_item_gossipBinding.insert(std::make_pair(Id, gb));
  	}
 	else
 	{
@@ -1456,7 +1456,7 @@ void LuaEngineMgr::RegisterGOGossipEvent(uint32 Id, uint32 Event, const char * F
 		LuaGOGossipBinding gb;
 		memset(&gb, 0, sizeof(LuaGOGossipBinding));
 		gb.Functions[Event] = strdup(FunctionName);
-		m_go_gossipBinding.insert(make_pair(Id, gb));
+        m_go_gossipBinding.insert(std::make_pair(Id, gb));
 	}
 	else
 	{
@@ -1998,7 +1998,7 @@ int luaUnit_RegisterEvent(lua_State * L, Unit * ptr)
 		return 0;
 
 	Creature * pCreature = ((Creature*)ptr);
-	string strFunc = string(func_to_call);
+    std::string strFunc = std::string(func_to_call);
 	sEventMgr.AddEvent(pCreature, &Creature::TriggerScriptEvent, strFunc, EVENT_CREATURE_UPDATE, (uint32)delay, (uint32)repeats, EVENT_FLAG_DO_NOT_EXECUTE_IN_WORLD_CONTEXT);
 	return 0;
 }
@@ -2255,7 +2255,7 @@ int luaUnit_GetClosestPlayer(lua_State * L, Unit * ptr)
 	float dist, d2;
 	Player * ret=NULL;
 
-	for(set<Player*>::iterator itr = ptr->GetInRangePlayerSetBegin(); itr != ptr->GetInRangePlayerSetEnd(); ++itr)
+    for (std::set<Player*>::iterator itr = ptr->GetInRangePlayerSetBegin(); itr != ptr->GetInRangePlayerSetEnd(); ++itr)
 	{
 		d2=(*itr)->GetDistanceSq(ptr);
 		if(!ret||d2<dist)
@@ -2289,7 +2289,7 @@ int luaUnit_GetRandomPlayer(lua_State * L, Unit * ptr)
 			uint32 r = RandomUInt(count-1);
 			count=0;
 
-			for(set<Player*>::iterator itr = ptr->GetInRangePlayerSetBegin(); itr != ptr->GetInRangePlayerSetEnd(); ++itr)
+            for (std::set<Player*>::iterator itr = ptr->GetInRangePlayerSetBegin(); itr != ptr->GetInRangePlayerSetEnd(); ++itr)
 			{
 				if (count==r)
 				{
@@ -2303,7 +2303,7 @@ int luaUnit_GetRandomPlayer(lua_State * L, Unit * ptr)
 	case RANDOM_IN_SHORTRANGE:
 		{
 			uint32 count = 0;
-			for(set<Player*>::iterator itr = ptr->GetInRangePlayerSetBegin(); itr != ptr->GetInRangePlayerSetEnd(); ++itr)
+            for (std::set<Player*>::iterator itr = ptr->GetInRangePlayerSetBegin(); itr != ptr->GetInRangePlayerSetEnd(); ++itr)
 			{
 				Player* obj = (Player*)(*itr);
 				if (obj && obj->CalcDistance(obj,ptr)<=8)
@@ -2313,7 +2313,7 @@ int luaUnit_GetRandomPlayer(lua_State * L, Unit * ptr)
 			{
 				uint32 r = RandomUInt(count-1);
 				count=0;
-				for(set<Player*>::iterator itr = ptr->GetInRangePlayerSetBegin(); itr != ptr->GetInRangePlayerSetEnd(); ++itr)
+                for (std::set<Player*>::iterator itr = ptr->GetInRangePlayerSetBegin(); itr != ptr->GetInRangePlayerSetEnd(); ++itr)
 				{
 					Player* obj = (Player*)(*itr);
 					if (obj && obj->CalcDistance(obj,ptr)<=8 && count==r)
@@ -2329,7 +2329,7 @@ int luaUnit_GetRandomPlayer(lua_State * L, Unit * ptr)
 	case RANDOM_IN_MIDRANGE:
 		{
 			uint32 count = 0;
-			for(set<Player*>::iterator itr = ptr->GetInRangePlayerSetBegin(); itr != ptr->GetInRangePlayerSetEnd(); ++itr)
+            for (std::set<Player*>::iterator itr = ptr->GetInRangePlayerSetBegin(); itr != ptr->GetInRangePlayerSetEnd(); ++itr)
 			{
 				Player* obj = (Player*)(*itr);
 				if (!obj)
@@ -2342,7 +2342,7 @@ int luaUnit_GetRandomPlayer(lua_State * L, Unit * ptr)
 			{
 				uint32 r = RandomUInt(count-1);
 				count=0;
-				for(set<Player*>::iterator itr = ptr->GetInRangePlayerSetBegin(); itr != ptr->GetInRangePlayerSetEnd(); ++itr)
+                for (std::set<Player*>::iterator itr = ptr->GetInRangePlayerSetBegin(); itr != ptr->GetInRangePlayerSetEnd(); ++itr)
 				{
 					Player* obj = (Player*)(*itr);
 					if (!obj)
@@ -2361,7 +2361,7 @@ int luaUnit_GetRandomPlayer(lua_State * L, Unit * ptr)
 	case RANDOM_IN_LONGRANGE:
 		{
 			uint32 count = 0;
-			for(set<Player*>::iterator itr = ptr->GetInRangePlayerSetBegin(); itr != ptr->GetInRangePlayerSetEnd(); ++itr)
+            for (std::set<Player*>::iterator itr = ptr->GetInRangePlayerSetBegin(); itr != ptr->GetInRangePlayerSetEnd(); ++itr)
 			{
 				Player* obj = (Player*)(*itr);
 				if (obj && obj->CalcDistance(obj,ptr)>=20)
@@ -2371,7 +2371,7 @@ int luaUnit_GetRandomPlayer(lua_State * L, Unit * ptr)
 			{
 				uint32 r = RandomUInt(count-1);
 				count=0;
-				for(set<Player*>::iterator itr = ptr->GetInRangePlayerSetBegin(); itr != ptr->GetInRangePlayerSetEnd(); ++itr)
+                for (std::set<Player*>::iterator itr = ptr->GetInRangePlayerSetBegin(); itr != ptr->GetInRangePlayerSetEnd(); ++itr)
 				{
 					Player* obj = (Player*)(*itr);
 					if (obj && obj->CalcDistance(obj,ptr)>=20 && count==r)
@@ -2387,7 +2387,7 @@ int luaUnit_GetRandomPlayer(lua_State * L, Unit * ptr)
 	case RANDOM_WITH_MANA:
 		{
 			uint32 count = 0;
-			for(set<Player*>::iterator itr = ptr->GetInRangePlayerSetBegin(); itr != ptr->GetInRangePlayerSetEnd(); ++itr)
+            for (std::set<Player*>::iterator itr = ptr->GetInRangePlayerSetBegin(); itr != ptr->GetInRangePlayerSetEnd(); ++itr)
 			{
 				Player* obj = (Player*)(*itr);
 				if (obj && obj->GetPowerType() == POWER_TYPE_MANA)
@@ -2397,7 +2397,7 @@ int luaUnit_GetRandomPlayer(lua_State * L, Unit * ptr)
 			{
 				uint32 r = RandomUInt(count-1);
 				count=0;
-				for(set<Player*>::iterator itr = ptr->GetInRangePlayerSetBegin(); itr != ptr->GetInRangePlayerSetEnd(); ++itr)
+                for (std::set<Player*>::iterator itr = ptr->GetInRangePlayerSetBegin(); itr != ptr->GetInRangePlayerSetEnd(); ++itr)
 				{
 					Player* obj = (Player*)(*itr);
 					if (obj && obj->GetPowerType() == POWER_TYPE_MANA && count==r)
@@ -2413,7 +2413,7 @@ int luaUnit_GetRandomPlayer(lua_State * L, Unit * ptr)
 	case RANDOM_WITH_ENERGY:
 		{
 			uint32 count = 0;
-			for(set<Player*>::iterator itr = ptr->GetInRangePlayerSetBegin(); itr != ptr->GetInRangePlayerSetEnd(); ++itr)
+            for (std::set<Player*>::iterator itr = ptr->GetInRangePlayerSetBegin(); itr != ptr->GetInRangePlayerSetEnd(); ++itr)
 			{
 				Player* obj = (Player*)(*itr);
 				if (obj && obj->GetPowerType() == POWER_TYPE_ENERGY)
@@ -2423,7 +2423,7 @@ int luaUnit_GetRandomPlayer(lua_State * L, Unit * ptr)
 			{
 				uint32 r = RandomUInt(count-1);
 				count=0;
-				for(set<Player*>::iterator itr = ptr->GetInRangePlayerSetBegin(); itr != ptr->GetInRangePlayerSetEnd(); ++itr)
+                for (std::set<Player*>::iterator itr = ptr->GetInRangePlayerSetBegin(); itr != ptr->GetInRangePlayerSetEnd(); ++itr)
 				{
 					Player* obj = (Player*)(*itr);
 					if (obj && obj->GetPowerType() == POWER_TYPE_ENERGY && count==r)
@@ -2439,7 +2439,7 @@ int luaUnit_GetRandomPlayer(lua_State * L, Unit * ptr)
 	case RANDOM_WITH_RAGE:
 		{
 			uint32 count = 0;
-			for(set<Player*>::iterator itr = ptr->GetInRangePlayerSetBegin(); itr != ptr->GetInRangePlayerSetEnd(); ++itr)
+            for (std::set<Player*>::iterator itr = ptr->GetInRangePlayerSetBegin(); itr != ptr->GetInRangePlayerSetEnd(); ++itr)
 			{
 				Player* obj = (Player*)(*itr);
 				if (obj && obj->GetPowerType() == POWER_TYPE_RAGE)
@@ -2449,7 +2449,7 @@ int luaUnit_GetRandomPlayer(lua_State * L, Unit * ptr)
 			{
 				uint32 r = RandomUInt(count-1);
 				count=0;
-				for(set<Player*>::iterator itr = ptr->GetInRangePlayerSetBegin(); itr != ptr->GetInRangePlayerSetEnd(); ++itr)
+                for (std::set<Player*>::iterator itr = ptr->GetInRangePlayerSetBegin(); itr != ptr->GetInRangePlayerSetEnd(); ++itr)
 				{
 					Player* obj = (Player*)(*itr);
 					if (obj && obj->GetPowerType() == POWER_TYPE_RAGE && count==r)
@@ -2469,7 +2469,7 @@ int luaUnit_GetRandomPlayer(lua_State * L, Unit * ptr)
 			if (!mt->IsPlayer())
 				return 0;
 
-			for(set<Player*>::iterator itr = ptr->GetInRangePlayerSetBegin(); itr != ptr->GetInRangePlayerSetEnd(); ++itr)
+            for (std::set<Player*>::iterator itr = ptr->GetInRangePlayerSetBegin(); itr != ptr->GetInRangePlayerSetEnd(); ++itr)
 			{
 				Player* obj = (Player*)(*itr);
 				if (obj != mt)
@@ -2479,7 +2479,7 @@ int luaUnit_GetRandomPlayer(lua_State * L, Unit * ptr)
 			{
 				uint32 r = RandomUInt(count-1);
 				count=0;
-				for(set<Player*>::iterator itr = ptr->GetInRangePlayerSetBegin(); itr != ptr->GetInRangePlayerSetEnd(); ++itr)
+                for (std::set<Player*>::iterator itr = ptr->GetInRangePlayerSetBegin(); itr != ptr->GetInRangePlayerSetEnd(); ++itr)
 				{
 					Player* obj = (Player*)(*itr);
 					if (obj && obj != mt && count==r)
@@ -2509,7 +2509,7 @@ int luaUnit_GetRandomFriend(lua_State * L, Unit * ptr)
 	Unit * ret=NULL;
 	uint32 count = 0;
 
-	for(set<Object*>::iterator itr = ptr->GetInRangeSetBegin(); itr != ptr->GetInRangeSetEnd(); ++itr)
+    for (std::set<Object*>::iterator itr = ptr->GetInRangeSetBegin(); itr != ptr->GetInRangeSetEnd(); ++itr)
 	{
 		Object* obj = (Object*)(*itr);
 		if (obj->IsUnit() && isFriendly(obj,ptr))
@@ -2520,7 +2520,7 @@ int luaUnit_GetRandomFriend(lua_State * L, Unit * ptr)
 	{
 		uint32 r = RandomUInt(count-1);
 		count=0;
-		for(set<Object*>::iterator itr = ptr->GetInRangeSetBegin(); itr != ptr->GetInRangeSetEnd(); ++itr)
+        for (std::set<Object*>::iterator itr = ptr->GetInRangeSetBegin(); itr != ptr->GetInRangeSetEnd(); ++itr)
 		{
 			Object* obj = (Object*)(*itr);
 			if (obj->IsUnit() && isFriendly(obj,ptr) && count==r)
@@ -2583,7 +2583,7 @@ int luaUnit_GetInRangeFriends(lua_State * L, Unit * ptr)
 	Object * pC = NULL;
 	uint32 count = 0;
 	lua_newtable(L);
-	for( set<Object*>::iterator itr = ptr->GetInRangeSetBegin(); itr != ptr->GetInRangeSetEnd(); itr++)
+    for (std::set<Object*>::iterator itr = ptr->GetInRangeSetBegin(); itr != ptr->GetInRangeSetEnd(); itr++)
 	{
 		if( (*itr) ->IsUnit() )
 			count++,
@@ -4366,7 +4366,7 @@ int luaGameObject_GetClosestPlayer(lua_State * L, GameObject * ptr)
 	float dist, d2;
 	Player * ret=NULL;
 
-	for(set<Player*>::iterator itr = ptr->GetInRangePlayerSetBegin(); itr != ptr->GetInRangePlayerSetEnd(); itr)
+    for (std::set<Player*>::iterator itr = ptr->GetInRangePlayerSetBegin(); itr != ptr->GetInRangePlayerSetEnd(); itr)
 	{
 		d2=(*itr)->GetDistanceSq(ptr);
 		if(!ret||d2<dist)

@@ -3148,7 +3148,7 @@ void Unit::Strike( Unit* pVictim, uint32 weapon_damage_type, SpellEntry* ability
 	if( block )
 		block = std::max( 0.0f, block - vsk * 0.04f );
 
-	crit += pVictim->IsPlayer() ? vsk * 0.04f : min( vsk * 0.2f, 0.0f ); 
+    crit += pVictim->IsPlayer() ? vsk * 0.04f : std::min(vsk * 0.2f, 0.0f);
 
 	// http://www.wowwiki.com/Miss
 	float misschance;
@@ -3702,7 +3702,7 @@ void Unit::Strike( Unit* pVictim, uint32 weapon_damage_type, SpellEntry* ability
 			Spell* cspell;
 
 			// Loop on hit spells, and strike with those.
-			for( map< SpellEntry*, pair< uint32, uint32 > >::iterator itr = static_cast< Player* >( this )->m_onStrikeSpells.begin();
+            for (std::map< SpellEntry*, std::pair< uint32, uint32 > >::iterator itr = static_cast< Player* >(this)->m_onStrikeSpells.begin();
 				itr != static_cast< Player* >( this )->m_onStrikeSpells.end(); ++itr )
 			{
 				if( itr->second.first )
@@ -3731,8 +3731,8 @@ void Unit::Strike( Unit* pVictim, uint32 weapon_damage_type, SpellEntry* ability
 
 		if( IsPlayer() && static_cast< Player* >( this )->m_onStrikeSpellDmg.size() )
 		{
-			map< uint32, OnHitSpell >::iterator it2 = static_cast< Player* >( this )->m_onStrikeSpellDmg.begin();
-			map< uint32, OnHitSpell >::iterator itr;
+            std::map< uint32, OnHitSpell >::iterator it2 = static_cast< Player* >(this)->m_onStrikeSpellDmg.begin();
+            std::map< uint32, OnHitSpell >::iterator itr;
 			uint32 min_dmg, max_dmg, range, dmg;
 			for(; it2 != static_cast< Player* >( this )->m_onStrikeSpellDmg.end(); )
 			{
@@ -3995,7 +3995,7 @@ void Unit::Strike( Unit* pVictim, uint32 weapon_damage_type, SpellEntry* ability
 
 			if (ex->deleted) continue;
 
-			for(set<Object*>::iterator itr = m_objectsInRange.begin(); itr != m_objectsInRange.end(); ++itr)
+            for (std::set<Object*>::iterator itr = m_objectsInRange.begin(); itr != m_objectsInRange.end(); ++itr)
 			{
 				if (!(*itr) || (*itr) == pVictim || !(*itr)->IsUnit())
 					continue;
@@ -6061,7 +6061,7 @@ void Unit::UpdateVisibility()
 	}
 	else			// For units we can save a lot of work
 	{
-		for(set<Player*>::iterator it2 = GetInRangePlayerSetBegin(); it2 != GetInRangePlayerSetEnd(); ++it2)
+        for (std::set<Player*>::iterator it2 = GetInRangePlayerSetBegin(); it2 != GetInRangePlayerSetEnd(); ++it2)
 		{
 			can_see = (*it2)->CanSee(this);
 			is_visible = (*it2)->GetVisibility(this, &itr);
@@ -6155,9 +6155,9 @@ bool Unit::GetSpeedDecrease()
 	int32 before=m_speedModifier;
 	m_speedModifier -= m_slowdown;
 	m_slowdown = 0;
-	map< uint32, int32 >::iterator itr = speedReductionMap.begin();
+    std::map< uint32, int32 >::iterator itr = speedReductionMap.begin();
 	for(; itr != speedReductionMap.end(); ++itr)
-		m_slowdown = (int32)min( m_slowdown, itr->second );
+        m_slowdown = (int32)std::min(m_slowdown, itr->second);
 
 	if(m_slowdown<-100)
 		m_slowdown = 100; //do not walk backwards !

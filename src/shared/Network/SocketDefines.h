@@ -10,7 +10,6 @@
 #define SOCKET_DEFINES_H
 
 #include "../Common.h"
-using namespace std;
 
 /* Implementation Selection */
 #ifdef WIN32		// Easy

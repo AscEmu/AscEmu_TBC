@@ -31,7 +31,7 @@
 
 OpcodeHandler WorldPacketHandlers[NUM_MSG_TYPES];
 
-WorldSession::WorldSession(uint32 id, string Name, WorldSocket *sock) : _player(0), _socket(sock), _accountId(id), _accountName(Name),
+WorldSession::WorldSession(uint32 id, std::string Name, WorldSocket *sock) : _player(0), _socket(sock), _accountId(id), _accountName(Name),
 _logoutTime(0), permissions(NULL), permissioncount(0), _loggingOut(false), instanceId(0)
 {
 	memset(movement_packet, 0, sizeof(movement_packet));
@@ -460,7 +460,7 @@ void WorldSession::SetSecurity(std::string securitystring)
 	LoadSecurity(securitystring);
 
 	// update db
-	CharacterDatabase.Execute("UPDATE accounts SET gm=\"%s\" WHERE acct=%u", CharacterDatabase.EscapeString(string(permissions)).c_str(), _accountId);
+    CharacterDatabase.Execute("UPDATE accounts SET gm=\"%s\" WHERE acct=%u", CharacterDatabase.EscapeString(std::string(permissions)).c_str(), _accountId);
 }
 
 bool WorldSession::CanUseCommand(char cmdstr)

@@ -141,13 +141,13 @@ void HonorHandler::OnPlayerKilledUnit( Player *pPlayer, Unit* pVictim )
 		if( pPlayer->m_bg )
 		{
 			// hackfix for battlegrounds (since the gorups there are disabled, we need to do this manually)
-			vector<Player*> toadd;
+            std::vector<Player*> toadd;
 			uint32 t = pPlayer->m_bgTeam;
 			toadd.reserve(15);		// shouldnt have more than this
 			pPlayer->m_bg->Lock();
-			set<Player*> * s = &pPlayer->m_bg->m_players[t];
+            std::set<Player*> * s = &pPlayer->m_bg->m_players[t];
 
-			for(set<Player*>::iterator itr = s->begin(); itr != s->end(); ++itr)
+            for (std::set<Player*>::iterator itr = s->begin(); itr != s->end(); ++itr)
 			{
 				if((*itr) == pPlayer || (*itr)->isInRange(pPlayer,100.0f))
 					toadd.push_back(*itr);
@@ -156,7 +156,7 @@ void HonorHandler::OnPlayerKilledUnit( Player *pPlayer, Unit* pVictim )
 			if( toadd.size() > 0 )
 			{
 				uint32 pts = Points / (uint32)toadd.size();
-				for(vector<Player*>::iterator vtr = toadd.begin(); vtr != toadd.end(); ++vtr)
+                for (std::vector<Player*>::iterator vtr = toadd.begin(); vtr != toadd.end(); ++vtr)
 				{
 					AddHonorPointsToPlayer(*vtr, pts);
 
@@ -178,7 +178,7 @@ void HonorHandler::OnPlayerKilledUnit( Player *pPlayer, Unit* pVictim )
 		}
 		else
 		{
-			set<Player*> contributors;
+            std::set<Player*> contributors;
 			// First loop: Get all the people in the attackermap.
 			pVictim->UpdateOppFactionSet();
 			for(std::set<Object*>::iterator itr = pVictim->GetInRangeOppFactsSetBegin(); itr != pVictim->GetInRangeOppFactsSetEnd(); itr++)
@@ -216,7 +216,7 @@ void HonorHandler::OnPlayerKilledUnit( Player *pPlayer, Unit* pVictim )
 				}
 			}
 
-			for(set<Player*>::iterator itr = contributors.begin(); itr != contributors.end(); itr++)
+            for (std::set<Player*>::iterator itr = contributors.begin(); itr != contributors.end(); itr++)
 			{
 				Player * pAffectedPlayer = (*itr);
 				if(!pAffectedPlayer) continue;

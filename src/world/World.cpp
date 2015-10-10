@@ -150,7 +150,7 @@ World::~World()
 	delete eventholder;
 
 	Storage_Cleanup();
-	for(list<SpellEntry*>::iterator itr = dummyspells.begin(); itr != dummyspells.end(); ++itr)
+    for (std::list<SpellEntry*>::iterator itr = dummyspells.begin(); itr != dummyspells.end(); ++itr)
 		delete *itr;
 }
 
@@ -991,7 +991,7 @@ Task * TaskList::GetTask()
 	queueLock.Acquire();
 
 	Task* t = 0;
-	for(set<Task*>::iterator itr = tasks.begin(); itr != tasks.end(); ++itr)
+    for (std::set<Task*>::iterator itr = tasks.begin(); itr != tasks.end(); ++itr)
 	{
 		if(!(*itr)->in_progress)
 		{
@@ -1051,7 +1051,7 @@ void TaskList::wait()
 	{
 		queueLock.Acquire();
 		has_tasks = false;
-		for(set<Task*>::iterator itr = tasks.begin(); itr != tasks.end(); ++itr)
+        for (std::set<Task*>::iterator itr = tasks.begin(); itr != tasks.end(); ++itr)
 		{
 			if(!(*itr)->completed)
 			{
@@ -1374,7 +1374,7 @@ void World::Rehash(bool load)
 		free( m_banTable );
 
 	m_banTable = NULL;
-	string s = Config.MainConfig.GetStringDefault( "Server", "BanTable", "" );
+    std::string s = Config.MainConfig.GetStringDefault("Server", "BanTable", "");
 	if( !s.empty() )
 		m_banTable = strdup( s.c_str() );
 
@@ -1619,7 +1619,7 @@ struct insert_playeritem
 	uint32 durability;
 	int32 containerslot;
 	int32 slot;
-	string enchantments;
+    std::string enchantments;
 };
 
 #define LOAD_THREAD_SLEEP 180
@@ -1743,8 +1743,8 @@ void World::PollCharacterInsertQueue(DatabaseConnection * con)
 {
 	// Our local stuff..
 	bool has_results = false;
-	map<uint32, vector<insert_playeritem> > itemMap;
-	map<uint32,vector<insert_playeritem> >::iterator itr;
+    std::map<uint32, std::vector<insert_playeritem> > itemMap;
+    std::map<uint32, std::vector<insert_playeritem> >::iterator itr;
 	Field * f;
 	insert_playeritem ipi;                          
 	static const char * characterTableFormat = "uSuuuuuussuuuuuuuuuuuuuuffffuususuufffuuuuusuuuUssuuuuuuffffuuuuufffssssssuuuuuuuu";
@@ -1774,14 +1774,14 @@ void World::PollCharacterInsertQueue(DatabaseConnection * con)
 			ipi.durability = f[11].GetUInt32();
 			ipi.containerslot = f[12].GetInt32();
 			ipi.slot = f[13].GetInt32();
-			ipi.enchantments = string(f[14].GetString());
+            ipi.enchantments = std::string(f[14].GetString());
 
 			itr = itemMap.find(ipi.ownerguid);
 			if(itr == itemMap.end())
 			{
-				vector<insert_playeritem> to_insert;
+                std::vector<insert_playeritem> to_insert;
 				to_insert.push_back(ipi);
-				itemMap.insert(make_pair(ipi.ownerguid,to_insert));
+                itemMap.insert(std::make_pair(ipi.ownerguid, to_insert));
 			}
 			else
 			{
@@ -1899,7 +1899,7 @@ void World::PollCharacterInsertQueue(DatabaseConnection * con)
 			itr = itemMap.find(guid);
 			if(itr != itemMap.end())
 			{
-				for(vector<insert_playeritem>::iterator vtr = itr->second.begin(); vtr != itr->second.end(); ++vtr)
+                for (std::vector<insert_playeritem>::iterator vtr = itr->second.begin(); vtr != itr->second.end(); ++vtr)
 				{
 					ss.rdbuf()->str("");
 					ss << "INSERT INTO playeritems VALUES(";
@@ -1976,7 +1976,7 @@ void World::DisconnectUsersWithIP(const char * ip, WorldSession * m_session)
 		if(!session->GetSocket())
 			continue;
 
-		string ip2 = session->GetSocket()->GetRemoteIP().c_str();
+        std::string ip2 = session->GetSocket()->GetRemoteIP().c_str();
 		if(!stricmp(ip, ip2.c_str()))
 		{
 			FoundUser = true;
@@ -2018,14 +2018,14 @@ void World::DisconnectUsersWithPlayerName(const char * plr, WorldSession * m_ses
 	m_sessionlock.ReleaseReadLock();
 }
 
-string World::GetUptimeString()
+std::string World::GetUptimeString()
 {
 	char str[300];
 	time_t pTime = (time_t)UNIXTIME - m_StartTime;
 	tm * tmv = gmtime(&pTime);
 
 	snprintf(str, 300, "%u days, %u hours, %u minutes, %u seconds.", tmv->tm_yday, tmv->tm_hour, tmv->tm_min, tmv->tm_sec);
-	return string(str);
+    return std::string(str);
 }
 
 void World::SendBCMessageByID(uint32 id)
@@ -2068,7 +2068,7 @@ void World::SendLocalizedWorldText(bool wide,const char * format, ...) // May no
 		if (itr->second->GetPlayer() &&
 			itr->second->GetPlayer()->IsInWorld() )
 		{
-			string temp = SessionLocalizedTextFilter(itr->second,format);
+            std::string temp = SessionLocalizedTextFilter(itr->second, format);
 			// parsing
 			format = (char*)temp.c_str();
 			char buffer[1024];

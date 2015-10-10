@@ -25,7 +25,7 @@ initialiseSingleton( ChannelMgr );
 void WorldSession::HandleChannelJoin(WorldPacket& recvPacket)
 {
 	CHECK_PACKET_SIZE(recvPacket, 1);
-	string channelname,pass;
+    std::string channelname, pass;
 	uint32 dbc_id = 0;
 	uint16 crap;		// crap = some sort of channel type?
 	uint32 i;
@@ -62,7 +62,7 @@ void WorldSession::HandleChannelJoin(WorldPacket& recvPacket)
 void WorldSession::HandleChannelLeave(WorldPacket& recvPacket)
 {
 	CHECK_PACKET_SIZE(recvPacket, 1);
-	string channelname;
+    std::string channelname;
 	uint32 code = 0;
 	Channel * chn;
 
@@ -79,7 +79,7 @@ void WorldSession::HandleChannelLeave(WorldPacket& recvPacket)
 void WorldSession::HandleChannelList(WorldPacket& recvPacket)
 {
 	CHECK_PACKET_SIZE(recvPacket, 1);
-	string channelname;
+    std::string channelname;
 	Channel * chn;
 
 	recvPacket >> channelname;
@@ -92,7 +92,7 @@ void WorldSession::HandleChannelList(WorldPacket& recvPacket)
 void WorldSession::HandleChannelPassword(WorldPacket& recvPacket)
 {
 	CHECK_PACKET_SIZE(recvPacket, 1);
-	string channelname,pass;
+    std::string channelname, pass;
 	Channel * chn;
 
 	recvPacket >> channelname;
@@ -105,7 +105,7 @@ void WorldSession::HandleChannelPassword(WorldPacket& recvPacket)
 void WorldSession::HandleChannelSetOwner(WorldPacket& recvPacket)
 {
 	CHECK_PACKET_SIZE(recvPacket, 1);
-	string channelname,newp;
+    std::string channelname, newp;
 	Channel * chn;
 	Player * plr;
 
@@ -121,7 +121,7 @@ void WorldSession::HandleChannelSetOwner(WorldPacket& recvPacket)
 void WorldSession::HandleChannelOwner(WorldPacket& recvPacket)
 {
 	CHECK_PACKET_SIZE(recvPacket, 1);
-	string channelname,pass;
+    std::string channelname, pass;
 	Channel * chn;
 
 	recvPacket >> channelname;
@@ -133,7 +133,7 @@ void WorldSession::HandleChannelOwner(WorldPacket& recvPacket)
 void WorldSession::HandleChannelModerator(WorldPacket& recvPacket)
 {
 	CHECK_PACKET_SIZE(recvPacket, 1);
-	string channelname,newp;
+    std::string channelname, newp;
 	Channel * chn;
 	Player * plr;
 
@@ -149,7 +149,7 @@ void WorldSession::HandleChannelModerator(WorldPacket& recvPacket)
 void WorldSession::HandleChannelUnmoderator(WorldPacket& recvPacket)
 {
 	CHECK_PACKET_SIZE(recvPacket, 1);
-	string channelname,newp;
+    std::string channelname, newp;
 	Channel * chn;
 	Player * plr;
 
@@ -165,7 +165,7 @@ void WorldSession::HandleChannelUnmoderator(WorldPacket& recvPacket)
 void WorldSession::HandleChannelMute(WorldPacket& recvPacket)
 {
 	CHECK_PACKET_SIZE(recvPacket, 1);
-	string channelname,newp;
+    std::string channelname, newp;
 	Channel * chn;
 	Player * plr;
 
@@ -181,7 +181,7 @@ void WorldSession::HandleChannelMute(WorldPacket& recvPacket)
 void WorldSession::HandleChannelUnmute(WorldPacket& recvPacket)
 {
 	CHECK_PACKET_SIZE(recvPacket, 1);
-	string channelname,newp;
+    std::string channelname, newp;
 	Channel * chn;
 	Player * plr;
 
@@ -197,7 +197,7 @@ void WorldSession::HandleChannelUnmute(WorldPacket& recvPacket)
 void WorldSession::HandleChannelInvite(WorldPacket& recvPacket)
 {
 	CHECK_PACKET_SIZE(recvPacket, 1);
-	string channelname,newp;
+    std::string channelname, newp;
 	Channel * chn;
 	Player * plr;
 
@@ -212,7 +212,7 @@ void WorldSession::HandleChannelInvite(WorldPacket& recvPacket)
 void WorldSession::HandleChannelKick(WorldPacket& recvPacket)
 {
 	CHECK_PACKET_SIZE(recvPacket, 1);
-	string channelname,newp;
+    std::string channelname, newp;
 	Channel * chn;
 	Player * plr;
 
@@ -228,7 +228,7 @@ void WorldSession::HandleChannelKick(WorldPacket& recvPacket)
 void WorldSession::HandleChannelBan(WorldPacket& recvPacket)
 {
 	CHECK_PACKET_SIZE(recvPacket, 1);
-	string channelname,newp;
+    std::string channelname, newp;
 	Channel * chn;
 	Player * plr;
 
@@ -244,7 +244,7 @@ void WorldSession::HandleChannelBan(WorldPacket& recvPacket)
 void WorldSession::HandleChannelUnban(WorldPacket& recvPacket)
 {
 	CHECK_PACKET_SIZE(recvPacket, 1);
-	string channelname,newp;
+    std::string channelname, newp;
 	Channel * chn;
 	PlayerInfo * plr;
 
@@ -260,7 +260,7 @@ void WorldSession::HandleChannelUnban(WorldPacket& recvPacket)
 void WorldSession::HandleChannelAnnounce(WorldPacket& recvPacket)
 {
 	CHECK_PACKET_SIZE(recvPacket, 1);
-	string channelname;
+    std::string channelname;
 	Channel * chn;
 	recvPacket >> channelname;
 	
@@ -272,7 +272,7 @@ void WorldSession::HandleChannelAnnounce(WorldPacket& recvPacket)
 void WorldSession::HandleChannelModerate(WorldPacket& recvPacket)
 {
 	CHECK_PACKET_SIZE(recvPacket, 1);
-	string channelname;
+    std::string channelname;
 	Channel * chn;
 	recvPacket >> channelname;
 
@@ -283,7 +283,7 @@ void WorldSession::HandleChannelModerate(WorldPacket& recvPacket)
 
 void WorldSession::HandleChannelRosterQuery(WorldPacket & recvPacket)
 {
-	string channelname;
+    std::string channelname;
 	Channel * chn;
 	recvPacket >> channelname;
 
@@ -294,7 +294,7 @@ void WorldSession::HandleChannelRosterQuery(WorldPacket & recvPacket)
 
 void WorldSession::HandleChannelNumMembersQuery(WorldPacket & recvPacket)
 {
-	string channel_name;
+    std::string channel_name;
 	WorldPacket data(SMSG_CHANNEL_NUM_MEMBERS_QUERY_RESPONSE, recvPacket.size() + 4);
 	Channel *chn;
 	recvPacket >> channel_name;

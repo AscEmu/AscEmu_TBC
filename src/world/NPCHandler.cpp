@@ -138,13 +138,13 @@ void WorldSession::SendTrainerList(Creature* pCreature)
 	uint32 Spacer = 0;
 	uint32 Count=0;
 	uint8 Status;
-	string Text;
+    std::string Text;
 
 	data << pCreature->GetGUID();
 	data << pTrainer->TrainerType;
 
 	data << uint32(0);
-	for(vector<TrainerSpell>::iterator itr = pTrainer->Spells.begin(); itr != pTrainer->Spells.end(); ++itr)
+    for (std::vector<TrainerSpell>::iterator itr = pTrainer->Spells.begin(); itr != pTrainer->Spells.end(); ++itr)
 	{
 		pSpell = &(*itr);
 		Status = TrainerGetSpellStatus(pSpell);
@@ -194,7 +194,7 @@ void WorldSession::HandleTrainerBuySpellOpcode(WorldPacket& recvPacket)
 	if(pTrainer == 0 || !CanTrainAt(_player, pTrainer)) return;
 
 	TrainerSpell * pSpell=NULL;
-	for(vector<TrainerSpell>::iterator itr = pTrainer->Spells.begin(); itr != pTrainer->Spells.end(); ++itr)
+    for (std::vector<TrainerSpell>::iterator itr = pTrainer->Spells.begin(); itr != pTrainer->Spells.end(); ++itr)
 	{
 		if( ( itr->pCastRealSpell && itr->pCastRealSpell->Id == TeachingSpellID ) ||
 			( itr->pLearnSpell && itr->pLearnSpell->Id == TeachingSpellID ) )
@@ -397,7 +397,7 @@ void WorldSession::HandleGossipHelloOpcode( WorldPacket & recv_data )
 {
 	if(!_player->IsInWorld()) return;
 	uint64 guid;
-	list<QuestRelation *>::iterator it;
+    std::list<QuestRelation *>::iterator it;
 	std::set<uint32> ql;
 
 	recv_data >> guid;
@@ -551,7 +551,7 @@ void WorldSession::HandleGossipSelectOptionOpcode( WorldPacket & recv_data )
 
 	if(extra)
 	{
-		string str;
+        std::string str;
 		if(recv_data.rpos()!=recv_data.wpos())
 			recv_data >> str;
 

@@ -19,14 +19,14 @@
 
 #include "Common.h"
 
-using namespace std;
-
-vector<string> StrSplit(const string &src, const string &sep)
+std::vector<std::string> StrSplit(const std::string &src, const std::string &sep)
 {
-	vector<string> r;
-	string s;
-	for (string::const_iterator i = src.begin(); i != src.end(); i++) {
-		if (sep.find(*i) != string::npos) {
+    std::vector<std::string> r;
+    std::string s;
+    for (std::string::const_iterator i = src.begin(); i != src.end(); i++)
+    {
+        if (sep.find(*i) != std::string::npos)
+        {
 			if (s.length()) r.push_back(s);
 			s = "";
 		} else {
@@ -107,7 +107,7 @@ int32 GetTimePeriodFromString(const char * str)
 	uint32 time_to_ban = 0;
 	char * p = (char*)str;
 	uint32 multiplier;
-	string number_temp;
+    std::string number_temp;
 	uint32 multipliee;
 	number_temp.reserve(10);
 
@@ -189,7 +189,7 @@ void MakeIntStringNoZero(char * buf, int num)
 	sprintf(buf,"%u",num);
 }
 
-string ConvertTimeStampToString(uint32 timestamp)
+std::string ConvertTimeStampToString(uint32 timestamp)
 {
 	int seconds = (int)timestamp;
 	int mins=0;
@@ -239,7 +239,7 @@ string ConvertTimeStampToString(uint32 timestamp)
 	}
 
 	char szTempBuf[100];
-	string szResult;
+    std::string szResult;
 
 	if(years) {
 		MakeIntStringNoZero(szTempBuf, years);
@@ -280,13 +280,13 @@ string ConvertTimeStampToString(uint32 timestamp)
 	return szResult;
 }
 
-string ConvertTimeStampToDataTime(uint32 timestamp)
+std::string ConvertTimeStampToDataTime(uint32 timestamp)
 {
 	char szTempBuf[100];
 	time_t t = (time_t)timestamp;
 	tm * pTM = localtime(&t);
 
-	string szResult;
+    std::string szResult;
 	szResult += szDayNames[pTM->tm_wday];
 	szResult += ", ";
 

@@ -390,7 +390,7 @@ bool ChatHandler::HandleBanCharacterCommand(const char* args, WorldSession *m_se
 		}
 
 		SystemMessage(m_session, "Banning player '%s' in database for '%s'.", pCharacter, pReason);
-		string escaped_reason = CharacterDatabase.EscapeString(string(pReason));
+        std::string escaped_reason = CharacterDatabase.EscapeString(std::string(pReason));
 		
 		CharacterDatabase.Execute("UPDATE characters SET banned = %u, banReason = '%s' WHERE guid = %u",
 			BanTime ? BanTime+(uint32)UNIXTIME : 1, escaped_reason.c_str(), pInfo->guid);
@@ -398,7 +398,7 @@ bool ChatHandler::HandleBanCharacterCommand(const char* args, WorldSession *m_se
 	else
 	{
 		SystemMessage(m_session, "Banning player '%s' ingame for '%s'.", pCharacter, pReason);
-		string sReason = string(pReason);
+        std::string sReason = std::string(pReason);
 		uint32 uBanTime = BanTime ? BanTime+(uint32)UNIXTIME : 1;
 		pPlayer->SetBanned(uBanTime, sReason);
 		pInfo = pPlayer->m_playerInfo;
@@ -417,7 +417,7 @@ bool ChatHandler::HandleBanCharacterCommand(const char* args, WorldSession *m_se
 	sWorld.SendWorldText( msg, NULL );
 	if( sWorld.m_banTable && pInfo )
 	{
-		CharacterDatabase.Execute("INSERT INTO %s VALUES('%s', '%s', %u, %u, '%s')", sWorld.m_banTable, m_session->GetPlayer()->GetName(), pInfo->name, (uint32)UNIXTIME, (uint32)UNIXTIME + BanTime, CharacterDatabase.EscapeString(string(pReason)).c_str() );
+        CharacterDatabase.Execute("INSERT INTO %s VALUES('%s', '%s', %u, %u, '%s')", sWorld.m_banTable, m_session->GetPlayer()->GetName(), pInfo->name, (uint32)UNIXTIME, (uint32)UNIXTIME + BanTime, CharacterDatabase.EscapeString(std::string(pReason)).c_str());
 	}
 	return true;
 }
@@ -447,7 +447,7 @@ bool ChatHandler::HandleUnBanCharacterCommand(const char* args, WorldSession *m_
 	}
 
 	// Ban in database
-	CharacterDatabase.Execute("UPDATE characters SET banned = 0 WHERE name = '%s'", CharacterDatabase.EscapeString(string(Character)).c_str());
+    CharacterDatabase.Execute("UPDATE characters SET banned = 0 WHERE name = '%s'", CharacterDatabase.EscapeString(std::string(Character)).c_str());
 
 	SystemMessage(m_session, "Unbanned character %s in database.", Character);
 	sGMLog.writefromsession(m_session, "unbanned %s", Character);
@@ -1953,9 +1953,9 @@ bool ChatHandler::HandleIPBanCommand(const char * args, WorldSession * m_session
 		expire_time = 0;
 	else
 		expire_time = UNIXTIME + (time_t)timeperiod;
-	string IP = pIp;
-	string::size_type i = IP.find("/");
-	if (i == string::npos)
+    std::string IP = pIp;
+    std::string::size_type i = IP.find("/");
+    if (i == std::string::npos)
 	{
 		RedSystemMessage(m_session, "Lack of CIDR address assumes a 32bit match (if you don't understand, dont worry, it worked)");
 		IP.append("/32");
@@ -1977,11 +1977,11 @@ bool ChatHandler::HandleIPBanCommand(const char * args, WorldSession * m_session
 
 bool ChatHandler::HandleIPUnBanCommand(const char * args, WorldSession * m_session)
 {
-	string pIp = args;
+    std::string pIp = args;
 	if (pIp.length() == 0)
 		return false;
 
-	if (pIp.find("/") == string::npos)
+    if (pIp.find("/") == std::string::npos)
 	{
 		RedSystemMessage(m_session, "Lack of CIDR address assumes a 32bit match (if you don't understand, dont worry, it worked)");
 		pIp.append("/32");
@@ -2135,7 +2135,7 @@ bool ChatHandler::HandleForceRenameCommand(const char * args, WorldSession * m_s
 	if(strlen(args) > 100)
 		return false;
 
-	string tmp = string(args);
+    std::string tmp = std::string(args);
 	PlayerInfo * pi = objmgr.GetPlayerInfoByName(tmp.c_str());
 	if(pi == 0)
 	{
@@ -2155,7 +2155,7 @@ bool ChatHandler::HandleForceRenameCommand(const char * args, WorldSession * m_s
 		BlueSystemMessageToPlr(plr, "%s forced your character to be renamed next logon.", m_session->GetPlayer()->GetName());
 	}
 
-	CharacterDatabase.Execute("INSERT INTO banned_names VALUES('%s')", CharacterDatabase.EscapeString(string(pi->name)).c_str());
+    CharacterDatabase.Execute("INSERT INTO banned_names VALUES('%s')", CharacterDatabase.EscapeString(std::string(pi->name)).c_str());
 	GreenSystemMessage(m_session, "Forcing %s to rename his character next logon.", args);
 	sGMLog.writefromsession(m_session, "forced %s to rename his charater (%u)", pi->name, pi->guid);
 	return true;
@@ -2192,7 +2192,7 @@ bool ChatHandler::HandleSetStandingCommand(const char * args, WorldSession * m_s
 	return true;
 }
 
-void SendHighlightedName(WorldSession * m_session, const char* prefix, char* full_name, string& lowercase_name, string& highlight, uint32 id)
+void SendHighlightedName(WorldSession * m_session, const char* prefix, char* full_name, std::string& lowercase_name, std::string& highlight, uint32 id)
 {
 	char message[1024];
 	char start[50];
@@ -2200,10 +2200,10 @@ void SendHighlightedName(WorldSession * m_session, const char* prefix, char* ful
 
 	snprintf(start, 50, "%s %u: %s", prefix, (unsigned int)id, MSG_COLOR_WHITE);
 
-	string::size_type hlen = highlight.length();
-	string fullname = string(full_name);
-	string::size_type offset = lowercase_name.find(highlight);
-	string::size_type remaining = fullname.size() - offset - hlen;
+    std::string::size_type hlen = highlight.length();
+    std::string fullname = std::string(full_name);
+    std::string::size_type offset = lowercase_name.find(highlight);
+    std::string::size_type remaining = fullname.size() - offset - hlen;
 	strcat(message, start);
 	strncat(message, fullname.c_str(), offset);
 	strcat(message, MSG_COLOR_LIGHTRED);
@@ -2236,7 +2236,7 @@ bool ChatHandler::HandleLookupItemCommand(const char * args, WorldSession * m_se
 {
 	if(!*args) return false;
 
-	string x = string(args);
+    std::string x = std::string(args);
 	arcemu_TOLOWER(x);
 	if(x.length() < 4)
 	{
@@ -2290,7 +2290,7 @@ bool ChatHandler::HandleLookupObjectCommand(const char * args, WorldSession * m_
 {
 	if(!*args) return false;
 
-	string x = string(args);
+    std::string x = std::string(args);
 	arcemu_TOLOWER(x);
 
 	StorageContainerIterator<GameObjectInfo> * itr = GameObjectNameStorage.MakeIterator();
@@ -2299,17 +2299,17 @@ bool ChatHandler::HandleLookupObjectCommand(const char * args, WorldSession * m_
 	uint32 t = getMSTime();
 	GameObjectInfo * i;
 	uint32 count = 0;
-	string y;
-	string recout;
+    std::string y;
+    std::string recout;
 	while(!itr->AtEnd())
 	{
 		i = itr->Get();
-		y = string(i->Name);
+        y = std::string(i->Name);
 		arcemu_TOLOWER(y);
 		if(FindXinYString(x,y))
 		{
 			//string objectID=MyConvertIntToString(i->ID);
-			string Name;
+            std::string Name;
 			std::stringstream strm;
 			strm<<i->ID;
 			//string ObjectID = i.c_str();
@@ -2342,7 +2342,7 @@ bool ChatHandler::HandleLookupCreatureCommand(const char * args, WorldSession * 
 {
 	if(!*args) return false;
 
-	string x = string(args);
+    std::string x = std::string(args);
 	arcemu_TOLOWER(x);
 	if(x.length() < 4)
 	{
@@ -2394,7 +2394,7 @@ bool ChatHandler::HandleLookupSpellCommand(const char * args, WorldSession * m_s
 {
 	if(!*args) return false;
 
-	string x = string(args);
+    std::string x = std::string(args);
 	arcemu_TOLOWER(x);
 	if(x.length() < 4)
 	{
@@ -2408,7 +2408,7 @@ bool ChatHandler::HandleLookupSpellCommand(const char * args, WorldSession * m_s
 	for (uint32 index = 0; index < dbcSpell.GetNumRows(); ++index)
 	{
 		SpellEntry* spell = dbcSpell.LookupRow(index);
-		string y = string(spell->Name);
+        std::string y = std::string(spell->Name);
 		arcemu_TOLOWER(y);
 		if(FindXinYString(x, y))
  		{
@@ -2431,7 +2431,7 @@ bool ChatHandler::HandleLookupSkillCommand(const char * args, WorldSession * m_s
 {
 	if(!*args) return false;
 
-	string x = string(args);
+    std::string x = std::string(args);
 	arcemu_TOLOWER(x);
 	if(x.length() < 4)
 	{
@@ -2445,7 +2445,7 @@ bool ChatHandler::HandleLookupSkillCommand(const char * args, WorldSession * m_s
 	for (uint32 index = 0; index < dbcSkillLine.GetNumRows(); ++index)
 	{
 		skilllineentry* skill = dbcSkillLine.LookupRow(index);
-		string y = string(skill->Name);
+        std::string y = std::string(skill->Name);
 		arcemu_TOLOWER(y);
 		if(FindXinYString(x, y))
  		{
@@ -2468,7 +2468,7 @@ bool ChatHandler::HandleLookupFactionCommand(const char * args, WorldSession * m
 {
 	if(!*args) return false;
 
-	string x = string(args);
+    std::string x = std::string(args);
 	arcemu_TOLOWER(x);
 	if(x.length() < 4)
 	{
@@ -2482,7 +2482,7 @@ bool ChatHandler::HandleLookupFactionCommand(const char * args, WorldSession * m
 	for (uint32 index = 0; index < dbcFaction.GetNumRows(); ++index)
 	{
 		FactionDBC* faction = dbcFaction.LookupRow(index);
-		string y = string(faction->Name);
+        std::string y = std::string(faction->Name);
 		arcemu_TOLOWER(y);
 		if(FindXinYString(x, y))
  		{
@@ -2653,8 +2653,8 @@ struct spell_thingo
 	uint32 target;
 };
 
-list<SpellEntry*> aiagent_spells;
-map<uint32, spell_thingo> aiagent_extra;
+std::list<SpellEntry*> aiagent_spells;
+std::map<uint32, spell_thingo> aiagent_extra;
 
 bool ChatHandler::HandleAIAgentDebugBegin(const char * args, WorldSession * m_session)
 {
@@ -2669,7 +2669,7 @@ bool ChatHandler::HandleAIAgentDebugBegin(const char * args, WorldSession * m_se
 	} while(result->NextRow());
 	delete result;
 
-	for(list<SpellEntry*>::iterator itr = aiagent_spells.begin(); itr != aiagent_spells.end(); ++itr)
+    for (std::list<SpellEntry*>::iterator itr = aiagent_spells.begin(); itr != aiagent_spells.end(); ++itr)
 	{
 		result = WorldDatabase.Query("SELECT * FROM ai_agents WHERE spell = %u", (*itr)->Id);
 		ASSERT(result);
@@ -2738,7 +2738,7 @@ bool ChatHandler::HandleAIAgentDebugContinue(const char * args, WorldSession * m
 		aiagent_spells.erase(aiagent_spells.begin());
 		BlueSystemMessage(m_session, "Casting %u, "MSG_COLOR_SUBWHITE"%u remaining.", sp->Id, aiagent_spells.size());
 
-		map<uint32, spell_thingo>::iterator it = aiagent_extra.find(sp->Id);
+        std::map<uint32, spell_thingo>::iterator it = aiagent_extra.find(sp->Id);
 		ASSERT(it != aiagent_extra.end());
 
 		SpellCastTargets targets;
@@ -2779,7 +2779,7 @@ bool ChatHandler::HandleRenameGuildCommand(const char* args, WorldSession *m_ses
 	if(!plr || !plr->GetGuildId() || !plr->GetGuild() || !args || !strlen(args))
 		return false;
 
-	Guild * pGuild = objmgr.GetGuildByGuildName(string(args));
+    Guild * pGuild = objmgr.GetGuildByGuildName(std::string(args));
 
 	if(pGuild)
 	{
@@ -2788,7 +2788,7 @@ bool ChatHandler::HandleRenameGuildCommand(const char* args, WorldSession *m_ses
 	}
 
 	GreenSystemMessage(m_session, "Changed guild name of %s to %s. This will take effect next restart.", plr->GetGuild()->GetGuildName(), args);
-	CharacterDatabase.Execute("UPDATE guilds SET `guildName` = \"%s\" WHERE `guildId` = '%u'", CharacterDatabase.EscapeString(string(args)).c_str(), plr->GetGuild()->GetGuildId());
+    CharacterDatabase.Execute("UPDATE guilds SET `guildName` = \"%s\" WHERE `guildId` = '%u'", CharacterDatabase.EscapeString(std::string(args)).c_str(), plr->GetGuild()->GetGuildId());
 	return true;
 }
 
@@ -2885,7 +2885,7 @@ bool ChatHandler::HandleArenaCreateTeamCommand(const char * args, WorldSession *
 	t->m_borderStyle=1;
 	t->m_backgroundColour=4284906803UL;
 	t->m_leader=plr->GetLowGUID();
-	t->m_name = string(name);
+    t->m_name = std::string(name);
 	t->AddMember(plr->m_playerInfo);
 	objmgr.AddArenaTeam(t);
 	SystemMessage(m_session, "created arena team.");
@@ -2966,7 +2966,7 @@ bool ChatHandler::HandleGenderChanger(const char* args, WorldSession *m_session)
 			gender = 1;
 	}
 	else
-		gender = min((int)atoi((char*)args),1);
+        gender = std::min((int)atoi((char*)args), 1);
 	target->setGender(gender);
 	if( target->getGender() == 0 )
 	{
@@ -3016,7 +3016,7 @@ bool ChatHandler::HandleDispelAllCommand(const char * args, WorldSession * m_ses
 
 bool ChatHandler::HandleShowItems(const char * args, WorldSession * m_session)
 {
-	string q;
+    std::string q;
 	Player * plr = getSelectedChar(m_session, true);
 	if(!plr) return true;
 

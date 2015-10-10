@@ -103,7 +103,7 @@ bool ChatHandler::HandleRenameAllCharacter(const char * args, WorldSession * m_s
 	return true;
 }
 
-void CapitalizeString(string& arg)
+void CapitalizeString(std::string& arg)
 {
 	if(arg.length() == 0) return;
 	arg[0] = toupper(arg[0]);
@@ -453,7 +453,7 @@ void WorldSession::HandleCharDeleteOpcode( WorldPacket & recv_data )
 					inf->guild->RemoveGuildMember(inf,NULL);
 			}
 
-			string name = result->Fetch()[0].GetString();
+            std::string name = result->Fetch()[0].GetString();
 			delete result;
 
 			for(int i = 0; i < NUM_CHARTER_TYPES; ++i)
@@ -509,7 +509,7 @@ void WorldSession::HandleCharRenameOpcode(WorldPacket & recv_data)
 	WorldPacket data( SMSG_CHAR_RENAME, recv_data.size() + 1 );
 
 	uint64 guid;
-	string name;
+    std::string name;
 	recv_data >> guid >> name;
 
 	PlayerInfo * pi = objmgr.GetPlayerInfo((uint32)guid);
@@ -928,7 +928,7 @@ bool ChatHandler::HandleRenameCommand(const char * args, WorldSession * m_sessio
 		return true;
 	}
 
-	string new_name = name2;
+    std::string new_name = name2;
 	PlayerInfo * pi = objmgr.GetPlayerInfoByName(name1);
 	if(pi == 0)
 	{

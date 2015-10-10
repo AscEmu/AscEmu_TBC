@@ -383,7 +383,7 @@ void WorldSession::HandlePetRename(WorldPacket & recv_data)
 {
 	if(!_player->IsInWorld()) return;
 	uint64 guid;
-	string name;
+    std::string name;
 	recv_data >> guid >> name;
 
 	if(!_player->GetSummon() || _player->GetSummon()->GetGUID() != guid)

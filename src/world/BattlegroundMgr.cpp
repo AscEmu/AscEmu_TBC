@@ -118,7 +118,7 @@ void CBattlegroundManager::HandleBattlegroundListPacket(WorldSession * m_session
 
 	/* Append the battlegrounds */
 	m_instanceLock.Acquire();
-	for(map<uint32, CBattleground*>::iterator itr = m_instances[BattlegroundType].begin(); itr != m_instances[BattlegroundType].end(); ++itr)
+    for (std::map<uint32, CBattleground*>::iterator itr = m_instances[BattlegroundType].begin(); itr != m_instances[BattlegroundType].end(); ++itr)
 	{
 		if(itr->second->CanPlayerJoin(m_session->GetPlayer(),BattlegroundType) && !itr->second->HasEnded() )
 		{
@@ -159,7 +159,7 @@ void CBattlegroundManager::HandleBattlegroundJoin(WorldSession * m_session, Worl
 	{
 		/* We haven't picked the first instance. This means we've specified an instance to join. */
 		m_instanceLock.Acquire();
-		map<uint32, CBattleground*>::iterator itr = m_instances[bgtype].find(instance);
+        std::map<uint32, CBattleground*>::iterator itr = m_instances[bgtype].find(instance);
 
 		if(itr == m_instances[bgtype].end())
 		{
@@ -196,9 +196,9 @@ void CBattlegroundManager::HandleBattlegroundJoin(WorldSession * m_session, Worl
 
 #define IS_ARENA(x) ( (x) >= BATTLEGROUND_ARENA_2V2 && (x) <= BATTLEGROUND_ARENA_5V5 )
 
-void ErasePlayerFromList(uint32 guid, list<uint32>* l)
+void ErasePlayerFromList(uint32 guid, std::list<uint32>* l)
 {
-	for(list<uint32>::iterator itr = l->begin(); itr != l->end(); ++itr)
+    for (std::list<uint32>::iterator itr = l->begin(); itr != l->end(); ++itr)
 	{
 		if((*itr) == guid)
 		{
@@ -237,7 +237,7 @@ void CBattlegroundManager::HandleGetBattlegroundQueueCommand(WorldSession * m_se
 
 	uint32 i,j;
 	Player * plr;
-	list<uint32>::iterator it3, it4;
+    std::list<uint32>::iterator it3, it4;
 
 	m_queueLock.Acquire();
 
@@ -424,7 +424,7 @@ int CBattlegroundManager::CreateArenaType(int type, Group * group1, Group * grou
 	return 0;
 }
 
-void CBattlegroundManager::AddPlayerToBg(CBattleground * bg, deque<uint32> *playerVec, uint32 i, uint32 j)
+void CBattlegroundManager::AddPlayerToBg(CBattleground * bg, std::deque<uint32> *playerVec, uint32 i, uint32 j)
 {
 	uint32 plrguid = *playerVec->begin();
 	playerVec->pop_front();
@@ -447,7 +447,7 @@ void CBattlegroundManager::AddPlayerToBg(CBattleground * bg, deque<uint32> *play
 	}
 }
 
-void CBattlegroundManager::AddPlayerToBgTeam(CBattleground * bg, deque<uint32> *playerVec, uint32 i, uint32 j, int Team)
+void CBattlegroundManager::AddPlayerToBgTeam(CBattleground * bg, std::deque<uint32> *playerVec, uint32 i, uint32 j, int Team)
 {
 	if (bg->HasFreeSlots(Team,bg->GetType()))
 	{
@@ -465,12 +465,12 @@ void CBattlegroundManager::AddPlayerToBgTeam(CBattleground * bg, deque<uint32> *
 
 void CBattlegroundManager::EventQueueUpdate(bool forceStart)
 {
-	deque<uint32> tempPlayerVec[2];
+    std::deque<uint32> tempPlayerVec[2];
 	uint32 i,j,k;
 	Player * plr;
 	CBattleground * bg;
-	list<uint32>::iterator it3, it4;
-	map<uint32, CBattleground*>::iterator iitr;
+    std::list<uint32>::iterator it3, it4;
+    std::map<uint32, CBattleground*>::iterator iitr;
 	Arena * arena;
 	int32 team;
 	uint32 plrguid;
@@ -560,7 +560,7 @@ void CBattlegroundManager::EventQueueUpdate(bool forceStart)
 				else
 				{
 					bg = iitr->second;
-					int size = (int)min(tempPlayerVec[0].size(),tempPlayerVec[1].size());
+                    int size = (int)std::min(tempPlayerVec[0].size(), tempPlayerVec[1].size());
 					for(int counter = 0; (counter < size) && (bg->IsFull() == false); counter++)
 					{
 						AddPlayerToBgTeam(bg, &tempPlayerVec[0], i, j, 0);
@@ -641,7 +641,7 @@ void CBattlegroundManager::EventQueueUpdate(bool forceStart)
 						}
 						else
 						{
-							int size = (int)min(tempPlayerVec[0].size(),tempPlayerVec[1].size());
+                            int size = (int)std::min(tempPlayerVec[0].size(), tempPlayerVec[1].size());
 							for(int counter = 0; (counter < size) && (bg->IsFull() == false); counter++)
 							{
 								AddPlayerToBgTeam(bg, &tempPlayerVec[0], i, j, 0);
@@ -659,7 +659,7 @@ void CBattlegroundManager::EventQueueUpdate(bool forceStart)
 	uint32 teamids[2] = {0,0};
 	uint32 avgRating[2] = {0,0};
 	uint32 n;
-	list<uint32>::iterator itz;
+    std::list<uint32>::iterator itz;
 	for(i = BATTLEGROUND_ARENA_2V2; i <= BATTLEGROUND_ARENA_5V5; ++i)
 	{
 		if(!forceStart && m_queuedGroups[i].size() < 2)      /* got enough to have an arena battle ;P */
@@ -700,7 +700,7 @@ void CBattlegroundManager::EventQueueUpdate(bool forceStart)
 
 			teamids[0] = GetArenaGroupQInfo(group1, i, &avgRating[0]);
 
-			list<uint32> possibleGroups;
+            std::list<uint32> possibleGroups;
 			for(itz = m_queuedGroups[i].begin(); itz != m_queuedGroups[i].end(); ++itz)
 			{
 				group2 = objmgr.GetGroupById(*itz);
@@ -753,7 +753,7 @@ void CBattlegroundManager::RemovePlayerFromQueues(Player * plr)
 
 	ASSERT(plr->m_bgQueueType < BATTLEGROUND_NUM_TYPES);
 	uint32 lgroup = GetLevelGrouping(plr->getLevel());
-	list<uint32>::iterator itr;
+    std::list<uint32>::iterator itr;
 
 	itr = m_queuedPlayers[plr->m_bgQueueType][lgroup].begin();
 	while(itr != m_queuedPlayers[plr->m_bgQueueType][lgroup].end())
@@ -780,7 +780,7 @@ void CBattlegroundManager::RemoveGroupFromQueues(Group * grp)
 	m_queueLock.Acquire();
 	for(uint32 i = BATTLEGROUND_ARENA_2V2; i < BATTLEGROUND_ARENA_5V5+1; ++i)
 	{
-		for(list<uint32>::iterator itr = m_queuedGroups[i].begin(); itr != m_queuedGroups[i].end(); )
+        for (std::list<uint32>::iterator itr = m_queuedGroups[i].begin(); itr != m_queuedGroups[i].end();)
 		{
 			if((*itr) == grp->GetID())
 				itr = m_queuedGroups[i].erase(itr);
@@ -841,7 +841,7 @@ void CBattleground::SendWorldStates(Player * plr)
 	data << bflag2;
 	data << uint16(m_worldStates.size());
 
-	for(map<uint32, uint32>::iterator itr = m_worldStates.begin(); itr != m_worldStates.end(); ++itr)
+    for (std::map<uint32, uint32>::iterator itr = m_worldStates.begin(); itr != m_worldStates.end(); ++itr)
 		data << itr->first << itr->second;
 	plr->GetSession()->SendPacket(&data);
 }
@@ -949,7 +949,7 @@ void CBattleground::BuildPvPUpdateDataPacket(WorldPacket * data)
 		*data << uint32((m_players[0].size() + m_players[1].size())-m_invisGMs);
 		for(uint32 i = 0; i < 2; ++i)
 		{
-			for(set<Player*>::iterator itr = m_players[i].begin(); itr != m_players[i].end(); ++itr)
+            for (std::set<Player*>::iterator itr = m_players[i].begin(); itr != m_players[i].end(); ++itr)
 			{
 				if( (*itr)->m_isGmInvisible )continue;
 				*data << (*itr)->GetGUID();
@@ -978,7 +978,7 @@ void CBattleground::BuildPvPUpdateDataPacket(WorldPacket * data)
 		*data << uint32((m_players[0].size() + m_players[1].size())-m_invisGMs);
 		for(uint32 i = 0; i < 2; ++i)
 		{
-			for(set<Player*>::iterator itr = m_players[i].begin(); itr != m_players[i].end(); ++itr)
+            for (std::set<Player*>::iterator itr = m_players[i].begin(); itr != m_players[i].end(); ++itr)
 			{
 				if( (*itr)->m_isGmInvisible )continue;
 				*data << (*itr)->GetGUID();
@@ -1176,7 +1176,7 @@ CBattleground * CBattlegroundManager::CreateInstance(uint32 Type, uint32 LevelGr
 		Log.Success("BattlegroundManager", "Created arena battleground type %u for level group %u on map %u.", Type, LevelGroup, mapid);
 		sEventMgr.AddEvent(bg, &CBattleground::EventCreate, EVENT_BATTLEGROUND_QUEUE_UPDATE, 1, 1,0);
 		m_instanceLock.Acquire();
-		m_instances[Type].insert( make_pair(iid, bg) );
+        m_instances[Type].insert(std::make_pair(iid, bg));
 		m_instanceLock.Release();
 		return bg;
 	}
@@ -1226,7 +1226,7 @@ CBattleground * CBattlegroundManager::CreateInstance(uint32 Type, uint32 LevelGr
 	Log.Success("BattlegroundManager", "Created battleground type %u for level group %u.", Type, LevelGroup);
 
 	m_instanceLock.Acquire();
-	m_instances[Type].insert( make_pair(iid, bg) );
+    m_instances[Type].insert(std::make_pair(iid, bg));
 	m_instanceLock.Release();
 
 	return bg;
@@ -1243,8 +1243,8 @@ void CBattlegroundManager::DeleteBattleground(CBattleground * bg)
 	m_instances[i].erase(bg->GetId());
 
 	/* erase any queued players */
-	list<uint32>::iterator itr = m_queuedPlayers[i][j].begin();
-	list<uint32>::iterator it2;
+    std::list<uint32>::iterator itr = m_queuedPlayers[i][j].begin();
+    std::list<uint32>::iterator it2;
 	for(; itr != m_queuedPlayers[i][j].end();)
 	{
 		it2 = itr++;
@@ -1306,7 +1306,7 @@ void CBattleground::DistributePacketToAll(WorldPacket * packet)
 	m_mainLock.Acquire();
 	for(int i = 0; i < 2; ++i)
 	{
-     for(set<Player*>::iterator itr = m_players[i].begin(); itr != m_players[i].end(); ++itr)
+        for (std::set<Player*>::iterator itr = m_players[i].begin(); itr != m_players[i].end(); ++itr)
 			if( (*itr) && (*itr)->GetSession() )
 			  (*itr)->GetSession()->SendPacket(packet);
 	}
@@ -1316,7 +1316,7 @@ void CBattleground::DistributePacketToAll(WorldPacket * packet)
 void CBattleground::DistributePacketToTeam(WorldPacket * packet, uint32 Team)
 {
 	m_mainLock.Acquire();
-	for(set<Player*>::iterator itr = m_players[Team].begin(); itr != m_players[Team].end(); ++itr)
+    for (std::set<Player*>::iterator itr = m_players[Team].begin(); itr != m_players[Team].end(); ++itr)
 		if( (*itr) && (*itr)->GetSession() )
 		  (*itr)->GetSession()->SendPacket(packet);
 	m_mainLock.Release();
@@ -1505,7 +1505,7 @@ void CBattleground::EventCountdown()
 		m_mainLock.Acquire();
 		for(int i = 0; i < 2; ++i)
 		{
-			 for(set<Player*>::iterator itr = m_players[i].begin(); itr != m_players[i].end(); ++itr)
+            for (std::set<Player*>::iterator itr = m_players[i].begin(); itr != m_players[i].end(); ++itr)
 				 if( (*itr) && (*itr)->GetSession() ){
 						(*itr)->GetSession()->SystemMessage((*itr)->GetSession()->LocalizedWorldSrv(46),(*itr)->GetSession()->LocalizedWorldSrv(GetNameID()));
 					}
@@ -1521,7 +1521,7 @@ void CBattleground::EventCountdown()
 		m_mainLock.Acquire();
 		for(int i = 0; i < 2; ++i)
 		{
-			 for(set<Player*>::iterator itr = m_players[i].begin(); itr != m_players[i].end(); ++itr)
+            for (std::set<Player*>::iterator itr = m_players[i].begin(); itr != m_players[i].end(); ++itr)
 				 if( (*itr) && (*itr)->GetSession() ){
 						(*itr)->GetSession()->SystemMessage((*itr)->GetSession()->LocalizedWorldSrv(47),(*itr)->GetSession()->LocalizedWorldSrv(GetNameID()));
 					}
@@ -1538,7 +1538,7 @@ void CBattleground::EventCountdown()
 			m_mainLock.Acquire();
 			for(int i = 0; i < 2; ++i)
 			{
-				 for(set<Player*>::iterator itr = m_players[i].begin(); itr != m_players[i].end(); ++itr)
+                for (std::set<Player*>::iterator itr = m_players[i].begin(); itr != m_players[i].end(); ++itr)
 					 if( (*itr) && (*itr)->GetSession() ){
 							(*itr)->GetSession()->SystemMessage((*itr)->GetSession()->LocalizedWorldSrv(48),(*itr)->GetSession()->LocalizedWorldSrv(GetNameID()));
 						}
@@ -1554,7 +1554,7 @@ void CBattleground::EventCountdown()
 			m_mainLock.Acquire();
 			for(int i = 0; i < 2; ++i)
 			{
-				 for(set<Player*>::iterator itr = m_players[i].begin(); itr != m_players[i].end(); ++itr)
+                for (std::set<Player*>::iterator itr = m_players[i].begin(); itr != m_players[i].end(); ++itr)
 					 if( (*itr) && (*itr)->GetSession() ){
 							(*itr)->GetSession()->SystemMessage((*itr)->GetSession()->LocalizedWorldSrv(49),(*itr)->GetSession()->LocalizedWorldSrv(GetNameID()));
 						}
@@ -1573,9 +1573,9 @@ void CBattleground::Start()
 
 void CBattleground::SetWorldState(uint32 Index, uint32 Value)
 {
-	map<uint32, uint32>::iterator itr = m_worldStates.find(Index);
+    std::map<uint32, uint32>::iterator itr = m_worldStates.find(Index);
 	if(itr == m_worldStates.end())
-		m_worldStates.insert( make_pair( Index, Value ) );
+        m_worldStates.insert(std::make_pair(Index, Value));
 	else
 		itr->second = Value;
 
@@ -1591,8 +1591,8 @@ void CBattleground::Close()
 	m_ended = true;
 	for(uint32 i = 0; i < 2; ++i)
 	{
-		set<Player*>::iterator itr;
-		set<uint32>::iterator it2;
+        std::set<Player*>::iterator itr;
+        std::set<uint32>::iterator it2;
 		uint32 guid;
 		Player * plr;
 		for(itr = m_players[i].begin(); itr != m_players[i].end();)
@@ -1691,7 +1691,7 @@ Creature * CBattleground::SpawnSpiritGuide(float x, float y, float z, float o, u
 void CBattleground::QueuePlayerForResurrect(Player * plr, Creature * spirit_healer)
 {
 	m_mainLock.Acquire();
-	map<Creature*,set<uint32> >::iterator itr = m_resurrectMap.find(spirit_healer);
+    std::map<Creature*, std::set<uint32> >::iterator itr = m_resurrectMap.find(spirit_healer);
 	if(itr != m_resurrectMap.end())
 		itr->second.insert(plr->GetLowGUID());
 	plr->m_areaSpiritHealer_guid=spirit_healer->GetGUID();
@@ -1701,7 +1701,7 @@ void CBattleground::QueuePlayerForResurrect(Player * plr, Creature * spirit_heal
 void CBattleground::RemovePlayerFromResurrect(Player * plr, Creature * spirit_healer)
 {
 	m_mainLock.Acquire();
-	map<Creature*,set<uint32> >::iterator itr = m_resurrectMap.find(spirit_healer);
+    std::map<Creature*, std::set<uint32> >::iterator itr = m_resurrectMap.find(spirit_healer);
 	if(itr != m_resurrectMap.end())
 		itr->second.erase(plr->GetLowGUID());
 	plr->m_areaSpiritHealer_guid=0;
@@ -1711,10 +1711,10 @@ void CBattleground::RemovePlayerFromResurrect(Player * plr, Creature * spirit_he
 void CBattleground::AddSpiritGuide(Creature * pCreature)
 {
 	m_mainLock.Acquire();
-	map<Creature*,set<uint32> >::iterator itr = m_resurrectMap.find(pCreature);
+    std::map<Creature*, std::set<uint32> >::iterator itr = m_resurrectMap.find(pCreature);
 	if(itr == m_resurrectMap.end())
 	{
-		set<uint32> ti;
+        std::set<uint32> ti;
 		m_resurrectMap.insert(make_pair(pCreature,ti));
 	}
 	m_mainLock.Release();
@@ -1731,8 +1731,8 @@ void CBattleground::EventResurrectPlayers()
 {
 	m_mainLock.Acquire();
 	Player * plr;
-	set<uint32>::iterator itr;
-	map<Creature*,set<uint32> >::iterator i;
+    std::set<uint32>::iterator itr;
+    std::map<Creature*, std::set<uint32> >::iterator i;
 	WorldPacket data(50);
 	for(i = m_resurrectMap.begin(); i != m_resurrectMap.end(); ++i)
 	{

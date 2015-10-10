@@ -107,7 +107,7 @@ private:
 	HM_NAMESPACE::hash_map<uint32, Auction*> auctions;
 
 	Mutex removalLock;
-	list<Auction*> removalList;
+    std::list<Auction*> removalList;
 
 	AuctionHouseDBC * dbc;
 

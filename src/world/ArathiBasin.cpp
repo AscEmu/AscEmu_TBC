@@ -414,13 +414,14 @@ void ArathiBasin::OnCreate()
 void ArathiBasin::OnStart()
 {
 	for(uint32 i = 0; i < 2; ++i) {
-		for(set<Player*>::iterator itr = m_players[i].begin(); itr != m_players[i].end(); ++itr) {
+        for (std::set<Player*>::iterator itr = m_players[i].begin(); itr != m_players[i].end(); ++itr)
+        {
 			(*itr)->RemoveAura(BG_PREPARATION);
 		}
 	}
 
 	// open gates
-	for(list<GameObject*>::iterator itr = m_gates.begin(); itr != m_gates.end(); ++itr)
+    for (std::list<GameObject*>::iterator itr = m_gates.begin(); itr != m_gates.end(); ++itr)
 	{
 		(*itr)->SetUInt32Value(GAMEOBJECT_FLAGS, 64);
 		(*itr)->SetUInt32Value(GAMEOBJECT_STATE, 0);
@@ -521,7 +522,7 @@ void ArathiBasin::EventUpdateResources(uint32 Team)
 		m_lastHonorGainResources[Team]+= resourcesToGainBH;
 
 		m_mainLock.Acquire();
-		for(set<Player*>::iterator itr = m_players[Team].begin(); itr != m_players[Team].end(); ++itr)
+        for (std::set<Player*>::iterator itr = m_players[Team].begin(); itr != m_players[Team].end(); ++itr)
 		{
 			(*itr)->m_bgScore.BonusHonor += resHonorTable[m_lgroup];
 			HonorHandler::AddHonorPointsToPlayer((*itr), resHonorTable[m_lgroup]);
@@ -555,7 +556,7 @@ void ArathiBasin::EventUpdateResources(uint32 Team)
 		/* add the marks of honor to all players */
 		m_mainLock.Acquire();
 
-		for(set<Player*>::iterator itr = m_players[Team].begin(); itr != m_players[Team].end(); ++itr)
+        for (std::set<Player*>::iterator itr = m_players[Team].begin(); itr != m_players[Team].end(); ++itr)
 		{
 			(*itr)->m_bgScore.BonusHonor += winHonorTable[m_lgroup];
 			HonorHandler::AddHonorPointsToPlayer((*itr), winHonorTable[m_lgroup]);
@@ -565,7 +566,7 @@ void ArathiBasin::EventUpdateResources(uint32 Team)
 		SpellEntry * loser_spell = dbcSpell.LookupEntry(24952);
 		for(uint32 i = 0; i < 2; ++i)
 		{
-			for(set<Player*>::iterator itr = m_players[i].begin(); itr != m_players[i].end(); ++itr)
+            for (std::set<Player*>::iterator itr = m_players[i].begin(); itr != m_players[i].end(); ++itr)
 			{
 				(*itr)->Root();
 				if(i == m_winningteam)
@@ -814,10 +815,10 @@ void ArathiBasin::AssaultControlPoint(Player * pPlayer, uint32 Id)
 		// this control point just got taken over by someone! oh noes!
 		if( m_spiritGuides[Id] != NULL )
 		{
-			map<Creature*,set<uint32> >::iterator itr = m_resurrectMap.find(m_spiritGuides[Id]);
+            std::map<Creature*, std::set<uint32> >::iterator itr = m_resurrectMap.find(m_spiritGuides[Id]);
 			if( itr != m_resurrectMap.end() )
 			{
-				for( set<uint32>::iterator it2 = itr->second.begin(); it2 != itr->second.end(); ++it2 )
+                for (std::set<uint32>::iterator it2 = itr->second.begin(); it2 != itr->second.end(); ++it2)
 				{
 					Player* r_plr = m_mapMgr->GetPlayer( *it2 );
 					if( r_plr != NULL && r_plr->isDead() )

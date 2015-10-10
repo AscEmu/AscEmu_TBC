@@ -21,16 +21,16 @@
 #define CONFIG_H
 #include "Common.h"
 
-using namespace std;
+
 struct SERVER_DECL ConfigSetting
 {
-	string AsString;
+	std::string AsString;
 	bool AsBool;
 	int AsInt;
 	float AsFloat;
 };
 
-typedef map<uint32, ConfigSetting> ConfigBlock;
+typedef std::map<uint32, ConfigSetting> ConfigBlock;
 
 class SERVER_DECL ConfigFile
 {
@@ -58,7 +58,7 @@ public:
 	float GetFloatVA(const char * block, float def, const char* name, ...);
 
 private:
-	map<uint32, ConfigBlock> m_settings;
+    std::map<uint32, ConfigBlock> m_settings;
 };
 
 

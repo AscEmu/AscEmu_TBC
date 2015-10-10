@@ -162,7 +162,7 @@ void AIInterface::Init(Unit *un, AIType at, MovementType mt)
 
 AIInterface::~AIInterface()
 {
-	for(list<AI_Spell*>::iterator itr = m_spells.begin(); itr != m_spells.end(); ++itr)
+    for (std::list<AI_Spell*>::iterator itr = m_spells.begin(); itr != m_spells.end(); ++itr)
 			delete (*itr);
 }
 
@@ -1396,7 +1396,7 @@ void AIInterface::_UpdateCombat(uint32 p_time)
 				SetNextTarget( (Unit*)NULL );
 
 				WorldPacket data( SMSG_MESSAGECHAT, 100 );
-				string msg = "%s attempts to run away in fear!";
+                std::string msg = "%s attempts to run away in fear!";
 				data << (uint8)CHAT_MSG_CHANNEL;
 				data << (uint32)LANG_UNIVERSAL;
 				data << (uint32)( strlen( static_cast< Creature* >( m_Unit )->GetCreatureInfo()->Name ) + 1 );
@@ -3335,7 +3335,7 @@ AI_Spell *AIInterface::getSpell()
 	}
 	else
 	{
-		for(list<AI_Spell*>::iterator itr = m_spells.begin(); itr != m_spells.end();)
+        for (std::list<AI_Spell*>::iterator itr = m_spells.begin(); itr != m_spells.end();)
 		{
 			sp = *itr;
 			++itr;
@@ -3515,7 +3515,7 @@ Unit *AIInterface::GetMostHated()
 	if(ResultUnit)
 		return ResultUnit;
 
-	pair<Unit*, int32> currentTarget;
+    std::pair<Unit*, int32> currentTarget;
 	currentTarget.first = 0;
 	currentTarget.second = -1;
 
@@ -3581,7 +3581,7 @@ Unit *AIInterface::GetSecondHated()
 
 	Unit *ResultUnit=GetMostHated();
 
-	pair<Unit*, int32> currentTarget;
+    std::pair<Unit*, int32> currentTarget;
 	currentTarget.first = 0;
 	currentTarget.second = -1;
 
@@ -3661,7 +3661,7 @@ bool AIInterface::modThreatByPtr(Unit* obj, int32 mod)
 	}
 	else
 	{
-		m_aiTargets.insert( make_pair( obj->GetGUID(), mod ) );
+        m_aiTargets.insert(std::make_pair(obj->GetGUID(), mod));
 
 		tempthreat = mod + obj->GetThreatModifyer();
 		if (tempthreat < 1)
@@ -3980,7 +3980,7 @@ void AIInterface::WipeReferences()
 	tauntedBy = 0;
 	m_Unit->AquireInrangeLock(); //make sure to release lock before exit function !
 	//Clear targettable
-	for(set<Object*>::iterator itr = m_Unit->GetInRangeSetBegin(); itr != m_Unit->GetInRangeSetEnd(); ++itr)
+    for (std::set<Object*>::iterator itr = m_Unit->GetInRangeSetBegin(); itr != m_Unit->GetInRangeSetEnd(); ++itr)
 		if( (*itr) && (*itr)->GetTypeId() == TYPEID_UNIT && static_cast<Unit*>(*itr)->GetAIInterface())
 			static_cast<Unit*>(*itr)->GetAIInterface()->RemoveThreatByPtr( m_Unit );
 	m_Unit->ReleaseInrangeLock();
@@ -3989,7 +3989,7 @@ void AIInterface::WipeReferences()
 
 void AIInterface::ResetProcCounts()
 {
-	for(list<AI_Spell*>::iterator itr = m_spells.begin(); itr != m_spells.end(); ++itr)
+    for (std::list<AI_Spell*>::iterator itr = m_spells.begin(); itr != m_spells.end(); ++itr)
 		if((*itr)->procCount)
 			(*itr)->procCounter=0;
 }
@@ -4065,7 +4065,7 @@ void AIInterface::EventChangeFaction( Unit *ForceAttackersToHateThisInstead )
 	if( ForceAttackersToHateThisInstead == NULL )
 	{
 		m_Unit->AquireInrangeLock(); //make sure to release lock before exit function !
-		for(set<Object*>::iterator itr = m_Unit->GetInRangeSetBegin(); itr != m_Unit->GetInRangeSetEnd(); ++itr)
+        for (std::set<Object*>::iterator itr = m_Unit->GetInRangeSetBegin(); itr != m_Unit->GetInRangeSetEnd(); ++itr)
 			if( (*itr) && (*itr)->GetTypeId() == TYPEID_UNIT && static_cast<Unit*>(*itr)->GetAIInterface() )
 				static_cast<Unit*>(*itr)->GetAIInterface()->RemoveThreatByPtr( m_Unit );
 		m_Unit->ReleaseInrangeLock();
@@ -4074,7 +4074,7 @@ void AIInterface::EventChangeFaction( Unit *ForceAttackersToHateThisInstead )
 	else
 	{
 		m_Unit->AquireInrangeLock(); //make sure to release lock before exit function !
-		for(set<Object*>::iterator itr = m_Unit->GetInRangeSetBegin(); itr != m_Unit->GetInRangeSetEnd(); ++itr)
+        for (std::set<Object*>::iterator itr = m_Unit->GetInRangeSetBegin(); itr != m_Unit->GetInRangeSetEnd(); ++itr)
 			if( (*itr) && (*itr)->GetTypeId() == TYPEID_UNIT && static_cast<Unit*>(*itr)->GetAIInterface() 
 				&& static_cast<Unit*>(*itr)->GetAIInterface()->getThreatByPtr( m_Unit ) )//this guy will join me in fight since i'm telling him "sorry i was controlled"
 			{

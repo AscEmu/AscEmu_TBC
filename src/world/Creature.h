@@ -152,8 +152,8 @@ struct CreatureProto
 	bool m_canCallForHelp;
 	float m_callForHelpHealth;
 
-	set<uint32> start_auras;
-	list<AI_Spell*> spells;
+    std::set<uint32> start_auras;
+    std::list<AI_Spell*> spells;
 };
 #pragma pack(pop)
 
@@ -361,8 +361,8 @@ public:
 	Quest *FindQuest(uint32 quest_id, uint8 quest_relation);
 	uint16 GetQuestRelation(uint32 quest_id);
 	uint32 NumOfQuests();
-	list<QuestRelation *>::iterator QuestsBegin() { return m_quests->begin(); };
-	list<QuestRelation *>::iterator QuestsEnd() { return m_quests->end(); };
+    std::list<QuestRelation *>::iterator QuestsBegin() { return m_quests->begin(); };
+    std::list<QuestRelation *>::iterator QuestsEnd() { return m_quests->end(); };
 	void SetQuestList(std::list<QuestRelation *>* qst_lst) { m_quests = qst_lst; };
 
 	inline bool isQuestGiver() { return HasFlag( UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER ); };
@@ -547,7 +547,7 @@ public:
 
 	void OnPushToWorld();
 	void Despawn(uint32 delay, uint32 respawntime);
-	void TriggerScriptEvent(string func);
+    void TriggerScriptEvent(std::string func);
 
 	AuctionHouse * auctionHouse;
 	bool has_waypoint_text;

@@ -480,7 +480,7 @@ public:
 						{
 							_unit->SendChatMessage(CHAT_MSG_MONSTER_YELL, LANG_UNIVERSAL, "Red Riding Hood cast");
 							std::vector<Player *> TargetTable;
-							for(set<Player*>::iterator itr = _unit->GetInRangePlayerSetBegin(); 
+                            for (std::set<Player*>::iterator itr = _unit->GetInRangePlayerSetBegin();
 								itr != _unit->GetInRangePlayerSetEnd(); ++itr)
 							{
 								Player *RandomTarget = NULL;
@@ -1328,7 +1328,7 @@ public:
 	void AstralSpawn()
 	{
 		std::vector<Player*> Target_List;
-		for(set<Player*>::iterator itr = _unit->GetInRangePlayerSetBegin(); 
+        for (std::set<Player*>::iterator itr = _unit->GetInRangePlayerSetBegin();
 			itr != _unit->GetInRangePlayerSetEnd(); ++itr)
 		{
 			Player *RandomTarget = NULL;
@@ -1633,7 +1633,7 @@ public:
 		bool HasAtiesh = false;
 		if(mTarget->GetTypeId() == TYPEID_PLAYER)
 		{
-			for(set<Player*>::iterator itr = _unit->GetInRangePlayerSetBegin(); itr != _unit->GetInRangePlayerSetEnd(); ++itr)
+            for (std::set<Player*>::iterator itr = _unit->GetInRangePlayerSetBegin(); itr != _unit->GetInRangePlayerSetEnd(); ++itr)
 			{
 				if(*itr)
 				{
@@ -2046,7 +2046,7 @@ public:
 		if(_unit->GetCurrentSpell() == NULL && _unit->GetAIInterface()->GetNextTarget())
 		{
 			std::vector<Player *> TargetTable;
-			for(set<Player*>::iterator itr = _unit->GetInRangePlayerSetBegin(); itr != _unit->GetInRangePlayerSetEnd(); ++itr) 
+            for (std::set<Player*>::iterator itr = _unit->GetInRangePlayerSetBegin(); itr != _unit->GetInRangePlayerSetEnd(); ++itr)
 			{ 
 				Player* RandomTarget = NULL;
 				RandomTarget = static_cast< Player* >(*itr);
@@ -2585,7 +2585,7 @@ public:
 		if(_unit->GetCurrentSpell() == NULL && _unit->GetAIInterface()->GetNextTarget())
 		{
 			std::vector<Unit *> TargetTable;
-			for(set<Object*>::iterator itr = _unit->GetInRangeSetBegin(); itr != _unit->GetInRangeSetEnd(); ++itr) 
+            for (std::set<Object*>::iterator itr = _unit->GetInRangeSetBegin(); itr != _unit->GetInRangeSetEnd(); ++itr)
 			{ 
 				if((*itr) != _unit && isHostile(_unit, (*itr)) && (*itr)->GetInstanceID() == _unit->GetInstanceID() && ((*itr)->GetTypeId() == TYPEID_UNIT || (*itr)->GetTypeId() == TYPEID_PLAYER))
 				{
@@ -3330,7 +3330,7 @@ public:
 		if(_unit->GetCurrentSpell() == NULL && _unit->GetAIInterface()->GetNextTarget())
 		{
 			std::vector<Player *> TargetTable;
-			for(set<Player*>::iterator itr = _unit->GetInRangePlayerSetBegin(); itr != _unit->GetInRangePlayerSetEnd(); ++itr) 
+            for (std::set<Player*>::iterator itr = _unit->GetInRangePlayerSetBegin(); itr != _unit->GetInRangePlayerSetEnd(); ++itr)
 			{ 
 				Player* RandomTarget = NULL;
 				RandomTarget = static_cast< Player* >(*itr);
@@ -3473,7 +3473,7 @@ public:
 		spells[0].casttime = (uint32)time(NULL) + spells[0].cooldown;
 
 		std::vector<Unit *> TargetTable;
-		for(set<Player*>::iterator itr = _unit->GetInRangePlayerSetBegin(); itr != _unit->GetInRangePlayerSetEnd(); ++itr) 
+        for (std::set<Player*>::iterator itr = _unit->GetInRangePlayerSetBegin(); itr != _unit->GetInRangePlayerSetEnd(); ++itr)
 		{
 			if(isHostile(_unit, (*itr)) && (*itr)->isAlive())
 			{
@@ -3613,7 +3613,7 @@ public:
 		{
 			VoidTimer = t + 20;
 			std::vector<Unit *> TargetTable;
-			for(set<Player*>::iterator itr = _unit->GetInRangePlayerSetBegin(); itr != _unit->GetInRangePlayerSetEnd(); ++itr) 
+            for (std::set<Player*>::iterator itr = _unit->GetInRangePlayerSetBegin(); itr != _unit->GetInRangePlayerSetEnd(); ++itr)
 			{ 
 				Unit* RandomTarget = NULL;
 				RandomTarget = static_cast< Unit* >(*itr);
@@ -3941,7 +3941,7 @@ public:
 
 		target = NULL;
 		//fireball barrage check
-		for(set<Object*>::iterator itr = _unit->GetInRangeSetBegin(); itr != _unit->GetInRangeSetEnd(); ++itr) 
+        for (std::set<Object*>::iterator itr = _unit->GetInRangeSetBegin(); itr != _unit->GetInRangeSetEnd(); ++itr)
 		{
 			if ((*itr)->GetTypeId() == TYPEID_PLAYER && (*itr)->GetInstanceID() == _unit->GetInstanceID())
 			{
@@ -3985,7 +3985,7 @@ public:
 		if(!mTailSweepTimer)
 		{
 			Unit *target = NULL;
-			for(set<Object*>::iterator itr = _unit->GetInRangeSetBegin(); itr != _unit->GetInRangeSetEnd(); ++itr) 
+            for (std::set<Object*>::iterator itr = _unit->GetInRangeSetBegin(); itr != _unit->GetInRangeSetEnd(); ++itr)
 			{
 				if ((*itr)->GetTypeId() == TYPEID_PLAYER && (*itr)->GetInstanceID() == _unit->GetInstanceID())
 				{
@@ -4101,7 +4101,7 @@ public:
 		{
 			std::vector<Unit*> TargetTable;		/* From M4ksiu - Big THX to Capt who helped me with std stuff to make it simple and fully working <3 */
 			/* If anyone wants to use this function, then leave this note!										 */
-			for(set<Object*>::iterator itr = _unit->GetInRangeSetBegin(); itr != _unit->GetInRangeSetEnd(); ++itr) 
+            for (std::set<Object*>::iterator itr = _unit->GetInRangeSetBegin(); itr != _unit->GetInRangeSetEnd(); ++itr)
 			{
 				if (((*itr)->GetTypeId()== TYPEID_UNIT || (*itr)->GetTypeId() == TYPEID_PLAYER) && (*itr)->GetInstanceID() == _unit->GetInstanceID())
 				{
@@ -4291,7 +4291,7 @@ public:
 		if(_unit->GetCurrentSpell() == NULL && _unit->GetAIInterface()->GetNextTarget())
 		{
 			std::vector<Unit*> TargetTable;		
-			for(set<Object*>::iterator itr = _unit->GetInRangeSetBegin(); itr != _unit->GetInRangeSetEnd(); ++itr) 
+            for (std::set<Object*>::iterator itr = _unit->GetInRangeSetBegin(); itr != _unit->GetInRangeSetEnd(); ++itr)
 			{ 
 				if (((spells[i].targettype == TARGET_RANDOM_FRIEND && isFriendly(_unit, (*itr))) || (spells[i].targettype != TARGET_RANDOM_FRIEND && isHostile(_unit, (*itr)) && (*itr) != _unit)) && ((*itr)->GetTypeId()== TYPEID_UNIT || (*itr)->GetTypeId() == TYPEID_PLAYER) && (*itr)->GetInstanceID() == _unit->GetInstanceID()) // isAttackable(_unit, (*itr)) && 
 				{

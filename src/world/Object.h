@@ -118,7 +118,7 @@ class SERVER_DECL Object : public EventableObject
 {
 public:
 	typedef std::set<Object*> InRangeSet;
-	typedef std::map<string, void*> ExtensionSet;
+    typedef std::map<std::string, void*> ExtensionSet;
 
 	virtual ~Object ( );
 
@@ -612,18 +612,18 @@ protected:
 	int32 m_instanceId;
 
 	ExtensionSet * m_extensions;
-	void _SetExtension(const string& name, void* ptr);		// so we can set from scripts. :)
+    void _SetExtension(const std::string& name, void* ptr);		// so we can set from scripts. :)
 
 public:
 
 	template<typename T>
-		void SetExtension(const string& name, T ptr)
+    void SetExtension(const std::string& name, T ptr)
 	{
 		_SetExtension(name, ((void*)ptr));
 	}
 
 	template<typename T>
-		T GetExtension(const string& name)
+    T GetExtension(const std::string& name)
 	{
 		if( m_extensions == NULL )
 			return ((T)NULL);

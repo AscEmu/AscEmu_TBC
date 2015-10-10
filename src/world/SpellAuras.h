@@ -364,7 +364,7 @@ struct SpellCharge
     uint32 procdiff;
 };
 
-typedef set<uint32> AreaAuraList;
+typedef std::set<uint32> AreaAuraList;
 
 class SERVER_DECL Aura : public EventableObject
 {

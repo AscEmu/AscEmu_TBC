@@ -44,7 +44,7 @@ public:
 	~WordFilter();
 
 	void Load(const char * szTableName);
-	bool Parse(string& sMessage, bool bAllowReplace = true);
+    bool Parse(std::string& sMessage, bool bAllowReplace = true);
 };
 
 extern WordFilter * g_characterNameFilter;
