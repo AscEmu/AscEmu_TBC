@@ -37,11 +37,6 @@ bool crashed = false;
 
 volatile bool Master::m_stopEvent = false;
 
-// Dword: unresolved external template definitions
-tPPoolClass<Spell>* Singleton< tPPoolClass<Spell> >::mSingleton = 0;
-tPPoolClass<Aura>* Singleton< tPPoolClass<Aura> >::mSingleton = 0;
-tPPoolClass<Item>* Singleton< tPPoolClass<Item> >::mSingleton = 0;
-
 // Database defines.
 SERVER_DECL Database* Database_Character;
 SERVER_DECL Database* Database_World;
