@@ -26,6 +26,7 @@
 #include "DBC/DBCStores.h"
 #include "AreaTrigger.h"
 #include "WorldSession.h"
+#include "Threading/RWLock.h"
 #include <set>
 #include <string>
 #include <vector>

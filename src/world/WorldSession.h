@@ -32,6 +32,7 @@
 #include "FastQueue.h"
 #include "Unit.h"
 #include <stddef.h>
+#include "Item.h"
 
 class Player;
 class WorldPacket;

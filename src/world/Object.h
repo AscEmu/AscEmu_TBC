@@ -128,6 +128,15 @@ class WorldSession;
 class Player;
 class MapCell;
 class MapMgr;
+class DynamicObject;
+class Creature;
+class GameObject;
+class Unit;
+class Group;
+class Pet;
+class Spell;
+class UpdateMask;
+#include "UpdateMask.h"
 
 //====================================================================
 //  Object

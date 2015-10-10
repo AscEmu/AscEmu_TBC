@@ -20,6 +20,7 @@
 #ifndef _WOWGUID_H
 #define _WOWGUID_H
 
+#include "CommonTypes.hpp"
 #include "Common.h"
 
 #define BitCount1(x) ((x) & 1)
