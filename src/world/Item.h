@@ -22,6 +22,7 @@
 #define WOWSERVER_ITEM_H
 
 #include "Skill.h"
+#include "ItemPrototype.h"
 
 struct EnchantmentInstance
 {

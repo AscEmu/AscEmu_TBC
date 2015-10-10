@@ -23,6 +23,7 @@
 
 #include "EventableObject.h"
 #include "Singleton.h"
+#include "ItemPrototype.h"
 
 #include <map>
 #include <vector>

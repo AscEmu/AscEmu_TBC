@@ -22,6 +22,7 @@
 #define WOWSERVER_QUEST_H
 
 #include "UpdateFields.h"
+#include "Unit.h"
 
 /*
 2.3.0 research

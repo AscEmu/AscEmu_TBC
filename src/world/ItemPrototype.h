@@ -21,6 +21,7 @@
 #ifndef _ITEMPROTOTYPE_H
 #define _ITEMPROTOTYPE_H
 class Spell;
+class GossipScript;
 
 #define GEM_META_SOCKET 1
 #define GEM_RED_SOCKET 2
@@ -586,7 +587,7 @@ struct ItemPrototype
 
     std::string lowercase_name;	// used in auctions
 	uint32 FoodType;		//pet food type
-	GossipScript * gossip_script;
+	GossipScript* gossip_script;
 	int32 ForcedPetId;
 };
 
