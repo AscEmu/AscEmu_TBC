@@ -21,6 +21,15 @@
 #ifndef __WORLD_H
 #define __WORLD_H
 
+#include "EventableObject.h"
+#include "Definitions.h"
+#include "DBC/DBCStores.h"
+#include "AreaTrigger.h"
+#include "WorldSession.h"
+#include <set>
+#include <string>
+#include <vector>
+
 #define IS_INSTANCE(a) (((a)>1)&&((a)!=530))
 
 class Object;
@@ -34,6 +43,7 @@ class Player;
 class EventableObjectHolder;
 class MapMgr;
 class Battleground;
+struct DatabaseConnection;
 
 enum Rates
 {

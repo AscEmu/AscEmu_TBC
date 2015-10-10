@@ -26,6 +26,13 @@
 #ifndef __WORLDSESSION_H
 #define __WORLDSESSION_H
 
+#include <Threading/Mutex.h>
+#include "Opcodes.h"
+#include "Quest.h"
+#include "FastQueue.h"
+#include "Unit.h"
+#include <stddef.h>
+
 class Player;
 class WorldPacket;
 class WorldSocket;
@@ -34,6 +41,9 @@ class MapMgr;
 class Creature;
 class MovementInfo;
 struct TrainerSpell;
+template<class T, class LOCK>
+class FastQueue;
+class Mutex;
 
 //#define SESSION_CAP 5
 
