@@ -637,7 +637,7 @@ void LuaEngine::LoadScripts()
 		}
 		else if(!stricmp(ext, ".luc"))
 		{
-            std::string full_path = string(list[filecount]->d_name);
+            std::string full_path = std::string(list[filecount]->d_name);
             luaBytecodeFiles.insert(std::string(full_path.c_str()));
 		}
 
