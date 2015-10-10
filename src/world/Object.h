@@ -21,8 +21,27 @@
 #ifndef _OBJECT_H
 #define _OBJECT_H
 
+#include "UpdateFields.h"
+#include "CommonTypes.hpp"
+
+class EventableObject;
+#include "EventableObject.h"
+
+#include <set>
+#include <map>
+
+#include "WoWGuid.h"
+#include "../shared/LocationVector.h"
+#include "DBC/DBCStructures.hpp"
+#include "../shared/StackBuffer.h"
+
+struct SpellEntry;
+struct FactionTemplateDBC;
+struct FactionDBC;
+
 class Unit;
 class Group;
+class Transporter;
 
 enum HIGHGUID_TYPE
 {

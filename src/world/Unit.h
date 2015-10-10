@@ -21,6 +21,9 @@
 #ifndef __UNIT_H
 #define __UNIT_H
 
+#include "Object.h"
+#include "LootMgr.h"
+
 class AIInterface;
 class DynamicObject;
 

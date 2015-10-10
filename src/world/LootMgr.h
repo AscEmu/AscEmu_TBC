@@ -21,8 +21,19 @@
 #ifndef _LOOTMGR_H
 #define _LOOTMGR_H
 
+#include "EventableObject.h"
+#include "Singleton.h"
+
+#include <map>
+#include <vector>
+#include <set>
+
 struct ItemPrototype;
 class MapMgr;
+struct RandomProps;
+struct ItemRandomSuffixEntry;
+class Player;
+
 class LootRoll : public EventableObject
 {
 public:
