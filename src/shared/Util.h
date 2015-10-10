@@ -47,4 +47,17 @@ extern SERVER_DECL bool _IsStringUTF8(const char *str);
 
 #endif
 
+inline uint32 getMSTime()
+    {
+        uint32 MSTime = 0;
+#ifdef WIN32
+        MSTime = GetTickCount();
+#else
+        timeval tv;
+        gettimeofday(&tv, NULL);
+        MSTime = (tv.tv_sec * 1000) + (tv.tv_usec / 1000);
+#endif
+        return MSTime;
+    }
+
 #endif
