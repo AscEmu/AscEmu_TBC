@@ -80,7 +80,7 @@ public:
 	AuctionHouse(uint32 ID);
 	~AuctionHouse();
 
-	ARCEMU_INLINE uint32 GetID() { return dbc->id; }
+	inline uint32 GetID() { return dbc->id; }
 	void LoadAuctions();
 
 	void UpdateAuctions();
@@ -107,7 +107,7 @@ private:
 	HM_NAMESPACE::hash_map<uint32, Auction*> auctions;
 
 	Mutex removalLock;
-	list<Auction*> removalList;
+    std::list<Auction*> removalList;
 
 	AuctionHouseDBC * dbc;
 

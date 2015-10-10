@@ -177,7 +177,7 @@ pSpellEffect SpellEffectsHandler[TOTAL_SPELL_EFFECTS]={
 		&Spell::SpellEffectNULL, // SPELL_EFFECT_TAME_CREATURE - 153 // http://thottbot.com/s46686 , http://thottbot.com/s46716 , http://thottbot.com/s46717, http://thottbot.com/s46718 ...  // spelleffect summon pet ??
 };
 
-char* SpellEffectNames[TOTAL_SPELL_EFFECTS] = {
+const char* SpellEffectNames[TOTAL_SPELL_EFFECTS] = {
 	"NULL",
 	"INSTANT_KILL",              //    1
 	"SCHOOL_DAMAGE",             //    2
@@ -4163,7 +4163,7 @@ void Spell::SpellEffectPowerBurn(uint32 i) // power burn
 		damage *= float2int32( 1 - ( ( static_cast<Player*>(unitTarget)->CalcRating( PLAYER_RATING_MODIFIER_SPELL_CRIT_RESILIENCE ) * 2 ) / 100.0f ) );
 	}
 
-	int32 mana = (int32)min( (int32)unitTarget->GetUInt32Value( UNIT_FIELD_POWER1 ), damage );
+    int32 mana = (int32)std::min((int32)unitTarget->GetUInt32Value(UNIT_FIELD_POWER1), damage);
 	unitTarget->ModUnsigned32Value(UNIT_FIELD_POWER1,-mana);
 	
 	m_caster->SpellNonMeleeDamageLog(unitTarget,GetProto()->Id, (uint32)(mana * GetProto()->Effectunknown[i]), pSpellId==0,true);   
@@ -6234,7 +6234,7 @@ void Spell::SpellEffectSpellSteal( uint32 i )
 						charge.spellId=aura->GetSpellId();
 						charge.ProcFlag=aura->GetSpellProto()->procFlags;
 						charge.lastproc = 0;
-						u_caster->m_chargeSpells.insert(make_pair(aura->GetSpellId(),charge));
+                        u_caster->m_chargeSpells.insert(std::make_pair(aura->GetSpellId(), charge));
 					}
 				}
 				u_caster->AddAura(aura);

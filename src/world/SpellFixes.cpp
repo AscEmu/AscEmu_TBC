@@ -428,15 +428,15 @@ void ApplyNormalFixes()
 	uint32 All_Seal_Groups_Combined=0;
 	// Relation Groups
 
-	map<uint32, uint32> talentSpells;
-	map<uint32,uint32>::iterator talentSpellIterator;
+    std::map<uint32, uint32> talentSpells;
+    std::map<uint32, uint32>::iterator talentSpellIterator;
 	unsigned int i,j;
 	for(i = 0; i < dbcTalent.GetNumRows(); ++i)
 	{
 		TalentEntry * tal = dbcTalent.LookupRow(i);
 		for(j = 0; j < 5; ++j)
 			if(tal->RankID[j] != 0)
-				talentSpells.insert(make_pair(tal->RankID[j], tal->TalentTree));
+                talentSpells.insert(std::make_pair(tal->RankID[j], tal->TalentTree));
 	}
 
 
@@ -652,9 +652,9 @@ void ApplyNormalFixes()
 			/** Load teaching spells (used for hunters when learning pets wild abilities) */
 			if(sp->Effect[b]==SPELL_EFFECT_LEARN_SPELL && sp->EffectImplicitTargetA[b]==EFF_TARGET_PET)
 			{
-				map<uint32,uint32>::iterator itr = sWorld.TeachingSpellMap.find(sp->EffectTriggerSpell[b]);
+                std::map<uint32, uint32>::iterator itr = sWorld.TeachingSpellMap.find(sp->EffectTriggerSpell[b]);
 				if(itr == sWorld.TeachingSpellMap.end())
-					sWorld.TeachingSpellMap.insert(make_pair(sp->EffectTriggerSpell[b],sp->Id));
+                    sWorld.TeachingSpellMap.insert(std::make_pair(sp->EffectTriggerSpell[b], sp->Id));
 			}
 
 			if( sp->Attributes & ATTRIBUTES_ONLY_OUTDOORS && sp->EffectApplyAuraName[b] == SPELL_AURA_MOUNTED )

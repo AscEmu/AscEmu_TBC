@@ -137,7 +137,7 @@ static inline uint32 GetLevelGrouping(uint32 level)
 class CBattlegroundManager : public Singleton<CBattlegroundManager>, public EventableObject
 {
 	/* Battleground Instance Map */
-	map<uint32, CBattleground*> m_instances[BATTLEGROUND_NUM_TYPES];
+    std::map<uint32, CBattleground*> m_instances[BATTLEGROUND_NUM_TYPES];
 	Mutex m_instanceLock;
 
 	/* Max Id */
@@ -145,10 +145,10 @@ class CBattlegroundManager : public Singleton<CBattlegroundManager>, public Even
 	
 	/* Queue System */
 	// Instance Id -> list<Player guid> [ BattlegroundType ] (instance 0 - first available)
-	list<uint32> m_queuedPlayers[BATTLEGROUND_NUM_TYPES][MAX_LEVEL_GROUP];
+    std::list<uint32> m_queuedPlayers[BATTLEGROUND_NUM_TYPES][MAX_LEVEL_GROUP];
 
 	// Instance Id -> list<Group id> [BattlegroundType][LevelGroup]
-	list<uint32> m_queuedGroups[BATTLEGROUND_NUM_TYPES];
+    std::list<uint32> m_queuedGroups[BATTLEGROUND_NUM_TYPES];
 
 	Mutex m_queueLock;
 
@@ -199,10 +199,10 @@ public:
 	int CreateArenaType(int type, Group * group1, Group * group2);
 
 	/* Add player to bg team */
-	void AddPlayerToBgTeam(CBattleground * bg, deque<uint32> *playerVec, uint32 i, uint32 j, int Team);
+    void AddPlayerToBgTeam(CBattleground * bg, std::deque<uint32> *playerVec, uint32 i, uint32 j, int Team);
 
 	/* Add player to bg */
-	void AddPlayerToBg(CBattleground * bg, deque<uint32> *playerVec, uint32 i, uint32 j);
+    void AddPlayerToBg(CBattleground * bg, std::deque<uint32> *playerVec, uint32 i, uint32 j);
 
 	/* Add a group to an arena */
 	void AddGroupToArena(CBattleground * bg, Group * group, int nteam);
@@ -224,17 +224,17 @@ protected:
 
 public:
 	/* Team->Player Map */
-	set<Player*> m_players[2];
+    std::set<Player*> m_players[2];
 	void Lock() { m_mainLock.Acquire(); }
 	void Unlock() { m_mainLock.Release(); }
 	void AddInvisGM() {Lock(); m_invisGMs++; Unlock();}
 	void RemoveInvisGM() {Lock(); m_invisGMs--; Unlock();}
 protected:
 	/* World States. This should be moved to mapmgr instead for world pvp :/ */
-	map<uint32, uint32> m_worldStates;
+    std::map<uint32, uint32> m_worldStates;
 
 	/* PvP Log Data Map */
-	map<uint32, BGScore> m_pvpData;
+    std::map<uint32, BGScore> m_pvpData;
 
 	/* Lock for all player data */
 	Mutex m_mainLock;
@@ -243,7 +243,7 @@ protected:
 	uint32 m_playerCountPerTeam;
 
 	/* "pending" players */
-	set<uint32> m_pendPlayers[2];
+    std::set<uint32> m_pendPlayers[2];
 
 	/* starting time */
 	uint32 m_startTime;
@@ -257,7 +257,7 @@ protected:
 	uint8 m_winningteam;
 
 	/* resurrect queue */
-	map<Creature*, set<uint32> > m_resurrectMap;
+    std::map<Creature*, std::set<uint32> > m_resurrectMap;
 	uint32 m_lastResurrect;
 
 	bool m_isWeekend;
@@ -290,18 +290,18 @@ public:
 	virtual void HookOnShadowSight() = 0;
 
 	/* Retreival Functions */
-	ARCEMU_INLINE uint32 GetId() { return m_id; }
-	ARCEMU_INLINE uint32 GetLevelGroup() { return m_levelGroup; }
-	ARCEMU_INLINE MapMgr* GetMapMgr() { return m_mapMgr; }
+	inline uint32 GetId() { return m_id; }
+	inline uint32 GetLevelGroup() { return m_levelGroup; }
+	inline MapMgr* GetMapMgr() { return m_mapMgr; }
 	
 	/* Creating a battleground requires a pre-existing map manager */
 	CBattleground(MapMgr * mgr, uint32 id, uint32 levelgroup, uint32 type);
 	virtual ~CBattleground();
 
 	/* Has it ended? */
-	ARCEMU_INLINE bool HasEnded() { return m_ended; }
+	inline bool HasEnded() { return m_ended; }
 	/* Has it started? */
-	ARCEMU_INLINE bool HasStarted() { return m_started; }
+	inline bool HasStarted() { return m_started; }
 
 	/* Send our current world states to a player . */
 	void SendWorldStates(Player * plr);
@@ -325,7 +325,7 @@ public:
 	void PlaySoundToAll(uint32 Sound);
 
 	/* Full? */
-	ARCEMU_INLINE bool IsFull() { return !(HasFreeSlots(0,m_type) || HasFreeSlots(1,m_type)); }
+	inline bool IsFull() { return !(HasFreeSlots(0,m_type) || HasFreeSlots(1,m_type)); }
 
 	/* Are we full? */
 	bool HasFreeSlots(uint32 Team, uint32 type) {
@@ -373,8 +373,8 @@ public:
 	GameObject * SpawnGameObject(uint32 entry,uint32 MapId , float x, float y, float z, float o, uint32 flags, uint32 faction, float scale);
 	void UpdatePvPData();
 
-	ARCEMU_INLINE uint32 GetStartTime() { return m_startTime; }
-	ARCEMU_INLINE uint32 GetType() { return m_type; }
+	inline uint32 GetStartTime() { return m_startTime; }
+	inline uint32 GetType() { return m_type; }
 
 	// events should execute in the correct context
 	int32 event_GetInstanceID();
@@ -391,7 +391,7 @@ public:
 	void SetWorldState(uint32 Index, uint32 Value);
 	Creature * SpawnSpiritGuide(float x, float y, float z, float o, uint32 horde);
 
-	ARCEMU_INLINE uint32 GetLastResurrect() { return m_lastResurrect; }
+	inline uint32 GetLastResurrect() { return m_lastResurrect; }
 	void AddSpiritGuide(Creature * pCreature);
 	void RemoveSpiritGuide(Creature * pCreature);
 	void QueuePlayerForResurrect(Player * plr, Creature * spirit_healer);

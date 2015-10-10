@@ -35,7 +35,7 @@ void AuctionMgr::LoadAuctionHouses()
 
 	res = WorldDatabase.Query("SELECT DISTINCT `group` FROM auctionhouse");
 	AuctionHouse * ah;
-	map<uint32, AuctionHouse*> tempmap;
+    std::map<uint32, AuctionHouse*> tempmap;
 	if(res)
 	{
 		uint32 period = (res->GetRowCount() / 20) + 1;
@@ -45,7 +45,7 @@ void AuctionMgr::LoadAuctionHouses()
 			ah = new AuctionHouse(res->Fetch()[0].GetUInt32());
 			ah->LoadAuctions();
 			auctionHouses.push_back(ah);
-			tempmap.insert( make_pair( res->Fetch()[0].GetUInt32(), ah ) );
+            tempmap.insert(std::make_pair(res->Fetch()[0].GetUInt32(), ah));
 			if( !((++c) % period) )
 				Log.Notice("AuctionHouse", "Done %u/%u, %u%% complete.", c, res->GetRowCount(), float2int32( (float(c) / float(res->GetRowCount()))*100.0f ));
 
@@ -58,7 +58,7 @@ void AuctionMgr::LoadAuctionHouses()
 	{
 		do 
 		{
-			auctionHouseEntryMap.insert( make_pair( res->Fetch()[0].GetUInt32(), tempmap[res->Fetch()[1].GetUInt32()] ) );
+            auctionHouseEntryMap.insert(std::make_pair(res->Fetch()[0].GetUInt32(), tempmap[res->Fetch()[1].GetUInt32()]));
 		} while(res->NextRow());
 		delete res;
 	}
@@ -76,7 +76,7 @@ void AuctionMgr::Update()
 	if((++loopcount % 100))
 		return;
 		
-	vector<AuctionHouse*>::iterator itr = auctionHouses.begin();
+    std::vector<AuctionHouse*>::iterator itr = auctionHouses.begin();
 	for(; itr != auctionHouses.end(); ++itr)
 	{
 		(*itr)->UpdateDeletionQueue();

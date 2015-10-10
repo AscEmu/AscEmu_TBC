@@ -121,7 +121,7 @@ bool ChatHandler::CreateGuildCommand(const char* args, WorldSession *m_session)
 		}
 	}
 	Guild * pGuild = NULL;
-	pGuild = objmgr.GetGuildByGuildName(string(args));
+    pGuild = objmgr.GetGuildByGuildName(std::string(args));
 
 	if(pGuild)
 	{
@@ -131,7 +131,7 @@ bool ChatHandler::CreateGuildCommand(const char* args, WorldSession *m_session)
 
 	Charter tempCharter(0, ptarget->GetLowGUID(), CHARTER_TYPE_GUILD);
 	tempCharter.SignatureCount=0;
-	tempCharter.GuildName = string(args);
+    tempCharter.GuildName = std::string(args);
 
 	pGuild = Guild::Create();
 	pGuild->CreateFromCharter(&tempCharter, ptarget->GetSession());
@@ -463,7 +463,7 @@ bool ChatHandler::HandleKillByPlrCommand( const char *args , WorldSession *m_ses
 		plr->KillPlayer();
 		BlueSystemMessageToPlr(plr, "You were killed by %s with a GM command.", m_session->GetPlayer()->GetName());
 		GreenSystemMessage(m_session, "Killed player %s.", args);
-		sGMLog.writefromsession(m_session, "remote killed "I64FMT" (Name: %s)", plr->GetGUID(), plr->GetNameString() );
+		sGMLog.writefromsession(m_session, "remote killed " I64FMT " (Name: %s)", plr->GetGUID(), plr->GetNameString() );
 
 	}
 	return true;
@@ -1279,7 +1279,7 @@ bool ChatHandler::HandleNpcComeCommand(const char* args, WorldSession* m_session
 	return true;
 }
 
-ARCEMU_INLINE void RepairItem2(Player * pPlayer, Item * pItem)
+inline void RepairItem2(Player * pPlayer, Item * pItem)
 {
     pItem->SetDurabilityToMax();
     pItem->m_isDirty = true;

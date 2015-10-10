@@ -65,10 +65,10 @@ struct MailMessage
 	uint32 message_type;
 	uint64 player_guid;
 	uint64 sender_guid;
-	string subject;
-	string body;
+    std::string subject;
+    std::string body;
 	uint32 money;
-	vector<uint64> items;
+    std::vector<uint64> items;
 	uint32 cod;
 	uint32 stationary;
 	uint32 expire_time;
@@ -80,7 +80,7 @@ struct MailMessage
 	bool AddMessageDataToPacket(WorldPacket& data);
 };
 
-typedef map<uint32, MailMessage> MessageMap;
+typedef std::map<uint32, MailMessage> MessageMap;
 
 class Mailbox
 {
@@ -103,9 +103,9 @@ public:
 
 	WorldPacket * BuildMailboxListingPacket();
 	void CleanupExpiredMessages();
-	ARCEMU_INLINE size_t MessageCount() { return Messages.size(); }
+	inline size_t MessageCount() { return Messages.size(); }
 	void FillTimePacket(WorldPacket& data);
-	ARCEMU_INLINE uint64 GetOwner() { return owner; }
+	inline uint64 GetOwner() { return owner; }
 	void Load(QueryResult * result);
 };
 
@@ -118,10 +118,10 @@ public:
 	MailError DeliverMessage(uint64 recipent, MailMessage* message);
 	void RemoveMessageIfDeleted(uint32 message_id, Player * plr);
 	void SaveMessageToSQL(MailMessage * message);
-	void SendAutomatedMessage(uint32 type, uint64 sender, uint64 receiver, string subject, string body, uint32 money,
+    void SendAutomatedMessage(uint32 type, uint64 sender, uint64 receiver, std::string subject, std::string body, uint32 money,
 		uint32 cod, uint64 item_guid, uint32 stationary);
 
-	ARCEMU_INLINE bool MailOption(uint32 flag)
+	inline bool MailOption(uint32 flag)
 	{
 		return (config_flags & flag) ? true : false;
 	}

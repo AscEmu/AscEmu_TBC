@@ -68,7 +68,7 @@ class Battleground;
 
 class SERVER_DECL FormationMgr : public Singleton < FormationMgr >
 {
-	map<uint32, Formation*> m_formations;
+    std::map<uint32, Formation*> m_formations;
 public:
 	typedef std::map<uint32, Formation*> FormationMap;
     FormationMgr();
@@ -91,7 +91,7 @@ public:
 	uint32 m_creatorGroup;
 	bool m_persistent;
 	uint32 m_difficulty;
-    set<uint32> m_killedNpcs;
+    std::set<uint32> m_killedNpcs;
 	time_t m_creation;
 	time_t m_expiration;
 	MapInfo * m_mapInfo;
@@ -111,7 +111,7 @@ public:
 	InstanceMgr();	
 	~InstanceMgr();
 
-	ARCEMU_INLINE Map* GetMap(uint32 mapid)
+	inline Map* GetMap(uint32 mapid)
 	{
 		if(mapid>NUM_MAPS)
 			return NULL;
@@ -136,7 +136,7 @@ public:
 
 	// has an instance expired?
 	// can a player join?
-    ARCEMU_INLINE bool PlayerOwnsInstance(Instance * pInstance, Player * pPlayer)
+    inline bool PlayerOwnsInstance(Instance * pInstance, Player * pPlayer)
 	{
 		// Expired?
 		if( pInstance->m_expiration && (UNIXTIME+20) >= pInstance->m_expiration)
@@ -158,7 +158,7 @@ public:
 	}
 
 	// has an instance expired?
-	ARCEMU_INLINE bool HasInstanceExpired(Instance * pInstance)
+	inline bool HasInstanceExpired(Instance * pInstance)
 	{
 		// expired?
 		if( pInstance->m_expiration && (UNIXTIME+20) >= pInstance->m_expiration)

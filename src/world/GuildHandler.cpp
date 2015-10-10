@@ -323,7 +323,7 @@ void WorldSession::HandleGuildRank(WorldPacket & recv_data)
 	}
 
 	uint32 rankId;
-	string newName;
+    std::string newName;
 	uint32 i;
 	GuildRank * pRank;
 
@@ -336,7 +336,7 @@ void WorldSession::HandleGuildRank(WorldPacket & recv_data)
 	recv_data >> newName;
 
 	if(newName.length() < 2)
-		newName = string(pRank->szRankName);
+        newName = std::string(pRank->szRankName);
 	
 	if(strcmp(newName.c_str(), pRank->szRankName) != 0)
 	{
@@ -367,7 +367,7 @@ void WorldSession::HandleGuildRank(WorldPacket & recv_data)
 
 void WorldSession::HandleGuildAddRank(WorldPacket & recv_data)
 {
-	string rankName;
+    std::string rankName;
 	Guild * pGuild = _player->GetGuild();
 
 	if(pGuild == NULL)
@@ -418,7 +418,7 @@ void WorldSession::HandleGuildDelRank(WorldPacket & recv_data)
 
 void WorldSession::HandleGuildSetPublicNote(WorldPacket & recv_data)
 {
-	string target, newnote;
+    std::string target, newnote;
 	recv_data >> target >> newnote;
 
 	PlayerInfo * pTarget = objmgr.GetPlayerInfoByName(target.c_str());
@@ -433,7 +433,7 @@ void WorldSession::HandleGuildSetPublicNote(WorldPacket & recv_data)
 
 void WorldSession::HandleGuildSetOfficerNote(WorldPacket & recv_data)
 {
-	string target, newnote;
+    std::string target, newnote;
 	recv_data >> target >> newnote;
 
 	PlayerInfo * pTarget = objmgr.GetPlayerInfoByName(target.c_str());
@@ -514,7 +514,7 @@ void WorldSession::HandleCharterBuy(WorldPacket & recv_data)
 	uint64 creature_guid;
 	uint64 crap;
 	uint32 crap2;
-	string name;
+    std::string name;
     uint8 error;
 	uint32 crap3,crap4,crap5,crap6,crap7,crap8,crap9,crap10,crap11,arena_index,crap12;
 	uint16 crap13;
@@ -984,7 +984,7 @@ void WorldSession::HandleCharterTurnInCharter(WorldPacket & recv_data)
 void WorldSession::HandleCharterRename(WorldPacket & recv_data)
 {
 	uint64 guid;
-	string name;
+    std::string name;
 	recv_data >> guid >> name;
 
 	Charter * pCharter = objmgr.GetCharterByItemGuid(guid);
@@ -1067,8 +1067,8 @@ void WorldSession::HandleGuildBankModifyTab(WorldPacket & recv_data)
 	GuildBankTab * pTab;
 	uint64 guid;
 	uint8 slot;
-	string tabname;
-	string tabicon;
+    std::string tabname;
+    std::string tabicon;
 	char * ptmp;
 
 	recv_data >> guid;

@@ -413,9 +413,9 @@ void GossipScript::GossipHello(Object* pObject, Player* Plr, bool AutoSend)
 	
 	if((flags & UNIT_NPC_FLAG_TRAINER || flags & UNIT_NPC_FLAG_TRAINER_PROF || flags & UNIT_NPC_FLAG_TRAINER_CLASS) && pTrainer != 0)
 	{
-		string name = pCreature->GetCreatureInfo()->Name;
-		string::size_type pos = name.find(" ");	  // only take first name
-		if(pos != string::npos)
+        std::string name = pCreature->GetCreatureInfo()->Name;
+        std::string::size_type pos = name.find(" ");	  // only take first name
+        if (pos != std::string::npos)
 			name = name.substr(0, pos);
 
 		if(CanTrainAt(Plr, pTrainer))
@@ -424,40 +424,40 @@ void GossipScript::GossipHello(Object* pObject, Player* Plr, bool AutoSend)
 			Menu->SetTextID(pTrainer->Cannot_Train_GossipTextId);
         if(pTrainer->TrainerType != TRAINER_TYPE_PET)
 		{
-			string msg = string(Plr->GetSession()->LocalizedWorldSrv(2));
+            std::string msg = std::string(Plr->GetSession()->LocalizedWorldSrv(2));
 			if(pTrainer->RequiredClass)
 			{
 				switch(Plr->getClass())
 				{
 				case MAGE:
-					msg += string(Plr->GetSession()->LocalizedWorldSrv(3));
+                    msg += std::string(Plr->GetSession()->LocalizedWorldSrv(3));
 					break;
 				case SHAMAN:
-					msg += string(Plr->GetSession()->LocalizedWorldSrv(4));
+                    msg += std::string(Plr->GetSession()->LocalizedWorldSrv(4));
 					break;
 				case WARRIOR:
-					msg += string(Plr->GetSession()->LocalizedWorldSrv(5));
+                    msg += std::string(Plr->GetSession()->LocalizedWorldSrv(5));
 					break;
 				case PALADIN:
-					msg += string(Plr->GetSession()->LocalizedWorldSrv(6));
+                    msg += std::string(Plr->GetSession()->LocalizedWorldSrv(6));
 					break;
 				case WARLOCK:
-					msg += string(Plr->GetSession()->LocalizedWorldSrv(7));
+                    msg += std::string(Plr->GetSession()->LocalizedWorldSrv(7));
 					break;
 				case HUNTER:
-					msg += string(Plr->GetSession()->LocalizedWorldSrv(8));
+                    msg += std::string(Plr->GetSession()->LocalizedWorldSrv(8));
 					break;
 				case ROGUE:
-					msg += string(Plr->GetSession()->LocalizedWorldSrv(9));
+                    msg += std::string(Plr->GetSession()->LocalizedWorldSrv(9));
 					break;
 				case DRUID:
-					msg += string(Plr->GetSession()->LocalizedWorldSrv(10));
+                    msg += std::string(Plr->GetSession()->LocalizedWorldSrv(10));
 					break;
 				case PRIEST:
-					msg += string(Plr->GetSession()->LocalizedWorldSrv(11));
+                    msg += std::string(Plr->GetSession()->LocalizedWorldSrv(11));
 					break;
 				}
-				msg += " "+string(Plr->GetSession()->LocalizedWorldSrv(12))+", ";
+                msg += " " + std::string(Plr->GetSession()->LocalizedWorldSrv(12)) + ", ";
 				msg += name;
 				msg += ".";
 
@@ -466,7 +466,7 @@ void GossipScript::GossipHello(Object* pObject, Player* Plr, bool AutoSend)
 			}
 			else
 			{
-				msg += string(Plr->GetSession()->LocalizedWorldSrv(12))+", ";
+                msg += std::string(Plr->GetSession()->LocalizedWorldSrv(12)) + ", ";
 				msg += name;
 				msg += ".";
 

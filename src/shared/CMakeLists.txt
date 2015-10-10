@@ -49,7 +49,6 @@ set(headers
    Database/dbcfile.h
    Database/Field.h
    Database/MySQLDatabase.h
-   mysql/mysql.h
    Network/CircularBuffer.h
    Network/ListenSocketLinux.h
    Network/ListenSocketWin32.h

@@ -173,7 +173,7 @@ void Creature::OnRemoveCorpse()
 	if (IsInWorld() && (int32)m_mapMgr->GetInstanceID() == m_instanceId)
 	{
 
-		sLog.outDetail("Removing corpse of "I64FMT"...", GetGUID());
+		sLog.outDetail("Removing corpse of " I64FMT "...", GetGUID());
 	   
 			if((GetMapMgr()->GetMapInfo() && GetMapMgr()->GetMapInfo()->type == INSTANCE_RAID && this->GetProto() && this->GetProto()->boss) || m_noRespawn)
 			{
@@ -232,7 +232,7 @@ void Creature::OnRespawn(MapMgr * m)
 		}
 	}
 
-	sLog.outDetail("Respawning "I64FMT"...", GetGUID());
+	sLog.outDetail("Respawning " I64FMT "...", GetGUID());
 	SetUInt32Value(UNIT_FIELD_HEALTH, GetUInt32Value(UNIT_FIELD_MAXHEALTH));
 	SetUInt32Value(UNIT_DYNAMIC_FLAGS, 0); // not tagging shiat
 	if(proto && m_spawn)
@@ -296,14 +296,14 @@ void Creature::generateLoot()
 		{
 			uint16 lootThreshold = looter->GetGroup()->GetThreshold();
 
-			for(vector<__LootItem>::iterator itr = loot.items.begin(); itr != loot.items.end(); itr++)
+            for (std::vector<__LootItem>::iterator itr = loot.items.begin(); itr != loot.items.end(); itr++)
 			{
 				if(itr->item.itemproto->Quality < lootThreshold)
 					continue;
 
 				// Master Loot Stuff - Let the rest of the raid know what dropped..
 				//TODO: Shouldn't we move this array to a global position? Or maybe it allready exists^^ (VirtualAngel) --- I can see (dead) talking pigs...^^
-				char* itemColours[7] = { "9d9d9d", "ffffff", "1eff00", "0070dd", "a335ee", "ff8000", "e6cc80" };
+                const char* itemColours[7] = { "9d9d9d", "ffffff", "1eff00", "0070dd", "a335ee", "ff8000", "e6cc80" };
 				char buffer[256];
 				sprintf(buffer, "\174cff%s\174Hitem:%u:0:0:0:0:0:0:0\174h[%s]\174h\174r", itemColours[itr->item.itemproto->Quality], itr->item.itemproto->ItemId, itr->item.itemproto->Name1);
 				this->SendChatMessage(CHAT_MSG_MONSTER_SAY, LANG_UNIVERSAL, buffer);
@@ -478,7 +478,7 @@ void Creature::AddQuest(QuestRelation *Q)
 
 void Creature::DeleteQuest(QuestRelation *Q)
 {
-	list<QuestRelation *>::iterator it;
+    std::list<QuestRelation *>::iterator it;
 	for ( it = m_quests->begin(); it != m_quests->end(); ++it )
 	{
 		if (((*it)->type == Q->type) && ((*it)->qst == Q->qst ))
@@ -492,7 +492,7 @@ void Creature::DeleteQuest(QuestRelation *Q)
 
 Quest* Creature::FindQuest(uint32 quest_id, uint8 quest_relation)
 {   
-	list<QuestRelation *>::iterator it;
+    std::list<QuestRelation *>::iterator it;
 	for (it = m_quests->begin(); it != m_quests->end(); ++it)
 	{
 		QuestRelation *ptr = (*it);
@@ -508,7 +508,7 @@ Quest* Creature::FindQuest(uint32 quest_id, uint8 quest_relation)
 uint16 Creature::GetQuestRelation(uint32 quest_id)
 {
 	uint16 quest_relation = 0;
-	list<QuestRelation *>::iterator it;
+    std::list<QuestRelation *>::iterator it;
 
 	for (it = m_quests->begin(); it != m_quests->end(); ++it)
 	{
@@ -906,7 +906,7 @@ void Creature::AddVendorItem(uint32 itemid, uint32 amount, ItemExtendedCostEntry
 	ci.extended_cost = ec;
 	if(!m_SellItems)
 	{
-		m_SellItems = new vector<CreatureItem>;
+        m_SellItems = new std::vector<CreatureItem>;
 		objmgr.SetVendorList(GetEntry(), m_SellItems);
 	}
 	m_SellItems->push_back(ci);
@@ -1140,7 +1140,7 @@ bool Creature::Load(CreatureSpawn *spawn, uint32 mode, MapInfo *info)
     //SetUInt32Value(UNIT_FIELD_LEVEL, (mode ? proto->Level + (info ? info->lvl_mod_a : 0) : proto->Level));
 	SetUInt32Value(UNIT_FIELD_LEVEL, proto->MinLevel + (RandomUInt(proto->MaxLevel - proto->MinLevel)));
 	if(mode && info)
-		ModUnsigned32Value(UNIT_FIELD_LEVEL, min(73 - GetUInt32Value(UNIT_FIELD_LEVEL), info->lvl_mod_a));
+        ModUnsigned32Value(UNIT_FIELD_LEVEL, std::min(73 - GetUInt32Value(UNIT_FIELD_LEVEL), info->lvl_mod_a));
 
 	for(uint32 i = 0; i < 7; ++i)
 		SetUInt32Value(UNIT_FIELD_RESISTANCES+i,proto->Resistances[i]);
@@ -1232,7 +1232,7 @@ bool Creature::Load(CreatureSpawn *spawn, uint32 mode, MapInfo *info)
 ////////////AI
 	
 	// kek
-	for(list<AI_Spell*>::iterator itr = proto->spells.begin(); itr != proto->spells.end(); ++itr)
+    for (std::list<AI_Spell*>::iterator itr = proto->spells.begin(); itr != proto->spells.end(); ++itr)
 	{
 		m_aiInterface->addSpellToList(*itr);
 	}
@@ -1431,7 +1431,7 @@ void Creature::Load(CreatureProto * proto_, float x, float y, float z)
 	////////////AI
 
 	// kek
-	for(list<AI_Spell*>::iterator itr = proto->spells.begin(); itr != proto->spells.end(); ++itr)
+    for (std::list<AI_Spell*>::iterator itr = proto->spells.begin(); itr != proto->spells.end(); ++itr)
 	{
 		m_aiInterface->addSpellToList(*itr);
 	}
@@ -1500,7 +1500,7 @@ void Creature::OnPushToWorld()
 {
 	if(proto)
 	{
-		set<uint32>::iterator itr = proto->start_auras.begin();
+        std::set<uint32>::iterator itr = proto->start_auras.begin();
 		SpellEntry * sp;
 		for(; itr != proto->start_auras.end(); ++itr)
 		{
@@ -1635,7 +1635,7 @@ void Creature::AISpellUpdate()
 
 				//printf("\nCOOLDOWN: %u, %u", newspell->RecoveryTime, newspell->CategoryRecoveryTime);
 
-				//printf("\nTEST: %f %f %f "I64FMT" "I64FMT, t.m_destX, t.m_destY, t.m_destZ, t.m_itemTarget, t.m_unitTarget);
+				//printf("\nTEST: %f %f %f " I64FMT " "I64FMT, t.m_destX, t.m_destY, t.m_destZ, t.m_itemTarget, t.m_unitTarget);
 
 				//we have no targets?
 				if (t.m_destX == 0.0f && t.m_destY == 0.0f && t.m_destZ == 0.0f && t.m_itemTarget == 0 && t.m_unitTarget == 0)
@@ -1723,7 +1723,7 @@ void Creature::Despawn(uint32 delay, uint32 respawntime)
 	}
 }
 
-void Creature::TriggerScriptEvent(string func)
+void Creature::TriggerScriptEvent(std::string func)
 {
 	if( _myScriptClass )
 		_myScriptClass->StringFunctionCall( func.c_str() );

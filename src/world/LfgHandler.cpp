@@ -201,7 +201,7 @@ void WorldSession::HandleLfgInviteAccept(WorldPacket & recvPacket)
 			{
 				// all players have accepted
 				Group * pGroup = new Group(true);
-				for(set<Player*>::iterator itr = _player->m_lfgMatch->AcceptedPlayers.begin(); itr != _player->m_lfgMatch->AcceptedPlayers.end(); ++itr)
+                for (std::set<Player*>::iterator itr = _player->m_lfgMatch->AcceptedPlayers.begin(); itr != _player->m_lfgMatch->AcceptedPlayers.end(); ++itr)
 					pGroup->AddMember((*itr)->m_playerInfo);
 
 				_player->m_lfgMatch->pGroup = pGroup;

@@ -82,7 +82,7 @@ bool Transporter::GenerateWaypoints()
 
 	if(path.Size() == 0) return false;
 
-	vector<keyFrame> keyFrames;
+    std::vector<keyFrame> keyFrames;
 	int mapChange = 0;
 	for (int i = 1; i < (int)path.Size() - 1; i++)
 	{
@@ -509,7 +509,7 @@ void Transporter::AddNPC(uint32 Entry, float offsetX, float offsetY, float offse
 	pCreature->Load(proto, m_position.x, m_position.y, m_position.z);
 	pCreature->m_transportPosition = new LocationVector(offsetX, offsetY, offsetZ, offsetO);
 	pCreature->m_transportGuid = GetUIdFromGUID();
-	m_npcs.insert(make_pair(guid,pCreature));
+    m_npcs.insert(std::make_pair(guid, pCreature));
 }
 
 Creature * Transporter::GetCreature(uint32 Guid)

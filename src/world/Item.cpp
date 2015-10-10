@@ -230,14 +230,14 @@ void Item::LoadFromDB(Field* fields, Player* plr, bool light )
 	if( light )
 		return;
 
-	string enchant_field = fields[15].GetString();
-	vector< string > enchants = StrSplit( enchant_field, ";" );
+    std::string enchant_field = fields[15].GetString();
+    std::vector< std::string > enchants = StrSplit(enchant_field, ";");
 	uint32 enchant_id;
 	EnchantEntry* entry;
 	uint32 time_left;
 	uint32 enchslot;
 
-	for( vector<string>::iterator itr = enchants.begin(); itr != enchants.end(); ++itr )
+    for (std::vector<std::string>::iterator itr = enchants.begin(); itr != enchants.end(); ++itr)
 	{
 		if( sscanf( (*itr).c_str(), "%u,%u,%u", (unsigned int*)&enchant_id, (unsigned int*)&time_left, (unsigned int*)&enchslot) == 3 )
 		{
@@ -653,7 +653,7 @@ int32 Item::AddEnchantment( EnchantEntry* Enchantment, uint32 Duration, bool Per
 	SetUInt32Value( EnchantBase + 2, 0 ); // charges
 
 	// Add it to our map.
-	Enchantments.insert(make_pair((uint32)Slot, Instance));
+    Enchantments.insert(std::make_pair((uint32)Slot, Instance));
 
 	if( m_owner == NULL )
 		return Slot;
@@ -807,7 +807,7 @@ void Item::ApplyEnchantmentBonus( uint32 Slot, bool Apply )
 					{
 						// Remove the proctriggerspell
 						uint32 SpellId;
-						list< struct ProcTriggerSpell >::iterator itr/*, itr2*/;
+                        std::list< struct ProcTriggerSpell >::iterator itr/*, itr2*/;
 						for( itr = m_owner->m_procSpells.begin(); itr != m_owner->m_procSpells.end(); )
 						{
 							SpellId = itr->spellId;
@@ -1151,12 +1151,12 @@ uint32 Item::GenerateRandomSuffixFactor( ItemPrototype* m_itemProto )
 	return long2int32( value );
 }
 
-string Item::GetItemLink(uint32 language = NULL)
+std::string Item::GetItemLink(uint32 language = 0)
 {
 	return GetItemLinkByProto(GetProto(), language);
 }
 
-string GetItemLinkByProto(ItemPrototype * iProto, uint32 language = NULL)
+std::string GetItemLinkByProto(ItemPrototype * iProto, uint32 language = 0)
 {
 	const char * ItemLink;
 	char buffer[256];

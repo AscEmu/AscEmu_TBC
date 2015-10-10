@@ -1,5 +1,6 @@
 /*
- * ArcEmu MMORPG Server
+ * AscEmu Framework based on ArcEmu MMORPG Server
+ * Copyright (C) 2014-2015 AscEmu Team <http://www.ascemu.org>
  * Copyright (C) 2008 <http://www.ArcEmu.org/>
  *
  * This program is free software: you can redistribute it and/or modify
@@ -9,16 +10,21 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #ifndef _THREADING_MUTEX_H
 #define _THREADING_MUTEX_H
+
+#include "CommonTypes.hpp"
+
+#ifndef WIN32
+#include <pthread.h>
+#endif
 
 class SERVER_DECL Mutex
 {
@@ -35,7 +41,7 @@ public:
 
 	/** Acquires this mutex. If it cannot be acquired immediately, it will block.
 	 */
-	ARCEMU_INLINE void Acquire()
+	inline void Acquire()
 	{
 #ifndef WIN32
 		pthread_mutex_lock(&mutex);
@@ -46,7 +52,7 @@ public:
 
 	/** Releases this mutex. No error checking performed
 	 */
-	ARCEMU_INLINE void Release()
+	inline void Release()
 	{
 #ifndef WIN32
 		pthread_mutex_unlock(&mutex);
@@ -59,7 +65,7 @@ public:
 	 * it will return false.
 	 * @return false if cannot be acquired, true if it was acquired.
 	 */
-	ARCEMU_INLINE bool AttemptAcquire()
+	inline bool AttemptAcquire()
 	{
 #ifndef WIN32
 		return (pthread_mutex_trylock(&mutex) == 0);
@@ -96,10 +102,10 @@ class SERVER_DECL FastMutex
 	DWORD m_recursiveCount;
 
 public:
-	ARCEMU_INLINE FastMutex() : m_lock(0),m_recursiveCount(0) {}
-	ARCEMU_INLINE ~FastMutex() {}
+	inline FastMutex() : m_lock(0),m_recursiveCount(0) {}
+	inline ~FastMutex() {}
 
-	ARCEMU_INLINE void Acquire()
+	inline void Acquire()
 	{
 		DWORD thread_id = GetCurrentThreadId(), owner;
 		if(thread_id == (DWORD)m_lock)
@@ -120,7 +126,7 @@ public:
 		++m_recursiveCount;
 	}
 
-	ARCEMU_INLINE bool AttemptAcquire()
+	inline bool AttemptAcquire()
 	{
 		DWORD thread_id = GetCurrentThreadId();
 		if(thread_id == (DWORD)m_lock)
@@ -139,7 +145,7 @@ public:
 		return false;
 	}
 
-	ARCEMU_INLINE void Release()
+	inline void Release()
 	{
 		if((--m_recursiveCount) == 0)
 			InterlockedExchange(&m_lock, 0);

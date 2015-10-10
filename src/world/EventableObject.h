@@ -21,6 +21,11 @@
 #ifndef _EVENTABLE_OBJECT_H
 #define _EVENTABLE_OBJECT_H
 
+#include "EventMgr.h"
+#include "../shared/Util.h"
+#include <list>
+#include <set>
+
 class EventableObjectHolder;
 
 /**
@@ -30,8 +35,8 @@ class EventableObjectHolder;
   * receiving the call from the instance thread / WorldRunnable thread.
   */
 
-typedef list<TimedEvent*> EventList;
-typedef multimap<uint32, TimedEvent*> EventMap;
+typedef std::list<TimedEvent*> EventList;
+typedef std::multimap<uint32, TimedEvent*> EventMap;
 
 #define EVENT_REMOVAL_FLAG_ALL 0xFFFFFFFF
 #define WORLD_INSTANCE -1
@@ -49,7 +54,7 @@ protected:
 	void event_ModifyTimeAndTimeLeft(uint32 EventType, uint32 Time);
 	bool event_HasEvent(uint32 EventType);
 	void event_RemoveByPointer(TimedEvent * ev);
-	ARCEMU_INLINE int32 event_GetCurrentInstanceId() { return m_event_Instanceid; }
+	inline int32 event_GetCurrentInstanceId() { return m_event_Instanceid; }
 	bool event_GetTimeLeft(uint32 EventType, uint32 * Time);
 
 public:
@@ -59,7 +64,7 @@ public:
 	virtual ~EventableObject();
 	void Virtual_Destructor();
 
-	ARCEMU_INLINE bool event_HasEvents() { return m_events.size() > 0 ? true : false; }
+	inline bool event_HasEvents() { return m_events.size() > 0 ? true : false; }
 	void event_AddEvent(TimedEvent * ptr);
 	void event_Relocate();
 	
@@ -87,7 +92,7 @@ protected:
   *
   */
 
-typedef set<EventableObject*> EventableObjectSet;
+typedef std::set<EventableObject*> EventableObjectSet;
 
 class EventableObjectHolder
 {
@@ -100,7 +105,7 @@ public:
 	void AddEvent(TimedEvent * ev);
 	void AddObject(EventableObject * obj);
 
-	ARCEMU_INLINE uint32 GetInstanceID() { return mInstanceId; }
+	inline uint32 GetInstanceID() { return mInstanceId; }
 
 protected:
 	int32 mInstanceId;
@@ -108,7 +113,7 @@ protected:
 	EventList m_events;
 
 	Mutex m_insertPoolLock;
-	typedef list<TimedEvent*> InsertableQueue;
+    typedef std::list<TimedEvent*> InsertableQueue;
 	InsertableQueue m_insertPool;
 };
 

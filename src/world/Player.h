@@ -463,8 +463,8 @@ struct FactionReputation
 	int32 standing;
 	uint8 flag;
 	int32 baseStanding;
-	ARCEMU_INLINE int32 CalcStanding() { return standing - baseStanding; }
-	ARCEMU_INLINE bool Positive() { return standing >= 0; }
+	inline int32 CalcStanding() { return standing - baseStanding; }
+	inline bool Positive() { return standing >= 0; }
 };
 
 typedef HM_NAMESPACE::hash_map<uint32, uint32> PlayerInstanceMap;
@@ -497,9 +497,9 @@ struct PlayerInfo
 };
 struct PlayerPet
 {
-	string name;
+    std::string name;
 	uint32 entry;
-	string fields;
+    std::string fields;
 	uint32 xp;
 	bool active;
 	char stablestate;
@@ -507,7 +507,7 @@ struct PlayerPet
 	uint32 level;
 	uint32 loyaltyxp;
 	uint32 happinessupdate;
-	string actionbar;
+    std::string actionbar;
 	bool summon;
 	uint32 loyaltypts;
 	uint32 loyaltyupdate;
@@ -692,7 +692,7 @@ typedef std::map<uint32, ScriptOverrideList* >      SpellOverrideMap;
 typedef std::map<uint32, uint32>                    SpellOverrideExtraAuraMap;
 typedef std::map<uint32, FactionReputation*>        ReputationMap;
 typedef std::map<uint32, uint64>                    SoloSpells;
-typedef std::map<SpellEntry*, pair<uint32, uint32> >StrikeSpellMap;
+typedef std::map<SpellEntry*, std::pair<uint32, uint32> >StrikeSpellMap;
 typedef std::map<uint32, OnHitSpell >               StrikeSpellDmgMap;
 typedef std::map<uint32, PlayerSkill>				SkillMap;
 typedef std::set<Player**>							ReferenceSet;
@@ -711,9 +711,9 @@ public:
 	Player ( uint32 guid );
 	~Player ( );
 
-	ARCEMU_INLINE Guild * GetGuild() { return m_playerInfo->guild; }
-	ARCEMU_INLINE GuildMember * GetGuildMember() { return m_playerInfo->guildMember; }
-	ARCEMU_INLINE GuildRank * GetGuildRankS() { return m_playerInfo->guildRank; }
+	inline Guild * GetGuild() { return m_playerInfo->guild; }
+	inline GuildMember * GetGuildMember() { return m_playerInfo->guildMember; }
+	inline GuildRank * GetGuildRankS() { return m_playerInfo->guildRank; }
 
 	void EventGroupFullUpdate();
 
@@ -791,8 +791,8 @@ public:
     void BuildFlagUpdateForNonGroupSet(uint32 index, uint32 flag);
 	std::string m_afk_reason;
 	void SetAFKReason(std::string reason) { m_afk_reason = reason; };
-	ARCEMU_INLINE const char* GetName() { return m_name.c_str(); }
-	ARCEMU_INLINE std::string* GetNameString() { return &m_name; }
+	inline const char* GetName() { return m_name.c_str(); }
+	inline std::string* GetNameString() { return &m_name; }
 	void Die();
 	//void KilledMonster(uint32 entry, const uint64 &guid);
 	void GiveXP(uint32 xp, const uint64 &guid, bool allowbonus);   // to stop rest xp being given
@@ -804,8 +804,8 @@ public:
     /************************************************************************/
     /* Taxi                                                                 */
     /************************************************************************/
-    ARCEMU_INLINE TaxiPath*    GetTaxiPath() { return m_CurrentTaxiPath; }
-    ARCEMU_INLINE bool         GetTaxiState() { return m_onTaxi; }
+    inline TaxiPath*    GetTaxiPath() { return m_CurrentTaxiPath; }
+    inline bool         GetTaxiState() { return m_onTaxi; }
     const uint32&       GetTaximask( uint8 index ) const { return m_taximask[index]; }
     void                LoadTaxiMask(const char* data);
     void                TaxiStart(TaxiPath* path, uint32 modelid, uint32 start_node);
@@ -813,14 +813,14 @@ public:
     void                EventDismount(uint32 money, float x, float y, float z);
     void                EventTaxiInterpolate();
 
-    ARCEMU_INLINE void         SetTaxiState    (bool state) { m_onTaxi = state; }
-    ARCEMU_INLINE void         SetTaximask     (uint8 index, uint32 value ) { m_taximask[index] = value; }
-    ARCEMU_INLINE void         SetTaxiPath     (TaxiPath *path) { m_CurrentTaxiPath = path; }
-    ARCEMU_INLINE void         SetTaxiPos()	{m_taxi_pos_x = m_position.x; m_taxi_pos_y = m_position.y; m_taxi_pos_z = m_position.z;}
-    ARCEMU_INLINE void         UnSetTaxiPos()	{m_taxi_pos_x = 0; m_taxi_pos_y = 0; m_taxi_pos_z = 0; }
+    inline void         SetTaxiState    (bool state) { m_onTaxi = state; }
+    inline void         SetTaximask     (uint8 index, uint32 value ) { m_taximask[index] = value; }
+    inline void         SetTaxiPath     (TaxiPath *path) { m_CurrentTaxiPath = path; }
+    inline void         SetTaxiPos()	{m_taxi_pos_x = m_position.x; m_taxi_pos_y = m_position.y; m_taxi_pos_z = m_position.z;}
+    inline void         UnSetTaxiPos()	{m_taxi_pos_x = 0; m_taxi_pos_y = 0; m_taxi_pos_z = 0; }
  
 	// Taxi related variables
-	vector<TaxiPath*>   m_taxiPaths;
+    std::vector<TaxiPath*>   m_taxiPaths;
     TaxiPath*           m_CurrentTaxiPath;
     uint32              taxi_model_id;
 	uint32              lastNode;
@@ -847,15 +847,15 @@ public:
 
 	int32                GetOpenQuestSlot();
 	QuestLogEntry*       GetQuestLogForEntry(uint32 quest);
-	ARCEMU_INLINE QuestLogEntry*GetQuestLogInSlot(uint32 slot)  { return m_questlog[slot]; }
-    ARCEMU_INLINE uint32        GetQuestSharer()                { return m_questSharer; }
+	inline QuestLogEntry*GetQuestLogInSlot(uint32 slot)  { return m_questlog[slot]; }
+    inline uint32        GetQuestSharer()                { return m_questSharer; }
     
-    ARCEMU_INLINE void         SetQuestSharer(uint32 guid)     { m_questSharer = guid; }
+    inline void         SetQuestSharer(uint32 guid)     { m_questSharer = guid; }
     void                SetQuestLogSlot(QuestLogEntry *entry, uint32 slot);
     
-    ARCEMU_INLINE void         PushToRemovedQuests(uint32 questid)	{ m_removequests.insert(questid);}
-	ARCEMU_INLINE void			PushToFinishedDailies(uint32 questid) { DailyMutex.Acquire(); m_finishedDailies.insert(questid); DailyMutex.Release();}
-	ARCEMU_INLINE bool		HasFinishedDaily(uint32 questid) { return (m_finishedDailies.find(questid) == m_finishedDailies.end() ? false : true); }
+    inline void         PushToRemovedQuests(uint32 questid)	{ m_removequests.insert(questid);}
+	inline void			PushToFinishedDailies(uint32 questid) { DailyMutex.Acquire(); m_finishedDailies.insert(questid); DailyMutex.Release();}
+	inline bool		HasFinishedDaily(uint32 questid) { return (m_finishedDailies.find(questid) == m_finishedDailies.end() ? false : true); }
     void                AddToFinishedQuests(uint32 quest_id);
     void                EventTimedQuestExpire(Quest *qst, QuestLogEntry *qle, uint32 log_slot);
 	void				AreaExploredOrEventHappens( uint32 questId ); // scriptdev2
@@ -885,12 +885,12 @@ public:
 	std::set<uint32>    quest_mobs;
 
     void EventPortToGM(Player *p);
-	ARCEMU_INLINE uint32 GetTeam() { return m_team; }
-	ARCEMU_INLINE uint32 GetTeamInitial() { return myRace->team_id==7 ? 0 : 1; }
-	ARCEMU_INLINE void SetTeam(uint32 t) { m_team = t; m_bgTeam=t; }
-	ARCEMU_INLINE void ResetTeam() { m_team = myRace->team_id==7 ? 0 : 1; m_bgTeam=m_team; }
+	inline uint32 GetTeam() { return m_team; }
+	inline uint32 GetTeamInitial() { return myRace->team_id==7 ? 0 : 1; }
+	inline void SetTeam(uint32 t) { m_team = t; m_bgTeam=t; }
+	inline void ResetTeam() { m_team = myRace->team_id==7 ? 0 : 1; m_bgTeam=m_team; }
 
-	ARCEMU_INLINE bool IsInFeralForm()
+	inline bool IsInFeralForm()
 	{
 		int s = GetShapeShift();
 		if( s <= 0 )
@@ -923,7 +923,7 @@ public:
     // PLEASE DO NOT INLINE!
     void AddOnStrikeSpell(SpellEntry* sp, uint32 delay)
     {
-        m_onStrikeSpells.insert( map< SpellEntry*, pair<uint32, uint32> >::value_type( sp, make_pair( delay, 0 ) ) );
+        m_onStrikeSpells.insert(std::map< SpellEntry*, std::pair<uint32, uint32> >::value_type(sp, std::make_pair(delay, 0)));
     }
     void RemoveOnStrikeSpell(SpellEntry *sp)
     {
@@ -991,17 +991,17 @@ public:
     /************************************************************************/
     /* PVP                                                                  */
     /************************************************************************/
-	ARCEMU_INLINE uint8 GetPVPRank()
+	inline uint8 GetPVPRank()
 	{
 		return (uint8)((GetUInt32Value(PLAYER_BYTES_3) >> 24) & 0xFF);
 	}
-	ARCEMU_INLINE void SetPVPRank(int newrank)
+	inline void SetPVPRank(int newrank)
 	{
 		SetUInt32Value(PLAYER_BYTES_3, ((GetUInt32Value(PLAYER_BYTES_3) & 0x00FFFFFF) | (uint8(newrank) << 24)));
 	}
 	uint32 GetMaxPersonalRating();
 	
-	ARCEMU_INLINE bool HasKnownTitle( RankTitles title )
+	inline bool HasKnownTitle( RankTitles title )
 	{
 		return ( GetUInt64Value( PLAYER_FIELD_KNOWN_TITLES ) & uint64(1) << uint8( title ) ) != 0;
 	}
@@ -1011,8 +1011,8 @@ public:
     /* Groups                                                               */
     /************************************************************************/
 	void                SetInviter(uint32 pInviter) { m_GroupInviter = pInviter; }
-	ARCEMU_INLINE uint32       GetInviter() { return m_GroupInviter; }
-	ARCEMU_INLINE bool         InGroup() { return (m_playerInfo->m_Group != NULL && !m_GroupInviter); }
+	inline uint32       GetInviter() { return m_GroupInviter; }
+	inline bool         InGroup() { return (m_playerInfo->m_Group != NULL && !m_GroupInviter); }
 	bool                IsGroupLeader()
 	{
 		if(m_playerInfo->m_Group != NULL)
@@ -1022,11 +1022,11 @@ public:
 		}
 		return false;
 	}
-	ARCEMU_INLINE int          HasBeenInvited() { return m_GroupInviter != 0; }
-	ARCEMU_INLINE Group*       GetGroup() { return m_playerInfo ? m_playerInfo->m_Group : NULL; }
-	ARCEMU_INLINE int8		   GetSubGroup() { return m_playerInfo->subGroup; }
+	inline int          HasBeenInvited() { return m_GroupInviter != 0; }
+	inline Group*       GetGroup() { return m_playerInfo ? m_playerInfo->m_Group : NULL; }
+	inline int8		   GetSubGroup() { return m_playerInfo->subGroup; }
     bool                IsGroupMember(Player *plyr);
-	ARCEMU_INLINE bool         IsBanned()
+	inline bool         IsBanned()
 	{
 		if(m_banned)
 		{
@@ -1035,19 +1035,19 @@ public:
 		}
 		return false;
 	}
-    ARCEMU_INLINE void         SetBanned() { m_banned = 4;}
-	ARCEMU_INLINE void         SetBanned(string Reason) { m_banned = 4; m_banreason = Reason;}
-	ARCEMU_INLINE void         SetBanned(uint32 timestamp, string& Reason) { m_banned = timestamp; m_banreason = Reason; }
-	ARCEMU_INLINE void         UnSetBanned() { m_banned = 0; }
-	ARCEMU_INLINE string       GetBanReason() {return m_banreason;}
+    inline void         SetBanned() { m_banned = 4;}
+    inline void         SetBanned(std::string Reason) { m_banned = 4; m_banreason = Reason; }
+    inline void         SetBanned(uint32 timestamp, std::string& Reason) { m_banned = timestamp; m_banreason = Reason; }
+	inline void         UnSetBanned() { m_banned = 0; }
+    inline std::string       GetBanReason() { return m_banreason; }
 
     /************************************************************************/
     /* Guilds                                                               */
     /************************************************************************/
-	ARCEMU_INLINE  bool        IsInGuild() {return (m_uint32Values[PLAYER_GUILDID] != 0) ? true : false;}
-	ARCEMU_INLINE uint32       GetGuildId() { return m_uint32Values[PLAYER_GUILDID]; }
+	inline  bool        IsInGuild() {return (m_uint32Values[PLAYER_GUILDID] != 0) ? true : false;}
+	inline uint32       GetGuildId() { return m_uint32Values[PLAYER_GUILDID]; }
 	void                SetGuildId(uint32 guildId);
-	ARCEMU_INLINE uint32       GetGuildRank() { return m_uint32Values[PLAYER_GUILDRANK]; }
+	inline uint32       GetGuildRank() { return m_uint32Values[PLAYER_GUILDRANK]; }
 	void                SetGuildRank(uint32 guildRank);
 	uint32              GetGuildInvitersGuid() { return m_invitersGuid; }
 	void                SetGuildInvitersGuid( uint32 guid ) { m_invitersGuid = guid; }
@@ -1061,9 +1061,9 @@ public:
 	void                EndDuel(uint8 WinCondition);
 	void                DuelCountdown();
 	void                SetDuelStatus(uint8 status) { m_duelStatus = status; }
-	ARCEMU_INLINE uint8        GetDuelStatus() { return m_duelStatus; }
+	inline uint8        GetDuelStatus() { return m_duelStatus; }
 	void                SetDuelState(uint8 state) { m_duelState = state; }
-	ARCEMU_INLINE uint8        GetDuelState() { return m_duelState; }
+	inline uint8        GetDuelState() { return m_duelState; }
     // duel variables
     Player*             DuelingWith;
 
@@ -1083,12 +1083,12 @@ public:
     /************************************************************************/
     /* Pets                                                                 */
     /************************************************************************/
-	ARCEMU_INLINE void			SetSummon(Pet *pet) { m_Summon = pet; }
-	ARCEMU_INLINE Pet*			GetSummon(void) { return m_Summon; }
+	inline void			SetSummon(Pet *pet) { m_Summon = pet; }
+	inline Pet*			GetSummon(void) { return m_Summon; }
 	uint32						GeneratePetNumber(void);
 	void						RemovePlayerPet(uint32 pet_number);
-	ARCEMU_INLINE void			AddPlayerPet(PlayerPet* pet, uint32 index) { m_Pets[index] = pet; }
-	ARCEMU_INLINE PlayerPet*	GetPlayerPet(uint32 idx)
+	inline void			AddPlayerPet(PlayerPet* pet, uint32 index) { m_Pets[index] = pet; }
+	inline PlayerPet*	GetPlayerPet(uint32 idx)
 	{
 		std::map<uint32, PlayerPet*>::iterator itr = m_Pets.find(idx);
 		if(itr != m_Pets.end()) return itr->second;
@@ -1098,9 +1098,9 @@ public:
 	void						SpawnPet(uint32 pet_number);
 	void						SpawnActivePet();
 
-	ARCEMU_INLINE uint8         GetPetCount(void) { return (uint8)m_Pets.size(); }
-	ARCEMU_INLINE void			SetStableSlotCount(uint8 count) { m_StableSlotCount = count; }
-	ARCEMU_INLINE uint8			GetStableSlotCount(void) { return m_StableSlotCount; }
+	inline uint8         GetPetCount(void) { return (uint8)m_Pets.size(); }
+	inline void			SetStableSlotCount(uint8 count) { m_StableSlotCount = count; }
+	inline uint8			GetStableSlotCount(void) { return m_StableSlotCount; }
 	uint32						GetUnstabledPetNumber(void)
 	{
 		if(m_Pets.size() == 0) return 0;
@@ -1116,9 +1116,9 @@ public:
     /************************************************************************/
     /* Item Interface                                                       */
     /************************************************************************/
-	ARCEMU_INLINE ItemInterface* GetItemInterface() { return m_ItemInterface; } // Player Inventory Item storage
-	ARCEMU_INLINE void			ApplyItemMods(Item *item, int8 slot, bool apply,bool justdrokedown=false) {  _ApplyItemMods(item, slot, apply,justdrokedown); }
-	ARCEMU_INLINE bool			HasItemCount( uint32 item, uint32 count, bool inBankAlso = false ) const;
+	inline ItemInterface* GetItemInterface() { return m_ItemInterface; } // Player Inventory Item storage
+	inline void			ApplyItemMods(Item *item, int8 slot, bool apply,bool justdrokedown=false) {  _ApplyItemMods(item, slot, apply,justdrokedown); }
+	inline bool			HasItemCount( uint32 item, uint32 count, bool inBankAlso = false ) const;
 
 	// Dword: for durability handling
 	void						RemoveItemVisual(uint8 slot);
@@ -1130,8 +1130,8 @@ public:
     /************************************************************************/
     /* Loot                                                                 */
     /************************************************************************/
-	ARCEMU_INLINE const uint64& GetLootGUID() const { return m_lootGuid; }
-	ARCEMU_INLINE void         SetLootGUID(const uint64 &guid) { m_lootGuid = guid; }
+	inline const uint64& GetLootGUID() const { return m_lootGuid; }
+	inline void         SetLootGUID(const uint64 &guid) { m_lootGuid = guid; }
 	void                SendLoot(uint64 guid,uint8 loot_type);
     // loot variables
     uint64              m_lootGuid;
@@ -1141,7 +1141,7 @@ public:
     /************************************************************************/
     /* World Session                                                        */
     /************************************************************************/
-	ARCEMU_INLINE WorldSession* GetSession() const { return m_session; }
+	inline WorldSession* GetSession() const { return m_session; }
 	void SetSession(WorldSession *s) { m_session = s; }
 	void SetBindPoint(float x, float y, float z, uint32 m, uint32 v) { m_bind_pos_x = x; m_bind_pos_y = y; m_bind_pos_z = z; m_bind_mapid = m; m_bind_zoneid = v;}
 	void SendDelayedPacket(WorldPacket *data, bool bDeleteOnSend)
@@ -1171,7 +1171,7 @@ public:
     /* Serialize character to db                                            */
     /************************************************************************/
 	void SaveToDB(bool bNewCharacter);
-	void SaveAuras(stringstream&);
+    void SaveAuras(std::stringstream&);
 	bool LoadFromDB(uint32 guid);
 	void LoadFromDBProc(QueryResultVector & results);
 
@@ -1237,7 +1237,7 @@ public:
 	void EventDeath();
 	//Note:ModSkillLine -> value+=amt;ModSkillMax -->value=amt; --wierd
 	float GetSkillUpChance(uint32 id);
-	//ARCEMU_INLINE std::list<struct skilllines>getSkillLines() { return m_skilllines; }
+	//inline std::list<struct skilllines>getSkillLines() { return m_skilllines; }
 	float SpellCrtiticalStrikeRatingBonus;
 	float SpellHasteRatingBonus;
 	void ModAttackSpeed( int32 mod, ModType type );
@@ -1251,27 +1251,27 @@ public:
 	void UpdateHit(int32 hit);
    
 	bool canCast(SpellEntry *m_spellInfo);
-	ARCEMU_INLINE float GetSpellCritFromSpell() { return m_spellcritfromspell; }
-	ARCEMU_INLINE float GetHitFromSpell() { return m_hitfromspell; }
+	inline float GetSpellCritFromSpell() { return m_spellcritfromspell; }
+	inline float GetHitFromSpell() { return m_hitfromspell; }
 	void SetSpellCritFromSpell(float value) { m_spellcritfromspell = value; }
 	void SetHitFromSpell(float value) { m_hitfromspell = value; }
-	ARCEMU_INLINE uint32 GetHealthFromSpell() { return m_healthfromspell; }
-	ARCEMU_INLINE uint32 GetManaFromSpell() { return m_manafromspell; }
+	inline uint32 GetHealthFromSpell() { return m_healthfromspell; }
+	inline uint32 GetManaFromSpell() { return m_manafromspell; }
 	void SetHealthFromSpell(uint32 value) { m_healthfromspell = value;}
 	void SetManaFromSpell(uint32 value) { m_manafromspell = value;}
 	uint32 CalcTalentResetCost(uint32 resetnum);
 	void SendTalentResetConfirm();
 	void SendPetUntrainConfirm();
 	uint32 GetTalentResetTimes() { return m_talentresettimes; }
-	ARCEMU_INLINE void SetTalentResetTimes(uint32 value) { m_talentresettimes = value; }
+	inline void SetTalentResetTimes(uint32 value) { m_talentresettimes = value; }
 	void SetPlayerStatus(uint8 pStatus) { m_status = pStatus; }
-	ARCEMU_INLINE uint8 GetPlayerStatus() { return m_status; }
+	inline uint8 GetPlayerStatus() { return m_status; }
 	const float& GetBindPositionX( ) const { return m_bind_pos_x; }
 	const float& GetBindPositionY( ) const { return m_bind_pos_y; }
 	const float& GetBindPositionZ( ) const { return m_bind_pos_z; }
 	const uint32& GetBindMapId( ) const { return m_bind_mapid; }
 	const uint32& GetBindZoneId( ) const { return m_bind_zoneid; }
-	ARCEMU_INLINE uint8 GetShapeShift()
+	inline uint8 GetShapeShift()
 	{
 		return GetByte(UNIT_FIELD_BYTES_2,3);
 	}
@@ -1330,15 +1330,15 @@ public:
 	uint32 m_BreathDamageTimer;
 	// Visible objects
 	bool CanSee(Object* obj);
-	ARCEMU_INLINE bool IsVisible(Object* pObj) { return !(m_visibleObjects.find(pObj) == m_visibleObjects.end()); }
+	inline bool IsVisible(Object* pObj) { return !(m_visibleObjects.find(pObj) == m_visibleObjects.end()); }
 	void AddInRangeObject(Object* pObj);
 	void OnRemoveInRangeObject(Object* pObj);
 	void ClearInRangeSet();
-	ARCEMU_INLINE void AddVisibleObject(Object* pObj) { m_visibleObjects.insert(pObj); }
-	ARCEMU_INLINE void RemoveVisibleObject(Object* pObj) { m_visibleObjects.erase(pObj); }
-	ARCEMU_INLINE void RemoveVisibleObject(InRangeSet::iterator itr) { m_visibleObjects.erase(itr); }
-	ARCEMU_INLINE InRangeSet::iterator FindVisible(Object * obj) { return m_visibleObjects.find(obj); }
-	ARCEMU_INLINE void RemoveIfVisible(Object * obj)
+	inline void AddVisibleObject(Object* pObj) { m_visibleObjects.insert(pObj); }
+	inline void RemoveVisibleObject(Object* pObj) { m_visibleObjects.erase(pObj); }
+	inline void RemoveVisibleObject(InRangeSet::iterator itr) { m_visibleObjects.erase(itr); }
+	inline InRangeSet::iterator FindVisible(Object * obj) { return m_visibleObjects.find(obj); }
+	inline void RemoveIfVisible(Object * obj)
 	{
 		InRangeSet::iterator itr = m_visibleObjects.find(obj);
 		if(itr == m_visibleObjects.end())
@@ -1348,14 +1348,14 @@ public:
 		PushOutOfRange(obj->GetNewGUID());
 	}
 
-	ARCEMU_INLINE bool GetVisibility(Object * obj, InRangeSet::iterator *itr)
+	inline bool GetVisibility(Object * obj, InRangeSet::iterator *itr)
 	{
 		*itr = m_visibleObjects.find(obj);
 		return ((*itr) != m_visibleObjects.end());
 	}
 
-	ARCEMU_INLINE InRangeSet::iterator GetVisibleSetBegin() { return m_visibleObjects.begin(); }
-	ARCEMU_INLINE InRangeSet::iterator GetVisibleSetEnd() { return m_visibleObjects.end(); }
+	inline InRangeSet::iterator GetVisibleSetBegin() { return m_visibleObjects.begin(); }
+	inline InRangeSet::iterator GetVisibleSetEnd() { return m_visibleObjects.end(); }
 	
 	//Transporters
 	bool m_lockTransportVariables;
@@ -1404,10 +1404,10 @@ public:
 	void UpdateNearbyGameObjects();
 	
 	void CalcResistance(uint32 type);
-	ARCEMU_INLINE float res_M_crit_get(){return m_resist_critical[0];}
-	ARCEMU_INLINE void res_M_crit_set(float newvalue){m_resist_critical[0]=newvalue;}
-	ARCEMU_INLINE float res_R_crit_get(){return m_resist_critical[1];}
-	ARCEMU_INLINE void res_R_crit_set(float newvalue){m_resist_critical[1]=newvalue;}
+	inline float res_M_crit_get(){return m_resist_critical[0];}
+	inline void res_M_crit_set(float newvalue){m_resist_critical[0]=newvalue;}
+	inline float res_R_crit_get(){return m_resist_critical[1];}
+	inline void res_R_crit_set(float newvalue){m_resist_critical[1]=newvalue;}
 	uint32 FlatResistanceModifierPos[7];
 	uint32 FlatResistanceModifierNeg[7];
 	uint32 BaseResistanceModPctPos[7];
@@ -1444,7 +1444,7 @@ public:
 		uint32 mRatingToPoint[37]; //block, skill.. cant be decimal values
 	};
 */
-	ARCEMU_INLINE uint32* GetPlayedtime() { return m_playedtime; };
+	inline uint32* GetPlayedtime() { return m_playedtime; };
 	void CalcStat(uint32 t);
 	float CalcRating(uint32 t);
 	void RecalcAllRatings();
@@ -1457,21 +1457,21 @@ public:
 	uint32 SoulStoneReceiver;
 	void removeSoulStone();
 
-    ARCEMU_INLINE uint32 GetSoulStoneReceiver(){return SoulStoneReceiver;}
-    ARCEMU_INLINE void SetSoulStoneReceiver(uint32 StoneGUID){SoulStoneReceiver = StoneGUID;}
-    ARCEMU_INLINE uint32 GetSoulStone(){return SoulStone;}
-    ARCEMU_INLINE void SetSoulStone(uint32 StoneID){SoulStone = StoneID;}
+    inline uint32 GetSoulStoneReceiver(){return SoulStoneReceiver;}
+    inline void SetSoulStoneReceiver(uint32 StoneGUID){SoulStoneReceiver = StoneGUID;}
+    inline uint32 GetSoulStone(){return SoulStone;}
+    inline void SetSoulStone(uint32 StoneID){SoulStone = StoneID;}
 
 	uint64 misdirectionTarget;
 
-	ARCEMU_INLINE uint64 GetMisdirectionTarget(){return misdirectionTarget;}
-	ARCEMU_INLINE void SetMisdirectionTarget(uint64 PlayerGUID){misdirectionTarget = PlayerGUID;}
+	inline uint64 GetMisdirectionTarget(){return misdirectionTarget;}
+	inline void SetMisdirectionTarget(uint64 PlayerGUID){misdirectionTarget = PlayerGUID;}
 
 	bool bReincarnation;
 	bool removeReagentCost;
 
-	map<uint32, WeaponModifier> damagedone;
-	map<uint32, WeaponModifier> tocritchance;
+    std::map<uint32, WeaponModifier> damagedone;
+    std::map<uint32, WeaponModifier> tocritchance;
 	uint32 Seal;
 	uint32 LastSeal;//need for paladin talent. We can eighter make a proc before auras are removed or use this. Some proc also need effect to appear so we would need 2 procs without double procing :S
 	uint32 judgespell;
@@ -1499,7 +1499,7 @@ public:
 	uint32 m_ShapeShifted;
 	uint32 m_MountSpellId;
     
-	ARCEMU_INLINE bool IsMounted() {return (m_MountSpellId!=0 ? true : false); }
+	inline bool IsMounted() {return (m_MountSpellId!=0 ? true : false); }
 	
     bool bHasBindDialogOpen;
 	bool bGMTagOn;
@@ -1551,7 +1551,7 @@ public:
 	
 	// Instance IDs
 
-	ARCEMU_INLINE uint32 GetPersistentInstanceId(uint32 mapId, uint32 difficulty)
+	inline uint32 GetPersistentInstanceId(uint32 mapId, uint32 difficulty)
 	{
 		if(mapId >= NUM_MAPS || difficulty >= NUM_INSTANCE_MODES || m_playerInfo == NULL)
 			return 0;
@@ -1597,22 +1597,22 @@ public:
 	uint32 m_arenaPoints;
 	uint32 m_honorless;
 	uint32 m_lastSeenWeather;
-	set<Object*> m_visibleFarsightObjects;
+    std::set<Object*> m_visibleFarsightObjects;
 	void EventTeleport(uint32 mapid, float x, float y, float z);
 	void EventTeleportTaxi(uint32 mapid, float x, float y, float z);
 	void ApplyLevelInfo(LevelInfo* Info, uint32 Level);
 	void BroadcastMessage(const char* Format, ...);
-	map<uint32, set<uint32> > SummonSpells;
-	map<uint32, PetSpellMap*> PetSpells;
+    std::map<uint32, std::set<uint32> > SummonSpells;
+    std::map<uint32, PetSpellMap*> PetSpells;
 	void AddSummonSpell(uint32 Entry, uint32 SpellID);
 	void RemoveSummonSpell(uint32 Entry, uint32 SpellID);
-	set<uint32>* GetSummonSpells(uint32 Entry);
+    std::set<uint32>* GetSummonSpells(uint32 Entry);
 	LockedQueue<WorldPacket*> delayedPackets;
-	set<Player *> gmTargets;
+    std::set<Player *> gmTargets;
 	uint32 m_UnderwaterMaxTime;
 	uint32 m_UnderwaterLastDmg;
-	ARCEMU_INLINE void setMyCorpse(Corpse * corpse) { myCorpse = corpse; }
-	ARCEMU_INLINE Corpse * getMyCorpse() { return myCorpse; }
+	inline void setMyCorpse(Corpse * corpse) { myCorpse = corpse; }
+	inline Corpse * getMyCorpse() { return myCorpse; }
 	bool bCorpseCreateable;
 	uint32 m_resurrectHealth, m_resurrectMana;
 	uint32 m_resurrectInstanceID, m_resurrectMapId;
@@ -1670,8 +1670,8 @@ public:
 	//! PvP Toggle (called on /pvp)
 	void PvPToggle();
 
-	ARCEMU_INLINE uint32 LastHonorResetTime() const { return m_lastHonorResetTime; }
-	ARCEMU_INLINE void LastHonorResetTime(uint32 val) { m_lastHonorResetTime = val; }
+	inline uint32 LastHonorResetTime() const { return m_lastHonorResetTime; }
+	inline void LastHonorResetTime(uint32 val) { m_lastHonorResetTime = val; }
 	uint32 OnlineTime;
 	bool tutorialsDirty;
 	LevelInfo * lvlinfo;
@@ -1679,21 +1679,21 @@ public:
 	uint32 load_health;
 	uint32 load_mana;
 	void CompleteLoading();
-	set<SpellEntry *> castSpellAtLogin;
+    std::set<SpellEntry *> castSpellAtLogin;
 	void OnPushToWorld();
 	void OnPrePushToWorld();
 	void OnWorldPortAck();
 	uint32 m_TeleportState;
-	set<Unit*> visiblityChangableSet;
+    std::set<Unit*> visiblityChangableSet;
 	bool m_beingPushed;
 	bool CanSignCharter(Charter * charter, Player * requester);
 	Charter * m_charters[NUM_CHARTER_TYPES];
 	uint32 flying_aura;
-	stringstream LoadAuras;
+    std::stringstream LoadAuras;
 	bool resend_speed;
 	bool rename_pending;
 	uint32 iInstanceType;
-	ARCEMU_INLINE void SetName(string& name) { m_name = name; }
+    inline void SetName(std::string& name) { m_name = name; }
 	// spell to (delay, last time)
 	
 	FactionReputation * reputationByListId[128];
@@ -1704,7 +1704,7 @@ public:
 	int8 m_spellcomboPoints; // rogue talent Ruthlessness will change combopoints while consuming them. solutions 1) add post cast prochandling, 2) delay adding the CP
 	void UpdateComboPoints();
 
-	ARCEMU_INLINE void AddComboPoints(uint64 target, uint8 count)
+	inline void AddComboPoints(uint64 target, uint8 count)
 	{
         if(m_comboTarget == target)
 			m_comboPoints += count;
@@ -1716,7 +1716,7 @@ public:
 		UpdateComboPoints();
 	}
 
-	ARCEMU_INLINE void NullComboPoints() { if(!m_retainComboPoints) { m_comboTarget = 0; m_comboPoints = 0; m_spellcomboPoints=0; } UpdateComboPoints(); }
+	inline void NullComboPoints() { if(!m_retainComboPoints) { m_comboTarget = 0; m_comboPoints = 0; m_spellcomboPoints=0; } UpdateComboPoints(); }
 	uint32 m_speedChangeCounter;
 
 	void SendAreaTriggerMessage(const char * message, ...);
@@ -1724,7 +1724,7 @@ public:
 	// Trade Target
 	//Player *getTradeTarget() {return mTradeTarget;};
 
-	ARCEMU_INLINE Player * GetTradeTarget()
+	inline Player * GetTradeTarget()
 	{
 		if(!IsInWorld()) return 0;
 		return m_mapMgr->GetPlayer((uint32)mTradeTarget);
@@ -1741,7 +1741,7 @@ public:
 	void UnPossess();
 
 	/* Last Speeds */
-	ARCEMU_INLINE void UpdateLastSpeeds()
+	inline void UpdateLastSpeeds()
 	{
 		m_lastRunSpeed = m_runSpeed;
 		m_lastRunBackSpeed = m_backWalkSpeed;
@@ -1818,7 +1818,7 @@ public:
 	uint64 m_areaSpiritHealer_guid;
 	bool m_finishingmovesdodge;
 
-	ARCEMU_INLINE bool IsAttacking() {return m_attacking; }
+	inline bool IsAttacking() {return m_attacking; }
 
 	static void InitVisibleUpdateBits();
 	static UpdateMask m_visibleUpdateMask;
@@ -1883,7 +1883,7 @@ protected:
 
     // Character Ban
 	uint32      m_banned;
-	string      m_banreason;
+    std::string      m_banreason;
 	uint32      m_AreaID;
 	Pet*        m_Summon;
 	uint32      m_PetNumberMax;
@@ -1979,7 +1979,7 @@ public:
 
 	void addDeletedSpell(uint32 id) { mDeletedSpells.insert( id ); }
 
-	map<uint32, uint32> m_forcedReactions;
+    std::map<uint32, uint32> m_forcedReactions;
 
 	uint32 m_flyhackCheckTimer;
 	void _FlyhackCheck();
@@ -1994,9 +1994,9 @@ public:
 private:
 	/* we may have multiple threads on this(chat) - burlex */
 	Mutex m_socialLock;
-	map<uint32, char*> m_friends;
-	set<uint32> m_ignores;
-	set<uint32> m_hasFriendList;
+    std::map<uint32, char*> m_friends;
+    std::set<uint32> m_ignores;
+    std::set<uint32> m_hasFriendList;
 
 	void Social_SendFriendList(uint32 flag);
 	
@@ -2076,8 +2076,8 @@ public:
 		++m_itr;
 	}
 
-	ARCEMU_INLINE PlayerSkill* Grab() { return &m_itr->second; }
-	ARCEMU_INLINE bool End() { return (m_itr==m_endItr)?true:false; }
+	inline PlayerSkill* Grab() { return &m_itr->second; }
+	inline bool End() { return (m_itr==m_endItr)?true:false; }
 };
 
 #ifdef ENABLE_COMPRESSED_MOVEMENT

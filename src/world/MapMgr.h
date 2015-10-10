@@ -72,9 +72,9 @@ typedef std::set<Object*> UpdateQueue;
 typedef std::set<Player*> PUpdateQueue;
 typedef std::set<Player*> PlayerSet;
 typedef HM_NAMESPACE::hash_map<uint32, Object*> StorageMap;
-typedef set<uint64> CombatProgressMap;
-typedef set<Creature*> CreatureSet;
-typedef set<GameObject*> GameObjectSet;
+typedef std::set<uint64> CombatProgressMap;
+typedef std::set<Creature*> CreatureSet;
+typedef std::set<GameObject*> GameObjectSet;
 typedef HM_NAMESPACE::hash_map<uint32, Creature*> CreatureSqlIdMap;
 typedef HM_NAMESPACE::hash_map<uint32, GameObject*> GameObjectSqlIdMap;
 

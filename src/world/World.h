@@ -21,6 +21,16 @@
 #ifndef __WORLD_H
 #define __WORLD_H
 
+#include "EventableObject.h"
+#include "Definitions.h"
+#include "DBC/DBCStores.h"
+#include "AreaTrigger.h"
+#include "WorldSession.h"
+#include "Threading/RWLock.h"
+#include <set>
+#include <string>
+#include <vector>
+
 #define IS_INSTANCE(a) (((a)>1)&&((a)!=530))
 
 class Object;
@@ -34,6 +44,7 @@ class Player;
 class EventableObjectHolder;
 class MapMgr;
 class Battleground;
+struct DatabaseConnection;
 
 enum Rates
 {
@@ -186,7 +197,7 @@ public:
 
 class TaskList
 {
-	set<Task*> tasks;
+    std::set<Task*> tasks;
 	Mutex queueLock;
 public:
 	Task * GetTask();
@@ -260,7 +271,7 @@ class WorldSocket;
 
 // Slow for remove in middle, oh well, wont get done much.
 typedef std::list<WorldSocket*> QueueSet;
-typedef set<WorldSession*> SessionSet;
+typedef std::set<WorldSession*> SessionSet;
 
 class SERVER_DECL World : public Singleton<World>, public EventableObject
 {
@@ -282,29 +293,29 @@ public:
 	void RemoveGlobalSession(WorldSession *session);
 	void DeleteSession(WorldSession *session);
 
-	ARCEMU_INLINE size_t GetSessionCount() const { return m_sessions.size(); }
+	inline size_t GetSessionCount() const { return m_sessions.size(); }
 	uint32 GetNonGmSessionCount();
-	ARCEMU_INLINE size_t GetQueueCount() { return mQueuedSessions.size(); }
+	inline size_t GetQueueCount() { return mQueuedSessions.size(); }
 	void GetStats(uint32 * GMCount, float * AverageLatency);
 
-	ARCEMU_INLINE uint32 GetPlayerLimit() const { return m_playerLimit; }
+	inline uint32 GetPlayerLimit() const { return m_playerLimit; }
 	void SetPlayerLimit(uint32 limit) { m_playerLimit = limit; }
 
-	ARCEMU_INLINE bool getAllowMovement() const { return m_allowMovement; }
+	inline bool getAllowMovement() const { return m_allowMovement; }
 	void SetAllowMovement(bool allow) { m_allowMovement = allow; }
-	ARCEMU_INLINE bool getGMTicketStatus() { return m_gmTicketSystem; };
+	inline bool getGMTicketStatus() { return m_gmTicketSystem; };
 	bool toggleGMTicketStatus()
 	{
 		m_gmTicketSystem = !m_gmTicketSystem;
 		return m_gmTicketSystem;
 	};
 
-	ARCEMU_INLINE std::string getGmClientChannel() { return GmClientChannel; }
+	inline std::string getGmClientChannel() { return GmClientChannel; }
 
 	void SetMotd(const char *motd) { m_motd = motd; }
-	ARCEMU_INLINE const char* GetMotd() const { return m_motd.c_str(); }
+	inline const char* GetMotd() const { return m_motd.c_str(); }
 
-	ARCEMU_INLINE time_t GetGameTime() const { return m_gameTime; }
+	inline time_t GetGameTime() const { return m_gameTime; }
 
 	bool SetInitialWorldSettings();
 
@@ -319,21 +330,22 @@ public:
 	void SendBCMessageByID(uint32 id);
 	void SendLocalizedWorldText(bool wide,const char * format, ...);
 
-	ARCEMU_INLINE void SetStartTime(uint32 val) { m_StartTime = val; }
-	ARCEMU_INLINE uint32 GetUptime(void) { return (uint32)UNIXTIME - m_StartTime; }
-	ARCEMU_INLINE uint32 GetStartTime(void) { return m_StartTime; }
+	inline void SetStartTime(uint32 val) { m_StartTime = val; }
+	inline uint32 GetUptime(void) { return (uint32)UNIXTIME - m_StartTime; }
+	inline uint32 GetStartTime(void) { return m_StartTime; }
 	std::string GetUptimeString();
 	// cebernic: textfilter,no fast,but works:D ...
-	ARCEMU_INLINE std::string SessionLocalizedTextFilter(WorldSession* _session,const char*text)
+	inline std::string SessionLocalizedTextFilter(WorldSession* _session,const char*text)
 	{
-			std::string opstr=string(text);
+        std::string opstr = std::string(text);
 			std::string::iterator t= opstr.begin();
 			std::string temp;
 			int found = 0;
 			std::string num;
 			while ( t!=opstr.end() )
 			{
-				if ( (char)(*t)=='{' && strlen(  (char*) (*t) )>1  ){ // find and not end :D
+                if ((char)(*t) == '{' && strlen((char*) & (*t)) > 1)
+                { // find and not end :D
 					found++;
 					++t;
 					continue;
@@ -365,22 +377,22 @@ public:
    
 	void UpdateSessions(uint32 diff);
 
-	ARCEMU_INLINE void setRate(int index,float value)
+	inline void setRate(int index,float value)
 	{
 		regen_values[index]=value;
 	}
 
-	ARCEMU_INLINE float getRate(int index)
+	inline float getRate(int index)
 	{
 		return regen_values[index];
 	}
 	
-	ARCEMU_INLINE uint32 getIntRate(int index)
+	inline uint32 getIntRate(int index)
 	{
 		return int_rates[index];
 	}
 
-	ARCEMU_INLINE void setIntRate(int index, uint32 value)
+	inline void setIntRate(int index, uint32 value)
 	{
 		int_rates[index] = value;
 	}
@@ -395,14 +407,14 @@ public:
 	typedef std::map< uint32, uint32> SpellPricesMap;
 	SpellPricesMap mPrices;
 
-	ARCEMU_INLINE uint32 GetTimeOut(){return TimeOut;}
+	inline uint32 GetTimeOut(){return TimeOut;}
 
 	struct NameGenData
 	{
-		string name;
+        std::string name;
 		uint32 type;
 	};
-	vector<NameGenData> _namegendata[3];
+    std::vector<NameGenData> _namegendata[3];
 	void LoadNameGenData();
 
     void LoadWMOAreaData()
@@ -430,7 +442,7 @@ public:
 	std::map<uint32,uint32> TeachingSpellMap;
 	uint32 GetTeachingSpell(uint32 NormalSpellId)
 	{
-		map<uint32,uint32>::iterator i = TeachingSpellMap.find(NormalSpellId);
+        std::map<uint32, uint32>::iterator i = TeachingSpellMap.find(NormalSpellId);
 		if(i!=TeachingSpellMap.end())
 			return i->second;
 		return 0;
@@ -448,8 +460,8 @@ public:
 
 	void SaveAllPlayers();
 
-	string MapPath;
-	string vMapPath;
+    std::string MapPath;
+    std::string vMapPath;
 	bool UnloadMapFiles;
 	bool BreathingEnabled;
 	bool SpeedhackProtection;
@@ -519,10 +531,10 @@ public:
 	int announce_gmtagcolor;
 	int announce_namecolor;
 	int announce_msgcolor;
-	string ann_namecolor;
-	string ann_gmtagcolor;
-	string ann_tagcolor;
-	string ann_msgcolor;
+    std::string ann_namecolor;
+    std::string ann_gmtagcolor;
+    std::string ann_tagcolor;
+    std::string ann_msgcolor;
 	void AnnounceColorChooser(int tagcolor, int gmtagcolor, int namecolor, int msgcolor);
 
 	int start_level;
@@ -612,7 +624,7 @@ public:
 	std::string GmClientChannel;
 	bool m_reqGmForCommands;
 	bool m_lfgForNonLfg;
-	list<SpellEntry*> dummyspells;
+    std::list<SpellEntry*> dummyspells;
 	uint32 m_levelCap;
 	uint32 m_genLevelCap;
 	bool m_limitedNames;

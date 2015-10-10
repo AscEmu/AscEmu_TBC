@@ -37,7 +37,7 @@ class LfgMgr : public Singleton < LfgMgr >, EventableObject
 {
 public:	
 	
-	typedef list<Player*> LfgPlayerList;
+	typedef std::list<Player*> LfgPlayerList;
 
 	LfgMgr();
 	~LfgMgr();
@@ -66,8 +66,8 @@ protected:
 class LfgMatch
 {
 public:
-	set<Player*> PendingPlayers;
-	set<Player*> AcceptedPlayers;
+	std::set<Player*> PendingPlayers;
+    std::set<Player*> AcceptedPlayers;
 	Mutex lock;
 	uint32 DungeonId;
     Group * pGroup;

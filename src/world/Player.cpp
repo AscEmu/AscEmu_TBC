@@ -542,7 +542,7 @@ Player::~Player ( )
 	delayedPackets.clear();
 }
 
-ARCEMU_INLINE uint32 GetSpellForLanguage(uint32 SkillID)
+inline uint32 GetSpellForLanguage(uint32 SkillID)
 {
 	switch(SkillID)
 	{
@@ -1173,7 +1173,7 @@ void Player::_EventCharmAttack()
 	//Can't find victim, stop attacking
 	if (!pVictim)
 	{
-		sLog.outError( "WORLD: "I64FMT" doesn't exist.",m_curSelection);
+		sLog.outError( "WORLD: " I64FMT " doesn't exist.",m_curSelection);
 		sLog.outDetail("Player::Update:  No valid current selection to attack, stopping attack\n");
 		this->setHRegenTimer(5000); //prevent clicking off creature for a quick heal
 		clearStateFlag(UF_ATTACKING);
@@ -1789,10 +1789,10 @@ void Player::_SavePetSpells(QueryBuffer * buf)
 		buf->AddQuery("DELETE FROM playersummonspells WHERE ownerguid=%u", GetLowGUID());
 
 	// Save summon spells
-	map<uint32, set<uint32> >::iterator itr = SummonSpells.begin();
+    std::map<uint32, std::set<uint32> >::iterator itr = SummonSpells.begin();
 	for(; itr != SummonSpells.end(); ++itr)
 	{
-		set<uint32>::iterator it = itr->second.begin();
+        std::set<uint32>::iterator it = itr->second.begin();
 		for(; it != itr->second.end(); ++it)
 		{
 			if(buf == NULL)
@@ -1806,13 +1806,13 @@ void Player::_SavePetSpells(QueryBuffer * buf)
 void Player::AddSummonSpell(uint32 Entry, uint32 SpellID)
 {
 	SpellEntry * sp = dbcSpell.LookupEntry(SpellID);
-	map<uint32, set<uint32> >::iterator itr = SummonSpells.find(Entry);
+    std::map<uint32, std::set<uint32> >::iterator itr = SummonSpells.find(Entry);
 	if(itr == SummonSpells.end())
 		SummonSpells[Entry].insert(SpellID);
 	else
 	{
-		set<uint32>::iterator it3;
-		for(set<uint32>::iterator it2 = itr->second.begin(); it2 != itr->second.end();)
+        std::set<uint32>::iterator it3;
+        for (std::set<uint32>::iterator it2 = itr->second.begin(); it2 != itr->second.end();)
 		{
 			it3 = it2++;
 			if(dbcSpell.LookupEntry(*it3)->NameHash == sp->NameHash)
@@ -1824,7 +1824,7 @@ void Player::AddSummonSpell(uint32 Entry, uint32 SpellID)
 
 void Player::RemoveSummonSpell(uint32 Entry, uint32 SpellID)
 {
-	map<uint32, set<uint32> >::iterator itr = SummonSpells.find(Entry);
+    std::map<uint32, std::set<uint32> >::iterator itr = SummonSpells.find(Entry);
 	if(itr != SummonSpells.end())
 	{
 		itr->second.erase(SpellID);
@@ -1833,9 +1833,9 @@ void Player::RemoveSummonSpell(uint32 Entry, uint32 SpellID)
 	}
 }
 
-set<uint32>* Player::GetSummonSpells(uint32 Entry)
+std::set<uint32>* Player::GetSummonSpells(uint32 Entry)
 {
-	map<uint32, set<uint32> >::iterator itr = SummonSpells.find(Entry);
+    std::map<uint32, std::set<uint32> >::iterator itr = SummonSpells.find(Entry);
 	if(itr != SummonSpells.end())
 	{
 		return &(itr->second);
@@ -1894,7 +1894,7 @@ void Player::SpawnPet(uint32 pet_number)
 	std::map<uint32, PlayerPet*>::iterator itr = m_Pets.find(pet_number);
 	if(itr == m_Pets.end())
 	{
-		sLog.outError("PET SYSTEM: "I64FMT" Tried to load invalid pet %d", GetGUID(), pet_number);
+		sLog.outError("PET SYSTEM: " I64FMT " Tried to load invalid pet %d", GetGUID(), pet_number);
 		return;
 	}
 	if (itr->second->spellid == 0)
@@ -2372,7 +2372,7 @@ void Player::SaveToDB(bool bNewCharacter /* =false */)
 	ss << "','";
 
 	// Add player finished quests
-	set<uint32>::iterator fq = m_finishedQuests.begin();
+    std::set<uint32>::iterator fq = m_finishedQuests.begin();
 	for(; fq != m_finishedQuests.end(); ++fq)
 	{
 		ss << (*fq) << ",";
@@ -2380,7 +2380,7 @@ void Player::SaveToDB(bool bNewCharacter /* =false */)
 
 	ss << "', '";
 	DailyMutex.Acquire();
-	set<uint32>::iterator fdq = m_finishedDailies.begin();
+    std::set<uint32>::iterator fdq = m_finishedDailies.begin();
 	for(; fdq != m_finishedDailies.end(); fdq++)
 	{
 		ss << (*fdq) << ",";
@@ -2708,7 +2708,7 @@ void Player::LoadFromDBProc(QueryResultVector & results)
 					if( !sk.CurrentValue )
 						sk.CurrentValue = 1;
 
-					m_skills.insert( make_pair(sk.Skill->id, sk) );
+                    m_skills.insert(std::make_pair(sk.Skill->id, sk));
 				}
 			}
 		}
@@ -2751,7 +2751,7 @@ void Player::LoadFromDBProc(QueryResultVector & results)
 					if( !sk.CurrentValue )
 						sk.CurrentValue = 1;
 
-					m_skills.insert(make_pair(v1, sk));
+                    m_skills.insert(std::make_pair(v1, sk));
 				}
 			}
 		}
@@ -3189,9 +3189,9 @@ void Player::LoadFromDBProc(QueryResultVector & results)
 		{
 			fields = result->Fetch();
 			if( strlen( fields[1].GetString() ) )
-				m_friends.insert( make_pair( fields[0].GetUInt32(), strdup(fields[1].GetString()) ) );
+                m_friends.insert(std::make_pair(fields[0].GetUInt32(), strdup(fields[1].GetString())));
 			else
-				m_friends.insert( make_pair( fields[0].GetUInt32(), (char*)NULL) );
+                m_friends.insert(std::make_pair(fields[0].GetUInt32(), (char*)NULL));
 
 		} while (result->NextRow());
 	}
@@ -4303,9 +4303,9 @@ void Player::ResurrectPlayer()
 {
 	sEventMgr.RemoveEvents(this,EVENT_PLAYER_FORECED_RESURECT); //in case somebody resurected us before this event happened
 	if( m_resurrectHealth )
-		SetUInt32Value( UNIT_FIELD_HEALTH, (uint32)min( m_resurrectHealth, m_uint32Values[UNIT_FIELD_MAXHEALTH] ) );
+        SetUInt32Value(UNIT_FIELD_HEALTH, (uint32)std::min(m_resurrectHealth, m_uint32Values[UNIT_FIELD_MAXHEALTH]));
 	if( m_resurrectMana )
-		SetUInt32Value( UNIT_FIELD_POWER1, (uint32)min( m_resurrectMana, m_uint32Values[UNIT_FIELD_MAXPOWER1] ) );
+        SetUInt32Value(UNIT_FIELD_POWER1, (uint32)std::min(m_resurrectMana, m_uint32Values[UNIT_FIELD_MAXPOWER1]));
 
 	m_resurrectHealth = m_resurrectMana = 0;
 
@@ -4679,7 +4679,7 @@ void Player::LeftChannel(Channel *c)
 
 void Player::CleanupChannels()
 {
-	set<Channel *>::iterator i;
+    std::set<Channel *>::iterator i;
 	Channel * c;
 	for(i = m_channels.begin(); i != m_channels.end();)
 	{
@@ -4874,7 +4874,7 @@ float Player::GetDodgeChance()
 	// dodge from spells
 	chance += GetDodgeFromSpell();
 
-	return max( chance, 0.0f ); // make sure we dont have a negative chance
+    return std::max(chance, 0.0f); // make sure we dont have a negative chance
 }
 
 // Gets block chances before defense skill is applied
@@ -4892,7 +4892,7 @@ float Player::GetBlockChance()
 	// block chance from spells
 	chance += GetBlockFromSpell();
 
-	return max( chance, 0.0f ); // make sure we dont have a negative chance
+    return std::max(chance, 0.0f); // make sure we dont have a negative chance
 }
 
 // Get parry chances before defense skill is applied
@@ -4909,7 +4909,7 @@ float Player::GetParryChance()
 	// parry chance from spells
 	chance += GetParryFromSpell();
 
-	return max( chance, 0.0f ); // make sure we dont have a negative chance
+    return std::max(chance, 0.0f); // make sure we dont have a negative chance
 }
 
 void Player::UpdateChances()
@@ -4926,7 +4926,7 @@ void Player::UpdateChances()
 	// dodge
 	tmp = GetDodgeChance();
 	tmp += defence_contribution;
-	tmp = min( max( tmp, 0.0f ), 95.0f );
+    tmp = std::min(std::max(tmp, 0.0f), 95.0f);
 	SetFloatValue( PLAYER_DODGE_PERCENTAGE, tmp );
 
 	// block
@@ -4935,7 +4935,7 @@ void Player::UpdateChances()
 	{
 		tmp = GetBlockChance();
 		tmp += defence_contribution;
-		tmp = min( max( tmp, 0.0f ), 95.0f );
+        tmp = std::min(std::max(tmp, 0.0f), 95.0f);
 	}
 	else
 		tmp = 0.0f;
@@ -4948,7 +4948,7 @@ void Player::UpdateChances()
 	{
 		tmp = GetParryChance();
 		tmp += defence_contribution;
-		tmp = min( max( tmp, 0.0f ), 95.0f );
+        tmp = std::min(std::max(tmp, 0.0f), 95.0f);
 	}
 	else
 		tmp = 0.0f;
@@ -4966,7 +4966,7 @@ void Player::UpdateChances()
 
 	if ( tocritchance.size() > 0 ) // crashfix by cebernic
 	{
-		map< uint32, WeaponModifier >::iterator itr = tocritchance.begin();
+        std::map< uint32, WeaponModifier >::iterator itr = tocritchance.begin();
 
 		Item* tItemMelee = GetItemInterface()->GetInventoryItem( EQUIPMENT_SLOT_MAINHAND );
 		Item* tItemRanged = GetItemInterface()->GetInventoryItem( EQUIPMENT_SLOT_RANGED );
@@ -4987,10 +4987,10 @@ void Player::UpdateChances()
 	}
 
 	float cr = tmp + CalcRating( PLAYER_RATING_MODIFIER_MELEE_CRIT ) + melee_bonus;
-	SetFloatValue( PLAYER_CRIT_PERCENTAGE, min( cr, 95.0f ) );
+    SetFloatValue(PLAYER_CRIT_PERCENTAGE, std::min(cr, 95.0f));
 
 	float rcr = tmp + CalcRating( PLAYER_RATING_MODIFIER_RANGED_CRIT ) + ranged_bonus;
-	SetFloatValue( PLAYER_RANGED_CRIT_PERCENTAGE, min( rcr, 95.0f ) );
+    SetFloatValue(PLAYER_RANGED_CRIT_PERCENTAGE, std::min(rcr, 95.0f));
 
 	gtFloat* SpellCritBase  = dbcSpellCritBase.LookupEntry(pClass-1);
 	gtFloat* SpellCritPerInt = dbcSpellCrit.LookupEntry(pLevel - 1 + (pClass-1)*100);
@@ -5646,10 +5646,10 @@ void Player::EventReduceDrunk(bool full)
 
 void Player::LoadTaxiMask(const char* data)
 {
-	vector<string> tokens = StrSplit(data, " ");
+    std::vector<std::string> tokens = StrSplit(data, " ");
 
 	int index;
-	vector<string>::iterator iter;
+    std::vector<std::string>::iterator iter;
 
 	for (iter = tokens.begin(), index = 0;
 		(index < 8) && (iter != tokens.end()); ++iter, ++index)
@@ -8847,7 +8847,7 @@ void Player::CompleteLoading()
 				charge.spellId = sp->Id;
 				charge.ProcFlag = sp->procFlags;
 				charge.lastproc = 0;
-				m_chargeSpells.insert( make_pair( sp->Id , charge ) );
+                m_chargeSpells.insert(std::make_pair(sp->Id, charge));
 			}
 		}
 		this->AddAura( aura );
@@ -8949,14 +8949,14 @@ void Player::OnWorldPortAck()
 		if(pMapinfo->HasFlag(WMI_INSTANCE_WELCOME) && GetMapMgr())
 		{
 			std::string welcome_msg;
-			welcome_msg = string(GetSession()->LocalizedWorldSrv(62))+" ";
-			welcome_msg += string(GetSession()->LocalizedMapName(pMapinfo->mapid));
+            welcome_msg = std::string(GetSession()->LocalizedWorldSrv(62)) + " ";
+            welcome_msg += std::string(GetSession()->LocalizedMapName(pMapinfo->mapid));
 			welcome_msg += ". ";
 			if(pMapinfo->type != INSTANCE_NONRAID && !(pMapinfo->type == INSTANCE_MULTIMODE && iInstanceType >= MODE_HEROIC) && m_mapMgr->pInstance)
 			{
 				/*welcome_msg += "This instance is scheduled to reset on ";
 				welcome_msg += asctime(localtime(&m_mapMgr->pInstance->m_expiration));*/
-				welcome_msg += string(GetSession()->LocalizedWorldSrv(66))+" ";
+                welcome_msg += std::string(GetSession()->LocalizedWorldSrv(66)) + " ";
 				welcome_msg += ConvertTimeStampToDataTime((uint32)m_mapMgr->pInstance->m_expiration);
 			}
 			sChatHandler.SystemMessage(m_session, welcome_msg.c_str());
@@ -9135,7 +9135,7 @@ bool Player::CanSignCharter(Charter * charter, Player * requester)
 		return true;
 }
 
-void Player::SaveAuras(stringstream &ss)
+void Player::SaveAuras(std::stringstream &ss)
 {
 	uint32 charges = 0, prevX = 0;
 	//cebernic: save all auras why only just positive?
@@ -9234,7 +9234,7 @@ void Player::SetShapeShift(uint8 ss)
 	}
 
 	// apply any talents/spells we have that apply only in this form.
-	set<uint32>::iterator itr;
+    std::set<uint32>::iterator itr;
 	SpellEntry * sp;
 	Spell * spe;
 	SpellCastTargets t(GetGUID());
@@ -9281,7 +9281,7 @@ void Player::CalcDamage()
 		if(IsInFeralForm())
 		{
 			float tmp = 1; // multiplicative damage modifier
-			for (map<uint32, WeaponModifier>::iterator i = damagedone.begin(); i!=damagedone.end();i++)
+            for (std::map<uint32, WeaponModifier>::iterator i = damagedone.begin(); i != damagedone.end(); i++)
 			{
 				if (i->second.wclass == (uint32) - 1) // applying only "any weapon" modifiers
 					tmp += i->second.value;
@@ -9347,7 +9347,7 @@ void Player::CalcDamage()
 		
 		float bonus=ap_bonus*speed;
 		float tmp = 1;
-		map<uint32, WeaponModifier>::iterator i;
+        std::map<uint32, WeaponModifier>::iterator i;
 		for(i = damagedone.begin();i!=damagedone.end();i++)
 		{
 			if((i->second.wclass == (uint32)-1) || //any weapon
@@ -9688,13 +9688,13 @@ void Player::Possess(Unit * pTarget)
 	
 	if( !( pTarget->m_isPet && static_cast< Pet* >( pTarget ) == m_Summon ) )
 	{
-		list<uint32> avail_spells;
-		for(list<AI_Spell*>::iterator itr = pTarget->GetAIInterface()->m_spells.begin(); itr != pTarget->GetAIInterface()->m_spells.end(); ++itr)
+        std::list<uint32> avail_spells;
+        for (std::list<AI_Spell*>::iterator itr = pTarget->GetAIInterface()->m_spells.begin(); itr != pTarget->GetAIInterface()->m_spells.end(); ++itr)
 		{
 			if((*itr)->agent == AGENT_SPELL)
 				avail_spells.push_back((*itr)->spell->Id);
 		}
-		list<uint32>::iterator itr = avail_spells.begin();
+        std::list<uint32>::iterator itr = avail_spells.begin();
 
 		WorldPacket data(SMSG_PET_SPELLS, pTarget->GetAIInterface()->m_spells.size() * 4 + 20);
 		data << pTarget->GetGUID();
@@ -9834,7 +9834,7 @@ void Player::_AddSkillLine(uint32 SkillLine, uint32 Curr_sk, uint32 Max_sk)
 		inf.MaximumValue = Max_sk;
 		inf.CurrentValue = ( inf.Skill->id != SKILL_RIDING ? Curr_sk : Max_sk );
 		inf.BonusValue = 0;
-		m_skills.insert( make_pair( SkillLine, inf ) );
+        m_skills.insert(std::make_pair(SkillLine, inf));
 		_UpdateSkillFields();
 	}
 	//Add to proficiency
@@ -9915,7 +9915,7 @@ void Player::_AdvanceSkillLine(uint32 SkillLine, uint32 Count /* = 1 */)
 	else
 	{	
 		uint32 curr_sk = itr->second.CurrentValue;
-		itr->second.CurrentValue = min(curr_sk + Count,itr->second.MaximumValue);
+        itr->second.CurrentValue = std::min(curr_sk + Count, itr->second.MaximumValue);
 		if (itr->second.CurrentValue != curr_sk)
 		{
 			_UpdateSkillFields();
@@ -10082,21 +10082,21 @@ void Player::_AddLanguages(bool All)
 
             sk.Reset(skills[i]);
 			sk.MaximumValue = sk.CurrentValue = 300;
-			m_skills.insert( make_pair(skills[i], sk) );
+            m_skills.insert(std::make_pair(skills[i], sk));
 			if((spell_id = ::GetSpellForLanguage(skills[i])) != 0)
 				addSpell(spell_id);
 		}
 	}
 	else
 	{
-		for(list<CreateInfo_SkillStruct>::iterator itr = info->skills.begin(); itr != info->skills.end(); ++itr)
+        for (std::list<CreateInfo_SkillStruct>::iterator itr = info->skills.begin(); itr != info->skills.end(); ++itr)
 		{
 			en = dbcSkillLine.LookupEntry(itr->skillid);
 			if(en->type == SKILL_TYPE_LANGUAGE)
 			{
 				sk.Reset(itr->skillid);
 				sk.MaximumValue = sk.CurrentValue = 300;
-				m_skills.insert( make_pair(itr->skillid, sk) );
+                m_skills.insert(std::make_pair(itr->skillid, sk));
 				if((spell_id = ::GetSpellForLanguage(itr->skillid)) != 0)
 					addSpell(spell_id);
 			}
@@ -10803,7 +10803,7 @@ void Player::_Cooldown_Add(uint32 Type, uint32 Misc, uint32 Time, uint32 SpellId
 		cd.ItemId = ItemId;
 		cd.SpellId = SpellId;
 
-		m_cooldownMap[Type].insert( make_pair( Misc, cd ) );
+        m_cooldownMap[Type].insert(std::make_pair(Misc, cd));
 	}
 
 #ifdef _DEBUG
@@ -11049,7 +11049,7 @@ void Player::_LoadPlayerCooldowns(QueryResult * result)
 		cd.ExpireTime = realtime;
 		cd.ItemId = itemid;
 		cd.SpellId = spellid;
-		m_cooldownMap[type].insert( make_pair( misc, cd ) );
+        m_cooldownMap[type].insert(std::make_pair(misc, cd));
 
 	} while ( result->NextRow( ) );
 }
@@ -11099,7 +11099,7 @@ void Player::_FlyhackCheck()
 void Player::Social_AddFriend(const char * name, const char * note)
 {
 	WorldPacket data(SMSG_FRIEND_STATUS, 10);
-	map<uint32, char*>::iterator itr;
+    std::map<uint32, char*>::iterator itr;
 
 	// lookup the player
 	PlayerInfo* info = objmgr.GetPlayerInfoByName(name);
@@ -11163,22 +11163,22 @@ void Player::Social_AddFriend(const char * name, const char * note)
 	}
 
 	if( note != NULL )
-		m_friends.insert( make_pair(info->guid, strdup(note)) );
+        m_friends.insert(std::make_pair(info->guid, strdup(note)));
 	else
-		m_friends.insert( make_pair(info->guid, (char*)NULL) );
+        m_friends.insert(std::make_pair(info->guid, (char*)NULL));
 
 	m_socialLock.Release();
 	m_session->SendPacket(&data);
 
 	// dump into the db
 	CharacterDatabase.Execute("INSERT INTO social_friends VALUES(%u, %u, \"%s\")",
-		GetLowGUID(), info->guid, note ? CharacterDatabase.EscapeString(string(note)).c_str() : "");
+                              GetLowGUID(), info->guid, note ? CharacterDatabase.EscapeString(std::string(note)).c_str() : "");
 }
 
 void Player::Social_RemoveFriend(uint32 guid)
 {
 	WorldPacket data(SMSG_FRIEND_STATUS, 10);
-	map<uint32, char*>::iterator itr;
+    std::map<uint32, char*>::iterator itr;
 
 	// are we ourselves?
 	if( guid == GetLowGUID() )
@@ -11220,7 +11220,7 @@ void Player::Social_RemoveFriend(uint32 guid)
 
 void Player::Social_SetNote(uint32 guid, const char * note)
 {
-	map<uint32,char*>::iterator itr;
+    std::map<uint32, char*>::iterator itr;
 
 	m_socialLock.Acquire();
 	itr = m_friends.find(guid);
@@ -11241,13 +11241,13 @@ void Player::Social_SetNote(uint32 guid, const char * note)
 
 	m_socialLock.Release();
 	CharacterDatabase.Execute("UPDATE social_friends SET note = \"%s\" WHERE character_guid = %u AND friend_guid = %u",
-		note ? CharacterDatabase.EscapeString(string(note)).c_str() : "", GetLowGUID(), guid);
+                              note ? CharacterDatabase.EscapeString(std::string(note)).c_str() : "", GetLowGUID(), guid);
 }
 
 void Player::Social_AddIgnore(const char * name)
 {
 	WorldPacket data(SMSG_FRIEND_STATUS, 10);
-	set<uint32>::iterator itr;
+    std::set<uint32>::iterator itr;
 	PlayerInfo * info;
 
 	// lookup the player
@@ -11292,7 +11292,7 @@ void Player::Social_AddIgnore(const char * name)
 void Player::Social_RemoveIgnore(uint32 guid)
 {
 	WorldPacket data(SMSG_FRIEND_STATUS, 10);
-	set<uint32>::iterator itr;
+    std::set<uint32>::iterator itr;
 
 	// are we ourselves?
 	if( guid == GetLowGUID() )
@@ -11353,7 +11353,7 @@ void Player::Social_TellFriendsOnline()
 		return;
 
 	WorldPacket data(SMSG_FRIEND_STATUS, 22);
-	set<uint32>::iterator itr;
+    std::set<uint32>::iterator itr;
 	Player * pl;
 	data << uint8( FRIEND_ONLINE ) << GetGUID() << uint8( 1 );
 	data << GetAreaID() << getLevel() << uint32(getClass());
@@ -11374,7 +11374,7 @@ void Player::Social_TellFriendsOffline()
 		return;
 
 	WorldPacket data(SMSG_FRIEND_STATUS, 10);
-	set<uint32>::iterator itr;
+    std::set<uint32>::iterator itr;
 	Player * pl;
 	data << uint8( FRIEND_OFFLINE ) << GetGUID() << uint8( 0 );
 
@@ -11391,8 +11391,8 @@ void Player::Social_TellFriendsOffline()
 void Player::Social_SendFriendList(uint32 flag)
 {
 	WorldPacket data(SMSG_FRIEND_LIST, 500);
-	map<uint32,char*>::iterator itr;
-	set<uint32>::iterator itr2;
+    std::map<uint32, char*>::iterator itr;
+    std::set<uint32>::iterator itr2;
 	Player * plr;
 
 	m_socialLock.Acquire();

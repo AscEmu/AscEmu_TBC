@@ -108,7 +108,7 @@ bool MailMessage::AddMessageDataToPacket(WorldPacket& data)
 	uint8 i = 0;
 	uint32 j;
 	size_t pos;
-	vector<uint64>::iterator itr;
+    std::vector<uint64>::iterator itr;
 	Item * pItem;
 
 	// add stuff
@@ -247,8 +247,8 @@ bool MailMessage::AddMessageDataToPacket(WorldPacket& data)
 
 void MailSystem::SaveMessageToSQL(MailMessage * message)
 {
-	stringstream ss;
-	vector< uint64 >::iterator itr;
+    std::stringstream ss;
+    std::vector< uint64 >::iterator itr;
 	ss << "REPLACE INTO mailbox VALUES("
 		<< message->message_id << ","
 		<< message->message_type << ","
@@ -281,9 +281,9 @@ void WorldSession::HandleSendMail(WorldPacket & recv_data )
 	uint8 itemslot;
 	uint8 i;
 	uint64 itemguid;
-	vector< Item* > items;
-	vector< Item* >::iterator itr;
-	string recepient;
+    std::vector< Item* > items;
+    std::vector< Item* >::iterator itr;
+    std::string recepient;
 	Item * pItem;
 	//uint32 err = MAIL_OK;
 
@@ -535,7 +535,7 @@ void WorldSession::HandleTakeItem(WorldPacket & recv_data )
 	uint64 mailbox;
 	uint32 message_id;
 	uint32 lowguid;
-	vector< uint64 >::iterator itr;
+    std::vector< uint64 >::iterator itr;
 
 	recv_data >> mailbox >> message_id >> lowguid;
 
@@ -623,7 +623,7 @@ void WorldSession::HandleTakeItem(WorldPacket & recv_data )
 	if( message->cod > 0 )
 	{
 		_player->ModUnsigned32Value(PLAYER_FIELD_COINAGE, -int32(message->cod));
-		string subject = "COD Payment: ";
+        std::string subject = "COD Payment: ";
 		subject += message->subject;
 		sMailSystem.SendAutomatedMessage(NORMAL, message->player_guid, message->sender_guid, subject, "", message->cod, 0, 0, 1);
 
@@ -775,7 +775,7 @@ void WorldSession::HandleItemTextQuery(WorldPacket & recv_data)
 	uint32 message_id;
 	recv_data >> message_id;
 
-	string body = "Internal Error";
+    std::string body = "Internal Error";
 
 	MailMessage * msg = _player->m_mailBox.GetMessage(message_id);
 	if(msg)
@@ -857,7 +857,7 @@ void MailSystem::RemoveMessageIfDeleted(uint32 message_id, Player * plr)
 		plr->m_mailBox.DeleteMessage(message_id, true);   // wipe the message
 }
 
-void MailSystem::SendAutomatedMessage(uint32 type, uint64 sender, uint64 receiver, string subject, string body,
+void MailSystem::SendAutomatedMessage(uint32 type, uint64 sender, uint64 receiver, std::string subject, std::string body,
 									  uint32 money, uint32 cod, uint64 item_guid, uint32 stationary)
 {
 	// This is for sending automated messages, for example from an auction house.

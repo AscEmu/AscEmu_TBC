@@ -1072,7 +1072,7 @@ void Instance::SaveToDB()
 		return;
 
 	std::stringstream ss;
-	set<uint32>::iterator itr;
+    std::set<uint32>::iterator itr;
 
 	ss << "REPLACE INTO `instances` (`id`, `mapid`, `creation`, `expiration`, `killed_npc_guids`, `difficulty`, `creator_group`, `creator_guid`, `persistent`) VALUES("
 		<< m_instanceId << ","
@@ -1163,7 +1163,7 @@ MapMgr * InstanceMgr::CreateBattlegroundInstance(uint32 mapid)
 	if( m_instances[mapid] == NULL )
 		m_instances[mapid] = new InstanceMap;
 
-	m_instances[mapid]->insert( make_pair( pInstance->m_instanceId, pInstance ) );
+    m_instances[mapid]->insert(std::make_pair(pInstance->m_instanceId, pInstance));
 	m_mapLock.Release();
 	ThreadPool.ExecuteTask(ret);
 	return ret;

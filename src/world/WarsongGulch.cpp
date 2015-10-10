@@ -162,7 +162,7 @@ void WarsongGulch::HookOnAreaTrigger(Player * plr, uint32 id)
 			m_homeFlags[plr->GetTeam()]->PushToWorld(m_mapMgr);
 
 		/* give each player on that team a bonus according to flagHonorTable */
-		for(set<Player*>::iterator itr = m_players[plr->GetTeam()].begin(); itr != m_players[plr->GetTeam()].end(); ++itr)
+        for (std::set<Player*>::iterator itr = m_players[plr->GetTeam()].begin(); itr != m_players[plr->GetTeam()].end(); ++itr)
 		{
 			(*itr)->m_bgScore.BonusHonor += flagHonorTable[m_lgroup];
 			HonorHandler::AddHonorPointsToPlayer((*itr), flagHonorTable[m_lgroup]);
@@ -185,7 +185,7 @@ void WarsongGulch::HookOnAreaTrigger(Player * plr, uint32 id)
 			SpellEntry * loser_spell = dbcSpell.LookupEntry(24950);
 			for(uint32 i = 0; i < 2; ++i)
 			{
-				for(set<Player*>::iterator itr = m_players[i].begin(); itr != m_players[i].end(); ++itr)
+                for (std::set<Player*>::iterator itr = m_players[i].begin(); itr != m_players[i].end(); ++itr)
 				{
 					(*itr)->Root();
 					if(i == m_winningteam)
@@ -280,7 +280,7 @@ void WarsongGulch::HookFlagDrop(Player * plr, GameObject * obj)
 		return;
 	}
 
-	map<uint32,uint32>::iterator itr = plr->m_forcedReactions.find(1059);
+    std::map<uint32, uint32>::iterator itr = plr->m_forcedReactions.find(1059);
 	if (itr != plr->m_forcedReactions.end()) {
 		return;
 	}
@@ -345,7 +345,7 @@ void WarsongGulch::HookFlagStand(Player * plr, GameObject * obj)
 		return;
 	}
 
-	map<uint32,uint32>::iterator itr = plr->m_forcedReactions.find(1059);
+    std::map<uint32, uint32>::iterator itr = plr->m_forcedReactions.find(1059);
 	if (itr != plr->m_forcedReactions.end()) {
 		return;
 	}
@@ -550,13 +550,14 @@ void WarsongGulch::OnCreate()
 void WarsongGulch::OnStart()
 {
 	for(uint32 i = 0; i < 2; ++i) {
-		for(set<Player*>::iterator itr = m_players[i].begin(); itr != m_players[i].end(); ++itr) {
+        for (std::set<Player*>::iterator itr = m_players[i].begin(); itr != m_players[i].end(); ++itr)
+        {
 			(*itr)->RemoveAura(BG_PREPARATION);
 		}
 	}
 
 	/* open the gates */
-	for(list<GameObject*>::iterator itr = m_gates.begin(); itr != m_gates.end(); ++itr)
+    for (std::list<GameObject*>::iterator itr = m_gates.begin(); itr != m_gates.end(); ++itr)
 	{
 		(*itr)->SetUInt32Value(GAMEOBJECT_FLAGS, 64);
 		(*itr)->SetUInt32Value(GAMEOBJECT_STATE, 0);

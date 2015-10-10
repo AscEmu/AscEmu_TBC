@@ -44,7 +44,7 @@ uint32 TimeStamp()
 	return uint32(((t / 1000000L) * 1000) + ((t % 1000000L) / 1000));
 }
 
-ARCEMU_INLINE uint32 mTimeStamp()
+inline uint32 mTimeStamp()
 {
 	return timeGetTime();
 }
@@ -58,7 +58,7 @@ uint32 TimeStamp()
 	return (tp.tv_sec * 1000) + (tp.tv_usec / 1000);
 }
 
-ARCEMU_INLINE uint32 mTimeStamp()
+inline uint32 mTimeStamp()
 {
 	struct timeval tp;
 	gettimeofday(&tp, NULL);
@@ -454,7 +454,7 @@ void WorldSession::HandleMovementOpcodes( WorldPacket & recv_data )
 		/************************************************************************/
 		/* Distribute to all inrange players.                                   */
 		/************************************************************************/
-		for(set<Player*>::iterator itr = _player->m_inRangePlayers.begin(); itr != _player->m_inRangePlayers.end(); ++itr)
+        for (std::set<Player*>::iterator itr = _player->m_inRangePlayers.begin(); itr != _player->m_inRangePlayers.end(); ++itr)
 		{
 #ifdef USING_BIG_ENDIAN
 			*(uint32*)&movement_packet[pos+5] = swap32(move_time + (*itr)->GetSession()->m_moveDelayTime);

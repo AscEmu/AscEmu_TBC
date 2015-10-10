@@ -21,7 +21,7 @@
 #ifndef _OBJECTMGR_H
 #define _OBJECTMGR_H
 
-ARCEMU_INLINE bool FindXinYString(std::string& x, std::string& y)
+inline bool FindXinYString(std::string& x, std::string& y)
 {
 	return y.find(x) != std::string::npos;
 }
@@ -133,10 +133,10 @@ struct GossipMenuItem
 	uint32		IntId;
 	uint8		Icon;
 	uint8		Extra;
-	string		Text;
+    std::string		Text;
 	uint32      m_gSender;
 	uint32      m_gAction;
-	string		m_gBoxMessage;
+    std::string		m_gBoxMessage;
     uint32      m_gBoxMoney;
 };
 struct SpellEntry;
@@ -157,7 +157,7 @@ struct TrainerSpell
 struct Trainer
 {
 	uint32 SpellCount;
-	vector<TrainerSpell> Spells;
+    std::vector<TrainerSpell> Spells;
 	char*	UIMessage;
     uint32 RequiredSkill;
 	uint32 RequiredSkillLine;
@@ -195,13 +195,13 @@ struct InstanceReputationMod
 struct ReputationModifier
 {
 	uint32 entry;
-	vector<ReputationMod> mods;
+    std::vector<ReputationMod> mods;
 };
 
 struct InstanceReputationModifier
 {
 	uint32 mapid;
-	vector<InstanceReputationMod> mods;
+    std::vector<InstanceReputationMod> mods;
 };
 
 struct NpcMonsterSay
@@ -271,7 +271,7 @@ public:
 	void SendTo(Player* Plr);
 	void SendGossipMenu( uint32 TitleTextId, uint64 npcGUID );
 	GossipMenuItem GetItem(uint32 Id);
-	ARCEMU_INLINE void SetTextID(uint32 TID) { TextId = TID; }
+	inline void SetTextID(uint32 TID) { TextId = TID; }
 
 protected:
 	uint32 TextId;
@@ -310,7 +310,7 @@ public:
 	uint32 LeaderGuid;
 	uint64 ItemGuid;
 	uint32 CharterId;
-	string GuildName;
+    std::string GuildName;
 
 	Charter(Field * fields);
 	Charter(uint32 id, uint32 leader, uint32 type) : CharterType(type), LeaderGuid(leader), CharterId(id)
@@ -333,10 +333,10 @@ public:
 	void AddSignature(uint32 PlayerGuid);
 	void RemoveSignature(uint32 PlayerGuid);
 
-	ARCEMU_INLINE uint32 GetLeader() { return LeaderGuid; }
-	ARCEMU_INLINE uint32 GetID() { return CharterId; }
+	inline uint32 GetLeader() { return LeaderGuid; }
+	inline uint32 GetID() { return CharterId; }
 
-	ARCEMU_INLINE bool IsFull() { return (SignatureCount == Slots); }
+	inline bool IsFull() { return (SignatureCount == Slots); }
 };
 
 typedef std::map<uint32, std::list<SpellEntry*>* >                  OverrideIdMap;
@@ -349,7 +349,7 @@ typedef std::map<uint32, InstanceBossInfo*>                         InstanceBoss
 #ifdef arcemu_USE_MAP_PLAYER_INDEX
 
 // you can use the string map (slower)
-typedef map<string, PlayerInfo*> PlayerNameStringIndexMap;
+typedef std::map<std::string, PlayerInfo*> PlayerNameStringIndexMap;
 
 
 #else			// or
@@ -357,22 +357,22 @@ typedef map<string, PlayerInfo*> PlayerNameStringIndexMap;
 // gcc has no default hash for string type,
 // so we have to make an explicit hash template here
 template<>
-struct __gnu_cxx::hash<string>
+struct __gnu_cxx::hash<std::string>
 {
-	size_t operator()(string& tbh) const
+	size_t operator()(std::string& tbh) const
 	{
 		// simple crc32 hash for now, we may need to change this later however
 		return size_t( crc32( (const unsigned char*)tbh.c_str(), tbh.length() ) );
 	}
 }
 
-typedef HM_NAMESPACE::hash_map<string, PlayerInfo*> PlayerNameStringIndexMap;
+typedef HM_NAMESPACE::hash_map<std::string, PlayerInfo*> PlayerNameStringIndexMap;
 
 #endif
 #else
 
 // vc++ has the type for a string hash already, so we don't need to do anything special
-typedef HM_NAMESPACE::hash_map<string, PlayerInfo*> PlayerNameStringIndexMap;
+typedef HM_NAMESPACE::hash_map<std::string, PlayerInfo*> PlayerNameStringIndexMap;
 
 #endif
 
@@ -387,7 +387,7 @@ public:
 	TimedEmoteList * GetTimedEmoteList(uint32 spawnid);
 
 	// other objects
-    
+
     // Set typedef's
 	typedef HM_NAMESPACE::hash_map<uint32, Group*>						GroupMap;
 	
@@ -407,10 +407,10 @@ public:
     
     // Map typedef's
     typedef std::map<uint32, LevelInfo*>                                LevelMap;
-	typedef std::map<pair<uint32, uint32>, LevelMap* >                  LevelInfoMap;
+    typedef std::map<std::pair<uint32, uint32>, LevelMap* >                  LevelInfoMap;
     typedef std::map<uint32, std::list<ItemPrototype*>* >               ItemSetContentMap;
 	typedef std::map<uint32, uint32>                                    NpcToGossipTextMap;
-	typedef std::map<uint32, set<SpellEntry*> >                         PetDefaultSpellMap;
+    typedef std::map<uint32, std::set<SpellEntry*> >                         PetDefaultSpellMap;
 	typedef std::map<uint32, uint32>                                    PetSpellCooldownMap;
 	typedef std::map<uint32, SpellEntry*>                               TotemSpellMap;
 	typedef std::multimap <uint32,uint32>                               BCEntryStorage;
@@ -459,7 +459,7 @@ public:
 	void AddGroup(Group* group)
 	{
 		m_groupLock.AcquireWriteLock();
-		m_groups.insert(make_pair(group->GetID(), group));
+        m_groups.insert(std::make_pair(group->GetID(), group));
 		m_groupLock.ReleaseWriteLock();
 	}
 
@@ -597,7 +597,7 @@ public:
 	LevelInfo * GetLevelInfo(uint32 Race, uint32 Class, uint32 Level);
 	void GenerateLevelUpInfo();
 	void LoadDefaultPetSpells();
-	set<SpellEntry*>* GetDefaultPetSpells(uint32 Entry);
+    std::set<SpellEntry*>* GetDefaultPetSpells(uint32 Entry);
 	uint32 GetPetSpellCooldown(uint32 SpellId);
 	void LoadPetSpellCooldowns();
 	WayPointMap * GetWayPointMap(uint32 spawnid);
@@ -628,11 +628,11 @@ public:
 	Charter * GetCharter(uint32 CharterId, CharterTypes Type);
 	void RemoveCharter(Charter *);
 	void LoadGuildCharters();
-	Charter * GetCharterByName(string &charter_name, CharterTypes Type);
+    Charter * GetCharterByName(std::string &charter_name, CharterTypes Type);
 	Charter * GetCharterByItemGuid(uint64 guid);
 	Charter * GetCharterByGuid(uint64 playerguid, CharterTypes type);
 
-	ArenaTeam * GetArenaTeamByName(string & name, uint32 Type);
+    ArenaTeam * GetArenaTeamByName(std::string & name, uint32 Type);
 	ArenaTeam * GetArenaTeamById(uint32 id);
 	ArenaTeam * GetArenaTeamByGuid(uint32 guid, uint32 Type);
 	void UpdateArenaTeamRankings();
@@ -655,7 +655,7 @@ public:
 	bool HandleInstanceReputationModifiers(Player * pPlayer, Unit * pVictim);
 	void LoadInstanceReputationModifiers();
 
-	ARCEMU_INLINE bool IsSpellDisabled(uint32 spellid)
+	inline bool IsSpellDisabled(uint32 spellid)
 	{
 		if(m_disabled_spells.find(spellid) != m_disabled_spells.end())
 			return true;
@@ -664,23 +664,23 @@ public:
 
 	void LoadDisabledSpells();
 	void ReloadDisabledSpells();
-	ARCEMU_INLINE GuildMap::iterator GetGuildsBegin() { return mGuild.begin(); }
-	ARCEMU_INLINE GuildMap::iterator GetGuildsEnd() { return mGuild.end(); }
+	inline GuildMap::iterator GetGuildsBegin() { return mGuild.begin(); }
+	inline GuildMap::iterator GetGuildsEnd() { return mGuild.end(); }
 
 	std::set<ProfessionDiscovery*> ProfessionDiscoveryTable;
 
 	// cebernic: This is an perfect Broadcast system,multi-lang supported also.
-	ARCEMU_INLINE uint32 GetBCGroupCountByKey(uint32 Key) { return (uint32)m_BCEntryStorage.count(Key); }
-	ARCEMU_INLINE bool IsBCEntryStorageEmpty() { return m_BCEntryStorage.empty(); }
-	ARCEMU_INLINE BCEntryStorage::iterator GetBCTotalItemBegin() { return m_BCEntryStorage.begin(); }
-	ARCEMU_INLINE BCEntryStorage::iterator GetBCTotalItemEnd() { return m_BCEntryStorage.end(); }
-	ARCEMU_INLINE int CalcCurrentBCEntry() 
+	inline uint32 GetBCGroupCountByKey(uint32 Key) { return (uint32)m_BCEntryStorage.count(Key); }
+	inline bool IsBCEntryStorageEmpty() { return m_BCEntryStorage.empty(); }
+	inline BCEntryStorage::iterator GetBCTotalItemBegin() { return m_BCEntryStorage.begin(); }
+	inline BCEntryStorage::iterator GetBCTotalItemEnd() { return m_BCEntryStorage.end(); }
+	inline int CalcCurrentBCEntry() 
 	// func sync at MAKE_TASK(ObjectMgr, StoreBroadCastGroupKey)[world.cpp]
 	{
 		if ( m_BCEntryStorage.empty() ) return -1;
 	  uint32 RandomCap = (uint32)sWorld.BCTriggerPercentCap;
 		
-		vector<uint32> Entries;
+      std::vector<uint32> Entries;
 		BCEntryStorage::iterator it = m_BCEntryStorage.upper_bound( RandomUInt(RandomCap)+1 );
 		while( it!=m_BCEntryStorage.end() )
 		{
@@ -715,7 +715,7 @@ protected:
 
 	HM_NAMESPACE::hash_map<uint32, Charter*> m_charters[NUM_CHARTER_TYPES];
 	
-	set<uint32> m_disabled_spells;
+    std::set<uint32> m_disabled_spells;
 
 	uint64 TransportersCount;
 	HM_NAMESPACE::hash_map<uint32,PlayerInfo*> m_playersinfo;

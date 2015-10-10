@@ -206,7 +206,7 @@ uint32 QuestMgr::CalcStatus(Object* quest_giver, Player* plr)
 	if(!bValid)
 	{
         //anoying msg that is not needed since all objects dont exactly have quests 
-		//sLog.outDebug("QUESTS: Warning, invalid NPC "I64FMT" specified for CalcStatus. TypeId: %d.", quest_giver->GetGUID(), quest_giver->GetTypeId());
+		//sLog.outDebug("QUESTS: Warning, invalid NPC " I64FMT " specified for CalcStatus. TypeId: %d.", quest_giver->GetGUID(), quest_giver->GetTypeId());
 		return status;
 	}
 
@@ -235,7 +235,7 @@ uint32 QuestMgr::CalcStatus(Object* quest_giver, Player* plr)
 uint32 QuestMgr::ActiveQuestsCount(Object* quest_giver, Player* plr)
 {
 	std::list<QuestRelation *>::const_iterator itr;
-	map<uint32, uint8> tmp_map;
+    std::map<uint32, uint8> tmp_map;
 	uint32 questCount = 0;
 
 	std::list<QuestRelation *>::const_iterator q_begin;
@@ -264,7 +264,7 @@ uint32 QuestMgr::ActiveQuestsCount(Object* quest_giver, Player* plr)
 
 	if(!bValid)
 	{
-		sLog.outDebug("QUESTS: Warning, invalid NPC "I64FMT" specified for ActiveQuestsCount. TypeId: %d.", quest_giver->GetGUID(), quest_giver->GetTypeId());
+		sLog.outDebug("QUESTS: Warning, invalid NPC " I64FMT " specified for ActiveQuestsCount. TypeId: %d.", quest_giver->GetGUID(), quest_giver->GetTypeId());
 		return 0;
 	}
 
@@ -516,10 +516,10 @@ void QuestMgr::BuildQuestList(WorldPacket *data, Object* qst_giver, Player *plr,
 {
 	if ( !plr || !plr->GetSession() ) return;
 	uint32 status;
-	list<QuestRelation *>::iterator it;
-	list<QuestRelation *>::iterator st;
-	list<QuestRelation *>::iterator ed;
-	map<uint32, uint8> tmp_map;
+    std::list<QuestRelation *>::iterator it;
+    std::list<QuestRelation *>::iterator st;
+    std::list<QuestRelation *>::iterator ed;
+    std::map<uint32, uint8> tmp_map;
 
 	data->Initialize( SMSG_QUESTGIVER_QUEST_LIST );
 
@@ -1262,14 +1262,14 @@ QuestRelationList* QuestMgr::GetGOQuestList(uint32 entryid)
 
 QuestRelationList* QuestMgr::GetCreatureQuestList(uint32 entryid)
 {
-	HM_NAMESPACE::hash_map<uint32, list<QuestRelation *>* > &olist = _GetList<Creature>();
+    HM_NAMESPACE::hash_map<uint32, std::list<QuestRelation *>* > &olist = _GetList<Creature>();
 	HM_NAMESPACE::hash_map<uint32, QuestRelationList* >::iterator itr = olist.find(entryid);
 	return (itr == olist.end()) ? 0 : itr->second;
 }
 
 template <class T> void QuestMgr::_AddQuest(uint32 entryid, Quest *qst, uint8 type)
 {
-	HM_NAMESPACE::hash_map<uint32, list<QuestRelation *>* > &olist = _GetList<T>();
+    HM_NAMESPACE::hash_map<uint32, std::list<QuestRelation *>* > &olist = _GetList<T>();
 	std::list<QuestRelation *>* nlist;
 	QuestRelation *ptr = NULL;
 
@@ -1277,14 +1277,14 @@ template <class T> void QuestMgr::_AddQuest(uint32 entryid, Quest *qst, uint8 ty
 	{
 		nlist = new std::list<QuestRelation *>;
 
-		olist.insert(HM_NAMESPACE::hash_map<uint32, list<QuestRelation *>* >::value_type(entryid, nlist));
+        olist.insert(HM_NAMESPACE::hash_map<uint32, std::list<QuestRelation *>* >::value_type(entryid, nlist));
 	}
 	else
 	{
 		nlist = olist.find(entryid)->second;
 	}
 
-	list<QuestRelation *>::iterator it;
+    std::list<QuestRelation *>::iterator it;
 	for (it = nlist->begin(); it != nlist->end(); ++it)
 	{
 		if ((*it)->qst == qst)
@@ -1323,9 +1323,9 @@ void QuestMgr::_CleanLine(std::string *str)
 
 void QuestMgr::_RemoveChar(char *c, std::string *str) 
 {
-	string::size_type pos = str->find(c,0);
+    std::string::size_type pos = str->find(c, 0);
 
-	while (pos != string::npos)
+    while (pos != std::string::npos)
 	{
 		str->erase(pos, 1);
 		pos = str->find(c, 0);
@@ -1537,7 +1537,7 @@ bool QuestMgr::OnActivateQuestGiver(Object *qst_giver, Player *plr)
 
 		if(!bValid)
 		{
-			sLog.outDebug("QUESTS: Warning, invalid NPC "I64FMT" specified for OnActivateQuestGiver. TypeId: %d.", qst_giver->GetGUID(), qst_giver->GetTypeId());
+			sLog.outDebug("QUESTS: Warning, invalid NPC " I64FMT " specified for OnActivateQuestGiver. TypeId: %d.", qst_giver->GetGUID(), qst_giver->GetTypeId());
 			return false;
 		}
 		
@@ -1584,10 +1584,10 @@ bool QuestMgr::OnActivateQuestGiver(Object *qst_giver, Player *plr)
 QuestMgr::~QuestMgr()
 {
 	HM_NAMESPACE::hash_map<uint32, Quest*>::iterator itr1;
-	HM_NAMESPACE::hash_map<uint32, list<QuestRelation *>* >::iterator itr2;
-	list<QuestRelation*>::iterator itr3;
-	HM_NAMESPACE::hash_map<uint32, list<QuestAssociation *>* >::iterator itr4;
-	list<QuestAssociation *>::iterator itr5;
+    HM_NAMESPACE::hash_map<uint32, std::list<QuestRelation *>* >::iterator itr2;
+    std::list<QuestRelation*>::iterator itr3;
+    HM_NAMESPACE::hash_map<uint32, std::list<QuestAssociation *>* >::iterator itr4;
+    std::list<QuestAssociation *>::iterator itr5;
 
 	// clear relations
 	for(itr2 = m_obj_quests.begin(); itr2 != m_obj_quests.end(); ++itr2)
@@ -1889,7 +1889,7 @@ void QuestMgr::LoadExtraQuestStuff()
 
 void QuestMgr::AddItemQuestAssociation( uint32 itemId, Quest *qst, uint8 item_count)
 {
-	HM_NAMESPACE::hash_map<uint32, list<QuestAssociation *>* > &associationList = GetQuestAssociationList();
+    HM_NAMESPACE::hash_map<uint32, std::list<QuestAssociation *>* > &associationList = GetQuestAssociationList();
 	std::list<QuestAssociation *>* tempList;
 	QuestAssociation *ptr = NULL;
 	
@@ -1899,7 +1899,7 @@ void QuestMgr::AddItemQuestAssociation( uint32 itemId, Quest *qst, uint8 item_co
 		// not found. Create a new entry and QuestAssociationList
 		tempList = new std::list<QuestAssociation *>;
 
-		associationList.insert(HM_NAMESPACE::hash_map<uint32, list<QuestAssociation *>* >::value_type(itemId, tempList));
+        associationList.insert(HM_NAMESPACE::hash_map<uint32, std::list<QuestAssociation *>* >::value_type(itemId, tempList));
 	}
 	else
 	{
@@ -1908,7 +1908,7 @@ void QuestMgr::AddItemQuestAssociation( uint32 itemId, Quest *qst, uint8 item_co
 	}
 	
 	// look through this item's QuestAssociationList for a matching quest entry
-	list<QuestAssociation *>::iterator it;
+    std::list<QuestAssociation *>::iterator it;
 	for (it = tempList->begin(); it != tempList->end(); ++it)
 	{
 		if ((*it)->qst == qst)

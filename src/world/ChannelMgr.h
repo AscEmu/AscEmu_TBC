@@ -36,7 +36,7 @@ public:
 
 private:
 	//team 0: aliance, team 1 horde
-	typedef map<string,Channel *> ChannelList;
+	typedef std::map<std::string,Channel *> ChannelList;
 	ChannelList Channels[2];
 	Mutex lock;
 };

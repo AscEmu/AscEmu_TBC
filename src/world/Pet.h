@@ -108,7 +108,7 @@ enum AutoCastEvents
 #define DEFAULT_SPELL_STATE 0x8100
 #define AUTOCAST_SPELL_STATE 0xC100
 
-typedef map<SpellEntry*, uint16> PetSpellMap;
+typedef std::map<SpellEntry*, uint16> PetSpellMap;
 struct PlayerPet;
 
 class SERVER_DECL Pet : public Creature
@@ -127,7 +127,7 @@ public:
 	virtual void Update(uint32 time);
 	void OnPushToWorld();
 
-	ARCEMU_INLINE uint32 GetXP(void) { return m_PetXP; }
+	inline uint32 GetXP(void) { return m_PetXP; }
 
 	void InitializeSpells();
 	void ReInitializeSpells();
@@ -136,17 +136,17 @@ public:
 	void SendNullSpellsToOwner();
 	void SendCastFailed( uint32 spellid, uint8 fail );
 
-	ARCEMU_INLINE void SetPetAction(uint32 act) { m_Action = act; }
-	ARCEMU_INLINE uint32 GetPetAction(void) { return m_Action; }
+	inline void SetPetAction(uint32 act) { m_Action = act; }
+	inline uint32 GetPetAction(void) { return m_Action; }
 
-	ARCEMU_INLINE void SetPetState(uint32 state) { m_State = state; }
-	ARCEMU_INLINE uint32 GetPetState(void) { return m_State; }
+	inline void SetPetState(uint32 state) { m_State = state; }
+	inline uint32 GetPetState(void) { return m_State; }
 
-	ARCEMU_INLINE void SetPetDiet(uint32 diet) { m_Diet = diet; }
-	ARCEMU_INLINE void SetPetDiet() { m_Diet = myFamily->petdietflags; }
-	ARCEMU_INLINE uint32 GetPetDiet(void) { return m_Diet; }
+	inline void SetPetDiet(uint32 diet) { m_Diet = diet; }
+	inline void SetPetDiet() { m_Diet = myFamily->petdietflags; }
+	inline uint32 GetPetDiet(void) { return m_Diet; }
 	
-	ARCEMU_INLINE AI_Spell* GetAISpellForSpellId(uint32 spellid)
+	inline AI_Spell* GetAISpellForSpellId(uint32 spellid)
 	{
 		std::map<uint32, AI_Spell*>::iterator itr = m_AISpellStore.find(spellid);
 		if(itr != m_AISpellStore.end())
@@ -161,8 +161,8 @@ public:
 
 	void DelayedRemove(bool bTime, bool bDeath);
 
-	ARCEMU_INLINE Player* GetPetOwner() { return m_Owner; }
-	ARCEMU_INLINE void ClearPetOwner() { m_Owner = 0; }
+	inline Player* GetPetOwner() { return m_Owner; }
+	inline void ClearPetOwner() { m_Owner = 0; }
 	void GiveXP(uint32 xp);
 	uint32 GetNextLevelXP(uint32 currentlevel);
 	void ApplyStatsForLevel();
@@ -182,17 +182,17 @@ public:
 	uint32 GetUntrainCost();
 	void SetSpellState(SpellEntry * sp, uint16 State);
 	uint16 GetSpellState(SpellEntry * sp);
-	ARCEMU_INLINE void RemoveSpell(uint32 SpellID)
+	inline void RemoveSpell(uint32 SpellID)
 	{
 		SpellEntry * sp = dbcSpell.LookupEntry(SpellID);
 		if(sp) RemoveSpell(sp);
 	}
-	ARCEMU_INLINE void SetSpellState(uint32 SpellID, uint16 State)
+	inline void SetSpellState(uint32 SpellID, uint16 State)
 	{
 		SpellEntry * sp = dbcSpell.LookupEntry(SpellID);
 		if(sp) SetSpellState(sp, State);
 	}
-	ARCEMU_INLINE uint16 GetSpellState(uint32 SpellID)
+	inline uint16 GetSpellState(uint32 SpellID)
 	{
 		if(SpellID == 0)
 			return DEFAULT_SPELL_STATE;
@@ -204,12 +204,12 @@ public:
 	}
 	
 	AI_Spell * CreateAISpell(SpellEntry * info);
-	ARCEMU_INLINE PetSpellMap* GetSpells() { return &mSpells; }
-	ARCEMU_INLINE bool IsSummon() { return Summon; }
+	inline PetSpellMap* GetSpells() { return &mSpells; }
+	inline bool IsSummon() { return Summon; }
 
 	void __fastcall SetAutoCastSpell(AI_Spell * sp);
-	void Rename(string NewName);
-	ARCEMU_INLINE string& GetName() { return m_name; }
+    void Rename(std::string NewName);
+    inline std::string& GetName() { return m_name; }
 	void AddPetSpellToOwner(uint32 spellId);
 	uint16 SpellTP(uint32 spellId);
 	uint16 GetUsedTP();
@@ -252,13 +252,13 @@ protected:
 	uint32 reset_cost;
 	bool bExpires;
 	bool Summon;
-	string m_name;
+    std::string m_name;
 	uint8 GetLoyaltyLevel(){return ((GetUInt32Value(UNIT_FIELD_BYTES_1) >> 8) & 0xff);};
 	HappinessState GetHappinessState();
 	uint32 GetHighestRankSpell(uint32 spellId);
 	bool UpdateLoyalty(char pts);
 
-	list<AI_Spell*> m_autoCastSpells[AUTOCAST_EVENT_COUNT];
+    std::list<AI_Spell*> m_autoCastSpells[AUTOCAST_EVENT_COUNT];
 };
 
 #define PET_LOYALTY_UPDATE_TIMER 120000

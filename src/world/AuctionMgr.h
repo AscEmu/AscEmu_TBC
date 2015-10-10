@@ -33,7 +33,7 @@ public:
 
 	~AuctionMgr()
 	{
-		vector<AuctionHouse*>::iterator itr = auctionHouses.begin();
+        std::vector<AuctionHouse*>::iterator itr = auctionHouses.begin();
 		for(; itr != auctionHouses.end(); ++itr)
 			delete (*itr);
 	}
@@ -53,7 +53,7 @@ public:
 
 private:
 	HM_NAMESPACE::hash_map<uint32, AuctionHouse*> auctionHouseEntryMap;
-	vector<AuctionHouse*> auctionHouses;
+    std::vector<AuctionHouse*> auctionHouses;
 	volatile uint32 maxId;
 	Mutex lock;
 	uint32 loopcount;

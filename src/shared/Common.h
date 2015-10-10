@@ -52,9 +52,9 @@ enum MsTimeVariables
 };
 
 #ifdef WIN32
-#define ARCEMU_INLINE __forceinline
+#define ARCEMU_FORCEINLINE __forceinline
 #else
-#define ARCEMU_INLINE inline
+#define ARCEMU_FORCEINLINE inline
 #endif
 
 #ifdef HAVE_CONFIG_H
@@ -63,30 +63,22 @@ enum MsTimeVariables
 
 #include "arcemuConfig.h"
 
-/* Define this if you're using a big-endian machine */
-#ifdef USING_BIG_ENDIAN
-#include <machine/byte_order.h>
-#define bswap_16(x) NXSwapShort(x)
-#define bswap_32(x) NXSwapInt(x)
-#define bswap_64(x) NXSwapLongLong(x)
-#endif
-
 #include <cstdlib>
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdarg.h>
-#include <time.h>
-#include <math.h>
-#include <errno.h>
+#include <cstdio>
+
+#include <cstdarg>
+#include <ctime>
+#include <cmath>
+#include <cerrno>
 
 #if defined( __WIN32__ ) || defined( WIN32 ) || defined( _WIN32 )
 #  define WIN32_LEAN_AND_MEAN
-#  define _WIN32_WINNT 0x0500
+//#  define _WIN32_WINNT 0x0500
 #  define NOMINMAX
 #  include <windows.h>
 #  undef NOMINMAX
 #else
-#  include <string.h>
+#  include <cstring>
 #  define MAX_PATH 1024
 #endif
 
@@ -185,14 +177,6 @@ enum MsTimeVariables
 #endif
 #endif
 
-/*#if COMPILER == COMPILER_MICROSOFT
-#  pragma warning( disable : 4267 ) // conversion from 'size_t' to 'int', possible loss of data
-#  pragma warning( disable : 4311 ) // 'type cast': pointer truncation from HMODULE to uint32
-#  pragma warning( disable : 4786 ) // identifier was truncated to '255' characters in the debug information
-#  pragma warning( disable : 4146 )
-#  pragma warning( disable : 4800 )
-#endif*/
-
 #if PLATFORM == PLATFORM_WIN32
 #define STRCASECMP stricmp
 #else
@@ -237,6 +221,8 @@ enum MsTimeVariables
 #include <cstdlib>
 //#include <iostream>
 
+#include "CommonHelpers.hpp"
+
 #if defined (__GNUC__)
 #  define GCC_VERSION (__GNUC__ * 10000 \
 					   + __GNUC_MINOR__ * 100 \
@@ -264,17 +250,47 @@ enum MsTimeVariables
 #endif
 #endif
 
-#if COMPILER == COMPILER_GNU && __GNUC__ >= 3
+// TEST SUPPORT FOR TR1
+
+#ifdef HAS_CXX0X
+#include <unordered_map>
+#include <unordered_set>
+#define HM_NAMESPACE ::std
+#define hash_map unordered_map
+#define hash_multimap unordered_multimap
+#define hash_set unordered_set
+#define hash_multiset tr1::unordered_multiset
+#elif COMPILER == COMPILER_GNU && __GNUC__ >= 3
 #include <ext/hash_map>
 #include <ext/hash_set>
+#define HM_NAMESPACE __gnu_cxx
+namespace __gnu_cxx
+{
+    template<> struct hash<unsigned long long>
+    {
+        size_t operator()(const unsigned long long & __x) const { return (size_t)__x; }
+    };
+    template<typename T> struct hash<T*>
+    {
+        size_t operator()(T* const & __x) const { return (size_t)__x; }
+    };
+    //support for std::strings as keys to hash maps
+    template<> struct hash< ::std::string>
+    {
+        size_t operator()(const ::std::string & keyval) const
+        {
+            return hash<const char*>()(keyval.c_str());
+        }
+    };
+};
 #else
+#define HM_NAMESPACE ::stdext
 #include <hash_map>
 #include <hash_set>
 #endif
 
 
-
-#ifdef _STLPORT_VERSION
+/*#ifdef _STLPORT_VERSION
 #define HM_NAMESPACE std
 using std::hash_map;
 using std::hash_set;
@@ -289,10 +305,10 @@ using stdext::hash_set;
 #define vsnprintf _vsnprintf
 //#define strlen lstrlen
 
-#ifdef WIN32
+/*#ifdef WIN32
 typedef char TCHAR;
 #define __T(x) x
-#endif
+#endif/
 
 // cebernic added it
 #define __utf8(x) _StringToUTF8(x)
@@ -304,33 +320,21 @@ typedef char TCHAR;
 #define HM_NAMESPACE std
 using std::hash_map;
 using std::hash_set;
+#elif defined(HAS_TR1)
+#define HM_NAMESPACE std
+#define hash_map std::tr1::unordered_map
+#define hash_set std::tr1::unordered_set
+/*using std::unordered_map;
+using std::unordered_set;/
 #elif COMPILER == COMPILER_GNU && __GNUC__ >= 3
 #define HM_NAMESPACE __gnu_cxx
 using __gnu_cxx::hash_map;
-using __gnu_cxx::hash_set;
-
-namespace __gnu_cxx
-{
-	template<> struct hash<unsigned long long>
-	{
-		size_t operator()(const unsigned long long &__x) const { return (size_t)__x; }
-	};
-	template<typename T> struct hash<T *>
-	{
-		size_t operator()(T * const &__x) const { return (size_t)__x; }
-	};
-
-};
-
-#else
-#define HM_NAMESPACE std
-using std::hash_map;
-#endif
+using __gnu_cxx::hash_set;*/
 
 #include "CommonTypes.hpp"
 
 // Include all threading files
-#include <assert.h>
+#include <cassert>
 #include "Threading/Threading.h"
 
 #include "Threading/AtomicULong.h"
@@ -360,15 +364,8 @@ using std::hash_map;
 #endif
 
 #ifndef WIN32
-#ifdef USING_BIG_ENDIAN
-//#define GUID_HIPART(x) (*((uint32*)&(x)))
-//#define GUID_LOPART(x) (*(((uint32*)&(x))+1))
-#define GUID_LOPART(x) ( ( x >> 32 ) )
-#define GUID_HIPART(x) ( ( x & 0x00000000ffffffff ) )
-#else
 #define GUID_HIPART(x) ( ( x >> 32 ) )
 #define GUID_LOPART(x) ( ( x & 0x00000000ffffffff ) )
-#endif
 #else
 #define GUID_HIPART(x) (*(((uint32*)&(x))+1))
 #define GUID_LOPART(x) (*((uint32*)&(x)))
@@ -413,11 +410,7 @@ static inline int float2int32(const float value)
 	union { int asInt[2]; double asDouble; } n;
 	n.asDouble = value + 6755399441055744.0;
 
-#if USING_BIG_ENDIAN
-	return n.asInt [1];
-#else
 	return n.asInt [0];
-#endif
 #endif
 }
 
@@ -436,11 +429,7 @@ static inline int long2int32(const double value)
   union { int asInt[2]; double asDouble; } n;
   n.asDouble = value + 6755399441055744.0;
 
-#if USING_BIG_ENDIAN
-  return n.asInt [1];
-#else
   return n.asInt [0];
-#endif
 #endif
 }
 
@@ -452,7 +441,7 @@ static inline int long2int32(const double value)
 #include <sys/timeb.h>
 #endif
 
-ARCEMU_INLINE uint32 now()
+inline uint32 now()
 {	
 #ifdef WIN32
 	return GetTickCount();
@@ -525,7 +514,7 @@ struct spawn_timed_emotes
 };
 typedef std::list<spawn_timed_emotes*> TimedEmoteList;
 
-ARCEMU_INLINE void reverse_array(uint8 * pointer, size_t count)
+inline void reverse_array(uint8 * pointer, size_t count)
 {
 	size_t x;
 	uint8 * temp = (uint8*)malloc(count);
@@ -541,13 +530,13 @@ int32 GetTimePeriodFromString(const char * str);
 std::string ConvertTimeStampToString(uint32 timestamp);
 std::string ConvertTimeStampToDataTime(uint32 timestamp);
 
-ARCEMU_INLINE void arcemu_TOLOWER(std::string& str)
+inline void arcemu_TOLOWER(std::string& str)
 {
 	for(size_t i = 0; i < str.length(); ++i)
 		str[i] = (char)tolower(str[i]);
 };
 
-ARCEMU_INLINE void arcemu_TOUPPER(std::string& str)
+inline void arcemu_TOUPPER(std::string& str)
 {
 	for(size_t i = 0; i < str.length(); ++i)
 		str[i] = (char)toupper(str[i]);
@@ -627,4 +616,4 @@ inline static unsigned int MakeIP(const char * str)
 // fixing the problem that causes the crash is the proper way to fix things
 //#define FORCED_SERVER_KEEPALIVE
 
-#endif
+#endif      //WOWSERVER_COMMON_H

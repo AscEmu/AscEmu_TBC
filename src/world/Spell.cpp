@@ -26,7 +26,7 @@
 extern pSpellEffect SpellEffectsHandler[TOTAL_SPELL_EFFECTS];
 extern pSpellTarget SpellTargetHandler[EFF_TARGET_LIST_LENGTH_MARKER];
 
-extern char* SpellEffectNames[TOTAL_SPELL_EFFECTS];
+extern const char* SpellEffectNames[TOTAL_SPELL_EFFECTS];
 
 enum SpellTargetSpecification
 {
@@ -2914,7 +2914,7 @@ void Spell::HandleAddAura(uint64 guid)
 					charge.spellId=itr->second->GetSpellId();
 					charge.ProcFlag=itr->second->GetSpellProto()->procFlags;
 					charge.lastproc = 0;
-					Target->m_chargeSpells.insert(make_pair(itr->second->GetSpellId(),charge));
+                    Target->m_chargeSpells.insert(std::make_pair(itr->second->GetSpellId(), charge));
 				}
 			}
 			Target->AddAura(itr->second); // the real spell is added last so the modifier is removed last

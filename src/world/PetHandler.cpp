@@ -251,7 +251,7 @@ void WorldSession::HandleUnstablePet(WorldPacket & recv_data)
 	PlayerPet *pet = _player->GetPlayerPet(petnumber);
 	if(!pet)
 	{
-		sLog.outError("PET SYSTEM: Player "I64FMT" tried to unstable non-existant pet %d", _player->GetGUID(), petnumber);
+		sLog.outError("PET SYSTEM: Player " I64FMT " tried to unstable non-existant pet %d", _player->GetGUID(), petnumber);
 		return;
 	}
 	_player->SpawnPet(petnumber);
@@ -273,7 +273,7 @@ void WorldSession::HandleStableSwapPet(WorldPacket & recv_data)
 	PlayerPet *pet = _player->GetPlayerPet(petnumber);
 	if(!pet)
 	{
-		sLog.outError("PET SYSTEM: Player "I64FMT" tried to unstable non-existant pet %d", _player->GetGUID(), petnumber);
+		sLog.outError("PET SYSTEM: Player " I64FMT " tried to unstable non-existant pet %d", _player->GetGUID(), petnumber);
 		return;
 	}
 	Pet *pPet = _player->GetSummon();
@@ -383,7 +383,7 @@ void WorldSession::HandlePetRename(WorldPacket & recv_data)
 {
 	if(!_player->IsInWorld()) return;
 	uint64 guid;
-	string name;
+    std::string name;
 	recv_data >> guid >> name;
 
 	if(!_player->GetSummon() || _player->GetSummon()->GetGUID() != guid)
@@ -476,7 +476,7 @@ void WorldSession::HandlePetCancelAura( WorldPacket& recvPacket )
 		return;
 
 	if( !pPet->RemoveAura( spellid ) )
-		sLog.outError("PET SYSTEM: Player "I64FMT" failed to cancel aura %u from pet", _player->GetGUID(), spellid );
+		sLog.outError("PET SYSTEM: Player " I64FMT " failed to cancel aura %u from pet", _player->GetGUID(), spellid );
 }
 
 

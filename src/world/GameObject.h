@@ -43,32 +43,7 @@ enum GAMEOBJECT_FLAG_BIT
 	GAMEOBJECT_CLICKABLE = 0x20,
 };
 
-#if ENABLE_SHITTY_STL_HACKS == 1
 typedef HM_NAMESPACE::hash_map<Quest*, uint32 > GameObjectGOMap;
-#else
-namespace HM_NAMESPACE
-{
-	template <>
-	struct hash<Quest*>
-	{
-		union __vp
-		{
-			size_t s;
-			Quest* p;
-		};
-
-		size_t operator()(Quest* __x) const
-		{
-			__vp vp;
-			vp.p = __x;
-			return vp.s;
-		}
-	};
-};
-
-typedef HM_NAMESPACE::hash_map<Quest*, uint32, HM_NAMESPACE::hash<Quest*> > GameObjectGOMap;
-#endif
-
 typedef HM_NAMESPACE::hash_map<Quest*, std::map<uint32, uint32> > GameObjectItemMap;
 
 #pragma pack(push,1)
@@ -158,8 +133,8 @@ public:
 	GameObject(uint64 guid);
 	~GameObject( );
 
-	ARCEMU_INLINE GameObjectInfo* GetInfo() { return pInfo; }
-	ARCEMU_INLINE void SetInfo(GameObjectInfo * goi) { pInfo = goi; }
+	inline GameObjectInfo* GetInfo() { return pInfo; }
+	inline void SetInfo(GameObjectInfo * goi) { pInfo = goi; }
 
 	//void Create ( uint32 display_id, uint8 state, uint32 obj_field_entry, float scale, uint16 type, uint16 faction, uint32 mapid, float x, float y, float z, float ang );
    // void Create ( uint32 mapid, float x, float y, float z, float ang);
@@ -210,7 +185,7 @@ public:
 
 	void Deactivate();
 
-	ARCEMU_INLINE bool isQuestGiver()
+	inline bool isQuestGiver()
 	{
 		if(m_uint32Values[GAMEOBJECT_TYPE_ID] == 2)
 			return true;
@@ -242,25 +217,25 @@ public:
 	void CallScriptUpdate();
    
 
-	ARCEMU_INLINE GameObjectAIScript* GetScript() { return myScript; }
+	inline GameObjectAIScript* GetScript() { return myScript; }
 
 	void TrapSearchTarget();	// Traps need to find targets faster :P
 
-	ARCEMU_INLINE bool HasAI() { return spell != 0; }
+	inline bool HasAI() { return spell != 0; }
 	GOSpawn * m_spawn;
 	void OnPushToWorld();
 	void OnRemoveInRangeObject(Object* pObj);
 	void RemoveFromWorld(bool free_guid);
 
-	ARCEMU_INLINE bool CanMine(){return (usage_remaining > 0);}
-	ARCEMU_INLINE void UseMine(){ if(usage_remaining) usage_remaining--;}
+	inline bool CanMine(){return (usage_remaining > 0);}
+	inline void UseMine(){ if(usage_remaining) usage_remaining--;}
 	void CalcMineRemaining(bool force)
 	{
 		if(force || !usage_remaining)
 			usage_remaining = GetInfo()->sound4 + RandomUInt(GetInfo()->sound5 - GetInfo()->sound4) - 1;
 	}
-	ARCEMU_INLINE bool CanFish() { return ( usage_remaining > 0 ); }
-	ARCEMU_INLINE void CatchFish() { if ( usage_remaining ) usage_remaining--; }
+	inline bool CanFish() { return ( usage_remaining > 0 ); }
+	inline void CatchFish() { if ( usage_remaining ) usage_remaining--; }
 	void CalcFishRemaining( bool force )
 	{
 		if ( force || !usage_remaining )

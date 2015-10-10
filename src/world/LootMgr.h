@@ -21,8 +21,20 @@
 #ifndef _LOOTMGR_H
 #define _LOOTMGR_H
 
+#include "EventableObject.h"
+#include "Singleton.h"
+#include "ItemPrototype.h"
+
+#include <map>
+#include <vector>
+#include <set>
+
 struct ItemPrototype;
 class MapMgr;
+struct RandomProps;
+struct ItemRandomSuffixEntry;
+class Player;
+
 class LootRoll : public EventableObject
 {
 public:
@@ -36,7 +48,7 @@ public:
 private:
 	std::map<uint32, uint32> m_NeedRolls;
 	std::map<uint32, uint32> m_GreedRolls;
-	set<uint32> m_passRolls;
+    std::set<uint32> m_passRolls;
 	uint32 _groupcount;
 	uint32 _slotid;
 	uint32 _itemid;
@@ -47,8 +59,8 @@ private:
 	MapMgr * _mgr;
 };
 
-typedef vector<pair<RandomProps*, float> > RandomPropertyVector;
-typedef vector<pair<ItemRandomSuffixEntry*, float> > RandomSuffixVector;
+typedef std::vector<std::pair<RandomProps*, float> > RandomPropertyVector;
+typedef std::vector<std::pair<ItemRandomSuffixEntry*, float> > RandomSuffixVector;
 
 typedef struct
 {
@@ -163,8 +175,8 @@ private:
 	void LoadLootTables(const char * szTableName,LootStore * LootTable);
 	void PushLoot(StoreLootList *list,Loot * loot, bool heroic);
 	
-	map<uint32, RandomPropertyVector> _randomprops;
-	map<uint32, RandomSuffixVector> _randomsuffix;
+    std::map<uint32, RandomPropertyVector> _randomprops;
+    std::map<uint32, RandomSuffixVector> _randomsuffix;
 };
 
 #define lootmgr LootMgr::getSingleton()

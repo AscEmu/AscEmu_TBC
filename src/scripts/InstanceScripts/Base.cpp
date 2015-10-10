@@ -26,7 +26,7 @@ SpellDesc::SpellDesc(SpellEntry* pInfo, SpellFunc pFnc, TargetType pTargetType, 
 	mInfo = pInfo;
 	mSpellFunc = pFnc;
 	mTargetType = pTargetType;
-	mChance = max(min(pChance, 100.0f), 0.0f);
+    mChance = std::max(std::min(pChance, 100.0f), 0.0f);
 	mCastTime = pCastTime;
 	mCooldown = pCooldown;
 	mMinRange = pMinRange;
@@ -447,7 +447,7 @@ void ArcScriptCreatureAI::RemoveAura(uint32 pSpellId)
 
 void ArcScriptCreatureAI::RemoveAuraOnPlayers(uint32 pSpellId)
 {
-	for( set<Player*>::iterator PlayerIter = _unit->GetInRangePlayerSetBegin(); PlayerIter != _unit->GetInRangePlayerSetEnd(); ++PlayerIter ) 
+    for (std::set<Player*>::iterator PlayerIter = _unit->GetInRangePlayerSetBegin(); PlayerIter != _unit->GetInRangePlayerSetEnd(); ++PlayerIter)
 	{
 		(*PlayerIter)->RemoveAura(pSpellId);
 	}
@@ -905,7 +905,7 @@ Unit* ArcScriptCreatureAI::GetBestPlayerTarget(TargetFilter pFilter)
 {
 	//Build potential target list
 	UnitArray TargetArray;
-	for( set<Player*>::iterator PlayerIter = _unit->GetInRangePlayerSetBegin(); PlayerIter != _unit->GetInRangePlayerSetEnd(); ++PlayerIter ) 
+    for (std::set<Player*>::iterator PlayerIter = _unit->GetInRangePlayerSetBegin(); PlayerIter != _unit->GetInRangePlayerSetEnd(); ++PlayerIter)
 	{ 
 		if( IsValidUnitTarget(*PlayerIter, pFilter) ) TargetArray.push_back(static_cast<Unit*>(*PlayerIter));
 	}
