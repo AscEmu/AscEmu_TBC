@@ -387,7 +387,7 @@ public:
 	TimedEmoteList * GetTimedEmoteList(uint32 spawnid);
 
 	// other objects
-    
+
     // Set typedef's
 	typedef HM_NAMESPACE::hash_map<uint32, Group*>						GroupMap;
 	

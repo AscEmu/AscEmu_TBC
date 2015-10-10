@@ -21,6 +21,9 @@
 #ifndef WOWSERVER_CREATURE_H
 #define WOWSERVER_CREATURE_H
 
+#include "Map.h"
+#include "Unit.h"
+
 class CreatureTemplate;
 class GossipScript;
 
@@ -28,7 +31,6 @@ class GossipScript;
 #define MAX_CREATURE_LOOT 8
 #define MAX_PET_SPELL 4
 #define VENDOR_ITEMS_UPDATE_TIME 3600000
-#include "Map.h"
 
 struct CreatureItem
 {
