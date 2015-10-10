@@ -24,6 +24,12 @@
 #ifndef __WORLDSOCKET_H
 #define __WORLDSOCKET_H
 
+#include "StackBuffer.h"
+#include "FastQueue.h"
+#include "Auth/WowCrypt.h"
+#include "WorldPacket.h"
+#include <string>
+
 /* Normal WorldSocket when not using clustering */
 #ifndef CLUSTERING
 
