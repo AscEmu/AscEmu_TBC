@@ -17,8 +17,7 @@
  *
  */
 
-#include "DBCStores.h"
-#include "Log.h"
+#include "StdAfx.h"
 #include "DBC/DBCGlobals.hpp"
 
 typedef std::map<WMOAreaTableTripple, WMOAreaTableEntry const*> WMOAreaInfoByTripple;
