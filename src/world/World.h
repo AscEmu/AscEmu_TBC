@@ -344,7 +344,8 @@ public:
 			std::string num;
 			while ( t!=opstr.end() )
 			{
-				if ( (char)(*t)=='{' && strlen(  (char*) (*t) )>1  ){ // find and not end :D
+                if ((char)(*t) == '{' && strlen((char*) & (*t)) > 1)
+                { // find and not end :D
 					found++;
 					++t;
 					continue;
