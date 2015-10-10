@@ -349,7 +349,7 @@ typedef std::map<uint32, InstanceBossInfo*>                         InstanceBoss
 #ifdef arcemu_USE_MAP_PLAYER_INDEX
 
 // you can use the string map (slower)
-typedef map<string, PlayerInfo*> PlayerNameStringIndexMap;
+typedef std::map<string, PlayerInfo*> PlayerNameStringIndexMap;
 
 
 #else			// or
@@ -357,16 +357,16 @@ typedef map<string, PlayerInfo*> PlayerNameStringIndexMap;
 // gcc has no default hash for string type,
 // so we have to make an explicit hash template here
 template<>
-struct __gnu_cxx::hash<string>
+struct __gnu_cxx::hash<std::string>
 {
-	size_t operator()(string& tbh) const
+	size_t operator()(std::string& tbh) const
 	{
 		// simple crc32 hash for now, we may need to change this later however
 		return size_t( crc32( (const unsigned char*)tbh.c_str(), tbh.length() ) );
 	}
 }
 
-typedef HM_NAMESPACE::hash_map<string, PlayerInfo*> PlayerNameStringIndexMap;
+typedef HM_NAMESPACE::hash_map<std::string, PlayerInfo*> PlayerNameStringIndexMap;
 
 #endif
 #else
