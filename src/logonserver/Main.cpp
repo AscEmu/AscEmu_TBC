@@ -148,7 +148,7 @@ bool startdb()
         return false;
     }
 
-    sLogonSQL = Database::CreateDatabaseInterface(1);
+    sLogonSQL = Database::CreateDatabaseInterface();
 
     // Initialize it
     if(!sLogonSQL->Initialize(lhostname.c_str(), (unsigned int)lport, lusername.c_str(),

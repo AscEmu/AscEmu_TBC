@@ -107,7 +107,6 @@ set(headers
    StackBuffer.h
    StackWalker.h
    Storage.h
-   Timer.h
    Util.h
    WorldPacket.h
    WoWGuid.h

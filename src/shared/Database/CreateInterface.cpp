@@ -1,5 +1,23 @@
+/*
+ * AscEmu Framework based on ArcEmu MMORPG Server
+ * Copyright (C) 2014-2015 AscEmu Team <http://www.ascemu.org/>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+
 #include "DatabaseEnv.h"
-#include "../CrashHandler.h"
 #include "../Log.h"
 
 #if defined(ENABLE_DATABASE_MYSQL)
@@ -9,24 +27,13 @@
 void Database::CleanupLibs()
 {
 #if defined(ENABLE_DATABASE_MYSQL)
-		mysql_library_end();
+    mysql_library_end();
 #endif
 }
 
-
-Database * Database::CreateDatabaseInterface(uint32 uType)
+Database* Database::CreateDatabaseInterface()
 {
-	switch(uType)
-	{
 #if defined(ENABLE_DATABASE_MYSQL)
-	case 1:		// MYSQL
-		return new MySQLDatabase();
-		break;
+    return new MySQLDatabase();
 #endif
-
-	}
-
-    Log.LargeErrorMessage("You have attempted to connect to a database that is unsupported or nonexistant.\nCheck your config and try again.", NULL);
-	abort();
-	return NULL;
 }

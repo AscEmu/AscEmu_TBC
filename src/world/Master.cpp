@@ -670,19 +670,14 @@ bool Master::_StartDB()
 	Database_Character=NULL;
 	string hostname, username, password, database;
 	int port = 0;
-	int type = 1;
-	//string lhostname, lusername, lpassword, ldatabase;
-	//int lport = 0;
-	//int ltype = 1;
+
 	// Configure Main Database
-	
 	bool result = Config.MainConfig.GetString( "WorldDatabase", "Username", &username );
 	Config.MainConfig.GetString( "WorldDatabase", "Password", &password );
 	result = !result ? result : Config.MainConfig.GetString( "WorldDatabase", "Hostname", &hostname );
 	result = !result ? result : Config.MainConfig.GetString( "WorldDatabase", "Name", &database );
 	result = !result ? result : Config.MainConfig.GetInt( "WorldDatabase", "Port", &port );
-	result = !result ? result : Config.MainConfig.GetInt( "WorldDatabase", "Type", &type );
-	Database_World = Database::CreateDatabaseInterface(type);
+	Database_World = Database::CreateDatabaseInterface();
 
 	if(result == false)
 	{
@@ -703,8 +698,7 @@ bool Master::_StartDB()
 	result = !result ? result : Config.MainConfig.GetString( "CharacterDatabase", "Hostname", &hostname );
 	result = !result ? result : Config.MainConfig.GetString( "CharacterDatabase", "Name", &database );
 	result = !result ? result : Config.MainConfig.GetInt( "CharacterDatabase", "Port", &port );
-	result = !result ? result : Config.MainConfig.GetInt( "CharacterDatabase", "Type", &type );
-	Database_Character = Database::CreateDatabaseInterface(type);
+	Database_Character = Database::CreateDatabaseInterface();
 
 	if(result == false)
 	{
