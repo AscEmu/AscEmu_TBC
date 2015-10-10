@@ -2214,11 +2214,11 @@ void SendHighlightedName(WorldSession * m_session, const char* prefix, char* ful
 	sChatHandler.SystemMessage(m_session, message);
 }
 
-void SendItemLinkToPlayer(ItemPrototype * iProto, WorldSession * pSession, bool ItemCount, Player * owner = NULL, uint32 language = NULL)
+void SendItemLinkToPlayer(ItemPrototype * iProto, WorldSession * pSession, bool ItemCount, Player * owner = nullptr, uint32 language = 0)
 {
 	if(!iProto || !pSession)
 		return;
-	if(ItemCount && owner == NULL)
+	if(ItemCount && owner == nullptr)
 		return;
 		
  	if(ItemCount)
@@ -2594,7 +2594,7 @@ bool ChatHandler::HandleNpcPossessCommand(const char * args, WorldSession * m_se
 	}
 
 	m_session->GetPlayer()->Possess(pTarget);
-	BlueSystemMessage(m_session, "Possessed "I64FMT, pTarget->GetGUID());
+	BlueSystemMessage(m_session, "Possessed " I64FMT, pTarget->GetGUID());
 	switch( pTarget->GetTypeId() )
 	{
 		case TYPEID_PLAYER:
@@ -2736,7 +2736,7 @@ bool ChatHandler::HandleAIAgentDebugContinue(const char * args, WorldSession * m
 
 		SpellEntry * sp = *aiagent_spells.begin();
 		aiagent_spells.erase(aiagent_spells.begin());
-		BlueSystemMessage(m_session, "Casting %u, "MSG_COLOR_SUBWHITE"%u remaining.", sp->Id, aiagent_spells.size());
+		BlueSystemMessage(m_session, "Casting %u, " MSG_COLOR_SUBWHITE "%u remaining.", sp->Id, aiagent_spells.size());
 
         std::map<uint32, spell_thingo>::iterator it = aiagent_extra.find(sp->Id);
 		ASSERT(it != aiagent_extra.end());

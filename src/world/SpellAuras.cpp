@@ -4719,30 +4719,42 @@ void Aura::SpellAuraProcTriggerDamage(bool apply)
 
 void Aura::SpellAuraTrackCreatures(bool apply)
 {
-	if(m_target->GetTypeId() != TYPEID_PLAYER)
-		return;
+    if (p_target != NULL)
+    {
+        if (apply)
+        {
+            if (p_target->TrackingSpell != 0)
+                p_target->RemoveAura(p_target->TrackingSpell);
 
-	Player *plr = static_cast< Player* >( m_target );
-
-	if(plr->TrackingSpell)
-		plr->RemoveAura(plr->TrackingSpell);
-
-	plr->TrackingSpell = apply ? GetSpellId() : NULL;
-	plr->SetUInt32Value(PLAYER_TRACK_CREATURES, apply ? ((uint32)1)<<(mod->m_miscValue-1) : NULL);
+            p_target->SetUInt32Value(PLAYER_TRACK_CREATURES, (uint32)1 << (mod->m_miscValue - 1));
+            p_target->TrackingSpell = GetSpellId();
+        }
+        else
+        {
+            p_target->TrackingSpell = 0;
+            p_target->SetUInt32Value(PLAYER_TRACK_CREATURES, 0);
+        }
+    }
 }
 
 void Aura::SpellAuraTrackResources(bool apply)
 {
-	if(m_target->GetTypeId() != TYPEID_PLAYER)
-		return;
+    if (p_target != NULL)
+    {
+        if (apply)
+        {
+            if (p_target->TrackingSpell != 0)
+                p_target->RemoveAura(p_target->TrackingSpell);
 
-	Player *plr = static_cast< Player* >( m_target );
-
-	if(plr->TrackingSpell)
-		plr->RemoveAura(plr->TrackingSpell);
-
-	plr->TrackingSpell = apply ? GetSpellId() : NULL;
-	plr->SetUInt32Value(PLAYER_TRACK_RESOURCES, apply ? ((uint32)1)<<(mod->m_miscValue-1) : NULL);
+            p_target->SetUInt32Value(PLAYER_TRACK_RESOURCES, (uint32)1 << (mod->m_miscValue - 1));
+            p_target->TrackingSpell = GetSpellId();
+        }
+        else
+        {
+            p_target->TrackingSpell = 0;
+            p_target->SetUInt32Value(PLAYER_TRACK_RESOURCES, 0);
+        }
+    }
 }
 
 void Aura::SpellAuraModParryPerc(bool apply)

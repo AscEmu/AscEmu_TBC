@@ -1242,22 +1242,23 @@ public:
         m_destY = target.m_destY;
         m_destZ = target.m_destZ;
 
-		m_strTarget = target.m_strTarget ? strdup(target.m_strTarget) : NULL;
+        m_strTarget = target.m_strTarget;
 
         m_targetMask = target.m_targetMask;
-	m_targetMaskExtended = target.m_targetMaskExtended;
+	    m_targetMaskExtended = target.m_targetMaskExtended;
 
         return *this;
     }
 
+    ~SpellCastTargets() { m_strTarget.clear(); }
     uint16 m_targetMask;
     uint16 m_targetMaskExtended;			// this could be a 32 also
     uint64 m_unitTarget;
     uint64 m_itemTarget;
+
     float m_srcX, m_srcY, m_srcZ;
     float m_destX, m_destY, m_destZ;
-    char* m_strTarget;
-
+    std::string m_strTarget;
 };
 
 enum SpellState

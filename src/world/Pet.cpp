@@ -448,7 +448,7 @@ void Pet::InitializeSpells()
 		{
 			// Cast on self..
 			Spell * sp = SpellPool.PooledNew();
-			sp->Init( this, info, true, false );
+			sp->Init( this, info, true, nullptr);
 			SpellCastTargets targets( this->GetGUID() );
 			sp->prepare( &targets );
 
@@ -902,7 +902,7 @@ void Pet::AddSpell( SpellEntry * sp, bool learning )
 		if(IsInWorld())
 		{
 			Spell * spell = SpellPool.PooledNew();
-			spell->Init(this, sp, true, false);
+			spell->Init(this, sp, true, nullptr);
 			SpellCastTargets targets(this->GetGUID());
 			spell->prepare(&targets);
 			mSpells[sp] = 0x0100;
@@ -1977,8 +1977,3 @@ Group *Pet::GetGroup()
 		return m_Owner->GetGroup();
 	return NULL;
 }
-
-
-
-
-

@@ -632,18 +632,18 @@ void LuaEngine::LoadScripts()
 		char* ext = strrchr(list[filecount]->d_name, '.');
 		if(ext != NULL && !strcmp(ext, ".lua"))
 			{
-				string full_path = string(list[filecount]->d_name);
-				luaFiles.insert(string(full_path.c_str()));
+                std::string full_path = std::string(list[filecount]->d_name);
+                luaFiles.insert(std::string(full_path.c_str()));
 		}
 		else if(!stricmp(ext, ".luc"))
 		{
-		string full_path = string(list[filecount]->d_name);
-		luaBytecodeFiles.insert(string(full_path.c_str()));
+            std::string full_path = string(list[filecount]->d_name);
+            luaBytecodeFiles.insert(std::string(full_path.c_str()));
 		}
 
-		free(list[filecount]);
+        free(list[filecount]);
 	}
-	free(list);
+    free(list);
 #endif
 
 	// we prefer precompiled code.
