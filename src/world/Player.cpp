@@ -1173,7 +1173,7 @@ void Player::_EventCharmAttack()
 	//Can't find victim, stop attacking
 	if (!pVictim)
 	{
-		sLog.outError( "WORLD: "I64FMT" doesn't exist.",m_curSelection);
+		sLog.outError( "WORLD: " I64FMT " doesn't exist.",m_curSelection);
 		sLog.outDetail("Player::Update:  No valid current selection to attack, stopping attack\n");
 		this->setHRegenTimer(5000); //prevent clicking off creature for a quick heal
 		clearStateFlag(UF_ATTACKING);
@@ -1894,7 +1894,7 @@ void Player::SpawnPet(uint32 pet_number)
 	std::map<uint32, PlayerPet*>::iterator itr = m_Pets.find(pet_number);
 	if(itr == m_Pets.end())
 	{
-		sLog.outError("PET SYSTEM: "I64FMT" Tried to load invalid pet %d", GetGUID(), pet_number);
+		sLog.outError("PET SYSTEM: " I64FMT " Tried to load invalid pet %d", GetGUID(), pet_number);
 		return;
 	}
 	if (itr->second->spellid == 0)

@@ -173,7 +173,7 @@ void Creature::OnRemoveCorpse()
 	if (IsInWorld() && (int32)m_mapMgr->GetInstanceID() == m_instanceId)
 	{
 
-		sLog.outDetail("Removing corpse of "I64FMT"...", GetGUID());
+		sLog.outDetail("Removing corpse of " I64FMT "...", GetGUID());
 	   
 			if((GetMapMgr()->GetMapInfo() && GetMapMgr()->GetMapInfo()->type == INSTANCE_RAID && this->GetProto() && this->GetProto()->boss) || m_noRespawn)
 			{
@@ -232,7 +232,7 @@ void Creature::OnRespawn(MapMgr * m)
 		}
 	}
 
-	sLog.outDetail("Respawning "I64FMT"...", GetGUID());
+	sLog.outDetail("Respawning " I64FMT "...", GetGUID());
 	SetUInt32Value(UNIT_FIELD_HEALTH, GetUInt32Value(UNIT_FIELD_MAXHEALTH));
 	SetUInt32Value(UNIT_DYNAMIC_FLAGS, 0); // not tagging shiat
 	if(proto && m_spawn)
@@ -1635,7 +1635,7 @@ void Creature::AISpellUpdate()
 
 				//printf("\nCOOLDOWN: %u, %u", newspell->RecoveryTime, newspell->CategoryRecoveryTime);
 
-				//printf("\nTEST: %f %f %f "I64FMT" "I64FMT, t.m_destX, t.m_destY, t.m_destZ, t.m_itemTarget, t.m_unitTarget);
+				//printf("\nTEST: %f %f %f " I64FMT " "I64FMT, t.m_destX, t.m_destY, t.m_destZ, t.m_itemTarget, t.m_unitTarget);
 
 				//we have no targets?
 				if (t.m_destX == 0.0f && t.m_destY == 0.0f && t.m_destZ == 0.0f && t.m_itemTarget == 0 && t.m_unitTarget == 0)
