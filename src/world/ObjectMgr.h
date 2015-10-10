@@ -349,7 +349,7 @@ typedef std::map<uint32, InstanceBossInfo*>                         InstanceBoss
 #ifdef arcemu_USE_MAP_PLAYER_INDEX
 
 // you can use the string map (slower)
-typedef std::map<string, PlayerInfo*> PlayerNameStringIndexMap;
+typedef std::map<std::string, PlayerInfo*> PlayerNameStringIndexMap;
 
 
 #else			// or
