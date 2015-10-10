@@ -550,7 +550,7 @@ protected:
 	bool HandleCollisionGetHeight(const char * args, WorldSession * m_session);
 
 	/* For skill related GM commands */
-	SkillNameMgr *SkillNameManager;
+	SkillNameMgr* SkillNameManager;
 
 	bool HandleFixScaleCommand(const char * args, WorldSession * m_session);
 	bool HandleAddTrainerSpellCommand( const char * args, WorldSession * m_session );

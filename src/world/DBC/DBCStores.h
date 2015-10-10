@@ -153,41 +153,6 @@ struct skilllineentry //SkillLine.dbc
     uint32 type;
     uint32 skillCostsID;
     char* Name;
-    //int32 NameAlt1;
-    //uint32 NameAlt2;
-    //uint32 NameAlt3;
-    //uint32 NameAlt4;
-    //uint32 NameAlt5;
-    //uint32 NameAlt6;
-    //uint32 NameAlt7;
-    //uint32 NameAlt8;
-    //uint32 NameAlt9;
-    //uint32 NameAlt10;
-    //uint32 NameAlt11;
-    //uint32 NameAlt12;
-    //uint32 NameAlt13;
-    //uint32 NameAlt14;
-    //uint32 NameAlt15;
-    //uint32 NameFlags;
-    //uint32 Description;
-    //uint32 DescriptionAlt1;
-    //uint32 DescriptionAlt2;
-    //uint32 DescriptionAlt3;
-    //uint32 DescriptionAlt4;
-    //uint32 DescriptionAlt5;
-    //uint32 DescriptionAlt6;
-    //uint32 DescriptionAlt7;
-    //uint32 DescriptionAlt8;
-    //uint32 DescriptionAlt9;
-    //uint32 DescriptionAlt10;
-    //uint32 DescriptionAlt11;
-    //uint32 DescriptionAlt12;
-    //uint32 DescriptionAlt13;
-    //uint32 DescriptionAlt14;
-    //uint32 DescriptionAlt15;
-    //uint32 DescriptionFlags;
-    //uint32 unk2;
-
 };
 
 // Struct for the entry in Spell.dbc
@@ -883,6 +848,21 @@ struct WMOAreaTableEntry
 	//uint32 nameflags;
 };
 
+struct NameGenEntry
+{
+    uint32 ID;
+    char* Name;
+    uint32 unk1;
+    uint32 unk2;
+};
+
+struct LFGDungeonEntry
+{
+    uint32 ID;                  // 0
+    //char* Name;                 // 1-17 Name lang
+    uint32 type;                // 20 Type
+};
+
 /*struct CharTitlesEntry
 {
 	uint32		ID;
@@ -1263,6 +1243,10 @@ extern SERVER_DECL DBCStorage<gtFloat> dbcHPRegen;
 extern SERVER_DECL DBCStorage<gtFloat> dbcHPRegenBase;
 extern SERVER_DECL DBCStorage<AreaTriggerEntry> dbcAreaTrigger;
 extern SERVER_DECL DBCStorage<WMOAreaTableEntry> dbcWMOAreaTable;
+
+extern SERVER_DECL DBCStorage<NameGenEntry> dbcNameGen;
+extern SERVER_DECL DBCStorage<LFGDungeonEntry> dbcLFGDungeon;
+
 //extern SERVER_DECL DBCStorage<CharTitlesEntry> dbcCharTitle; // not used yet
 
 bool LoadDBCs();

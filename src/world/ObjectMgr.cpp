@@ -2231,39 +2231,31 @@ set<SpellEntry*>* ObjectMgr::GetDefaultPetSpells(uint32 Entry)
 
 void ObjectMgr::LoadPetSpellCooldowns()
 {
-	DBCFile dbc;
+    for (DBCStorage<CreatureSpellDataEntry>::iterator itr = dbcCreatureSpellData.begin(); itr != dbcCreatureSpellData.end(); ++itr)
+    {
+        CreatureSpellDataEntry* csde = *itr;
 
-	if( !dbc.open( "DBC/CreatureSpellData.dbc" ) )
-	{
-		Log.Error( "ObjectMgr", "Cannot find file ./DBC/CreatureSpellData.dbc" );
-		return;
-	}
+        for (uint32 j = 0; j < 3; ++j)
+        {
+            uint32 SpellId = csde->Spells[j];
+            uint32 Cooldown = csde->Cooldowns[j] * 10;
 
-	uint32 SpellId;
-	uint32 Cooldown;
-	for(uint32 i = 0; i < dbc.getRecordCount(); ++i)
-	{
-		for(uint32 j = 0; j < 3; ++j)
-		{
-			SpellId = dbc.getRecord(i).getUInt(1 + j);
-			Cooldown = dbc.getRecord(i).getUInt(5 + j);
-			Cooldown *= 10;
-			if(SpellId)
-			{
-				PetSpellCooldownMap::iterator itr = mPetSpellCooldowns.find(SpellId);
-				if(itr == mPetSpellCooldowns.end())
-				{
-					if( Cooldown )
-						mPetSpellCooldowns.insert( make_pair(SpellId, Cooldown) );
-				}
-				else
-				{
-					uint32 SP2 = mPetSpellCooldowns[SpellId];
-					ASSERT(Cooldown == SP2);
-				}
-			}
-		}
-	}
+            if (SpellId != 0)
+            {
+                PetSpellCooldownMap::iterator itr = mPetSpellCooldowns.find(SpellId);
+                if (itr == mPetSpellCooldowns.end())
+                {
+                    if (Cooldown)
+                        mPetSpellCooldowns.insert(std::make_pair(SpellId, Cooldown));
+                }
+                else
+                {
+                    uint32 SP2 = mPetSpellCooldowns[SpellId];
+                    ASSERT(Cooldown == SP2);
+                }
+            }
+        }
+    }
 }
 
 uint32 ObjectMgr::GetPetSpellCooldown(uint32 SpellId)

@@ -69,6 +69,10 @@ SERVER_DECL DBCStorage<gtFloat> dbcHPRegen;
 SERVER_DECL DBCStorage<gtFloat> dbcHPRegenBase;
 SERVER_DECL DBCStorage<AreaTriggerEntry> dbcAreaTrigger;
 SERVER_DECL DBCStorage<WMOAreaTableEntry> dbcWMOAreaTable;
+
+SERVER_DECL DBCStorage<NameGenEntry> dbcNameGen;
+SERVER_DECL DBCStorage<LFGDungeonEntry> dbcLFGDungeon;
+
 //SERVER_DECL DBCStorage<CharTitlesEntry> dbcCharTitle;
 
 const char* ItemSetFormat = "usxxxxxxxxxxxxxxxuuuuuuuuuxxxxxxxxxuuuuuuuuuuuuuuuuuu";
@@ -120,12 +124,15 @@ const char* mapentryFormat =
 "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
 const char* itemrandomsuffixformat = "uxxxxxxxxxxxxxxxxxxuuuuuu";
 const char* chatchannelformat = "uuxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
-const char * durabilityqualityFormat = "uf";
-const char * durabilitycostsFormat = "uuuuuuuuuuuuuuuuuuuuuuuuuuuuuu";
+const char* durabilityqualityFormat = "uf";
+const char* durabilitycostsFormat = "uuuuuuuuuuuuuuuuuuuuuuuuuuuuuu";
 const char* bankslotpriceformat = "uu";
 const char* gtfloatformat = "f";
 const char* areatriggerformat = "uuffffffff";
 const char* wmoareaformat = "uiiixxxxxuuxxxxxxxxxxxxxxxxx";
+
+const char* namegenentryformat = "usuu";
+const char* LFGDungeonEntryformat = "nxxxxxxxxxxxxxxxxxxxixxx"; //not complete
 //const char* chartitleFormat = "uxsxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxu";
 
 template<class T>
@@ -191,8 +198,8 @@ bool LoadDBCs()
 	LOAD_DBC("DBC/AreaTrigger.dbc", areatriggerformat, true, dbcAreaTrigger, true);
     LOAD_DBC("DBC/WMOAreaTable.dbc", wmoareaformat, true, dbcWMOAreaTable, false );
     //LOAD_DBC("DBC/SummonProperties.dbc", summonpropertiesformat, true, dbcSummonProperties, false);
-    //LOAD_DBC("DBC/NameGen.dbc", namegenentryformat, true, dbcNameGen, true);
-    //LOAD_DBC("DBC/LFGDungeons.dbc", LFGDungeonEntryformat, true, dbcLFGDungeon, false); //Is it not important to handle it?
+    LOAD_DBC("DBC/NameGen.dbc", namegenentryformat, true, dbcNameGen, true);
+    LOAD_DBC("DBC/LFGDungeons.dbc", LFGDungeonEntryformat, true, dbcLFGDungeon, true); //Is it not important to handle it?
     //LOAD_DBC("DBC/Vehicle.dbc", VehicleEntryfmt, true, dbcVehicle, true);
     //LOAD_DBC("DBC/VehicleSeat.dbc", VehicleSeatEntryfmt, true, dbcVehicleSeat, false);
 

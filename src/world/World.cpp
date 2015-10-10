@@ -337,40 +337,6 @@ bool World::SetInitialWorldSettings()
 		return false;
 	}
 
-	/* Convert area table ids/flags */
-    /* TODO: Why are we doing this? Is it still necessary after DBC rework? */
-    /*
-	DBCFile area;
-
-	if( !area.open( "DBC/AreaTable.dbc" ) )
-	{
-		Log.Error( "World", "Cannot find file ./DBC/AreaTable.dbc" );
-		return false;
-	}
-
-	uint32 flag_, area_, zone_;
-	for(uint32 i = 0; i < area.getRecordCount(); ++i)
-	{
-		area_ = area.getRecord(i).getUInt(0);
-		flag_ = area.getRecord(i).getUInt(3);
-		zone_ = area.getRecord(i).getUInt(2);
-
-		mAreaIDToTable[flag_] = dbcArea.LookupEntryForced(area_);
-		if(mZoneIDToTable.find(zone_) != mZoneIDToTable.end())
-		{
-			if(mZoneIDToTable[zone_]->AreaFlags != 312 &&
-				mAreaIDToTable[flag_]->AreaFlags == 312)
-			{
-				// over ride.
-				mZoneIDToTable[zone_] = mAreaIDToTable[flag_];
-			}
-		}
-		else
-		{
-			mZoneIDToTable[zone_] = mAreaIDToTable[flag_];
-		}
-	}*/
-
 	new ObjectMgr;
 	new QuestMgr;
 	new LootMgr;
@@ -1418,24 +1384,16 @@ void World::Rehash(bool load)
 
 void World::LoadNameGenData()
 {
-	DBCFile dbc;
+    for (DBCStorage<NameGenEntry>::iterator itr = dbcNameGen.begin(); itr != dbcNameGen.end(); ++itr)
+    {
+        NameGenEntry* nge = *itr;
 
-	if( !dbc.open( "DBC/NameGen.dbc" ) )
-	{
-		Log.Error( "World", "Cannot find file ./DBC/NameGen.dbc" );
-		return;
-	}
+        NameGenData d;
 
-	for(uint32 i = 0; i < dbc.getRecordCount(); ++i)
-	{
-		NameGenData d;
-		if(dbc.getRecord(i).getString(1)==NULL)
-			continue;
-
-		d.name = string(dbc.getRecord(i).getString(1));
-		d.type = dbc.getRecord(i).getUInt(3);
-		_namegendata[d.type].push_back(d);
-	}
+        d.name = std::string(nge->Name);
+        d.type = nge->unk2;
+        _namegendata[d.type].push_back(d);
+    }
 }
 
 void World::CharacterEnumProc(QueryResultVector& results, uint32 AccountId)
