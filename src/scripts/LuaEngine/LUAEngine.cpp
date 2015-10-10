@@ -1935,7 +1935,8 @@ int luaUnit_FullCastSpellOnTarget(lua_State * L, Unit * ptr)
 }
 int luaUnit_SpawnCreature(lua_State * L, Unit * ptr)
 {
-	if(ptr == NULL) return 0;
+	if(ptr == NULL)
+        return 0;
 	uint32 entry_id = luaL_checkinteger(L, 1);
 	float x = (float)luaL_checkinteger(L, 2);
 	float y = (float)luaL_checkinteger(L, 3);
@@ -1952,7 +1953,7 @@ int luaUnit_SpawnCreature(lua_State * L, Unit * ptr)
 	CreatureProto *p = CreatureProtoStorage.LookupEntry(entry_id);
     
     if(p == NULL)
-      return NULL;
+      return 0;
 	Creature * pCreature = ptr->GetMapMgr()->GetInterface()->SpawnCreature(entry_id,x,y,z,o,true,true,0,0);
 	pCreature->SetUInt32Value(UNIT_FIELD_FACTIONTEMPLATE,faction);
 	pCreature->_setFaction();
@@ -1965,7 +1966,8 @@ int luaUnit_SpawnCreature(lua_State * L, Unit * ptr)
 }
 int luaUnit_SpawnGameObject(lua_State * L, Unit * ptr)
 {
-	if(ptr == NULL) return 0;
+	if(ptr == NULL)
+        return 0;
 	uint32 entry_id = luaL_checkinteger(L, 1);
 	float x = (float)luaL_checkinteger(L, 2);
 	float y = (float)luaL_checkinteger(L, 3);
@@ -3010,7 +3012,7 @@ int luaUnit_GetCreatureNearestCoords(lua_State * L, Unit * ptr)
     float x = (float)luaL_checknumber(L,1);
     float y = (float)luaL_checknumber(L,2);
     float z = (float)luaL_checknumber(L,3);
-    if(entryid==NULL) 
+    if(entryid==0) 
         lua_pushnil(L);
     else
         Lunar<Unit>::push(L,ptr->GetMapMgr()->GetInterface()->GetCreatureNearestCoords(x, y, z, entryid), false);
@@ -3024,7 +3026,7 @@ int luaUnit_GetGameObjectNearestCoords(lua_State *L, Unit * ptr)
     float x = (float)luaL_checknumber(L,1);
     float y = (float)luaL_checknumber(L,2);
     float z = (float)luaL_checknumber(L,3);
-    if(entryid==NULL) 
+    if(entryid==0) 
         lua_pushnil(L);
     else
         Lunar<GameObject>::push(L,ptr->GetMapMgr()->GetInterface()->GetGameObjectNearestCoords(x, y, z, entryid), false);
@@ -3141,7 +3143,7 @@ int luaUnit_IsCreatureMoving(lua_State * L, Unit * ptr)
 int luaUnit_SetOutOfCombatRange(lua_State * L, Unit * ptr)
 {
 	int range = luaL_checkinteger(L, 1);
-	if(ptr != NULL || range != NULL)
+	if(ptr != nullptr || range != 0)
 		ptr->GetAIInterface()->setOutOfCombatRange(range);
 	return 0;
 }
@@ -3307,7 +3309,7 @@ int luaUnit_AddDataToPacket(lua_State * L, Unit * ptr)
 	{
 		case 0:
 			// int
-			dat << luaL_checkinteger(L, 2);
+            dat << (int32)luaL_checkinteger(L, 2);
 			break;
 		case 1:
 			// uint8
