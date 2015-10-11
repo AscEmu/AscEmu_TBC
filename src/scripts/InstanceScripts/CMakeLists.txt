@@ -56,6 +56,7 @@ set(sources
     Raid_TheEye.cpp  
     Raid_WorldBosses.cpp 
     Raid_ZulAman.cpp
+    Raid_ZulGurub.cpp
     Event_DarkPortal.cpp
     GenericAI.cpp 
     Base.cpp 
