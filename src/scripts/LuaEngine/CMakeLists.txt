@@ -1,28 +1,31 @@
-if(NOT BUILD_LUAENGINE )
+# Copyright (C) 2014-2015 AscEmu Team <http://www.ascemu.org>
+
+if(NOT BUILD_LUAENGINE)
   message("\tLuaEngine was skipped because BUILD_LUAENGINE is unchecked.")
   return()
-endif()
+endif(NOT BUILD_LUAENGINE)
 
-
+# set up our project name
 project(LuaEngine)
 
+set(prefix ${SCRIPTS_PATH}/${PROJECT_NAME})
+
 #SRCS - contains the source files that compose this project.
-file(GLOB sources_localdir *.cpp *.h)
+set(SRCS
+   ${prefix}/LUAEngine.cpp 
+   )
 
-set(ascemu_luaengine_SRCS
-  ${ascemu_luaengine_SRCS}
-  ${sources_localdir}
-)
+set(HEADERS
+   ${prefix}/LUAEngine.h
+   ${prefix}/LUAFunctions.h
+   )
 
-include_directories( ${include_dirs} ${ascemu_luaengine_SRCS} ${GLOBAL_INCLUDE_DIRS} ${DEPENDENCY_ROOT}/zlib)
-add_definitions( -DSCRIPTLIB -DSKIP_ALLOCATOR_SHARING )
-IF( IS_LINUX )
+include_directories(${include_dirs} ${prefix} ${DEPENDENCY_ROOT}/zlib)
+IF(IS_LINUX)
 	add_definitions(-Wno-deprecated)
 ENDIF()
 
-
-add_library(${PROJECT_NAME} SHARED ${ascemu_luaengine_SRCS})
-add_dependencies( ${PROJECT_NAME} lualib shared world)
-target_link_libraries( ${PROJECT_NAME} lualib world)
+add_library(${PROJECT_NAME} SHARED ${SRCS} ${HEADERS})
+add_dependencies(${PROJECT_NAME} ${script_dependencies} lualib)
+target_link_libraries(${PROJECT_NAME} ${script_linkages} lualib)
 install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION ${ASCEMU_SCRIPTLIB_PATH} LIBRARY DESTINATION ${ASCEMU_SCRIPTLIB_PATH})
-

@@ -1,33 +1,55 @@
-if(NOT BUILD_QUESTSCRIPTS)
+# Copyright (C) 2014-2015 AscEmu Team <http://www.ascemu.org>
+
+if(NOT BUILD_QUESTSCRIPTS )
   message("\tQuestScripts was skipped because BUILD_QUESTSCRIPTS is unchecked.")
   return()
 endif(NOT BUILD_QUESTSCRIPTS)
 
-PROJECT(QuestScripts)
+# set up our project name
+project(QuestScripts)
 
-file(GLOB_RECURSE sources_EAS EAS/*.cpp EAS/*.h)
-file(GLOB sources_localdir *.cpp *.h)
+set(prefix ${SCRIPTS_PATH}/${PROJECT_NAME})
 
-set(ascemu_questscripts_SRCS
-  ${ascemu_questscripts_SRCS}
-  ${sources_localdir}
-  ${sources_EAS}
-)
+SET(sources
+   Azuremyst_Isle.cpp
+   BladeEdge_Mountains.cpp
+   Druid.cpp
+   Eastern_Plaguelands.cpp
+   Hellfire_Peninsula.cpp
+   Isle_of_QuelDanas.cpp
+   Mage.cpp
+   Nagrand.cpp
+   Paladin.cpp
+   Shadowmoon.cpp
+   Silverpine_Forest.cpp
+   Terrokar_Forest.cpp
+   The_Barrens.cpp
+   Undercity.cpp
+   Ungoro.cpp
+   Zangarmarsh.cpp
+   Setup.cpp 
+   )
 
-include_directories( ${GLOBAL_INCLUDE_DIRS} ${ascemu_questscripts_SRCS} ${DEPENDENCY_ROOT}/zlib )
+set(headers
+   Setup.h
+   EAS/EasyFunctions.h
+   )
 
-add_library( ${PROJECT_NAME} SHARED ${ascemu_questscripts_SRCS} )
+foreach(src IN ITEMS ${sources})
+   set(SRCS ${SRCS} ${prefix}/${src})
+endforeach(src)
+foreach(src IN ITEMS ${headers})
+   set(HEADERS ${HEADERS} ${prefix}/${src})
+endforeach(src)
 
-#common include directories that script libraries might include.
-SET( include_dirs ${GLOBAL_INCLUDE_DIRS} )
-
-add_dependencies( ${PROJECT_NAME} shared world QuestScripts )
-add_definitions( -DSCRIPTLIB -DSKIP_ALLOCATOR_SHARING )
-target_link_libraries( ${PROJECT_NAME} world )
+include_directories( ${include_dirs} ${prefix} ${DEPENDENCY_ROOT}/zlib)
+add_library(${PROJECT_NAME} SHARED ${SRCS} ${HEADERS})
+add_dependencies(${PROJECT_NAME} ${script_dependencies})
+target_link_libraries(${PROJECT_NAME} ${script_linkages})
 
 include(PCHSupport)
-IF( CMAKE_GENERATOR MATCHES Visual*)
-	ADD_NATIVE_PRECOMPILED_HEADER(${PROJECT_NAME} Setup.h ${ascemu_questscripts_SRCS}/Setup.cpp)
-ENDIF()
+if(CMAKE_GENERATOR MATCHES Visual*)
+   ADD_NATIVE_PRECOMPILED_HEADER(${PROJECT_NAME} Setup.h ${prefix}/Setup.cpp)
+endif()
 
 install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION ${ASCEMU_SCRIPTLIB_PATH} LIBRARY DESTINATION ${ASCEMU_SCRIPTLIB_PATH})
