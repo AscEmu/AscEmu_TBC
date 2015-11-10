@@ -4905,6 +4905,45 @@ void Unit::SendChatMessage(uint8 type, uint32 lang, const char *msg)
 	SendMessageToSet(&data, true);
 }
 
+/// \todo implement localization support
+// 1. Chat Areas (Area, Map, World)
+// 2. WorldPacket... support for MONSTER_SAY
+// 3. data resize, map with players (PlayerSession)
+// 4. Sending localizations if available... puh
+void Unit::SendScriptTextChatMessage(uint32 textid)
+{
+    CreatureText* ct = CreatureTextStorage.LookupEntry(textid);
+    CreatureInfo* ci = (m_objectTypeId == TYPEID_UNIT) ? ((Creature*)this)->GetCreatureInfo() : NULL;
+
+    if (ci == NULL)
+        return;
+
+    const char* name = ci->Name;
+    size_t CreatureNameLength = strlen((char*)name) + 1;
+    size_t MessageLength = strlen((char*)ct->text) + 1;
+
+    if (ct->emote != 0)
+        this->EventAddEmote(ct->emote, ct->duration);
+
+    if (ct->sound != 0)
+        this->PlaySoundToSet(ct->sound);
+
+    // Send chat msg
+    WorldPacket data(SMSG_MESSAGECHAT, 35 + CreatureNameLength + MessageLength);
+    data << uint8(ct->type);            // f.e. CHAT_MSG_MONSTER_SAY enum ChatMsg (perfect name for this enum XD)
+    data << uint32(ct->language);       // f.e. LANG_UNIVERSAL enum Languages
+    data << GetGUID();                  // guid of the npc
+    data << uint32(0);
+    data << uint32(CreatureNameLength); // the length of the npc name (needed to calculate text beginning)
+    data << name;                       // name of the npc
+    data << uint64(0);
+    data << uint32(MessageLength);      // the length of the message (needed to calculate the bubble)
+    data << ct->text;                   // the text
+    data << uint8(0x00);
+
+    SendMessageToSet(&data, true);      // sending this
+}
+
 void Unit::WipeHateList()
 { 
 	GetAIInterface()->WipeHateList(); 

@@ -110,6 +110,21 @@ struct WorldStringTable
 	char * text;
 };
 
+struct CreatureText
+{
+    uint32 id;                  // unique id \todo remove this and use creature_entry + text_id as key
+    char* text;
+    uint32 creature_entry;      // creature entry ID
+    uint32 text_id;             // text_id started with 0
+    ChatMsg type;
+    Languages language;
+    float probability;          // chance/percent
+    EmoteType emote;            // emote id on say
+    uint32 duration;
+    uint32 sound;               // the sound on say
+    uint32 broadcast_id;
+};
+
 struct WorldBroadCast
 {
 	uint32 id;

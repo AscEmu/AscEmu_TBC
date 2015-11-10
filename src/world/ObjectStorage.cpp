@@ -38,6 +38,7 @@ const char * gFishingFormat								= "uuu";
 const char * gWorldMapInfoFormat						= "uuuuufffusuuuuuuufu";
 const char * gZoneGuardsFormat							= "uuu";
 const char * gUnitModelSizeFormat						= "ufu";
+const char* gCreatureTextFormat                         = "usuuuuuuuuu";
 // cebernic extended
 const char * gWorldStringTableFormat        = "us"; // p2wow added [for worldserver common message storage]
 const char * gWorldBroadCastFormat          = "usu";// announce message
@@ -58,6 +59,7 @@ SERVER_DECL SQLStorage<FishingZoneEntry, HashMapStorageContainer<FishingZoneEntr
 SERVER_DECL SQLStorage<MapInfo, ArrayStorageContainer<MapInfo> >							WorldMapInfoStorage;
 SERVER_DECL SQLStorage<ZoneGuardEntry, HashMapStorageContainer<ZoneGuardEntry> >			ZoneGuardStorage;
 SERVER_DECL SQLStorage<UnitModelSizeEntry, HashMapStorageContainer<UnitModelSizeEntry> >	UnitModelSizeStorage;
+SERVER_DECL SQLStorage<CreatureText, HashMapStorageContainer<CreatureText> >                CreatureTextStorage;
 SERVER_DECL SQLStorage<WorldStringTable, HashMapStorageContainer<WorldStringTable> >	WorldStringTableStorage;
 SERVER_DECL SQLStorage<WorldBroadCast, HashMapStorageContainer<WorldBroadCast> >	WorldBroadCastStorage;
 
@@ -497,6 +499,7 @@ void Storage_FillTaskList(TaskList & tl)
 	make_task(WorldMapInfoStorage, MapInfo, ArrayStorageContainer, "worldmap_info", gWorldMapInfoFormat);
 	make_task(ZoneGuardStorage, ZoneGuardEntry, HashMapStorageContainer, "zoneguards", gZoneGuardsFormat);
 	make_task(UnitModelSizeStorage, UnitModelSizeEntry, HashMapStorageContainer, "unit_display_sizes", gUnitModelSizeFormat);
+    make_task(CreatureTextStorage, CreatureText, HashMapStorageContainer, "npc_script_text", gCreatureTextFormat);
 	make_task(WorldStringTableStorage, WorldStringTable, HashMapStorageContainer, "worldstring_tables", gWorldStringTableFormat);
 	make_task(WorldBroadCastStorage, WorldBroadCast, HashMapStorageContainer, "worldbroadcast", gWorldBroadCastFormat);
 }
@@ -532,6 +535,7 @@ void Storage_Cleanup()
 	WorldMapInfoStorage.Cleanup();
 	ZoneGuardStorage.Cleanup();
 	UnitModelSizeStorage.Cleanup();
+    CreatureTextStorage.Cleanup();
 	WorldStringTableStorage.Cleanup();
 	WorldBroadCastStorage.Cleanup();
 }
@@ -562,6 +566,8 @@ bool LoadAdditionalTable(const char * TableName, const char * SecondName)
 		AreaTriggerStorage.LoadAdditionalData(SecondName, gAreaTriggerFormat);
 	else if(!stricmp(TableName, "itempages"))			// Item Pages
 		ItemPrototypeStorage.LoadAdditionalData(SecondName, gItemPageFormat);
+    else if (!stricmp(TableName, "npc_script_text"))            // ONLY for scripted text
+        CreatureTextStorage.LoadAdditionalData(SecondName, gCreatureTextFormat);
 	else if(!stricmp(TableName, "worldstring_tables"))			// WorldString
 		WorldStringTableStorage.LoadAdditionalData(SecondName, gWorldStringTableFormat);
 	else if(!stricmp(TableName, "worldbroadcast"))			// Worldbroadcast
@@ -603,6 +609,8 @@ bool Storage_ReloadTable(const char * TableName)
 		AreaTriggerStorage.Reload();
 	else if(!stricmp(TableName, "itempages"))			// Item Pages
 		ItemPageStorage.Reload();
+    else if (!stricmp(TableName, "npc_script_text"))            // Creature Text
+        CreatureTextStorage.Reload();
 	else if(!stricmp(TableName, "worldstring_tables"))			// wst
 		WorldStringTableStorage.Reload();
 	else if(!stricmp(TableName, "worldbroadcast"))			// wb
