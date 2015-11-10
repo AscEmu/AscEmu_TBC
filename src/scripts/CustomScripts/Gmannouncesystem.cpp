@@ -23,9 +23,7 @@ void OnEnterWorld(Player * pPlayer)
 
     if( pPlayer->GetMapId() == 169 && pPlayer->IsPvPFlagged() )
             pPlayer->SetPvPFlag();
-        
-        pPlayer->ResetKillStreak()
-;};
+};
 
 class ChampionOfNaruu : public QuestScript
 {       

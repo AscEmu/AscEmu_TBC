@@ -27,7 +27,7 @@
 #include "../logonserver/Opcodes/LogonRealmOpcodes.hpp"
 #include "../shared/Log.h"
 #include <RC4Engine.h>
-#include "zlib.h"
+#include "../../dep/zlib/zlib.h" // Wer das mit eingebunden hat hat da wohl ganz kräftig etwas vergessen ! Vorher : #include"zlib.h"
 
 extern SERVER_DECL SessionLogWriter* GMCommand_Log;
 #define sGMLog (*GMCommand_Log)
