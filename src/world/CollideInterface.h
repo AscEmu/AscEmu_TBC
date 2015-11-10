@@ -84,8 +84,6 @@ public:
 		if (!mgr->getAreaInfo(mapId, x, y, z, flags, adtid, rootid, groupid))
 			return true;
 
-		bool outdoor = flags & 0x08;
-
 		WMOAreaTableEntry* wmoArea = sWorld.GetWMOAreaData(rootid, adtid, groupid);
 
 		if (wmoArea != NULL)
@@ -105,7 +103,7 @@ public:
 			if (wmoArea->flags & 2)
 				return false;
 		}
-		return outdoor;
+        return (flags & 0x08) != 0;
 	}
 
 	inline float GetHeight(uint32 mapId, float x, float y, float z)

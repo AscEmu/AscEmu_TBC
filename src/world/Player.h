@@ -184,6 +184,17 @@ enum PlayerSpeedType
     FLY	            = 6,
 };
 
+/*
+Exalted	        1,000	 Access to racial mounts. Capped at 999.7
+Revered	        21,000	 Heroic mode keys for Outland dungeons
+Honored	        12,000	 10% discount from faction vendors
+Friendly	    6,000
+Neutral	        3,000
+Unfriendly	    3,000	 Cannot buy, sell or interact.
+Hostile	        3,000	 You will always be attacked on sight
+Hated	        36,000
+*/
+
 enum Standing
 {
     STANDING_HATED,
@@ -437,27 +448,6 @@ const float dodgeRatio[PLAYER_LEVEL_CAP][12] = {
 #endif
 };
 
-/*
-Exalted	        1,000	 Access to racial mounts. Capped at 999.7
-Revered	        21,000	 Heroic mode keys for Outland dungeons
-Honored	        12,000	 10% discount from faction vendors
-Friendly	    6,000
-Neutral	        3,000
-Unfriendly	    3,000	 Cannot buy, sell or interact.
-Hostile	        3,000	 You will always be attacked on sight
-Hated	        36,000 
-*/
-enum FactionRating
-{
-	HATED,
-	HOSTILE,
-	UNFRIENDLY,
-	NEUTRAL,
-	FRIENDLY,
-	HONORED,
-	REVERED,
-	EXALTED
-};
 struct FactionReputation
 {
 	int32 standing;
