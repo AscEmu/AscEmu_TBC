@@ -71,6 +71,7 @@ public:
 private:
 	bool _StartDB();
 	void _StopDB();
+    bool CheckDBVersion();
 
 	void _HookSignals();
 	void _UnhookSignals();
