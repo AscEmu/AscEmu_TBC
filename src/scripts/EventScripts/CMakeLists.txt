@@ -7,16 +7,28 @@ endif(NOT BUILD_EVENTSCRIPTS)
 
 project(EventScripts)
 
-file(GLOB sources_localdir *.cpp *.h)
+set(prefix ${SCRIPTS_PATH}/EventScripts)
 
-set(ascemu_eventscripts_SRCS
-  ${ascemu_eventscripts_SRCS}
-  ${sources_localdir}
-)
+#sources -contains source files for our library.
+set(sources
+   Setup.cpp
+   )
 
-add_library(${PROJECT_NAME} SHARED ${ascemu_eventscripts_SRCS})
+set(headers
+   Setup.h
+   )
+
+foreach(src IN ITEMS ${sources})
+   set(SRCS ${SRCS} ${prefix}/${src})
+endforeach(src)
+foreach(src IN ITEMS ${headers})
+   set(HEADERS ${HEADERS} ${prefix}/${src})
+endforeach(src)
+
+include_directories(${include_dirs} ${DEPENDENCY_ROOT}/zlib)
+add_library(${PROJECT_NAME} SHARED ${SRCS} ${HEADERS})
 add_dependencies(${PROJECT_NAME} ${script_dependencies})
-target_link_libraries(${PROJECT_NAME} ${ascemu_eventscripts_SRCS})
+target_link_libraries(${PROJECT_NAME} ${script_linkages})
 
 include(PCHSupport)
 if(CMAKE_GENERATOR MATCHES Visual*)
