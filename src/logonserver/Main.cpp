@@ -24,7 +24,7 @@
 #ifndef WIN32
 #include <sys/resource.h>
 #endif
-#include "../shared/arcemu_getopt.h"
+#include "../shared/ascemu_getopt.h"
 
 #define BANNER "<< AscEmu %s/%s-%s (%s) :: Logon Server >>"
 
@@ -47,7 +47,7 @@ void _OnSignal(int s)
 #ifndef WIN32
         case SIGHUP:
             {
-                sLog.outDetail("Received SIGHUP signal, reloading accounts.");
+                LOG_DETAIL("Received SIGHUP signal, reloading accounts.");
                 AccountMgr::getSingleton().ReloadAccounts(true);
             }
             break;
@@ -144,7 +144,7 @@ bool startdb()
             if(!existsPort) { errorMessage += "    Port\r\n"; }
         }
 
-        sLog.outError(errorMessage.c_str());
+        LOG_ERROR(errorMessage.c_str());
         return false;
     }
 
@@ -155,7 +155,7 @@ bool startdb()
                               lpassword.c_str(), ldatabase.c_str(), Config.MainConfig.GetIntDefault("LogonDatabase", "ConnectionCount", 5),
                               16384))
     {
-        sLog.outError("sql: Logon database initialization failed. Exiting.");
+        LOG_ERROR("sql: Logon database initialization failed. Exiting.");
         return false;
     }
 
@@ -204,7 +204,7 @@ bool Rehash()
     char* config_file = (char*)CONFDIR "/logon.conf";
     if(!Config.MainConfig.SetSource(config_file))
     {
-        sLog.outError("Config file could not be rehashed.");
+        LOG_ERROR("Config file could not be rehashed.");
         return false;
     }
 
@@ -224,7 +224,7 @@ bool Rehash()
         std::string::size_type i = itr->find("/");
         if(i == std::string::npos)
         {
-            sLog.outError("IP: %s could not be parsed. Ignoring", itr->c_str());
+            LOG_ERROR("IP: %s could not be parsed. Ignoring", itr->c_str());
             continue;
         }
 
@@ -235,7 +235,7 @@ bool Rehash()
         unsigned char ipmask = (char)atoi(smask.c_str());
         if(ipraw == 0 || ipmask == 0)
         {
-            sLog.outError("IP: %s could not be parsed. Ignoring", itr->c_str());
+            LOG_ERROR("IP: %s could not be parsed. Ignoring", itr->c_str());
             continue;
         }
 
@@ -250,7 +250,7 @@ bool Rehash()
         std::string::size_type i = itr->find("/");
         if(i == std::string::npos)
         {
-            sLog.outError("IP: %s could not be parsed. Ignoring", itr->c_str());
+            LOG_ERROR("IP: %s could not be parsed. Ignoring", itr->c_str());
             continue;
         }
 
@@ -261,7 +261,7 @@ bool Rehash()
         unsigned char ipmask = (char)atoi(smask.c_str());
         if(ipraw == 0 || ipmask == 0)
         {
-            sLog.outError("IP: %s could not be parsed. Ignoring", itr->c_str());
+            LOG_ERROR("IP: %s could not be parsed. Ignoring", itr->c_str());
             continue;
         }
 
@@ -323,29 +323,29 @@ void LogonServer::Run(int argc, char** argv)
     
     sLog.outBasic(BANNER, BUILD_HASH_STR, CONFIG, PLATFORM_TEXT, ARCH);
     sLog.outBasic("========================================================");
-    //sLog.outErrorSilent(BANNER, BUILD_HASH_STR, CONFIG, PLATFORM_TEXT, ARCH); // Echo off.
-    //sLog.outErrorSilent("========================================================"); // Echo off.
+    sLog.outErrorSilent(BANNER, BUILD_HASH_STR, CONFIG, PLATFORM_TEXT, ARCH); // Echo off.
+    sLog.outErrorSilent("========================================================"); // Echo off.
 
     if(do_version)
     {
-        //sLog.Close();
+        sLog.Close();
         return;
     }
 
     if(do_check_conf)
     {
-        sLog.outBasic("Checking config file: %s", config_file);
+        LOG_BASIC("Checking config file: %s", config_file);
         if(Config.MainConfig.SetSource(config_file, true))
-            sLog.outBasic("  Passed without errors.");
+            LOG_BASIC("  Passed without errors.");
         else
-            sLog.outBasic("  Encountered one or more errors.");
+            LOG_BASIC("  Encountered one or more errors.");
         /* Remved useless die directive */
         /*
         string die;
         if(Config.MainConfig.GetString("die", "msg", &die) || Config.MainConfig.GetString("die2", "msg", &die))
             printf("Die directive received: %s", die.c_str());
         */
-        //sLog.Close();
+        sLog.Close();
         delete config_file;
         return;
     }
@@ -360,7 +360,7 @@ void LogonServer::Run(int argc, char** argv)
     Log.Success("Config", "Loading Config Files...");
     if(!Rehash())
     {
-        //sLog.Close();
+        sLog.Close();
         return;
     }
 
@@ -371,7 +371,7 @@ void LogonServer::Run(int argc, char** argv)
 
     if(!startdb())
     {
-        //sLog.Close();
+        sLog.Close();
         return;
     }
 
@@ -407,8 +407,8 @@ void LogonServer::Run(int argc, char** argv)
     max_build = Config.MainConfig.GetIntDefault("Client", "MaxBuild", 6999);
     */
 
-    //min_build = LOGON_MINBUILD;
-    //max_build = LOGON_MAXBUILD;
+    min_build = LOGON_MINBUILD;
+    max_build = LOGON_MAXBUILD;
 
     std::string logon_pass = Config.MainConfig.GetStringDefault("LogonServer", "RemotePassword", "r3m0t3b4d");
     Sha1Hash hash;
@@ -496,7 +496,7 @@ void LogonServer::Run(int argc, char** argv)
     }
     else
     {
-        sLog.outError("Error creating sockets. Shutting down...");
+        LOG_ERROR("Error creating sockets. Shutting down...");
     }
 
     pfc->kill();
@@ -530,8 +530,8 @@ void LogonServer::Run(int argc, char** argv)
     delete pfc;
     delete cl;
     delete sl;
-    sLog.outBasic("Shutdown complete.");
-    //sLog.Close();
+    LOG_BASIC("Shutdown complete.");
+    sLog.Close();
 }
 
 void OnCrash(bool Terminate)

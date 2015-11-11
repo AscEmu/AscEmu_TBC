@@ -41,7 +41,7 @@ LogonCommServerSocket::LogonCommServerSocket(SOCKET fd) : Socket(fd, 65536, 5242
     authenticated = 0;
     seed = 0;
 
-    sLog.outDebug("Created LogonCommServerSocket %u", m_fd);
+    LOG_DETAIL("Created LogonCommServerSocket %u", m_fd);
 }
 
 LogonCommServerSocket::~LogonCommServerSocket()
@@ -51,7 +51,7 @@ LogonCommServerSocket::~LogonCommServerSocket()
 
 void LogonCommServerSocket::OnDisconnect()
 {
-    sLog.outDebug("LogonCommServerSocket::Ondisconnect event.");
+    LOG_DETAIL("LogonCommServerSocket::Ondisconnect event.");
 
     // if we're registered -> Set offline
     if (!removed)
@@ -69,7 +69,7 @@ void LogonCommServerSocket::OnConnect()
 {
     if (!IsServerAllowed(GetRemoteAddress().s_addr))
     {
-        sLog.outError("Server connection from %s:%u DENIED, not an allowed IP.", GetRemoteIP().c_str(), GetRemotePort());
+        LOG_ERROR("Server connection from %s:%u DENIED, not an allowed IP.", GetRemoteIP().c_str(), GetRemotePort());
         Disconnect();
         return;
     }
@@ -164,7 +164,7 @@ void LogonCommServerSocket::HandlePacket(WorldPacket & recvData)
 
     if (recvData.GetOpcode() >= LRMSG_MAX_OPCODES || Handlers[recvData.GetOpcode()] == 0)
     {
-        sLog.outError("Got unknwon packet from logoncomm: %u", recvData.GetOpcode());
+        LOG_ERROR("Got unknwon packet from logoncomm: %u", recvData.GetOpcode());
         return;
     }
 
@@ -319,7 +319,7 @@ void LogonCommServerSocket::HandleAuthChallenge(WorldPacket & recvData)
         snprintf(buf, 3, "%.2X", key[i]);
         sstext << buf;
     }
-    sLog.outDebug(sstext.str().c_str());
+    LOG_DETAIL(sstext.str().c_str());
 
     recvCrypto.Setup(key, 20);
     sendCrypto.Setup(key, 20);
@@ -349,7 +349,7 @@ void LogonCommServerSocket::HandleMappingReply(WorldPacket & recvData)
 
     if (uncompress((uint8*)buf.contents(), &rsize, recvData.contents() + 4, (u_long)recvData.size() - 4) != Z_OK)
     {
-        sLog.outError("Uncompress of mapping failed.");
+        LOG_ERROR("Uncompress of mapping failed.");
         return;
     }
 
@@ -366,7 +366,7 @@ void LogonCommServerSocket::HandleMappingReply(WorldPacket & recvData)
 
     HM_NAMESPACE::hash_map<uint32, uint8>::iterator itr;
     buf >> count;
-    sLog.outDebug("Got mapping packet for realm %u, total of %u entries.", (unsigned int)realm_id, (unsigned int)count);
+    LOG_BASIC("Got mapping packet for realm %u, total of %u entries.", (unsigned int)realm_id, (unsigned int)count);
     for (uint32 i = 0; i < count; ++i)
     {
         buf >> account_id >> number_of_characters;

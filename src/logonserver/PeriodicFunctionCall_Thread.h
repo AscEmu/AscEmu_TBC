@@ -93,13 +93,13 @@ class PeriodicFunctionCaller : public ThreadBase
 #ifdef WIN32
             /* push the event */
             SetEvent(hEvent);
-            sLog.outDetail("Waiting for PFC thread to exit...");
+            LOG_DETAIL("Waiting for PFC thread to exit...");
             /* wait for the thread to exit */
             while(thread_active)
             {
                 Sleep(100);
             }
-            sLog.outDetail("PFC thread exited.");
+            LOG_DETAIL("PFC thread exited.");
 #else
             pthread_cond_signal(&abortcond);
 #endif

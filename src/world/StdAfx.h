@@ -86,7 +86,7 @@ extern SERVER_DECL SessionLogWriter* Player_Log;
 #include "../shared/CircularQueue.h"
 #include "../shared/Threading/RWLock.h"
 #include "../shared/Threading/Condition.h"
-#include "../shared/arcemu_getopt.h"
+#include "../shared/ascemu_getopt.h"
 
 #include "UpdateFields.h"
 #include "UpdateMask.h"

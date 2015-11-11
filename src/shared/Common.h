@@ -61,7 +61,7 @@ enum MsTimeVariables
 # include <config.h>
 #endif
 
-#include "arcemuConfig.h"
+#include "ascemuConfig.h"
 
 #include <cstdlib>
 #include <cstdio>
@@ -606,6 +606,8 @@ inline static unsigned int MakeIP(const char * str)
 
 #include "DynLib.hpp"
 #include "FindFiles.hpp"
+#include "SysInfo.hpp"
+#include "PerformanceCounter.hpp"
 
 // warning, by enabling this define you are aware that you are only delaying the inevitable
 // some crashes are not recorable and those will stack up in time and lead to a full crash
