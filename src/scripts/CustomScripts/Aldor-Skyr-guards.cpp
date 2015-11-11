@@ -2,7 +2,7 @@
 #include "Setup.h"
 
 #define SPELL_BANISH	36642
-#define SPELL_EXILE		39533
+#define SPELL_EXILE	39533
 
 class AldorSkyrGuard : public CreatureAIScript
 {

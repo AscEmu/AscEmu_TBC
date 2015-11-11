@@ -31,7 +31,8 @@ extern "C" SCRIPT_DECL void _exp_script_register(ScriptMgr* mgr)
     SetupGMAnnounce(mgr);
 	SetupAldorSkyrGuard(mgr);
 	SetupTeleNPC(mgr);
-
+	SetupHunterTrainer(mgr);
+	SetupSkillNPC(mgr);
 }
 
 #ifdef WIN32
