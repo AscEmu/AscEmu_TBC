@@ -25,7 +25,7 @@
 //Instances
 void SetupArcatraz(ScriptMgr * mgr);
 void SetupAuchenaiCrypts(ScriptMgr * mgr);
-//void SetupBlackMorass(ScriptMgr * mgr);
+void SetupTheBlackMorass(ScriptMgr * mgr);
 void SetupBlackrockSpire(ScriptMgr *mgr);
 void SetupBlackrockDepths(ScriptMgr * mgr);
 void SetupBloodFurnace(ScriptMgr * mgr);
