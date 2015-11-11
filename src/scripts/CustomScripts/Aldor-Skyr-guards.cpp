@@ -8,8 +8,7 @@ class AldorSkyrGuard : public CreatureAIScript
 {
 public:
 	ADD_CREATURE_FACTORY_FUNCTION(AldorSkyrGuard);
-    AldorSkyrGuard(Creature* pCreature) : CreatureAIScript(pCreature)
-    {};
+    AldorSkyrGuard(Creature* pCreature) : CreatureAIScript(pCreature) { };
 
 	void OnCombatStart(Unit* mTarget)
 	{
