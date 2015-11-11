@@ -1,8 +1,8 @@
-INCLUDES += -I$(srcdir)/../arcemu-shared
+INCLUDES += -I$(srcdir)/../AscEmu-shared
 
-bin_PROGRAMS = arcemu-world
+bin_PROGRAMS = AscEmu-world
 
-arcemu_world_SOURCES = \
+AscEmu_world_SOURCES = \
     CollideInterface.cpp \
     CollideInterface.h \
     VoiceChatClientSocket.cpp \
@@ -199,9 +199,9 @@ arcemu_world_SOURCES = \
 	ConsoleCommands.h \
 	ConsoleListener.cpp
 	
-arcemu_world_LDADD = -lshared -lz -lpcre -lcollision
+AscEmu_world_LDADD = -lshared -lz -lpcre -lcollision
 
-arcemu_world_LDFLAGS = -L$(srcdir)/../arcemu-shared \
+AscEmu_world_LDFLAGS = -L$(srcdir)/../AscEmu-shared \
                -L$(srcdir)/../../extras/collision/collision_dll \
                -L/usr/lib \
                @LIB_EXPORT@

@@ -65,7 +65,7 @@ static const uint32 g_allianceStateFields[3] = { WORLDSTATE_HELLFIRE_STADIUM_ALL
 static const uint32 g_neutralStateFields[3]	= { WORLDSTATE_HELLFIRE_STADIUM_NEUTRAL, WORLDSTATE_HELLFIRE_OVERLOOK_NEUTRAL, WORLDSTATE_HELLFIRE_BROKENHILL_NEUTRAL };
 
 // updates clients visual counter, and adds the buffs to players if needed
-ARCEMU_INLINE void UpdateTowerCount(MapMgr * mgr)
+AscEmu_INLINE void UpdateTowerCount(MapMgr * mgr)
 {
 	mgr->GetWorldStateManager()->SetWorldState(WORLDSTATE_HELLFIRE_ALLIANCE_TOWERS_CONTROLLED, g_allianceTowers);
 	mgr->GetWorldStateManager()->SetWorldState(WORLDSTATE_HELLFIRE_HORDE_TOWERS_CONTROLLED, g_hordeTowers);

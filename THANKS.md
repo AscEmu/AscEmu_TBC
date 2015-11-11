@@ -1,7 +1,7 @@
 # AscEmu
 ## Thanks and Credits
 
-AscEmu is derived from ArcEmu, OpenAscent, Ascent, Antrix, EspireEmu and 
+AscEmu is derived from Arcemu, OpenAscent, Ascent, Antrix, EspireEmu and 
 Wow Daemon Team. A lot of people worked on the source and we appreciate the developers of the earlier projects.
 
 ### Personal (Project) Credits:

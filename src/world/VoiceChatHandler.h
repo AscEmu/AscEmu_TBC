@@ -1,5 +1,5 @@
 /*
- * arcemu MMORPG Server
+ * AscEmu MMORPG Server
  * Voice Chat Engine
  * Copyright (C) 2005-2007 Burlex <burlex@gmail.com>
  *
@@ -23,7 +23,7 @@
 
 #ifdef VOICE_CHAT
 
-#include "../arcemu-voicechat/arcemu_opcodes.h"
+#include "../AscEmu-voicechat/AscEmu_opcodes.h"
 #include "VoiceChatClientSocket.h"
 
 class VoiceChatClientSocket;

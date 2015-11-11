@@ -1,6 +1,6 @@
 /*
- * ArcEmu MMORPG Server
- * Copyright (C) 2008 <http://www.ArcEmu.org/>
+ * AscEmu MMORPG Server
+ * Copyright (C) 2008 <http://www.AscEmu.org/>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -52,16 +52,16 @@ enum MsTimeVariables
 };
 
 #ifdef WIN32
-#define ARCEMU_FORCEINLINE __forceinline
+#define AscEmu_FORCEINLINE __forceinline
 #else
-#define ARCEMU_FORCEINLINE inline
+#define AscEmu_FORCEINLINE inline
 #endif
 
 #ifdef HAVE_CONFIG_H
 # include <config.h>
 #endif
 
-#include "arcemuConfig.h"
+#include "AscEmuConfig.h"
 
 #include <cstdlib>
 #include <cstdio>
@@ -530,13 +530,13 @@ int32 GetTimePeriodFromString(const char * str);
 std::string ConvertTimeStampToString(uint32 timestamp);
 std::string ConvertTimeStampToDataTime(uint32 timestamp);
 
-inline void arcemu_TOLOWER(std::string& str)
+inline void AscEmu_TOLOWER(std::string& str)
 {
 	for(size_t i = 0; i < str.length(); ++i)
 		str[i] = (char)tolower(str[i]);
 };
 
-inline void arcemu_TOUPPER(std::string& str)
+inline void AscEmu_TOUPPER(std::string& str)
 {
 	for(size_t i = 0; i < str.length(); ++i)
 		str[i] = (char)toupper(str[i]);

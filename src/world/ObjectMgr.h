@@ -1,7 +1,7 @@
 /*
- * ArcEmu MMORPG Server
+ * AscEmu MMORPG Server
  * Copyright (C) 2005-2007 Ascent Team <http://www.ascentemu.com/>
- * Copyright (C) 2008 <http://www.ArcEmu.org/>
+ * Copyright (C) 2008 <http://www.AscEmu.org/>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -360,8 +360,8 @@ typedef std::list<GM_Ticket*>                                       GmTicketList
 typedef std::map<uint32, InstanceBossInfo*>                         InstanceBossInfoMap;
 
 #ifndef WIN32
-#define arcemu_USE_MAP_PLAYER_INDEX
-#ifdef arcemu_USE_MAP_PLAYER_INDEX
+#define AscEmu_USE_MAP_PLAYER_INDEX
+#ifdef AscEmu_USE_MAP_PLAYER_INDEX
 
 // you can use the string map (slower)
 typedef std::map<std::string, PlayerInfo*> PlayerNameStringIndexMap;
