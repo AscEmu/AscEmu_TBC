@@ -22,5 +22,7 @@
 #define GOSSIP_SCRIPTS_SETUP_H
 
 void SetupGMAnnounce(ScriptMgr * mgr);
+void SetupAldorSkyrGuard(ScriptMgr * mgr);
+void SetupTeleNPC(ScriptMgr * mgr);
 
 #endif
