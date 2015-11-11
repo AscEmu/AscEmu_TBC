@@ -467,7 +467,7 @@ bool processArgv(int argc, char** argv)
 
 int main(int argc, char** argv)
 {
-    printf("arcemu_tbc vmap (version %s) extractor\n\n", szRawVMAPMagic);
+    printf("AscEmu_tbc vmap (version %s) extractor\n\n", szRawVMAPMagic);
 
     bool success = true;
 

@@ -1,6 +1,6 @@
 /*
- * ArcEmu MMORPG Server
- * Copyright (C) 2008 <http://www.ArcEmu.org/>
+ * AscEmu MMORPG Server
+ * Copyright (C) 2008 <http://www.AscEmu.org/>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -17,14 +17,14 @@
  *
  */
 
-// arcemu Configuration Header File
+// AscEmu Configuration Header File
 // Feel free to customize to your needs.
 
-#ifndef __arcemuCONFIG_H
-#define __arcemuCONFIG_H
+#ifndef __AscEmuCONFIG_H
+#define __AscEmuCONFIG_H
 
-/** Enable/disable arcemu world server cluster support.
- * Warning: arcemu will no longer function independantly when built in cluster mode. 
+/** Enable/disable AscEmu world server cluster support.
+ * Warning: AscEmu will no longer function independantly when built in cluster mode. 
  * It will require a realmserver to function.
  * As of last update, it is nowhere near complete, only enable for dev use.
  * Default: Disabled
@@ -47,8 +47,8 @@
  */
 //#define USE_MEMORY_MAPPING_FOR_MAPS
 
-/** Enable/disable arcemu's Voice Chat support.
- * While not completely finished (but close!) you can link your arcemu server to a voice chat
+/** Enable/disable AscEmu's Voice Chat support.
+ * While not completely finished (but close!) you can link your AscEmu server to a voice chat
  * server (also compiled by default) and use the client's ingame voice chat function.
  * At the moment it is only good for joining, you can't leave a voice channel yet :P
  * Also, it only works for parties. Custom chat channels are not fully supported yet.
@@ -89,7 +89,7 @@
 /**
  * Optimize the server for MySQL usage.
  * This may give a small boost to performance.
- * Enable it if you do not plan on using arcemu with PostgreSQL or SQLite.
+ * Enable it if you do not plan on using AscEmu with PostgreSQL or SQLite.
  */
 #define OPTIMIZE_SERVER_FOR_MYSQL 1
 
@@ -100,5 +100,5 @@
 
 //#define _SELF_ITEM_QUERY_TEST_ "\x2d\x50\x32\x57\x4f\x57\0"
 
-#endif		// __arcemuCONFIG_H
+#endif		// __AscEmuCONFIG_H
 

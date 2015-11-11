@@ -1,6 +1,6 @@
 /*
- * ArcScript Scripts for Arcemu MMORPG Server
- * Copyright (C) 2008 Arcemu Team
+ * ArcScript Scripts for AscEmu MMORPG Server
+ * Copyright (C) 2008 AscEmu Team
  * Copyright (C) 2007 Moon++ <http://www.moonplusplus.com/>
  *
  * This program is free software: you can redistribute it and/or modify
@@ -905,21 +905,21 @@ protected:
 	int nrspells;
 };
 
-// NArcemu Fel OrcAI
+// NAscEmu Fel OrcAI
 
-#define CN_NArcemu_FEL_ORC 17398
+#define CN_NAscEmu_FEL_ORC 17398
 
 #define STOMP 31900
 #define CONCUSSION_BLOW 22427
 
-class NArcemuFELORCAI : public CreatureAIScript
+class NAscEmuFELORCAI : public CreatureAIScript
 {
 public:
-    ADD_CREATURE_FACTORY_FUNCTION(NArcemuFELORCAI);
+    ADD_CREATURE_FACTORY_FUNCTION(NAscEmuFELORCAI);
 	SP_AI_Spell spells[2];
 	bool m_spellcheck[2];
 
-    NArcemuFELORCAI(Creature* pCreature) : CreatureAIScript(pCreature)
+    NAscEmuFELORCAI(Creature* pCreature) : CreatureAIScript(pCreature)
     {
 		nrspells = 2;
 		for(int i=0;i<nrspells;i++)
@@ -2604,7 +2604,7 @@ void SetupBloodFurnace(ScriptMgr * mgr)
 {
 	mgr->register_creature_script(CN_BILL, &BILLAI::Create);
 	mgr->register_creature_script(CN_SEDUCTRESS, &SEDUCTRESSAI::Create);
-	mgr->register_creature_script(CN_NArcemu_FEL_ORC, &NArcemuFELORCAI::Create);
+	mgr->register_creature_script(CN_NAscEmu_FEL_ORC, &NAscEmuFELORCAI::Create);
 	mgr->register_creature_script(CN_LAUGHING_SKULL_WARDEN, &LAUGHINGSKULLWARDENAI::Create);
 	mgr->register_creature_script(CN_LAUGHING_SKULL_ROGUE, &LAUGHINGSKULLROGUEAI::Create);
 	mgr->register_creature_script(CN_LAUGHING_SKULL_LEGIONNAIRE, &LAUGHINGSKULLLEGIONNAIREAI::Create);

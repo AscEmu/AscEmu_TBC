@@ -67,7 +67,7 @@ int main()
 		fclose(entries);
 	}
 
-	FILE* tags = fopen("../../arcemu-tag", "r");
+	FILE* tags = fopen("../../AscEmu-tag", "r");
 
 	if (tags != NULL)
 	{

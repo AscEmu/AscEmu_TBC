@@ -108,10 +108,10 @@ class SERVER_DECL Socket
         Mutex m_readMutex;
 
         // we are connected? stop from posting events.
-        Arcemu::Threading::AtomicBoolean m_connected;
+        AscEmu::Threading::AtomicBoolean m_connected;
 
         // We are deleted? Stop us from posting events.
-        Arcemu::Threading::AtomicBoolean m_deleted;
+        AscEmu::Threading::AtomicBoolean m_deleted;
 
         sockaddr_in m_client;
 
@@ -132,7 +132,7 @@ class SERVER_DECL Socket
 
     private:
         // Write lock, stops multiple write events from being posted.
-        Arcemu::Threading::AtomicCounter m_writeLock;
+        AscEmu::Threading::AtomicCounter m_writeLock;
 
         /* Win32 - IOCP Specific Calls */
 #ifdef CONFIG_USE_IOCP

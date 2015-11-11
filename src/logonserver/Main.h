@@ -1,7 +1,7 @@
 /*
- * AscEmu Framework based on ArcEmu MMORPG Server
+ * AscEmu Framework based on AscEmu MMORPG Server
  * Copyright (C) 2014-2015 AscEmu Team <http://www.ascemu.org/>
- * Copyright (C) 2008-2012 ArcEmu Team <http://www.ArcEmu.org/>
+ * Copyright (C) 2008-2012 AscEmu Team <http://www.AscEmu.org/>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -21,7 +21,7 @@
 #include "../shared/Singleton.h"
 #include "LogonServer.hpp"
 
-extern Arcemu::Threading::AtomicBoolean mrunning;
+extern AscEmu::Threading::AtomicBoolean mrunning;
 class AuthSocket;
 extern std::set<AuthSocket*> _authSockets;
 extern Mutex _authSocketLock;
@@ -41,7 +41,7 @@ class LogonServer : public Singleton< LogonServer >
         uint32 min_build;
         uint8 sql_hash[20];
 
-        //Arcemu::PerformanceCounter perfcounter;
+        //AscEmu::PerformanceCounter perfcounter;
     private:
         bool m_stopEvent;
 };

@@ -1,7 +1,7 @@
 /*
- * ArcEmu MMORPG Server
+ * AscEmu MMORPG Server
  * Copyright (C) 2005-2007 Ascent Team <http://www.ascentemu.com/>
- * Copyright (C) 2008 <http://www.ArcEmu.org/>
+ * Copyright (C) 2008 <http://www.AscEmu.org/>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -83,7 +83,7 @@ bool CheckResultLengthCreatures(QueryResult * res)
 		{
 			first_table_warning = false;
 			Log.LargeErrorMessage("One of your creature_spawns table has the wrong column count.",
-				"arcemu has skipped loading this table in order to avoid crashing.",
+				"AscEmu has skipped loading this table in order to avoid crashing.",
 				"Please correct this, if you do not no spawns will show.", NULL);
 		}
 
@@ -102,7 +102,7 @@ bool CheckResultLengthGameObject(QueryResult * res)
 		{
 			first_table_warningg = false;
 			Log.LargeErrorMessage("One of your gameobject_spawns table has the wrong column count.",
-				"arcemu has skipped loading this table in order to avoid crashing.",
+				"AscEmu has skipped loading this table in order to avoid crashing.",
 				"Please correct this, if you do not no spawns will show.", NULL);
 		}
 

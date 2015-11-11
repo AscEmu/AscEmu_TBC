@@ -1,6 +1,6 @@
 /*
- * ArcScript Scripts for Arcemu MMORPG Server
- * Copyright (C) 2008 Arcemu Team
+ * ArcScript Scripts for AscEmu MMORPG Server
+ * Copyright (C) 2008 AscEmu Team
  * Copyright (C) 2007 Moon++ <http://www.moonplusplus.com/>
  *
  * This program is free software: you can redistribute it and/or modify
@@ -497,7 +497,7 @@ public:
 
     void weapons()
     {	
-		// CREDITS to Skyboat on Arcemuemu.com/forums  he had some of this info on one of his releases
+		// CREDITS to Skyboat on AscEmuemu.com/forums  he had some of this info on one of his releases
         switch(phase)
         {
         case 0:

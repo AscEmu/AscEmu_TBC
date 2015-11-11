@@ -1,7 +1,7 @@
 /*
- * AscEmu Framework based on ArcEmu MMORPG Server
+ * AscEmu Framework based on AscEmu MMORPG Server
  * Copyright (C) 2014-2015 AscEmu Team <http://www.ascemu.org/>
- * Copyright (C) 2008-2012 ArcEmu Team <http://www.ArcEmu.org/>
+ * Copyright (C) 2008-2012 AscEmu Team <http://www.AscEmu.org/>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -457,7 +457,7 @@ void LogonCommServerSocket::HandleDatabaseModify(WorldPacket & recvData)
             recvData >> account >> duration >> banreason;
 
             // remember we expect this in uppercase
-            arcemu_TOUPPER(account);
+            AscEmu_TOUPPER(account);
 
             Account* pAccount = sAccountMgr.GetAccount(account);
             if (pAccount == NULL)
@@ -478,7 +478,7 @@ void LogonCommServerSocket::HandleDatabaseModify(WorldPacket & recvData)
             recvData >> account >> gm;
 
             // remember we expect this in uppercase
-            arcemu_TOUPPER(account);
+            AscEmu_TOUPPER(account);
 
             Account* pAccount = sAccountMgr.GetAccount(account);
             if (pAccount == NULL)
@@ -499,7 +499,7 @@ void LogonCommServerSocket::HandleDatabaseModify(WorldPacket & recvData)
             recvData >> account >> duration;
 
             // remember we expect this in uppercase
-            arcemu_TOUPPER(account);
+            AscEmu_TOUPPER(account);
 
             Account* pAccount = sAccountMgr.GetAccount(account);
             if (pAccount == NULL)
@@ -619,7 +619,7 @@ void LogonCommServerSocket::HandleDatabaseModify(WorldPacket & recvData)
             std::string name_save = name;  // save original name to check
 
             // remember we expect this in uppercase
-            arcemu_TOUPPER(name);
+            AscEmu_TOUPPER(name);
 
             auto account_check = sAccountMgr.GetAccount(name);
 
@@ -682,7 +682,7 @@ void LogonCommServerSocket::HandleRequestCheckAccount(WorldPacket & recvData)
             std::string account_name_save = account_name;  // save original account_name to check
 
             // remember we expect this in uppercase
-            arcemu_TOUPPER(account_name);
+            AscEmu_TOUPPER(account_name);
 
             auto account_check = sAccountMgr.GetAccount(account_name);
             if (account_check == nullptr)

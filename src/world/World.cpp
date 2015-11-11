@@ -1,7 +1,7 @@
 /*
- * ArcEmu MMORPG Server
+ * AscEmu MMORPG Server
  * Copyright (C) 2005-2007 Ascent Team <http://www.ascentemu.com/>
- * Copyright (C) 2008 <http://www.ArcEmu.org/>
+ * Copyright (C) 2008 <http://www.AscEmu.org/>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -1115,11 +1115,11 @@ void World::Rehash(bool load)
 	if(load)
 	{
 		#ifdef WIN32
-		Config.MainConfig.SetSource("configs/arcemu-world.conf", true);
-		Config.OptionalConfig.SetSource("configs/arcemu-optional.conf", true);
+		Config.MainConfig.SetSource("configs/AscEmu-world.conf", true);
+		Config.OptionalConfig.SetSource("configs/AscEmu-optional.conf", true);
 		#else
-		Config.MainConfig.SetSource((char*)CONFDIR "/arcemu-world.conf", true);
-		Config.OptionalConfig.SetSource((char*)CONFDIR "/arcemu-optional.conf", true);
+		Config.MainConfig.SetSource((char*)CONFDIR "/AscEmu-world.conf", true);
+		Config.OptionalConfig.SetSource((char*)CONFDIR "/AscEmu-optional.conf", true);
 		#endif
 	}
 	if(!ChannelMgr::getSingletonPtr())
@@ -1166,7 +1166,7 @@ void World::Rehash(bool load)
 	setRate(RATE_ARENAPOINTMULTIPLIER3X, Config.MainConfig.GetFloatDefault("Rates", "ArenaMultiplier3x", 1.0f));
 	setRate(RATE_ARENAPOINTMULTIPLIER5X, Config.MainConfig.GetFloatDefault("Rates", "ArenaMultiplier5x", 1.0f));
 	SetPlayerLimit(Config.MainConfig.GetIntDefault("Server", "PlayerLimit", 1000));
-	SetMotd(Config.MainConfig.GetStringDefault("Server", "Motd", "Arcemu Default MOTD").c_str());
+	SetMotd(Config.MainConfig.GetStringDefault("Server", "Motd", "AscEmu Default MOTD").c_str());
 	mQueueUpdateInterval = Config.MainConfig.GetIntDefault("Server", "QueueUpdateInterval", 5000);
 	SetKickAFKPlayerTime(Config.MainConfig.GetIntDefault("Server", "KickAFKPlayers", 0));
 	sLog.SetScreenLoggingLevel(Config.MainConfig.GetIntDefault("LogLevel", "Screen", 1));

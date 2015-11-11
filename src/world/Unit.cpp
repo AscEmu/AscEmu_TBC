@@ -1,7 +1,7 @@
 /*
- * ArcEmu MMORPG Server
+ * AscEmu MMORPG Server
  * Copyright (C) 2005-2007 Ascent Team <http://www.ascentemu.com/>
- * Copyright (C) 2008 <http://www.ArcEmu.org/>
+ * Copyright (C) 2008 <http://www.AscEmu.org/>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -3780,7 +3780,7 @@ void Unit::Strike( Unit* pVictim, uint32 weapon_damage_type, SpellEntry* ability
 				// However, there is also an opcode that tells the caster that the aura has been refreshed.
 				// This isn't implemented anywhere else in the source, so I can't work on that part :P
 				// (The 'cooldown' meter on the target frame that shows how long the aura has until expired does not get reset)=
-				// I would say break; here, but apparently in arcemu, one paladin can have multiple judgements on the target. No idea if this is blizzlike or not.
+				// I would say break; here, but apparently in AscEmu, one paladin can have multiple judgements on the target. No idea if this is blizzlike or not.
 			}
 		}
 

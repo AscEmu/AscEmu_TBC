@@ -111,7 +111,7 @@ void SetGrave(MapMgr* pmgr)
 	}
 }
 
-ARCEMU_INLINE void UpdateTowerCountZM(MapMgr* mgr)
+AscEmu_INLINE void UpdateTowerCountZM(MapMgr* mgr)
 {
 	if(!mgr)
 		return;

@@ -1,7 +1,7 @@
 /*
- * AscEmu Framework based on ArcEmu MMORPG Server
+ * AscEmu Framework based on AscEmu MMORPG Server
  * Copyright (C) 2014-2015 AscEmu Team <http://www.ascemu.org/>
- * Copyright (C) 2008 <http://www.ArcEmu.org/>
+ * Copyright (C) 2008 <http://www.AscEmu.org/>
  * Copyright (C) 2005-2007 Ascent Team
  *
  * This program is free software: you can redistribute it and/or modify
@@ -90,7 +90,7 @@ class LogonCommWatcherThread : public ThreadBase
 {
     bool running;
 
-    Arcemu::Threading::ConditionVariable cond;
+    AscEmu::Threading::ConditionVariable cond;
 
     public:
 
@@ -134,7 +134,7 @@ void LogonCommHandler::Startup()
             std::string acct = result->Fetch()[0].GetString();
             std::string perm = result->Fetch()[1].GetString();
 
-            arcemu_TOUPPER(acct);
+            AscEmu_TOUPPER(acct);
             forced_permissions.insert(make_pair(acct, perm));
 
         }
@@ -148,7 +148,7 @@ void LogonCommHandler::AddForcedPermission(std::string acct, std::string perm)
 {
     auto account_name = acct.c_str();
     auto permission_string = perm.c_str();
-    arcemu_TOUPPER(acct);
+    AscEmu_TOUPPER(acct);
 
     ForcedPermissionMap::iterator itr = forced_permissions.find(acct);
     if (itr != forced_permissions.end())
@@ -451,8 +451,8 @@ void LogonCommHandler::TestConsoleLogon(std::string & username, std::string & pa
     std::string newpass = password;
     std::string srpstr;
 
-    arcemu_TOUPPER(newuser);
-    arcemu_TOUPPER(newpass);
+    AscEmu_TOUPPER(newuser);
+    AscEmu_TOUPPER(newpass);
 
     srpstr = newuser + ":" + newpass;
 

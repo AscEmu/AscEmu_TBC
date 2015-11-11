@@ -1,6 +1,6 @@
 /*
-* arcemu MMORPG Server
-* Copyright (C) 2005-2007 arcemu Team <http://www.arcemuemu.com/>
+* AscEmu MMORPG Server
+* Copyright (C) 2005-2007 AscEmu Team <http://www.AscEmuemu.com/>
 *
 * This program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -16,7 +16,7 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *
 */
-// Coded by Captnoord for arcemu (2007), please give feedback to me if your able to.
+// Coded by Captnoord for AscEmu (2007), please give feedback to me if your able to.
 
 #include "StdAfx.h"
 

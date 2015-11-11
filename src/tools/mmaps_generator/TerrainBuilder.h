@@ -1,5 +1,5 @@
 /*
- * AscEmu Framework based on ArcEmu MMORPG Server
+ * AscEmu Framework based on AscEmu MMORPG Server
  * Copyright (C) 2014-2015 AscEmu Team <http://www.ascemu.org>
  * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
  *

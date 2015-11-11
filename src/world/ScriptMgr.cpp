@@ -1,7 +1,7 @@
 /*
- * ArcEmu MMORPG Server
+ * AscEmu MMORPG Server
  * Copyright (C) 2005-2007 Ascent Team <http://www.ascentemu.com/>
- * Copyright (C) 2008 <http://www.ArcEmu.org/>
+ * Copyright (C) 2008 <http://www.AscEmu.org/>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -50,7 +50,7 @@ ScriptMgr::~ScriptMgr()
 
 struct ScriptingEngine_dl
 {
-    Arcemu::DynLib* dl;
+    AscEmu::DynLib* dl;
     exp_script_register InitializeCall;
     uint32 Type;
 
@@ -96,17 +96,17 @@ void ScriptMgr::LoadScripts()
 #endif
 #endif
 
-    Arcemu::FindFilesResult findres;
+    AscEmu::FindFilesResult findres;
     std::vector< ScriptingEngine_dl > Engines;
 
-    Arcemu::FindFiles(Path.c_str(), FileMask.c_str(), findres);
+    AscEmu::FindFiles(Path.c_str(), FileMask.c_str(), findres);
     uint32 count = 0;
 
     while (findres.HasNext())
     {
         std::stringstream loadmessage;
         std::string fname = Path + findres.GetNext();
-        Arcemu::DynLib* dl = new Arcemu::DynLib(fname.c_str());
+        AscEmu::DynLib* dl = new AscEmu::DynLib(fname.c_str());
 
         loadmessage << dl->GetName() << " : ";
 

@@ -1,7 +1,7 @@
 /*
- * AscEmu Framework based on ArcEmu MMORPG Server
+ * AscEmu Framework based on AscEmu MMORPG Server
  * Copyright (C) 2014-2015 AscEmu Team <http://www.ascemu.org/>
- * Copyright (C) 2008-2012 ArcEmu Team <http://www.ArcEmu.org/>
+ * Copyright (C) 2008-2012 AscEmu Team <http://www.AscEmu.org/>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -34,7 +34,7 @@ enum checkType
 class LogonConsoleThread : public ThreadBase
 {
     public:
-    Arcemu::Threading::AtomicBoolean kill;
+    AscEmu::Threading::AtomicBoolean kill;
     LogonConsoleThread();
     ~LogonConsoleThread();
     bool run();

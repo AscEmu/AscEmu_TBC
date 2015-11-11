@@ -1,7 +1,7 @@
 /*
- * ArcEmu MMORPG Server
+ * AscEmu MMORPG Server
  * Copyright (C) 2005-2007 Ascent Team <http://www.ascentemu.com/>
- * Copyright (C) 2008 <http://www.ArcEmu.org/>
+ * Copyright (C) 2008 <http://www.AscEmu.org/>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -286,7 +286,7 @@ void ObjectMgr::DeletePlayerInfo( uint32 guid )
 	}
 
     std::string pnam = std::string(pl->name);
-	arcemu_TOLOWER(pnam);
+	AscEmu_TOLOWER(pnam);
 	i2 = m_playersInfoByName.find(pnam);
 	if( i2 != m_playersInfoByName.end() && i2->second == pl )
 		m_playersInfoByName.erase( i2 );
@@ -317,7 +317,7 @@ void ObjectMgr::AddPlayerInfo(PlayerInfo *pn)
 	playernamelock.AcquireWriteLock();
 	m_playersinfo[pn->guid] =  pn ;
     std::string pnam = std::string(pn->name);
-	arcemu_TOLOWER(pnam);
+	AscEmu_TOLOWER(pnam);
 	m_playersInfoByName[pnam] = pn;
 	playernamelock.ReleaseWriteLock();
 }
@@ -326,13 +326,13 @@ void ObjectMgr::RenamePlayerInfo(PlayerInfo * pn, const char * oldname, const ch
 {
 	playernamelock.AcquireWriteLock();
     std::string oldn = std::string(oldname);
-	arcemu_TOLOWER(oldn);
+	AscEmu_TOLOWER(oldn);
 
 	PlayerNameStringIndexMap::iterator itr = m_playersInfoByName.find( oldn );
 	if( itr != m_playersInfoByName.end() && itr->second == pn )
 	{
         std::string newn = std::string(newname);
-		arcemu_TOLOWER(newn);
+		AscEmu_TOLOWER(newn);
 		m_playersInfoByName.erase( itr );
 		m_playersInfoByName[newn] = pn;
 	}
@@ -444,7 +444,7 @@ void ObjectMgr::LoadPlayersInfo()
 			}
 
             std::string lpn = std::string(pn->name);
-			arcemu_TOLOWER(lpn);
+			AscEmu_TOLOWER(lpn);
 			m_playersInfoByName[lpn] = pn;
 
 			//this is startup -> no need in lock -> don't use addplayerinfo
@@ -463,7 +463,7 @@ void ObjectMgr::LoadPlayersInfo()
 PlayerInfo* ObjectMgr::GetPlayerInfoByName(const char * name)
 {
     std::string lpn = std::string(name);
-	arcemu_TOLOWER(lpn);
+	AscEmu_TOLOWER(lpn);
 	PlayerNameStringIndexMap::iterator i;
 	PlayerInfo *rv = NULL;
 	playernamelock.AcquireReadLock();
@@ -1052,7 +1052,7 @@ Player* ObjectMgr::GetPlayer(const char* name, bool caseSensitive)
 	if(!caseSensitive)
 	{
 		std::string strName = name;
-		arcemu_TOLOWER(strName);
+		AscEmu_TOLOWER(strName);
 		for (itr = _players.begin(); itr != _players.end(); ++itr)
 		{
 			if(!stricmp(itr->second->GetNameString()->c_str(), strName.c_str()))
@@ -1413,7 +1413,7 @@ void ObjectMgr::LoadSpellFixes()
 		if( result->GetFieldCount() != 8 )
 		{
 			Log.LargeErrorMessage("Incorrect column count at spellfixes, skipping, please fix it.",
-				"arcemu has skipped loading this table in order to avoid crashing.", NULL);
+				"AscEmu has skipped loading this table in order to avoid crashing.", NULL);
 			return;
 		}
 		sLog.outDetail("Loading %u spell fixes from database...",result->GetRowCount());

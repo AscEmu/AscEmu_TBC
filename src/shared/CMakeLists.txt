@@ -22,7 +22,7 @@ set(sources
    Threading/ConditionVariable.cpp
    Threading/Mutex.cpp
    Threading/ThreadPool.cpp
-   arcemu_getopt.cpp
+   AscEmu_getopt.cpp
    CoreMemoryAllocator.cpp
    CoreMemoryAllocator_Core.cpp
    CrashHandler.cpp
@@ -73,8 +73,8 @@ set(headers
    Threading/Threading.h
    Threading/ThreadPool.h
    Threading/ThreadStarter.h
-   arcemu_getopt.h
-   arcemuConfig.h
+   AscEmu_getopt.h
+   AscEmuConfig.h
    AuthCodes.h
    ByteBuffer.h
    CallBack.h

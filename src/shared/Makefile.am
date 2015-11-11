@@ -29,8 +29,8 @@ libshared_a_SOURCES = \
     Threading/Mutex.cpp \
     Threading/ThreadPool.cpp \
     Storage.h \
-    arcemu_getopt.h \
-    arcemu_getopt.cpp \
+    AscEmu_getopt.h \
+    AscEmu_getopt.cpp \
     CrashHandler.h \
     CrashHandler.cpp \
     Auth/BigNumber.cpp \

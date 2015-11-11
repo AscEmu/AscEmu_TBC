@@ -1,7 +1,7 @@
 /*
- * AscEmu Framework based on ArcEmu MMORPG Server
+ * AscEmu Framework based on AscEmu MMORPG Server
  * Copyright (C) 2014-2015 AscEmu Team <http://www.ascemu.org/>
- * Copyright (C) 2008-2012 ArcEmu Team <http://www.ArcEmu.org/>
+ * Copyright (C) 2008-2012 AscEmu Team <http://www.AscEmu.org/>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -43,7 +43,7 @@ void AccountMgr::ReloadAccounts(bool silent)
             AccountName = field[1].GetString();
 
             // transform to uppercase
-            arcemu_TOUPPER(AccountName);
+            AscEmu_TOUPPER(AccountName);
 
             //Use private __GetAccount, for locks
             acct = __GetAccount(AccountName);
@@ -140,7 +140,7 @@ void AccountMgr::AddAccount(Field* field)
         sLogonSQL->Execute("UPDATE accounts SET muted = 0 WHERE acct=%u", acct->AccountId);
     }
     // Convert username to uppercase. this is needed ;)
-    arcemu_TOUPPER(Username);
+    AscEmu_TOUPPER(Username);
 
     // prefer encrypted passwords over nonencrypted
     if(EncryptedPassword.size() > 0)
@@ -222,7 +222,7 @@ void AccountMgr::UpdateAccount(Account* acct, Field* field)
         sLogonSQL->Execute("UPDATE accounts SET muted = 0 WHERE acct=%u", acct->AccountId);
     }
     // Convert username to uppercase. this is needed ;)
-    arcemu_TOUPPER(Username);
+    AscEmu_TOUPPER(Username);
 
     // prefer encrypted passwords over nonencrypted
     if(EncryptedPassword.size() > 0)

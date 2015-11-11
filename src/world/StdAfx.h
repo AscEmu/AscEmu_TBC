@@ -1,7 +1,7 @@
 /*
- * ArcEmu MMORPG Server
+ * AscEmu MMORPG Server
  * Copyright (C) 2005-2007 Ascent Team <http://www.ascentemu.com/>
- * Copyright (C) 2008 <http://www.ArcEmu.org/>
+ * Copyright (C) 2008 <http://www.AscEmu.org/>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -86,14 +86,14 @@ extern SERVER_DECL SessionLogWriter* Player_Log;
 #include "../shared/CircularQueue.h"
 #include "../shared/Threading/RWLock.h"
 #include "../shared/Threading/Condition.h"
-#include "../shared/arcemu_getopt.h"
+#include "../shared/AscEmu_getopt.h"
 
 #include "UpdateFields.h"
 #include "UpdateMask.h"
 #include "Opcodes.h"
 
 #ifdef CLUSTERING
-	#include "../arcemu-realmserver/WorkerOpcodes.h"
+	#include "../AscEmu-realmserver/WorkerOpcodes.h"
 #endif
 
 #include "Packets.h"

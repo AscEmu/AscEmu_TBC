@@ -1,6 +1,6 @@
 /*
- * AscEmu Framework based on ArcEmu MMORPG Server
- * Copyright (C) 2008-2012 <http://www.ArcEmu.com/>
+ * AscEmu Framework based on AscEmu MMORPG Server
+ * Copyright (C) 2008-2012 <http://www.AscEmu.com/>
  *
  * Circular Buffer Class
  * Based on the Bip Buffer concept, from http://www.codeproject.com/KB/IP/bipbuffer.aspx
