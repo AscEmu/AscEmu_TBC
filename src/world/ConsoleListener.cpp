@@ -1,7 +1,7 @@
 /*
- * ArcEmu MMORPG Server
+ * AscEmu MMORPG Server
  * Copyright (C) 2005-2007 Ascent Team <http://www.ascentemu.com/>
- * Copyright (C) 2008 <http://www.ArcEmu.org/>
+ * Copyright (C) 2008 <http://www.AscEmu.org/>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -265,7 +265,7 @@ void ConsoleSocket::OnRead()
 
 void ConsoleSocket::OnConnect()
 {
-	m_pConsole->Write("Welcome to ArcEmu's Remote Administration Console.\r\n");
+	m_pConsole->Write("Welcome to AscEmu's Remote Administration Console.\r\n");
 	m_pConsole->Write("Please authenticate to continue. \r\n\r\n");
 	m_pConsole->Write("login: ");
 }

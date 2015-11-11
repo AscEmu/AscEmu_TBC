@@ -39,7 +39,7 @@ void Usage(char* prg)
 
 int main(int argc, char** argv)
 {
-    printf("arcemu_tbc vmap (version %s) assembler\n\n", szVMAPMagic);
+    printf("AscEmu_tbc vmap (version %s) assembler\n\n", szVMAPMagic);
 
     if (argc != 3)
     {

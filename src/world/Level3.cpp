@@ -1,8 +1,8 @@
 
 /*
  * Copyright (C) 2005-2007 Ascent Team <http://www.ascentemu.com/>
- * ArcEmu MMORPG Server
- * Copyright (C) 2008 <http://www.ArcEmu.org/>
+ * AscEmu MMORPG Server
+ * Copyright (C) 2008 <http://www.AscEmu.org/>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -2237,7 +2237,7 @@ bool ChatHandler::HandleLookupItemCommand(const char * args, WorldSession * m_se
 	if(!*args) return false;
 
     std::string x = std::string(args);
-	arcemu_TOLOWER(x);
+	AscEmu_TOLOWER(x);
 	if(x.length() < 4)
 	{
 		RedSystemMessage(m_session, "Your search string must be at least 5 characters long.");
@@ -2258,7 +2258,7 @@ bool ChatHandler::HandleLookupItemCommand(const char * args, WorldSession * m_se
 
 		std::string litName	= std::string(lit ? lit->Name : "");
 		
-		arcemu_TOLOWER(litName);
+		AscEmu_TOLOWER(litName);
 		
 		bool localizedFound	= false;
 		if(FindXinYString(x, litName))
@@ -2291,7 +2291,7 @@ bool ChatHandler::HandleLookupObjectCommand(const char * args, WorldSession * m_
 	if(!*args) return false;
 
     std::string x = std::string(args);
-	arcemu_TOLOWER(x);
+	AscEmu_TOLOWER(x);
 
 	StorageContainerIterator<GameObjectInfo> * itr = GameObjectNameStorage.MakeIterator();
 
@@ -2305,7 +2305,7 @@ bool ChatHandler::HandleLookupObjectCommand(const char * args, WorldSession * m_
 	{
 		i = itr->Get();
         y = std::string(i->Name);
-		arcemu_TOLOWER(y);
+		AscEmu_TOLOWER(y);
 		if(FindXinYString(x,y))
 		{
 			//string objectID=MyConvertIntToString(i->ID);
@@ -2343,7 +2343,7 @@ bool ChatHandler::HandleLookupCreatureCommand(const char * args, WorldSession * 
 	if(!*args) return false;
 
     std::string x = std::string(args);
-	arcemu_TOLOWER(x);
+	AscEmu_TOLOWER(x);
 	if(x.length() < 4)
 	{
 		RedSystemMessage(m_session, "Your search string must be at least 5 characters long.");
@@ -2363,7 +2363,7 @@ bool ChatHandler::HandleLookupCreatureCommand(const char * args, WorldSession * 
 
 		std::string liName	= std::string(li ? li->Name : "");
 		
-		arcemu_TOLOWER(liName);
+		AscEmu_TOLOWER(liName);
 		
 		bool localizedFound	= false;
 
@@ -2395,7 +2395,7 @@ bool ChatHandler::HandleLookupSpellCommand(const char * args, WorldSession * m_s
 	if(!*args) return false;
 
     std::string x = std::string(args);
-	arcemu_TOLOWER(x);
+	AscEmu_TOLOWER(x);
 	if(x.length() < 4)
 	{
 		RedSystemMessage(m_session, "Your search string must be at least 5 characters long.");
@@ -2409,7 +2409,7 @@ bool ChatHandler::HandleLookupSpellCommand(const char * args, WorldSession * m_s
 	{
 		SpellEntry* spell = dbcSpell.LookupRow(index);
         std::string y = std::string(spell->Name);
-		arcemu_TOLOWER(y);
+		AscEmu_TOLOWER(y);
 		if(FindXinYString(x, y))
  		{
  			// Print out the name in a cool highlighted fashion
@@ -2432,7 +2432,7 @@ bool ChatHandler::HandleLookupSkillCommand(const char * args, WorldSession * m_s
 	if(!*args) return false;
 
     std::string x = std::string(args);
-	arcemu_TOLOWER(x);
+	AscEmu_TOLOWER(x);
 	if(x.length() < 4)
 	{
 		RedSystemMessage(m_session, "Your search string must be at least 5 characters long.");
@@ -2446,7 +2446,7 @@ bool ChatHandler::HandleLookupSkillCommand(const char * args, WorldSession * m_s
 	{
 		skilllineentry* skill = dbcSkillLine.LookupRow(index);
         std::string y = std::string(skill->Name);
-		arcemu_TOLOWER(y);
+		AscEmu_TOLOWER(y);
 		if(FindXinYString(x, y))
  		{
  			// Print out the name in a cool highlighted fashion
@@ -2469,7 +2469,7 @@ bool ChatHandler::HandleLookupFactionCommand(const char * args, WorldSession * m
 	if(!*args) return false;
 
     std::string x = std::string(args);
-	arcemu_TOLOWER(x);
+	AscEmu_TOLOWER(x);
 	if(x.length() < 4)
 	{
 		RedSystemMessage(m_session, "Your search string must be at least 5 characters long.");
@@ -2483,7 +2483,7 @@ bool ChatHandler::HandleLookupFactionCommand(const char * args, WorldSession * m
 	{
 		FactionDBC* faction = dbcFaction.LookupRow(index);
         std::string y = std::string(faction->Name);
-		arcemu_TOLOWER(y);
+		AscEmu_TOLOWER(y);
 		if(FindXinYString(x, y))
  		{
  			// Print out the name in a cool highlighted fashion

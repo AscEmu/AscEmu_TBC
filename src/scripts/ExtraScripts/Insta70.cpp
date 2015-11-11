@@ -1,6 +1,6 @@
 /*
- * ArcScript Scripts for Arcemu MMORPG Server
- * Copyright (C) 2008 Arcemu Team
+ * ArcScript Scripts for AscEmu MMORPG Server
+ * Copyright (C) 2008 AscEmu Team
  * Copyright (C) 2007 Moon++ <http://www.moonplusplus.com/>
  *
  * This program is free software: you can redistribute it and/or modify
@@ -145,7 +145,7 @@ void learnAll( Player *plr )
 void PlayerFirstEnter(Player * pPlayer)
 {
 /*
-	Look at arcemu-optional.conf for starting level:
+	Look at AscEmu-optional.conf for starting level:
 	<Optional    StartingLevel = "1"
 	Set it to 70:
 	<Optional    StartingLevel = "70"

@@ -1,7 +1,7 @@
 /*
- * ArcEmu MMORPG Server
+ * AscEmu MMORPG Server
  * Copyright (C) 2005-2007 Ascent Team <http://www.ascentemu.com/>
- * Copyright (C) 2008 <http://www.ArcEmu.org/>
+ * Copyright (C) 2008 <http://www.AscEmu.org/>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -126,8 +126,8 @@ enum QUEST_SHARE
 	QUEST_SHARE_MSG_FINISH_QUEST	= 8,
 };
 
-#define arcemu_QUEST_REPEATABLE 1
-#define arcemu_QUEST_REPEATABLE_DAILY 2
+#define AscEmu_QUEST_REPEATABLE 1
+#define AscEmu_QUEST_REPEATABLE_DAILY 2
 
 class QuestScript;
 #pragma pack(push,1)

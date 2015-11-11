@@ -1,7 +1,7 @@
 /*
- * ArcEmu MMORPG Server
+ * AscEmu MMORPG Server
  * Copyright (C) 2005-2007 Ascent Team <http://www.ascentemu.com/>
- * Copyright (C) 2008 <http://www.ArcEmu.org/>
+ * Copyright (C) 2008 <http://www.AscEmu.org/>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -132,7 +132,7 @@ typedef std::set<GossipScript*> CustomGossipScripts;
 typedef std::set<QuestScript*> QuestScripts;
 typedef std::list<void*> ServerHookList;
 typedef std::list<SCRIPT_MODULE> LibraryHandleMap;
-typedef std::list< Arcemu::DynLib* > DynamicLibraryMap;
+typedef std::list< AscEmu::DynLib* > DynamicLibraryMap;
 
 #define VISIBLE_RANGE (26.46f)
 #define MAX_SCRIPTS 1000

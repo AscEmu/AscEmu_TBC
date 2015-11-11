@@ -1,7 +1,7 @@
 /*
- * ArcEmu MMORPG Server
+ * AscEmu MMORPG Server
  * Copyright (C) 2005-2007 Ascent Team <http://www.ascentemu.com/>
- * Copyright (C) 2008 <http://www.ArcEmu.org/>
+ * Copyright (C) 2008 <http://www.AscEmu.org/>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -120,32 +120,32 @@ bool Master::Run(int argc, char ** argv)
 	int do_database_clean = 0;
 	time_t curTime;
 
-	struct arcemu_option longopts[] =
+	struct AscEmu_option longopts[] =
 	{
-		{ "checkconf",			arcemu_no_argument,				&do_check_conf,			1		},
-		{ "screenloglevel",		arcemu_required_argument,		&screen_log_level,		1		},
-		{ "fileloglevel",		arcemu_required_argument,		&file_log_level,		1		},
-		{ "version",			arcemu_no_argument,				&do_version,			1		},
-		{ "conf",				arcemu_required_argument,		NULL,					'c'		},
-		{ "realmconf",			arcemu_required_argument,		NULL,					'r'		},
-		{ "databasecleanup",	arcemu_no_argument,				&do_database_clean,		1		},
-		{ "cheatercheck",		arcemu_no_argument,				&do_cheater_check,		1		},
+		{ "checkconf",			AscEmu_no_argument,				&do_check_conf,			1		},
+		{ "screenloglevel",		AscEmu_required_argument,		&screen_log_level,		1		},
+		{ "fileloglevel",		AscEmu_required_argument,		&file_log_level,		1		},
+		{ "version",			AscEmu_no_argument,				&do_version,			1		},
+		{ "conf",				AscEmu_required_argument,		NULL,					'c'		},
+		{ "realmconf",			AscEmu_required_argument,		NULL,					'r'		},
+		{ "databasecleanup",	AscEmu_no_argument,				&do_database_clean,		1		},
+		{ "cheatercheck",		AscEmu_no_argument,				&do_cheater_check,		1		},
 		{ 0, 0, 0, 0 }
 	};
 
 	char c;
-	while ((c = arcemu_getopt_long_only(argc, argv, ":f:", longopts, NULL)) != -1)
+	while ((c = AscEmu_getopt_long_only(argc, argv, ":f:", longopts, NULL)) != -1)
 	{
 		switch (c)
 		{
 		case 'c':
-			config_file = new char[strlen(arcemu_optarg)];
-			strcpy(config_file, arcemu_optarg);
+			config_file = new char[strlen(AscEmu_optarg)];
+			strcpy(config_file, AscEmu_optarg);
 			break;
 
 		case 'r':
-			realm_config_file = new char[strlen(arcemu_optarg)];
-			strcpy(realm_config_file, arcemu_optarg);
+			realm_config_file = new char[strlen(AscEmu_optarg)];
+			strcpy(realm_config_file, AscEmu_optarg);
 			break;
 
 		case 0:
@@ -246,7 +246,7 @@ bool Master::Run(int argc, char ** argv)
     
 #ifndef WIN32
 	if(geteuid() == 0 || getegid() == 0)
-		Log.LargeErrorMessage("You are running ArcEmu as root.", "This is not needed, and may be a possible security risk.", "It is advised to hit CTRL+C now and", "start as a non-privileged user.", NULL);
+		Log.LargeErrorMessage("You are running AscEmu as root.", "This is not needed, and may be a possible security risk.", "It is advised to hit CTRL+C now and", "start as a non-privileged user.", NULL);
 #endif
 
 	InitRandomNumberGenerators();
@@ -290,7 +290,7 @@ bool Master::Run(int argc, char ** argv)
 		snprintf(cmd, 1024, "./crashreport -r %d -d \"%s\"", BUILD_REVISION, banner);
 		system(cmd);
 	}
-	unlink("arcemu.uptime");
+	unlink("AscEmu.uptime");
 #endif
 
 	if( !_StartDB() )
@@ -457,7 +457,7 @@ bool Master::Run(int argc, char ** argv)
 			ThreadPool.ShowStats();
 			ThreadPool.IntegrityCheck();
 #if !defined(WIN32) && defined(__DEBUG__)
-			FILE * f = fopen( "arcemu.uptime", "w" );
+			FILE * f = fopen( "AscEmu.uptime", "w" );
 			if( f )
 			{
 				fprintf(f, "%u", sWorld.GetUptime());
@@ -692,10 +692,10 @@ bool Master::CheckDBVersion()
         if (result < 0)
         {
             Log.Error("Database", "You need to apply the world update queries that are newer than %s. Exiting.", WorldDBVersion);
-            Log.Error("Database", "You can find the world update queries in the sql/world_updates sub-directory of your Arcemu source directory.");
+            Log.Error("Database", "You can find the world update queries in the sql/world_updates sub-directory of your AscEmu source directory.");
         }
         else
-            Log.Error("Database", "Your world database is probably too new for this Arcemu version, you need to update your server. Exiting.");
+            Log.Error("Database", "Your world database is probably too new for this AscEmu version, you need to update your server. Exiting.");
 
         delete wqr;
         return false;
@@ -722,10 +722,10 @@ bool Master::CheckDBVersion()
         if (result < 0)
         {
             Log.Error("Database", "You need to apply the character update queries that are newer than %s. Exiting.", CharDBVersion);
-            Log.Error("Database", "You can find the character update queries in the sql/character_updates sub-directory of your Arcemu source directory.");
+            Log.Error("Database", "You can find the character update queries in the sql/character_updates sub-directory of your AscEmu source directory.");
         }
         else
-            Log.Error("Database", "Your character database is too new for this Arcemu version, you need to update your server. Exiting.");
+            Log.Error("Database", "Your character database is too new for this AscEmu version, you need to update your server. Exiting.");
 
         delete cqr;
         return false;

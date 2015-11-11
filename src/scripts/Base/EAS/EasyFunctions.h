@@ -66,7 +66,7 @@ namespace EASY_FUNCTIONS
 
 	bool AddItem(uint32 entry, Player *plr, uint32 count = 1);
   
-	ARCEMU_INLINE void EventCastSpell(Unit* caster, Unit* target, uint32 spellid, uint32 time)
+	AscEmu_INLINE void EventCastSpell(Unit* caster, Unit* target, uint32 spellid, uint32 time)
 	{
 		sEventMgr.AddEvent(((Unit*)caster), &Unit::EventCastSpell, ((Unit*)target), dbcSpell.LookupEntry(spellid), EVENT_UNK, time, 0, EVENT_FLAG_DO_NOT_EXECUTE_IN_WORLD_CONTEXT);
 	}

@@ -1,6 +1,6 @@
 /*
- * ArcEmu MMORPG Server
- * Copyright (C) 2008 <http://www.ArcEmu.org/>
+ * AscEmu MMORPG Server
+ * Copyright (C) 2008 <http://www.AscEmu.org/>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -27,7 +27,7 @@
 // pooled allocations
 //#define STORAGE_ALLOCATION_POOLS 1
 
-#define STORAGE_ARRAY_MAX 200000
+#define STORAGE_ARRAY_MAX 20000000
 
 #ifdef STORAGE_ALLOCATION_POOLS
 template<class T>

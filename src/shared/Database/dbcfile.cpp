@@ -1,6 +1,6 @@
 /* 
-* ArcEmu MMORPG Server
-* Copyright (C) 2008 ArcEmu <http://www.ArcEmu.org/>
+* AscEmu MMORPG Server
+* Copyright (C) 2008 AscEmu <http://www.AscEmu.org/>
 *
 * This work is licensed under the Creative Commons 
 * Attribution-Noncommercial-NoDerivative Works 3.0 Unported License.

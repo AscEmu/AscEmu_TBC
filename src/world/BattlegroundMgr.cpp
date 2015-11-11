@@ -1,7 +1,7 @@
 /*
-* ArcEmu MMORPG Server
+* AscEmu MMORPG Server
  * Copyright (C) 2005-2007 Ascent Team <http://www.ascentemu.com/>
-* Copyright (C) 2008 <http://www.ArcEmu.org/>
+* Copyright (C) 2008 <http://www.AscEmu.org/>
 *
 * This program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU Affero General Public License as published by
@@ -1345,7 +1345,7 @@ void CBattlegroundManager::SendBattlefieldStatus(Player * plr, uint32 Status, ui
 	{
 		if(Type >= BATTLEGROUND_ARENA_2V2 && Type <= BATTLEGROUND_ARENA_5V5)
 		{
-			data << uint32(0);		// Queue Slot 0..2. Only the first slot is used in arcemu!
+			data << uint32(0);		// Queue Slot 0..2. Only the first slot is used in AscEmu!
 			switch(Type)
 			{
 			case BATTLEGROUND_ARENA_2V2:

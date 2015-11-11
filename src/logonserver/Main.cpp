@@ -1,7 +1,7 @@
 /*
- * AscEmu Framework based on ArcEmu MMORPG Server
+ * AscEmu Framework based on AscEmu MMORPG Server
  * Copyright (C) 2014-2015 AscEmu Team <http://www.ascemu.org/>
- * Copyright (C) 2008-2012 ArcEmu Team <http://www.ArcEmu.org/>
+ * Copyright (C) 2008-2012 AscEmu Team <http://www.AscEmu.org/>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -24,7 +24,7 @@
 #ifndef WIN32
 #include <sys/resource.h>
 #endif
-#include "../shared/arcemu_getopt.h"
+#include "../shared/AscEmu_getopt.h"
 
 #define BANNER "<< AscEmu %s/%s-%s (%s) :: Logon Server >>"
 
@@ -35,7 +35,7 @@
 // Database impl
 Database* sLogonSQL;
 initialiseSingleton(LogonServer);
-Arcemu::Threading::AtomicBoolean mrunning(true);
+AscEmu::Threading::AtomicBoolean mrunning(true);
 Mutex _authSocketLock;
 std::set<AuthSocket*> _authSockets;
 
@@ -290,25 +290,25 @@ void LogonServer::Run(int argc, char** argv)
     int do_check_conf = 0;
     int do_version = 0;
 
-    struct arcemu_option longopts[] =
+    struct AscEmu_option longopts[] =
     {
-        { "checkconf",          arcemu_no_argument,              &do_check_conf,         1        },
-        { "screenloglevel",     arcemu_required_argument,        &screen_log_level,      1        },
-        { "fileloglevel",       arcemu_required_argument,        &file_log_level,        1        },
-        { "version",            arcemu_no_argument,              &do_version,            1        },
-        { "conf",               arcemu_required_argument,        NULL,                  'c'       },
+        { "checkconf",          AscEmu_no_argument,              &do_check_conf,         1        },
+        { "screenloglevel",     AscEmu_required_argument,        &screen_log_level,      1        },
+        { "fileloglevel",       AscEmu_required_argument,        &file_log_level,        1        },
+        { "version",            AscEmu_no_argument,              &do_version,            1        },
+        { "conf",               AscEmu_required_argument,        NULL,                  'c'       },
         { 0, 0, 0, 0 }
     };
 
     int c;
-    while((c = arcemu_getopt_long_only(argc, argv, ":f:", longopts, NULL)) != -1)
+    while((c = AscEmu_getopt_long_only(argc, argv, ":f:", longopts, NULL)) != -1)
     {
         switch(c)
         {
             case 'c':
                 /* Log filename was set */
-                config_file = new char[strlen(arcemu_optarg) + 1];
-                strcpy(config_file, arcemu_optarg);
+                config_file = new char[strlen(AscEmu_optarg) + 1];
+                strcpy(config_file, AscEmu_optarg);
                 break;
             case 0:
                 break;

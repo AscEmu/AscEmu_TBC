@@ -34,7 +34,7 @@ class SocketMgr : public Singleton<SocketMgr>
         ListenSocketBase* listenfds[SOCKET_HOLDER_SIZE];
 
         /// socket counter
-        Arcemu::Threading::AtomicCounter socket_count;
+        AscEmu::Threading::AtomicCounter socket_count;
 
         int max_fd;
 

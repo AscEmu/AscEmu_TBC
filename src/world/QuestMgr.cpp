@@ -1,7 +1,7 @@
 /*
- * ArcEmu MMORPG Server
+ * AscEmu MMORPG Server
  * Copyright (C) 2005-2007 Ascent Team <http://www.ascentemu.com/>
- * Copyright (C) 2008 <http://www.ArcEmu.org/>
+ * Copyright (C) 2008 <http://www.AscEmu.org/>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -53,7 +53,7 @@ uint32 QuestMgr::PlayerMeetsReqs(Player* plr, Quest* qst, bool skiplevelcheck)
 	else
     {
 		status = QMGR_QUEST_REPEATABLE;
-		if(qst->is_repeatable == arcemu_QUEST_REPEATABLE_DAILY && plr->HasFinishedDaily(qst->id))
+		if(qst->is_repeatable == AscEmu_QUEST_REPEATABLE_DAILY && plr->HasFinishedDaily(qst->id))
 			return QMGR_QUEST_NOT_AVAILABLE;
     }
 
@@ -1094,7 +1094,7 @@ void QuestMgr::OnQuestFinished(Player* plr, Quest* qst, Object *qst_giver, uint3
 		plr->ModUnsigned32Value( PLAYER_FIELD_COINAGE, GenerateRewardMoney( plr, qst ) );
 
 		// if daily then append to finished dailies
-		if ( qst->is_repeatable == arcemu_QUEST_REPEATABLE_DAILY )
+		if ( qst->is_repeatable == AscEmu_QUEST_REPEATABLE_DAILY )
 			plr->PushToFinishedDailies( qst->id );
 	}
 	else

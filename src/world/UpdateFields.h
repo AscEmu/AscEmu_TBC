@@ -1,7 +1,7 @@
 /*
- * ArcEmu MMORPG Server
+ * AscEmu MMORPG Server
  * Copyright (C) 2005-2007 Ascent Team <http://www.ascentemu.com/>
- * Copyright (C) 2008 <http://www.ArcEmu.org/>
+ * Copyright (C) 2008 <http://www.AscEmu.org/>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -21,8 +21,8 @@
 /** 2.4.3 UpdateFields as of 16/07/08
  */
 
-#ifndef __arcemu_UPDATEFIELDS_H
-#define __arcemu_UPDATEFIELDS_H
+#ifndef __AscEmu_UPDATEFIELDS_H
+#define __AscEmu_UPDATEFIELDS_H
 
 //OBJECT:
 #define OBJECT_FIELD_GUID                                      	0x000	//  Size: 2, Type: GUID, Flags: 1
@@ -1544,12 +1544,12 @@
 
 
 
-#endif		// __arcemu_UPDATEFIELDS_H
+#endif		// __AscEmu_UPDATEFIELDS_H
 
 /*
 //client 3.0.1 fields
-#ifndef __arcemu_UPDATEFIELDS_H
-#define __arcemu_UPDATEFIELDS_H
+#ifndef __AscEmu_UPDATEFIELDS_H
+#define __AscEmu_UPDATEFIELDS_H
 
 //OBJECT_FIELD_:
 #define OBJECT_FIELD_GUID                                       0x0000     
@@ -3445,5 +3445,5 @@
 #define CORPSE_FIELD_PAD                                        OBJECT_END + 0x001F     
 #define CORPSE_FIELD_END                                        OBJECT_END + 0x0020     
 
-#endif // __arcemu_UPDATEFIELDS_H
+#endif // __AscEmu_UPDATEFIELDS_H
 */

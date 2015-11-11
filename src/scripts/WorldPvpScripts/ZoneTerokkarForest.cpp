@@ -69,7 +69,7 @@ static const uint32 g_allianceStateFields[5]	= {	WORLDSTATE_TEROKKAR_TOWER1_ALLI
 static const uint32 g_neutralStateFields[5]		= {	WORLDSTATE_TEROKKAR_TOWER1_NEUTRAL,	WORLDSTATE_TEROKKAR_TOWER2_NEUTRAL,	WORLDSTATE_TEROKKAR_TOWER3_NEUTRAL,	WORLDSTATE_TEROKKAR_TOWER4_NEUTRAL,	WORLDSTATE_TEROKKAR_TOWER5_NEUTRAL };
 
 // updates clients visual counter, and adds the buffs to players if needed
-ARCEMU_INLINE void UpdateTowerCount(MapMgr* mgr)
+AscEmu_INLINE void UpdateTowerCount(MapMgr* mgr)
 {
 	mgr->GetWorldStateManager()->SetWorldState(WORLDSTATE_TEROKKAR_ALLIANCE_TOWERS_CONTROLLED, TFg_allianceTowers);
 	mgr->GetWorldStateManager()->SetWorldState(WORLDSTATE_TEROKKAR_HORDE_TOWERS_CONTROLLED, TFg_hordeTowers);
