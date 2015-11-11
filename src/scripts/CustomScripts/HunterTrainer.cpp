@@ -2,7 +2,7 @@
 #include "Setup.h"
 
 #define SendQuickMenu(textid) objmgr.CreateGossipMenuForPlayer(&Menu, pObject->GetGUID(), textid, Plr); \
-    Menu->SendTo(Plr);
+	Menu->SendTo(Plr);
 
 void SpawnPet(Player * pPlayer, uint32 petId)
 {
@@ -24,9 +24,10 @@ void SpawnPet(Player * pPlayer, uint32 petId)
 		sp->flags = 0;
 		sp->form = 0;
 		sp->movetype = 0;
-		sp->o = pPlayer->GetOrientation();
 		sp->x = pPlayer->GetPositionX();
 		sp->y = pPlayer->GetPositionY();
+		sp->z = pPlayer->GetPositionZ();
+		sp->o = pPlayer->GetOrientation();
 		sp->channel_spell=sp->channel_target_creature=sp->channel_target_go=0;
 		pCreature->Load(sp, (uint32)NULL, NULL);
 		Pet *old_pet = pPlayer->GetSummon();
@@ -87,7 +88,7 @@ public:
 				Menu->AddItem(0, "I would like a Blackwind Warp Chaser.", 16);
 				Menu->SendTo(Plr);
 				return;
-				break;
+			break;
 		}
 
 		uint32 id = IntId - 10;
@@ -97,19 +98,19 @@ public:
 		SendQuickMenu(200017);
 	}
 
-     void GossipEnd(Object * pObject, Player* Plr)
+    void GossipEnd(Object * pObject, Player* Plr)
 	{
 		GossipScript::GossipEnd(pObject, Plr);
 	}
 
-     void Destroy()
-     {
+	void Destroy()
+    {
 		delete this;
-     }
+    }
 };
 
 void SetupHunterTrainer(ScriptMgr * mgr)
 {
 	GossipScript * ht = (GossipScript*)new HunterTrainer;
-	mgr->register_gossip_script(200016, ht);
+	mgr->register_gossip_script(135790, ht);
 }

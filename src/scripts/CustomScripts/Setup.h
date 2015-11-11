@@ -24,5 +24,7 @@
 void SetupGMAnnounce(ScriptMgr * mgr);
 void SetupAldorSkyrGuard(ScriptMgr * mgr);
 void SetupTeleNPC(ScriptMgr * mgr);
+void SetupHunterTrainer(ScriptMgr * mgr);
+void SetupSkillNPC(ScriptMgr * mgr);
 
 #endif
