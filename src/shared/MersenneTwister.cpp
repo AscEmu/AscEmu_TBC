@@ -86,10 +86,28 @@ uint32 RandomUInt(uint32 n)
     counter = 0;
     for (;;)
     {
-        c = counter%NUMBER_OF_GENERATORS;
+        c = counter % NUMBER_OF_GENERATORS;
         if (m_locks[c]->AttemptAcquire())
         {
             ret = m_generators[c]->IRandom(0, n);
+            m_locks[c]->Release();
+            return ret;
+        }
+
+        ++counter;
+    }
+}
+
+uint32 RandomUInt(uint32 n1, uint32 n2)
+{
+    uint32 ret;
+    uint32 c;
+    for (;;)
+    {
+        c = counter % NUMBER_OF_GENERATORS;
+        if (m_locks[c]->AttemptAcquire())
+        {
+            ret = m_generators[c]->IRandom(n1, n2);
             m_locks[c]->Release();
             return ret;
         }
