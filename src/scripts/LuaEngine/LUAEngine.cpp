@@ -724,7 +724,7 @@ void LuaEngine::OnUnitEvent(Unit * pUnit, const char * FunctionName, uint32 Even
 
 void LuaEngine::OnQuestEvent(Player * QuestOwner, const char * FunctionName, uint32 QuestID, uint32 EventType, Object * QuestStarter, uint32 Misc, uint32 Misc2)
 {
-	if(FunctionName==NULL)
+	if(FunctionName==nullptr)
 		return;
 
 	m_Lock.Acquire();
@@ -807,7 +807,7 @@ void LuaEngine::OnGameObjectEvent(GameObject * pGameObject, const char * Functio
 }
 void LuaEngine::OnGossipEvent(Object * pObject, const char * FunctionName, uint32 EventType, Player * mPlayer, uint32 Id, uint32 IntId, const char * Code)
 {
-	if(FunctionName==NULL)
+	if(FunctionName==nullptr)
 		return;
 
 	m_Lock.Acquire();
@@ -1143,12 +1143,12 @@ public:
 		if(pObject->GetTypeId() == TYPEID_UNIT)
         {
            if( m_unit_gossip_binding->Functions[GOSSIP_EVENT_ON_TALK] != NULL )
-			    g_engine->OnGossipEvent( pObject, m_unit_gossip_binding->Functions[GOSSIP_EVENT_ON_TALK], GOSSIP_EVENT_ON_TALK, Plr, NULL, NULL, NULL );
+               g_engine->OnGossipEvent(pObject, m_unit_gossip_binding->Functions[GOSSIP_EVENT_ON_TALK], GOSSIP_EVENT_ON_TALK, Plr, NULL, NULL, nullptr);
        }
         else if(pObject->GetTypeId() == TYPEID_ITEM)
         {
             if( m_item_gossip_binding->Functions[GOSSIP_EVENT_ON_TALK] != NULL )
-			    g_engine->OnGossipEvent( pObject, m_item_gossip_binding->Functions[GOSSIP_EVENT_ON_TALK], GOSSIP_EVENT_ON_TALK, Plr, NULL, NULL, NULL );
+                g_engine->OnGossipEvent(pObject, m_item_gossip_binding->Functions[GOSSIP_EVENT_ON_TALK], GOSSIP_EVENT_ON_TALK, Plr, NULL, NULL, nullptr);
         }
 	}
 
@@ -1176,17 +1176,17 @@ public:
 		if(pObject->GetTypeId() == TYPEID_UNIT)
         {
 		    if( m_unit_gossip_binding->Functions[GOSSIP_EVENT_ON_END] != NULL )
-			    g_engine->OnGossipEvent( pObject, m_unit_gossip_binding->Functions[GOSSIP_EVENT_ON_END], GOSSIP_EVENT_ON_END, Plr, NULL, NULL, NULL );
+                g_engine->OnGossipEvent(pObject, m_unit_gossip_binding->Functions[GOSSIP_EVENT_ON_END], GOSSIP_EVENT_ON_END, Plr, NULL, NULL, nullptr);
         }
         else if(pObject->GetTypeId() == TYPEID_ITEM)
         {
             if( m_item_gossip_binding->Functions[GOSSIP_EVENT_ON_END] != NULL )
-			    g_engine->OnGossipEvent( pObject, m_item_gossip_binding->Functions[GOSSIP_EVENT_ON_END], GOSSIP_EVENT_ON_END, Plr, NULL, NULL, NULL );
+                g_engine->OnGossipEvent(pObject, m_item_gossip_binding->Functions[GOSSIP_EVENT_ON_END], GOSSIP_EVENT_ON_END, Plr, NULL, NULL, nullptr);
         }
         else if(pObject->GetTypeId() == TYPEID_GAMEOBJECT)
         {
             if( m_go_gossip_binding->Functions[GOSSIP_EVENT_ON_END] != NULL )
-			    g_engine->OnGossipEvent( pObject, m_go_gossip_binding->Functions[GOSSIP_EVENT_ON_END], GOSSIP_EVENT_ON_END, Plr, NULL, NULL, NULL );
+                g_engine->OnGossipEvent(pObject, m_go_gossip_binding->Functions[GOSSIP_EVENT_ON_END], GOSSIP_EVENT_ON_END, Plr, NULL, NULL, nullptr);
         }
 	}
 
