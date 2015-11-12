@@ -1088,43 +1088,25 @@ enum Opcodes
 
 enum FriendsResult
 {
-    FRIEND_DB_ERROR = 0x00,
-    FRIEND_LIST_FULL = 0x01,
-    FRIEND_ONLINE = 0x02,
-    FRIEND_OFFLINE = 0x03,
-    FRIEND_NOT_FOUND = 0x04,
-    FRIEND_REMOVED = 0x05,
-    FRIEND_ADDED_ONLINE = 0x06,
-    FRIEND_ADDED_OFFLINE = 0x07,
-    FRIEND_ALREADY = 0x08,
-    FRIEND_SELF = 0x09,
-    FRIEND_ENEMY = 0x0A,
-    FRIEND_IGNORE_FULL = 0x0B,
-    FRIEND_IGNORE_SELF = 0x0C,
-    FRIEND_IGNORE_NOT_FOUND = 0x0D,
-    FRIEND_IGNORE_ALREADY = 0x0E,
-    FRIEND_IGNORE_ADDED = 0x0F,
-    FRIEND_IGNORE_REMOVED = 0x10
+    FRIEND_DB_ERROR             = 0x00,
+    FRIEND_LIST_FULL            = 0x01,
+    FRIEND_ONLINE               = 0x02,
+    FRIEND_OFFLINE              = 0x03,
+    FRIEND_NOT_FOUND            = 0x04,
+    FRIEND_REMOVED              = 0x05,
+    FRIEND_ADDED_ONLINE         = 0x06,
+    FRIEND_ADDED_OFFLINE        = 0x07,
+    FRIEND_ALREADY              = 0x08,
+    FRIEND_SELF                 = 0x09,
+    FRIEND_ENEMY                = 0x0A,
+    FRIEND_IGNORE_FULL          = 0x0B,
+    FRIEND_IGNORE_SELF          = 0x0C,
+    FRIEND_IGNORE_NOT_FOUND     = 0x0D,
+    FRIEND_IGNORE_ALREADY       = 0x0E,
+    FRIEND_IGNORE_ADDED         = 0x0F,
+    FRIEND_IGNORE_REMOVED       = 0x10
 };
 
-
-/*
-0	= Universal
-1	= ?Orcish?
-2	= Darnassian
-3	= Taurahe
-4	= ?
-5	= ?
-6	= Dwarvish
-7	= Common
-8	= Demonic
-9	= Titan
-10	= Thelassian
-11	= Draconic
-12	= Kalimag
-13	= Gnomish
-14	= Troll
-*/
 
 /*
 2.3.0 stuff
@@ -1148,43 +1130,43 @@ enum FriendsResult
 
 enum NPCFlags
 {
-    //									Hex				Decimal			Bit  Comments
-    UNIT_NPC_FLAG_NONE = 0x00000000,	//0,			01
-    UNIT_NPC_FLAG_GOSSIP = 0x00000001,	//1,			02	Gossip/Talk (CMSG_GOSSIP_HELLO)
-    UNIT_NPC_FLAG_QUESTGIVER = 0x00000002,	//2,			03	Questgiver
-    UNIT_NPC_FLAG_UNK1 = 0x00000004,	//4,			04
-    UNIT_NPC_FLAG_UNK2 = 0x00000008,	//8,			05
-    UNIT_NPC_FLAG_TRAINER = 0x00000010,	//16,			06	Trainer (CMSG_TRAINER_LIST)
-    UNIT_NPC_FLAG_TRAINER_CLASS = 0x00000020,	//32,			07
-    UNIT_NPC_FLAG_TRAINER_PROF = 0x00000040,	//64,			08
-    UNIT_NPC_FLAG_VENDOR = 0x00000080,	//128,			09	Vendor (CMSG_LIST_INVENTORY)
-    UNIT_NPC_FLAG_VENDOR_AMMO = 0x00000100,	//256,			10
-    UNIT_NPC_FLAG_VENDOR_FOOD = 0x00000200,	//512,			11
-    UNIT_NPC_FLAG_VENDOR_POISON = 0x00000400,	//1024,			12
-    UNIT_NPC_FLAG_VENDOR_REAGENT = 0x00000800,	//2048,			13
-    UNIT_NPC_FLAG_ARMORER = 0x00001000,	//4096,			14
-    UNIT_NPC_FLAG_REPAIR = 0x00001000,   // scriptdev2 dupe
-    UNIT_NPC_FLAG_TAXIVENDOR = 0x00002000,	//8192,			15	Taxi Vendor (CMSG_TAXIQUERYAVAILABLENODES)
-    UNIT_NPC_FLAG_FLIGHTMASTER = 0x00002000,   // scriptdev2 dupe
-    UNIT_NPC_FLAG_SPIRITHEALER = 0x00004000,	//16384,		16	Spirithealer (CMSG_BINDER_ACTIVATE)
-    UNIT_NPC_FLAG_SPIRITGUIDE = 0x00008000,	//32768,		17
-    UNIT_NPC_FLAG_INNKEEPER = 0x00010000,	//65536,		18	Innkeeper Asking for Bind Point
-    UNIT_NPC_FLAG_BANKER = 0x00020000,	//131072,		19	Banker
-    UNIT_NPC_FLAG_ARENACHARTER = 0x00040000,	//262144,		20	GuildMasters also have UNIT_NPC_FLAG_TABARDCHANGER!!
-    UNIT_NPC_FLAG_PETITIONER = 0x00040000,   // scriptdev2 dupe
-    UNIT_NPC_FLAG_TABARDCHANGER = 0x00080000,	//524288,		21	Tabard Design Changer Flag
-    UNIT_NPC_FLAG_TABARDDESIGNER = 0x00080000,   // scriptdev2 dupe
-    UNIT_NPC_FLAG_BATTLEFIELDPERSON = 0x00100000,	//1048576,		22	BattleMaster (CMSG_BATTLEMASTER_HELLO (0x02D7))
-    UNIT_NPC_FLAG_BATTLEMASTER = 0x00100000,   // scriptdev2 dupe
-    UNIT_NPC_FLAG_AUCTIONEER = 0x00200000,	//2097152,		23	Auctioneer (MSG_AUCTION_HELLO)
-    UNIT_NPC_FLAG_STABLEMASTER = 0x00400000,	//4194304,		24	(MSG_LIST_STABLED_PETS (0x026F))
-    UNIT_NPC_FLAG_GUILD_BANK = 0x00800000,	//8388608,		25
-    UNIT_NPC_FLAG_GUARD = 0x10000000,   // scriptdev2
+    //                                  Hex             Decimal         Bit Comments
+    UNIT_NPC_FLAG_NONE                  = 0x00000000,   //0,            01
+    UNIT_NPC_FLAG_GOSSIP                = 0x00000001,   //1,            02  Gossip/Talk (CMSG_GOSSIP_HELLO)
+    UNIT_NPC_FLAG_QUESTGIVER            = 0x00000002,   //2,            03  Questgiver
+    UNIT_NPC_FLAG_UNK1                  = 0x00000004,   //4,            04
+    UNIT_NPC_FLAG_UNK2                  = 0x00000008,   //8,            05
+    UNIT_NPC_FLAG_TRAINER               = 0x00000010,   //16,           06  Trainer (CMSG_TRAINER_LIST)
+    UNIT_NPC_FLAG_TRAINER_CLASS         = 0x00000020,   //32,           07
+    UNIT_NPC_FLAG_TRAINER_PROF          = 0x00000040,   //64,           08
+    UNIT_NPC_FLAG_VENDOR                = 0x00000080,   //128,          09  Vendor (CMSG_LIST_INVENTORY)
+    UNIT_NPC_FLAG_VENDOR_AMMO           = 0x00000100,   //256,          10
+    UNIT_NPC_FLAG_VENDOR_FOOD           = 0x00000200,   //512,          11
+    UNIT_NPC_FLAG_VENDOR_POISON         = 0x00000400,   //1024,         12
+    UNIT_NPC_FLAG_VENDOR_REAGENT        = 0x00000800,   //2048,         13
+    UNIT_NPC_FLAG_ARMORER               = 0x00001000,   //4096,         14
+    UNIT_NPC_FLAG_REPAIR                = 0x00001000,   //                  scriptdev2 dupe
+    UNIT_NPC_FLAG_TAXIVENDOR            = 0x00002000,   //8192,         15  Taxi Vendor (CMSG_TAXIQUERYAVAILABLENODES)
+    UNIT_NPC_FLAG_FLIGHTMASTER          = 0x00002000,   //                  scriptdev2 dupe
+    UNIT_NPC_FLAG_SPIRITHEALER          = 0x00004000,   //16384,        16  Spirithealer (CMSG_BINDER_ACTIVATE)
+    UNIT_NPC_FLAG_SPIRITGUIDE           = 0x00008000,   //32768,        17
+    UNIT_NPC_FLAG_INNKEEPER             = 0x00010000,   //65536,        18  Innkeeper Asking for Bind Point
+    UNIT_NPC_FLAG_BANKER                = 0x00020000,   //131072,       19  Banker
+    UNIT_NPC_FLAG_ARENACHARTER          = 0x00040000,   //262144,       20  GuildMasters also have UNIT_NPC_FLAG_TABARDCHANGER!!
+    UNIT_NPC_FLAG_PETITIONER            = 0x00040000,   //                  scriptdev2 dupe
+    UNIT_NPC_FLAG_TABARDCHANGER         = 0x00080000,   //524288,       21  Tabard Design Changer Flag
+    UNIT_NPC_FLAG_TABARDDESIGNER        = 0x00080000,   //                  scriptdev2 dupe
+    UNIT_NPC_FLAG_BATTLEFIELDPERSON     = 0x00100000,   //1048576,      22  BattleMaster (CMSG_BATTLEMASTER_HELLO (0x02D7))
+    UNIT_NPC_FLAG_BATTLEMASTER          = 0x00100000,   //                  scriptdev2 dupe
+    UNIT_NPC_FLAG_AUCTIONEER            = 0x00200000,   //2097152,      23  Auctioneer (MSG_AUCTION_HELLO)
+    UNIT_NPC_FLAG_STABLEMASTER          = 0x00400000,   //4194304,      24  (MSG_LIST_STABLED_PETS (0x026F))
+    UNIT_NPC_FLAG_GUILD_BANK            = 0x00800000,   //8388608,      25
+    UNIT_NPC_FLAG_GUARD                 = 0x10000000,   //                  scriptdev2
 };
 
 //enum FieldFlags {
-//	0x00000008	== can't climb slopes too steep
-//	0x40000000	== sheathed
+//  0x00000008  ==  can't climb slopes too steep
+//  0x40000000  ==  sheathed
 //};
 
-#endif
+#endif      //_OPCODES_H
