@@ -1,7 +1,8 @@
 /*
- * ArcEmu MMORPG Server
- * Copyright (C) 2005-2007 Ascent Team <http://www.ascentemu.com/>
+ * AscEmu Framework based on ArcEmu MMORPG Server
+ * Copyright (C) 2014-2015 AscEmu Team <http://www.ascemu.org/>
  * Copyright (C) 2008 <http://www.ArcEmu.org/>
+ * Copyright (C) 2005-2007 Ascent Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -10,12 +11,11 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #ifndef _MASTER_H
@@ -58,25 +58,25 @@
 
 class Master : public Singleton<Master>
 {
-public:
-	Master();
-	~Master();
-	bool Run(int argc, char ** argv);
-	bool m_ShutdownEvent;
-	uint32 m_ShutdownTimer;
+    public:
+    Master();
+    ~Master();
+    bool Run(int argc, char ** argv);
+    bool m_ShutdownEvent;
+    uint32 m_ShutdownTimer;
 
-	static volatile bool m_stopEvent;
-	bool m_restartEvent;
+    static volatile bool m_stopEvent;
+    bool m_restartEvent;
 
-private:
-	bool _StartDB();
-	void _StopDB();
+    private:
+    bool _StartDB();
+    void _StopDB();
     bool CheckDBVersion();
 
-	void _HookSignals();
-	void _UnhookSignals();
+    void _HookSignals();
+    void _UnhookSignals();
 
-	static void _OnSignal(int s);
+    static void _OnSignal(int s);
 };
 
 #define sMaster Master::getSingleton()

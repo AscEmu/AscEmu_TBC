@@ -1,3 +1,21 @@
+/*
+ * AscEmu Framework based on ArcEmu MMORPG Server
+ * Copyright (C) 2014-2015 AscEmu Team <http://www.ascemu.org/>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #ifndef _SPEED_DETECTOR_H_
 #define _SPEED_DETECTOR_H_
 
@@ -24,20 +42,20 @@ class Player;
 
 class SpeedCheatDetector
 {
-	public:
-		SpeedCheatDetector();
-		void		AddSample(float x, float y, int stamp, float player_speed); // update the detector with new values
-		inline char	IsCheatDetected(){ return cheat_threat >= CHEAT_ALARMS_TO_TRIGGER_CHEAT; } // test cheater status
-		void		SkipSamplingUntil(int stamp);	// delay then reset cheat detector
-		void		ReportCheater(Player *_player);	// take actions agains a cheater
-		void		EventSpeedChange();				// reset internal values on speed change
+    public:
+    SpeedCheatDetector();
+    void		AddSample(float x, float y, int stamp, float player_speed); // update the detector with new values
+    inline char	IsCheatDetected() { return cheat_threat >= CHEAT_ALARMS_TO_TRIGGER_CHEAT; } // test cheater status
+    void		SkipSamplingUntil(int stamp);	// delay then reset cheat detector
+    void		ReportCheater(Player *_player);	// take actions agains a cheater
+    void		EventSpeedChange();				// reset internal values on speed change
 
-	private:
-		float			last_x,last_y;
-		int				last_stamp;
-		signed char		cheat_threat;		//don't draw quick conclusions. If player is suspicios over time then kill him
-		float			last_used_speed;	//we reset if speed changed since our last measure
-		float			bigest_hacked_speed_dif;
+    private:
+    float			last_x, last_y;
+    int				last_stamp;
+    signed char		cheat_threat;		//don't draw quick conclusions. If player is suspicios over time then kill him
+    float			last_used_speed;	//we reset if speed changed since our last measure
+    float			bigest_hacked_speed_dif;
 };
 
 #endif

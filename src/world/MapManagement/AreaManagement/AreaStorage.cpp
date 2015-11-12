@@ -1,6 +1,8 @@
 /*
  * AscEmu Framework based on ArcEmu MMORPG Server
- * Copyright (C) 2014-2015 AscEmu Team <http://www.ascemu.org>
+ * Copyright (C) 2014-2015 AscEmu Team <http://www.ascemu.org/>
+ * Copyright (C) 2008 <http://www.ArcEmu.org/>
+ * Copyright (C) 2005-2007 Ascent Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -14,7 +16,6 @@
  *
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
- *
  */
 
 #include "AreaStorage.hpp"
@@ -127,35 +128,35 @@ namespace MapManagement
         /*
         bool AreaStorage::IsOutdoorWMO(uint32 mogp_flags, int32 adt_id, int32 root_id, int32 group_id, WMOAreaTableEntry const* wmo_entry, ::DBC::Structures::AreaTableEntry const* at_entry)
         {
-            bool outdoor = true;
+        bool outdoor = true;
 
-            if (wmo_entry && at_entry)
-            {
-                if (at_entry->flags & 0x04000000) // AREA_FLAG_OUTSIDE
-                {
-                    return true;
-                }
-                if (at_entry->flags & 0x02000000) // AREA_FLAG_INSIDE
-                {
-                    return false;
-                }
-            }
+        if (wmo_entry && at_entry)
+        {
+        if (at_entry->flags & 0x04000000) // AREA_FLAG_OUTSIDE
+        {
+        return true;
+        }
+        if (at_entry->flags & 0x02000000) // AREA_FLAG_INSIDE
+        {
+        return false;
+        }
+        }
 
-            outdoor = (mogp_flags & 0x8) != 0;
+        outdoor = (mogp_flags & 0x8) != 0;
 
-            if (wmo_entry)
-            {
-                if (wmo_entry->flags & 0x4)
-                {
-                    return true;
-                }
-                if (wmo_entry->flags & 0x2)
-                {
-                    outdoor = false;
-                }
-            }
+        if (wmo_entry)
+        {
+        if (wmo_entry->flags & 0x4)
+        {
+        return true;
+        }
+        if (wmo_entry->flags & 0x2)
+        {
+        outdoor = false;
+        }
+        }
 
-            return outdoor;
+        return outdoor;
         }*/
 
         uint32 AreaStorage::GetIdByFlag(uint32 area_flag)

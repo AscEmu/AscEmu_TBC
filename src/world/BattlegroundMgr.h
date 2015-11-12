@@ -1,7 +1,8 @@
 /*
- * ArcEmu MMORPG Server
- * Copyright (C) 2005-2007 Ascent Team <http://www.ascentemu.com/>
+ * AscEmu Framework based on ArcEmu MMORPG Server
+ * Copyright (C) 2014-2015 AscEmu Team <http://www.ascemu.org/>
  * Copyright (C) 2008 <http://www.ArcEmu.org/>
+ * Copyright (C) 2005-2007 Ascent Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -10,12 +11,11 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #ifndef __BATTLEGROUNDMGR_H
@@ -31,30 +31,30 @@ class Group;
 
 enum BattleGroundTypes
 {
-	BATTLEGROUND_ALTERAC_VALLEY = 1,
-	BATTLEGROUND_WARSUNG_GULCH	= 2,
-	BATTLEGROUND_ARATHI_BASIN	= 3,
-	BATTLEGROUND_ARENA_2V2		= 4,
-	BATTLEGROUND_ARENA_3V3		= 5,
-	BATTLEGROUND_ARENA_5V5		= 6,
-	BATTLEGROUND_EYE_OF_THE_STORM=7,
-	BATTLEGROUND_NUM_TYPES		 =8,
+    BATTLEGROUND_ALTERAC_VALLEY = 1,
+    BATTLEGROUND_WARSUNG_GULCH = 2,
+    BATTLEGROUND_ARATHI_BASIN = 3,
+    BATTLEGROUND_ARENA_2V2 = 4,
+    BATTLEGROUND_ARENA_3V3 = 5,
+    BATTLEGROUND_ARENA_5V5 = 6,
+    BATTLEGROUND_EYE_OF_THE_STORM = 7,
+    BATTLEGROUND_NUM_TYPES = 8,
 };
 
 struct BGScore
 {
-	uint32 KillingBlows;
-	uint32 HonorableKills;
-	uint32 Deaths;
-	uint32 BonusHonor;
-	uint32 DamageDone;
-	uint32 HealingDone;
-	uint32 Misc1;
-	uint32 Misc2;
+    uint32 KillingBlows;
+    uint32 HonorableKills;
+    uint32 Deaths;
+    uint32 BonusHonor;
+    uint32 DamageDone;
+    uint32 HealingDone;
+    uint32 Misc1;
+    uint32 Misc2;
 };
 
-static uint32 BGMaximumPlayers[BATTLEGROUND_NUM_TYPES] = {0,0,0,0,0,0,0,0,};
-static uint32 BGMinimumPlayers[BATTLEGROUND_NUM_TYPES] = {0,0,0,0,0,0,0,0,};
+static uint32 BGMaximumPlayers[BATTLEGROUND_NUM_TYPES] = { 0, 0, 0, 0, 0, 0, 0, 0, };
+static uint32 BGMinimumPlayers[BATTLEGROUND_NUM_TYPES] = { 0, 0, 0, 0, 0, 0, 0, 0, };
 
 #define SOUND_BATTLEGROUND_BEGIN			0xD6F
 #define SOUND_HORDE_SCORES					8213
@@ -111,22 +111,22 @@ static uint32 BGMinimumPlayers[BATTLEGROUND_NUM_TYPES] = {0,0,0,0,0,0,0,0,};
 /* get level grouping for player */
 static inline uint32 GetLevelGrouping(uint32 level)
 {
-	if(level < 10)
-		return 0;
-	else if(level < 20)
-		return 1;
-	else if(level < 30)
-		return 2;
-	else if(level < 40)
-		return 3;
-	else if(level < 50)
-		return 4;
-	else if(level < 60)
-		return 5;
-	else if(level < 70)
-		return 6;
-	else
-		return 7;
+    if (level < 10)
+        return 0;
+    else if (level < 20)
+        return 1;
+    else if (level < 30)
+        return 2;
+    else if (level < 40)
+        return 3;
+    else if (level < 50)
+        return 4;
+    else if (level < 60)
+        return 5;
+    else if (level < 70)
+        return 6;
+    else
+        return 7;
 }
 #define MAX_LEVEL_GROUP 8
 #define MINIMUM_PLAYERS_ON_EACH_SIDE_FOR_BG 1
@@ -136,279 +136,280 @@ static inline uint32 GetLevelGrouping(uint32 level)
 
 class CBattlegroundManager : public Singleton<CBattlegroundManager>, public EventableObject
 {
-	/* Battleground Instance Map */
+    /* Battleground Instance Map */
     std::map<uint32, CBattleground*> m_instances[BATTLEGROUND_NUM_TYPES];
-	Mutex m_instanceLock;
+    Mutex m_instanceLock;
 
-	/* Max Id */
-	uint32 m_maxBattlegroundId;
-	
-	/* Queue System */
-	// Instance Id -> list<Player guid> [ BattlegroundType ] (instance 0 - first available)
+    /* Max Id */
+    uint32 m_maxBattlegroundId;
+
+    /* Queue System */
+    // Instance Id -> list<Player guid> [ BattlegroundType ] (instance 0 - first available)
     std::list<uint32> m_queuedPlayers[BATTLEGROUND_NUM_TYPES][MAX_LEVEL_GROUP];
 
-	// Instance Id -> list<Group id> [BattlegroundType][LevelGroup]
+    // Instance Id -> list<Group id> [BattlegroundType][LevelGroup]
     std::list<uint32> m_queuedGroups[BATTLEGROUND_NUM_TYPES];
 
-	Mutex m_queueLock;
+    Mutex m_queueLock;
 
-public:
-	CBattlegroundManager();
-	~CBattlegroundManager();
+    public:
+    CBattlegroundManager();
+    ~CBattlegroundManager();
 
-	/* Get the Config */
-	void LoadBGSetFromConfig();
+    /* Get the Config */
+    void LoadBGSetFromConfig();
 
-	/* Packet Handlers */
-	void HandleBattlegroundListPacket(WorldSession * m_session, uint32 BattlegroundType);
-	void HandleArenaJoin(WorldSession * m_session, uint32 BattlegroundType, uint8 as_group, uint8 rated_match);
+    /* Packet Handlers */
+    void HandleBattlegroundListPacket(WorldSession * m_session, uint32 BattlegroundType);
+    void HandleArenaJoin(WorldSession * m_session, uint32 BattlegroundType, uint8 as_group, uint8 rated_match);
 
-	/* Player Logout Handler */
-	void OnPlayerLogout(Player * plr);
+    /* Player Logout Handler */
+    void OnPlayerLogout(Player * plr);
 
-	/* Handler On Update Event */
-	void EventQueueUpdate();
-	void EventQueueUpdate(bool forceStart);
+    /* Handler On Update Event */
+    void EventQueueUpdate();
+    void EventQueueUpdate(bool forceStart);
 
-	/* Handle GetBattlegroundQueue Command */
-	void HandleGetBattlegroundQueueCommand(WorldSession * m_session);
+    /* Handle GetBattlegroundQueue Command */
+    void HandleGetBattlegroundQueueCommand(WorldSession * m_session);
 
-	/* Handle Battleground Join */
-	void HandleBattlegroundJoin(WorldSession * m_session, WorldPacket & pck);
+    /* Handle Battleground Join */
+    void HandleBattlegroundJoin(WorldSession * m_session, WorldPacket & pck);
 
-	/* Remove Player From All Queues */
-	void RemovePlayerFromQueues(Player * plr);
-	void RemoveGroupFromQueues(Group * grp);
+    /* Remove Player From All Queues */
+    void RemovePlayerFromQueues(Player * plr);
+    void RemoveGroupFromQueues(Group * grp);
 
-	/* Create a battleground instance of type x */
-	CBattleground * CreateInstance(uint32 Type, uint32 LevelGroup);
+    /* Create a battleground instance of type x */
+    CBattleground * CreateInstance(uint32 Type, uint32 LevelGroup);
 
-	/* Can we create a new instance of type x level group y? (NO LOCK!) */
-	bool CanCreateInstance(uint32 Type, uint32 LevelGroup);
+    /* Can we create a new instance of type x level group y? (NO LOCK!) */
+    bool CanCreateInstance(uint32 Type, uint32 LevelGroup);
 
-	/* Deletes a battleground (called from MapMgr) */
-	void DeleteBattleground(CBattleground * bg);
+    /* Deletes a battleground (called from MapMgr) */
+    void DeleteBattleground(CBattleground * bg);
 
-	/* Build SMSG_BATTLEFIELD_STATUS */
-	void SendBattlefieldStatus(Player * plr, uint32 Status, uint32 Type, uint32 InstanceID, uint32 Time, uint32 MapId, uint8 RatedMatch);
+    /* Build SMSG_BATTLEFIELD_STATUS */
+    void SendBattlefieldStatus(Player * plr, uint32 Status, uint32 Type, uint32 InstanceID, uint32 Time, uint32 MapId, uint8 RatedMatch);
 
-	/* Gets ArenaTeam info from group */
-	uint32 GetArenaGroupQInfo(Group * group, int type, uint32 *avgRating);
+    /* Gets ArenaTeam info from group */
+    uint32 GetArenaGroupQInfo(Group * group, int type, uint32 *avgRating);
 
-	/* Creates an arena with groups group1 and group2 */
-	int CreateArenaType(int type, Group * group1, Group * group2);
+    /* Creates an arena with groups group1 and group2 */
+    int CreateArenaType(int type, Group * group1, Group * group2);
 
-	/* Add player to bg team */
+    /* Add player to bg team */
     void AddPlayerToBgTeam(CBattleground * bg, std::deque<uint32> *playerVec, uint32 i, uint32 j, int Team);
 
-	/* Add player to bg */
+    /* Add player to bg */
     void AddPlayerToBg(CBattleground * bg, std::deque<uint32> *playerVec, uint32 i, uint32 j);
 
-	/* Add a group to an arena */
-	void AddGroupToArena(CBattleground * bg, Group * group, int nteam);
+    /* Add a group to an arena */
+    void AddGroupToArena(CBattleground * bg, Group * group, int nteam);
 };
 
 class CBattleground : public EventableObject
 {
-protected:
-	/* Groups */
-	Group * m_groups[2];
+    protected:
+    /* Groups */
+    Group * m_groups[2];
 
-	time_t m_nextPvPUpdateTime;
-	MapMgr * m_mapMgr;
-	uint32 m_id;
-	uint32 m_type;
-	uint32 m_levelGroup;
-	uint32 m_deltaRating[2];
-	uint32 m_invisGMs;
+    time_t m_nextPvPUpdateTime;
+    MapMgr * m_mapMgr;
+    uint32 m_id;
+    uint32 m_type;
+    uint32 m_levelGroup;
+    uint32 m_deltaRating[2];
+    uint32 m_invisGMs;
 
-public:
-	/* Team->Player Map */
+    public:
+    /* Team->Player Map */
     std::set<Player*> m_players[2];
-	void Lock() { m_mainLock.Acquire(); }
-	void Unlock() { m_mainLock.Release(); }
-	void AddInvisGM() {Lock(); m_invisGMs++; Unlock();}
-	void RemoveInvisGM() {Lock(); m_invisGMs--; Unlock();}
-protected:
-	/* World States. This should be moved to mapmgr instead for world pvp :/ */
+    void Lock() { m_mainLock.Acquire(); }
+    void Unlock() { m_mainLock.Release(); }
+    void AddInvisGM() { Lock(); m_invisGMs++; Unlock(); }
+    void RemoveInvisGM() { Lock(); m_invisGMs--; Unlock(); }
+    protected:
+    /* World States. This should be moved to mapmgr instead for world pvp :/ */
     std::map<uint32, uint32> m_worldStates;
 
-	/* PvP Log Data Map */
+    /* PvP Log Data Map */
     std::map<uint32, BGScore> m_pvpData;
 
-	/* Lock for all player data */
-	Mutex m_mainLock;
+    /* Lock for all player data */
+    Mutex m_mainLock;
 
-	/* Player count per team */
-	uint32 m_playerCountPerTeam;
+    /* Player count per team */
+    uint32 m_playerCountPerTeam;
 
-	/* "pending" players */
+    /* "pending" players */
     std::set<uint32> m_pendPlayers[2];
 
-	/* starting time */
-	uint32 m_startTime;
-	bool m_started;
+    /* starting time */
+    uint32 m_startTime;
+    bool m_started;
 
-	/* countdown stuff */
-	uint32 m_countdownStage;
+    /* countdown stuff */
+    uint32 m_countdownStage;
 
-	/* winner stuff */
-	bool m_ended;
-	uint8 m_winningteam;
+    /* winner stuff */
+    bool m_ended;
+    uint8 m_winningteam;
 
-	/* resurrect queue */
+    /* resurrect queue */
     std::map<Creature*, std::set<uint32> > m_resurrectMap;
-	uint32 m_lastResurrect;
+    uint32 m_lastResurrect;
 
-	bool m_isWeekend;
+    bool m_isWeekend;
 
-public:
+    public:
 
-	void SendChatMessage(uint32 Type, uint64 Guid, const char * Format, ...);
+    void SendChatMessage(uint32 Type, uint64 Guid, const char * Format, ...);
 
-	/* Hook Functions */
-	virtual void HookOnPlayerDeath(Player * plr) = 0;
+    /* Hook Functions */
+    virtual void HookOnPlayerDeath(Player * plr) = 0;
 
-	/* Repopping - different battlegrounds have different ways of handling this */
-	virtual bool HookHandleRepop(Player * plr) = 0;
+    /* Repopping - different battlegrounds have different ways of handling this */
+    virtual bool HookHandleRepop(Player * plr) = 0;
 
-	/* In CTF battlegrounds mounting will cause you to lose your flag. */
-	virtual void HookOnMount(Player * plr) = 0;
+    /* In CTF battlegrounds mounting will cause you to lose your flag. */
+    virtual void HookOnMount(Player * plr) = 0;
 
-	/* Only used in CTF (as far as I know) */
-	virtual void HookFlagDrop(Player * plr, GameObject * obj) = 0;
-	virtual void HookFlagStand(Player * plr, GameObject * obj) = 0;
+    /* Only used in CTF (as far as I know) */
+    virtual void HookFlagDrop(Player * plr, GameObject * obj) = 0;
+    virtual void HookFlagStand(Player * plr, GameObject * obj) = 0;
 
-	/* Used when a player kills a unit/player */
-	virtual void HookOnPlayerKill(Player * plr, Unit * pVictim) = 0;
-	virtual void HookOnHK(Player * plr) = 0;
+    /* Used when a player kills a unit/player */
+    virtual void HookOnPlayerKill(Player * plr, Unit * pVictim) = 0;
+    virtual void HookOnHK(Player * plr) = 0;
 
-	/* On Area Trigger */
-	virtual void HookOnAreaTrigger(Player * plr, uint32 id) = 0;
+    /* On Area Trigger */
+    virtual void HookOnAreaTrigger(Player * plr, uint32 id) = 0;
 
-	/* On Shadow Sight */
-	virtual void HookOnShadowSight() = 0;
+    /* On Shadow Sight */
+    virtual void HookOnShadowSight() = 0;
 
-	/* Retreival Functions */
-	inline uint32 GetId() { return m_id; }
-	inline uint32 GetLevelGroup() { return m_levelGroup; }
-	inline MapMgr* GetMapMgr() { return m_mapMgr; }
-	
-	/* Creating a battleground requires a pre-existing map manager */
-	CBattleground(MapMgr * mgr, uint32 id, uint32 levelgroup, uint32 type);
-	virtual ~CBattleground();
+    /* Retreival Functions */
+    inline uint32 GetId() { return m_id; }
+    inline uint32 GetLevelGroup() { return m_levelGroup; }
+    inline MapMgr* GetMapMgr() { return m_mapMgr; }
 
-	/* Has it ended? */
-	inline bool HasEnded() { return m_ended; }
-	/* Has it started? */
-	inline bool HasStarted() { return m_started; }
+    /* Creating a battleground requires a pre-existing map manager */
+    CBattleground(MapMgr * mgr, uint32 id, uint32 levelgroup, uint32 type);
+    virtual ~CBattleground();
 
-	/* Send our current world states to a player . */
-	void SendWorldStates(Player * plr);
+    /* Has it ended? */
+    inline bool HasEnded() { return m_ended; }
+    /* Has it started? */
+    inline bool HasStarted() { return m_started; }
 
-	/* Send the pvp log data of all players to this player. */
-	void SendPVPData(Player * plr);
+    /* Send our current world states to a player . */
+    void SendWorldStates(Player * plr);
 
-	/* Get the starting position for this team. */
-	virtual LocationVector GetStartingCoords(uint32 Team) = 0;
+    /* Send the pvp log data of all players to this player. */
+    void SendPVPData(Player * plr);
 
-	/* Send a packet to the entire battleground */
-	void DistributePacketToAll(WorldPacket * packet);
+    /* Get the starting position for this team. */
+    virtual LocationVector GetStartingCoords(uint32 Team) = 0;
 
-	/* send a packet to only this team */
-	void DistributePacketToTeam(WorldPacket * packet, uint32 Team);
+    /* Send a packet to the entire battleground */
+    void DistributePacketToAll(WorldPacket * packet);
 
-	/* play sound to this team only */
-	void PlaySoundToTeam(uint32 Team, uint32 Sound);
+    /* send a packet to only this team */
+    void DistributePacketToTeam(WorldPacket * packet, uint32 Team);
 
-	/* play sound to all */
-	void PlaySoundToAll(uint32 Sound);
+    /* play sound to this team only */
+    void PlaySoundToTeam(uint32 Team, uint32 Sound);
 
-	/* Full? */
-	inline bool IsFull() { return !(HasFreeSlots(0,m_type) || HasFreeSlots(1,m_type)); }
+    /* play sound to all */
+    void PlaySoundToAll(uint32 Sound);
 
-	/* Are we full? */
-	bool HasFreeSlots(uint32 Team, uint32 type) {
-		bool res;
-		m_mainLock.Acquire();
-		if (type >= BATTLEGROUND_ARENA_2V2 && type <= BATTLEGROUND_ARENA_5V5)
-		{
-			res = ((uint32)m_players[Team].size() + m_pendPlayers[Team].size() < BGMaximumPlayers[type]);
-		}
-		else
-		{
-			uint32 size[2];
-			size[0] = uint32(m_players[0].size() + m_pendPlayers[0].size());
-			size[1] = uint32(m_players[1].size() + m_pendPlayers[1].size());
-			res = (size[Team] < BGMaximumPlayers[type]) && (((int)size[Team] - (int)size[1-Team]) <= 0);
-		}
-		m_mainLock.Release();
-		return res; 
-	}
+    /* Full? */
+    inline bool IsFull() { return !(HasFreeSlots(0, m_type) || HasFreeSlots(1, m_type)); }
 
-	/* Add Player */
-	void AddPlayer(Player * plr, uint32 team);
-	virtual void OnAddPlayer(Player * plr) = 0;
+    /* Are we full? */
+    bool HasFreeSlots(uint32 Team, uint32 type)
+    {
+        bool res;
+        m_mainLock.Acquire();
+        if (type >= BATTLEGROUND_ARENA_2V2 && type <= BATTLEGROUND_ARENA_5V5)
+        {
+            res = ((uint32)m_players[Team].size() + m_pendPlayers[Team].size() < BGMaximumPlayers[type]);
+        }
+        else
+        {
+            uint32 size[2];
+            size[0] = uint32(m_players[0].size() + m_pendPlayers[0].size());
+            size[1] = uint32(m_players[1].size() + m_pendPlayers[1].size());
+            res = (size[Team] < BGMaximumPlayers[type]) && (((int)size[Team] - (int)size[1 - Team]) <= 0);
+        }
+        m_mainLock.Release();
+        return res;
+    }
 
-	/* Remove Player */
-	void RemovePlayer(Player * plr, bool logout);
-	virtual void OnRemovePlayer(Player * plr) = 0;
+    /* Add Player */
+    void AddPlayer(Player * plr, uint32 team);
+    virtual void OnAddPlayer(Player * plr) = 0;
 
-	/* Port Player */
-	void PortPlayer(Player * plr, bool skip_teleport = false);
-	virtual void OnCreate() = 0;
+    /* Remove Player */
+    void RemovePlayer(Player * plr, bool logout);
+    virtual void OnRemovePlayer(Player * plr) = 0;
 
-	/* Remove pending player */
-	void RemovePendingPlayer(Player * plr);
+    /* Port Player */
+    void PortPlayer(Player * plr, bool skip_teleport = false);
+    virtual void OnCreate() = 0;
 
-	/* Gets the number of free slots */
-	uint32 GetFreeSlots(uint32 t, uint32 type)
-	{
-		m_mainLock.Acquire();
-		size_t s = BGMaximumPlayers[type] - m_players[t].size() - m_pendPlayers[t].size();
-		m_mainLock.Release();
-		return (uint32)s;
-	}
+    /* Remove pending player */
+    void RemovePendingPlayer(Player * plr);
 
-	GameObject * SpawnGameObject(uint32 entry,uint32 MapId , float x, float y, float z, float o, uint32 flags, uint32 faction, float scale);
-	void UpdatePvPData();
+    /* Gets the number of free slots */
+    uint32 GetFreeSlots(uint32 t, uint32 type)
+    {
+        m_mainLock.Acquire();
+        size_t s = BGMaximumPlayers[type] - m_players[t].size() - m_pendPlayers[t].size();
+        m_mainLock.Release();
+        return (uint32)s;
+    }
 
-	inline uint32 GetStartTime() { return m_startTime; }
-	inline uint32 GetType() { return m_type; }
+    GameObject * SpawnGameObject(uint32 entry, uint32 MapId, float x, float y, float z, float o, uint32 flags, uint32 faction, float scale);
+    void UpdatePvPData();
 
-	// events should execute in the correct context
-	int32 event_GetInstanceID();
-	void EventCreate();
+    inline uint32 GetStartTime() { return m_startTime; }
+    inline uint32 GetType() { return m_type; }
 
-	virtual uint32 GetNameID() { return 34;}
-	void EventCountdown();
+    // events should execute in the correct context
+    int32 event_GetInstanceID();
+    void EventCreate();
 
-	virtual void Start();
-	virtual void OnStart() {}
-	void Close();
-	virtual void OnClose() {}
+    virtual uint32 GetNameID() { return 34; }
+    void EventCountdown();
 
-	void SetWorldState(uint32 Index, uint32 Value);
-	Creature * SpawnSpiritGuide(float x, float y, float z, float o, uint32 horde);
+    virtual void Start();
+    virtual void OnStart() {}
+    void Close();
+    virtual void OnClose() {}
 
-	inline uint32 GetLastResurrect() { return m_lastResurrect; }
-	void AddSpiritGuide(Creature * pCreature);
-	void RemoveSpiritGuide(Creature * pCreature);
-	void QueuePlayerForResurrect(Player * plr, Creature * spirit_healer);
-	void RemovePlayerFromResurrect(Player * plr, Creature * spirit_healer);
-	void EventResurrectPlayers();
-	virtual bool CanPlayerJoin(Player * plr,uint32 type);
-	virtual bool CreateCorpse(Player * plr) { return true; }
-	virtual bool HookSlowLockOpen(GameObject * pGo, Player * pPlayer, Spell * pSpell) { return false; }
+    void SetWorldState(uint32 Index, uint32 Value);
+    Creature * SpawnSpiritGuide(float x, float y, float z, float o, uint32 horde);
 
-	void BuildPvPUpdateDataPacket(WorldPacket * data);
-	virtual uint8 Rated() { return 0; }
-	void OnPlayerPushed(Player* plr);
+    inline uint32 GetLastResurrect() { return m_lastResurrect; }
+    void AddSpiritGuide(Creature * pCreature);
+    void RemoveSpiritGuide(Creature * pCreature);
+    void QueuePlayerForResurrect(Player * plr, Creature * spirit_healer);
+    void RemovePlayerFromResurrect(Player * plr, Creature * spirit_healer);
+    void EventResurrectPlayers();
+    virtual bool CanPlayerJoin(Player * plr, uint32 type);
+    virtual bool CreateCorpse(Player * plr) { return true; }
+    virtual bool HookSlowLockOpen(GameObject * pGo, Player * pPlayer, Spell * pSpell) { return false; }
 
-	virtual void SetIsWeekend(bool isweekend) {}
+    void BuildPvPUpdateDataPacket(WorldPacket * data);
+    virtual uint8 Rated() { return 0; }
+    void OnPlayerPushed(Player* plr);
+
+    virtual void SetIsWeekend(bool isweekend) {}
 };
 
 #define BattlegroundManager CBattlegroundManager::getSingleton( )
 
-	
+
 #endif

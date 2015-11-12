@@ -1,7 +1,8 @@
 /*
- * ArcEmu MMORPG Server
- * Copyright (C) 2005-2007 Ascent Team <http://www.ascentemu.com/>
+ * AscEmu Framework based on ArcEmu MMORPG Server
+ * Copyright (C) 2014-2015 AscEmu Team <http://www.ascemu.org/>
  * Copyright (C) 2008 <http://www.ArcEmu.org/>
+ * Copyright (C) 2005-2007 Ascent Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -10,17 +11,12 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-//
-// MapCell.h
-//
 
 #ifndef __MAP_CELL_H
 #define __MAP_CELL_H
@@ -32,55 +28,55 @@ class Map;
 
 class SERVER_DECL MapCell
 {
-	friend class MapMgr;
-public:
-	MapCell() {};
-	~MapCell();
+    friend class MapMgr;
+    public:
+    MapCell() {};
+    ~MapCell();
 
-	typedef std::set<Object*> ObjectSet;
+    typedef std::set<Object*> ObjectSet;
 
-	//Init
-	void Init(uint32 x, uint32 y, uint32 mapid, MapMgr *mapmgr);
+    //Init
+    void Init(uint32 x, uint32 y, uint32 mapid, MapMgr *mapmgr);
 
-	//Object Managing
-	void AddObject(Object *obj); 
-	void RemoveObject(Object *obj);
-	bool HasObject(Object *obj) { return (_objects.find(obj) != _objects.end()); }
-	bool HasPlayers() { return ((_playerCount > 0) ? true : false); }
-	inline size_t GetObjectCount() { return _objects.size(); }
-	void RemoveObjects();
-	inline ObjectSet::iterator Begin() { return _objects.begin(); }
-	inline ObjectSet::iterator End() { return _objects.end(); }
+    //Object Managing
+    void AddObject(Object *obj);
+    void RemoveObject(Object *obj);
+    bool HasObject(Object *obj) { return (_objects.find(obj) != _objects.end()); }
+    bool HasPlayers() { return ((_playerCount > 0) ? true : false); }
+    inline size_t GetObjectCount() { return _objects.size(); }
+    void RemoveObjects();
+    inline ObjectSet::iterator Begin() { return _objects.begin(); }
+    inline ObjectSet::iterator End() { return _objects.end(); }
 
-	//State Related
-	void SetActivity(bool state);
+    //State Related
+    void SetActivity(bool state);
 
-	inline bool IsActive() { return _active; }
-	inline bool IsLoaded() { return _loaded; }
-	inline void SetLoaded( bool Loaded = true ) { _loaded = Loaded; }
+    inline bool IsActive() { return _active; }
+    inline bool IsLoaded() { return _loaded; }
+    inline void SetLoaded(bool Loaded = true) { _loaded = Loaded; }
 
-	//Object Loading Managing
-	void LoadObjects(CellSpawns * sp);
-	inline uint32 GetPlayerCount() { return _playerCount; }
+    //Object Loading Managing
+    void LoadObjects(CellSpawns * sp);
+    inline uint32 GetPlayerCount() { return _playerCount; }
 
-	inline bool IsUnloadPending() { return _unloadpending; }
-	inline void SetUnloadPending(bool up) { _unloadpending = up; }
-	void QueueUnloadPending();
-	void CancelPendingUnload();
-	void Unload();
-	inline uint16 GetPositionX() { return _x; }
-	inline uint16 GetPositionY() { return _y; }
+    inline bool IsUnloadPending() { return _unloadpending; }
+    inline void SetUnloadPending(bool up) { _unloadpending = up; }
+    void QueueUnloadPending();
+    void CancelPendingUnload();
+    void Unload();
+    inline uint16 GetPositionX() { return _x; }
+    inline uint16 GetPositionY() { return _y; }
 
-	ObjectSet _respawnObjects;
+    ObjectSet _respawnObjects;
 
-private:
-	uint16 _x,_y;
-	ObjectSet _objects;
-	bool _active, _loaded;
-	bool _unloadpending;
+    private:
+    uint16 _x, _y;
+    ObjectSet _objects;
+    bool _active, _loaded;
+    bool _unloadpending;
 
-	uint16 _playerCount;
-	MapMgr* _mapmgr;
+    uint16 _playerCount;
+    MapMgr* _mapmgr;
 };
 
 #endif

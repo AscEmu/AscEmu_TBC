@@ -1,7 +1,8 @@
 /*
- * ArcEmu MMORPG Server
- * Copyright (C) 2005-2007 Ascent Team <http://www.ascentemu.com/>
+ * AscEmu Framework based on ArcEmu MMORPG Server
+ * Copyright (C) 2014-2015 AscEmu Team <http://www.ascemu.org/>
  * Copyright (C) 2008 <http://www.ArcEmu.org/>
+ * Copyright (C) 2005-2007 Ascent Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -10,22 +11,21 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-enum LFGTypes 
+enum LFGTypes
 {
-	LFG_NONE = 0,
-	LFG_INSTANCE = 1,
-	LFG_RAID = 2,
-	LFG_QUEST = 3,
-	LFG_ZONE = 4,
-	LFG_HEROIC_DUNGEON = 5, // from client
+    LFG_NONE = 0,
+    LFG_INSTANCE = 1,
+    LFG_RAID = 2,
+    LFG_QUEST = 3,
+    LFG_ZONE = 4,
+    LFG_HEROIC_DUNGEON = 5, // from client
 };
 
 #define MAX_DUNGEONS 201+1 // check max entrys +1 on lfgdungeons.dbc
@@ -35,44 +35,44 @@ enum LFGTypes
 class LfgMatch;
 class LfgMgr : public Singleton < LfgMgr >, EventableObject
 {
-public:	
-	
-	typedef std::list<Player*> LfgPlayerList;
+    public:
 
-	LfgMgr();
-	~LfgMgr();
-	
-	bool AttemptLfgJoin(Player * pl, uint32 LfgDungeonId);
-	void SetPlayerInLFGqueue(Player *pl,uint32 LfgDungeonId);
-	void SetPlayerInLfmList(Player * pl, uint32 LfgDungeonId);
-	void RemovePlayerFromLfgQueue(Player *pl,uint32 LfgDungeonId);
-	void RemovePlayerFromLfgQueues(Player * pl);
-	void RemovePlayerFromLfmList(Player * pl, uint32 LfmDungeonId);
-	void UpdateLfgQueue(uint32 LfgDungeonId);
-	void SendLfgList(Player * plr, uint32 Dungeon);
-	void EventMatchTimeout(LfgMatch * pMatch);
+    typedef std::list<Player*> LfgPlayerList;
 
-	int32 event_GetInstanceId() { return -1; }
-	
-protected:
-	
-	LfgPlayerList m_lookingForGroup[MAX_DUNGEONS];
-	LfgPlayerList m_lookingForMore[MAX_DUNGEONS];
-	Mutex m_lock;
-	
-	
+    LfgMgr();
+    ~LfgMgr();
+
+    bool AttemptLfgJoin(Player * pl, uint32 LfgDungeonId);
+    void SetPlayerInLFGqueue(Player *pl, uint32 LfgDungeonId);
+    void SetPlayerInLfmList(Player * pl, uint32 LfgDungeonId);
+    void RemovePlayerFromLfgQueue(Player *pl, uint32 LfgDungeonId);
+    void RemovePlayerFromLfgQueues(Player * pl);
+    void RemovePlayerFromLfmList(Player * pl, uint32 LfmDungeonId);
+    void UpdateLfgQueue(uint32 LfgDungeonId);
+    void SendLfgList(Player * plr, uint32 Dungeon);
+    void EventMatchTimeout(LfgMatch * pMatch);
+
+    int32 event_GetInstanceId() { return -1; }
+
+    protected:
+
+    LfgPlayerList m_lookingForGroup[MAX_DUNGEONS];
+    LfgPlayerList m_lookingForMore[MAX_DUNGEONS];
+    Mutex m_lock;
+
+
 };
 
 class LfgMatch
 {
-public:
-	std::set<Player*> PendingPlayers;
+    public:
+    std::set<Player*> PendingPlayers;
     std::set<Player*> AcceptedPlayers;
-	Mutex lock;
-	uint32 DungeonId;
+    Mutex lock;
+    uint32 DungeonId;
     Group * pGroup;
 
-	LfgMatch(uint32 did) : DungeonId(did),pGroup(NULL) { }
+    LfgMatch(uint32 did) : DungeonId(did), pGroup(NULL) {}
 };
 
 extern uint32 LfgDungeonTypes[MAX_DUNGEONS];

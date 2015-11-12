@@ -1,5 +1,6 @@
 /*
  * AscEmu Framework based on ArcEmu MMORPG Server
+ * Copyright (C) 2014-2015 AscEmu Team <http://www.ascemu.org/>
  * Copyright (C) 2008-2011 <http://www.ArcEmu.org/>
  *
  * This program is free software: you can redistribute it and/or modify
@@ -14,7 +15,6 @@
  *
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
- *
  */
 
 #include "DBCLoader.hpp"
@@ -72,34 +72,34 @@ namespace DBC
         {
             switch (dbc_format[x])
             {
-            case DBC::DbcFieldFormat::FT_FLOAT:
-                record_size += sizeof(float);
-                break;
-            case DBC::DbcFieldFormat::FT_INT:
-                record_size += sizeof(uint32);
-                break;
-            case DBC::DbcFieldFormat::FT_STRING:
-                record_size += sizeof(char*);
-                break;
-            case DBC::DbcFieldFormat::FT_SORT:
-                i = x;
-                break;
-            case DBC::DbcFieldFormat::FT_IND:
-                i = x;
-                record_size += sizeof(uint32);
-                break;
-            case DBC::DbcFieldFormat::FT_BYTE:
-                record_size += sizeof(uint8);
-                break;
-            case DBC::DbcFieldFormat::FT_NA:
-            case DBC::DbcFieldFormat::FT_NA_BYTE:
-                break;
-            case FT_LOGIC:
-                ASSERT(false && "Attempted to load DBC files that do not have field types that match what is in the core. Check DBC\\DBCStructures.hpp or your DBC files.");
-                break;
-            default:
-                ASSERT(false && "Unknown field format character in DBC\\DBCStructures.hpp");
-                break;
+                case DBC::DbcFieldFormat::FT_FLOAT:
+                    record_size += sizeof(float);
+                    break;
+                case DBC::DbcFieldFormat::FT_INT:
+                    record_size += sizeof(uint32);
+                    break;
+                case DBC::DbcFieldFormat::FT_STRING:
+                    record_size += sizeof(char*);
+                    break;
+                case DBC::DbcFieldFormat::FT_SORT:
+                    i = x;
+                    break;
+                case DBC::DbcFieldFormat::FT_IND:
+                    i = x;
+                    record_size += sizeof(uint32);
+                    break;
+                case DBC::DbcFieldFormat::FT_BYTE:
+                    record_size += sizeof(uint8);
+                    break;
+                case DBC::DbcFieldFormat::FT_NA:
+                case DBC::DbcFieldFormat::FT_NA_BYTE:
+                    break;
+                case FT_LOGIC:
+                    ASSERT(false && "Attempted to load DBC files that do not have field types that match what is in the core. Check DBC\\DBCStructures.hpp or your DBC files.");
+                    break;
+                default:
+                    ASSERT(false && "Unknown field format character in DBC\\DBCStructures.hpp");
+                    break;
             }
         }
 
@@ -253,34 +253,34 @@ namespace DBC
             {
                 switch (dbc_format[x])
                 {
-                case DBC::DbcFieldFormat::FT_FLOAT:
-                    *((float*)(&data_table[offset])) = this->GetRecord(y).GetFloat(x, m_field_count, this->GetOffset(x));
-                    offset += sizeof(float);
-                    break;
-                case DBC::DbcFieldFormat::FT_IND:
-                case DBC::DbcFieldFormat::FT_INT:
-                    *((uint32*)(&data_table[offset])) = this->GetRecord(y).GetUInt32(x, m_field_count, this->GetOffset(x));
-                    offset += sizeof(uint32);
-                    break;
-                case DBC::DbcFieldFormat::FT_BYTE:
-                    *((uint8*)(&data_table[offset])) = this->GetRecord(y).GetUInt8(x, m_field_count, this->GetOffset(x));
-                    offset += sizeof(uint8);
-                    break;
-                case DBC::DbcFieldFormat::FT_STRING:
-                    /* Non-empty or "" strings are replaced in DBC::DBCLoader::AutoProduceStrings */
-                    *((char**)(&data_table[offset])) = NULL;
-                    offset += sizeof(char*);
-                    break;
-                case DBC::DbcFieldFormat::FT_NA:
-                case DBC::DbcFieldFormat::FT_NA_BYTE:
-                case DBC::DbcFieldFormat::FT_SORT:
-                    break;
-                case FT_LOGIC:
-                    ASSERT(false && "Attempted to load DBC files that do not have field types that match what is in the core. Check DBC\\DBCStructures.hpp or your DBC files.");
-                    break;
-                default:
-                    ASSERT(false && "Unknown field format character in DBC\\DBCStructures.hpp");
-                    break;
+                    case DBC::DbcFieldFormat::FT_FLOAT:
+                        *((float*)(&data_table[offset])) = this->GetRecord(y).GetFloat(x, m_field_count, this->GetOffset(x));
+                        offset += sizeof(float);
+                        break;
+                    case DBC::DbcFieldFormat::FT_IND:
+                    case DBC::DbcFieldFormat::FT_INT:
+                        *((uint32*)(&data_table[offset])) = this->GetRecord(y).GetUInt32(x, m_field_count, this->GetOffset(x));
+                        offset += sizeof(uint32);
+                        break;
+                    case DBC::DbcFieldFormat::FT_BYTE:
+                        *((uint8*)(&data_table[offset])) = this->GetRecord(y).GetUInt8(x, m_field_count, this->GetOffset(x));
+                        offset += sizeof(uint8);
+                        break;
+                    case DBC::DbcFieldFormat::FT_STRING:
+                        /* Non-empty or "" strings are replaced in DBC::DBCLoader::AutoProduceStrings */
+                        *((char**)(&data_table[offset])) = NULL;
+                        offset += sizeof(char*);
+                        break;
+                    case DBC::DbcFieldFormat::FT_NA:
+                    case DBC::DbcFieldFormat::FT_NA_BYTE:
+                    case DBC::DbcFieldFormat::FT_SORT:
+                        break;
+                    case FT_LOGIC:
+                        ASSERT(false && "Attempted to load DBC files that do not have field types that match what is in the core. Check DBC\\DBCStructures.hpp or your DBC files.");
+                        break;
+                    default:
+                        ASSERT(false && "Unknown field format character in DBC\\DBCStructures.hpp");
+                        break;
                 }
             }
         }
@@ -304,38 +304,38 @@ namespace DBC
             {
                 switch (dbc_format[x])
                 {
-                case DBC::DbcFieldFormat::FT_FLOAT:
-                    offset += sizeof(float);
-                    break;
-                case DBC::DbcFieldFormat::FT_IND:
-                case DBC::DbcFieldFormat::FT_INT:
-                    offset += sizeof(uint32);
-                    break;
-                case DBC::DbcFieldFormat::FT_BYTE:
-                    offset += sizeof(uint8);
-                    break;
-                case DBC::DbcFieldFormat::FT_STRING:
-                {
-                    /* Fills only unfilled entries */
-                    char** slot = (char**)(&data_table[offset]);
-                    if (!*slot || !**slot)
+                    case DBC::DbcFieldFormat::FT_FLOAT:
+                        offset += sizeof(float);
+                        break;
+                    case DBC::DbcFieldFormat::FT_IND:
+                    case DBC::DbcFieldFormat::FT_INT:
+                        offset += sizeof(uint32);
+                        break;
+                    case DBC::DbcFieldFormat::FT_BYTE:
+                        offset += sizeof(uint8);
+                        break;
+                    case DBC::DbcFieldFormat::FT_STRING:
                     {
-                        const char* st = this->GetRecord(y).GetString(x, m_field_count, this->GetOffset(x), m_string_size, m_string_table);
-                        *slot = string_pool + (st - (const char*)m_string_table);
+                        /* Fills only unfilled entries */
+                        char** slot = (char**)(&data_table[offset]);
+                        if (!*slot || !**slot)
+                        {
+                            const char* st = this->GetRecord(y).GetString(x, m_field_count, this->GetOffset(x), m_string_size, m_string_table);
+                            *slot = string_pool + (st - (const char*)m_string_table);
+                        }
+                        offset += sizeof(char*);
+                        break;
                     }
-                    offset += sizeof (char*);
-                    break;
-                }
-                case DBC::DbcFieldFormat::FT_NA:
-                case DBC::DbcFieldFormat::FT_NA_BYTE:
-                case DBC::DbcFieldFormat::FT_SORT:
-                    break;
-                case FT_LOGIC:
-                    ASSERT(false && "Attempted to load DBC files that do not have field types that match what is in the core. Check DBC\\DBCStructures.hpp or your DBC files.");
-                    break;
-                default:
-                    ASSERT(false && "Unknown field format character in DBC\\DBCStructures.hpp");
-                    break;
+                    case DBC::DbcFieldFormat::FT_NA:
+                    case DBC::DbcFieldFormat::FT_NA_BYTE:
+                    case DBC::DbcFieldFormat::FT_SORT:
+                        break;
+                    case FT_LOGIC:
+                        ASSERT(false && "Attempted to load DBC files that do not have field types that match what is in the core. Check DBC\\DBCStructures.hpp or your DBC files.");
+                        break;
+                    default:
+                        ASSERT(false && "Unknown field format character in DBC\\DBCStructures.hpp");
+                        break;
                 }
             }
         }

@@ -1,5 +1,6 @@
 /*
- * ArcEmu MMORPG Server
+ * AscEmu Framework based on ArcEmu MMORPG Server
+ * Copyright (C) 2014-2015 AscEmu Team <http://www.ascemu.org/>
  * Copyright (C) 2008 <http://www.ArcEmu.org/>
  *
  * This program is free software: you can redistribute it and/or modify
@@ -9,12 +10,11 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #ifndef __SPELLSTORE_H
@@ -29,8 +29,8 @@
 
 struct BankSlotPrice
 {
-	uint32 Id;
-	uint32 Price;
+    uint32 Id;
+    uint32 Price;
 };
 
 struct ItemSetEntry
@@ -57,13 +57,13 @@ struct Lock
     uint32 minlockskill[5]; // min skill in lockpiking to unlock.
     //uint32 unk3[11];
 
-	/* Actually it is:
-	uint32 Id;
+    /* Actually it is:
+    uint32 Id;
     uint32 locktype[8];
     uint32 lockmisc[8];
     uint32 minlockskill[8];
     uint32 action[8];
-	*/
+    */
 };
 
 struct emoteentry
@@ -95,7 +95,7 @@ struct skilllinespell //SkillLineAbility.dbc
     uint32 skilline;
     uint32 spell;
     //uint32 raceMask;
-	//uint32 classMask;
+    //uint32 classMask;
     //uint32 excludeRace;
     //uint32 excludeClass;
     //uint32 minSkillLineRank;
@@ -139,7 +139,8 @@ struct EnchantEntry
 
 };
 
-struct GemPropertyEntry{
+struct GemPropertyEntry
+{
     uint32 Entry;
     uint32 EnchantmentID;
     uint32 unk1;//bool
@@ -158,309 +159,309 @@ struct skilllineentry //SkillLine.dbc
 // Struct for the entry in Spell.dbc
 struct SpellEntry
 {
-	uint32 Id;                              //1
-	uint32 Category;                        //2
-	uint32 castUI;                          //3 something like spelltype 0: general spells 1: Pet spells 2: Disguise / transormation spells 3: enchantment spells
-	uint32 DispelType;                      //4
-	uint32 MechanicsType;                   //5
-	uint32 Attributes;                      //6
-	uint32 AttributesEx;                    //7
-	uint32 AttributesExB;                   //8
-	uint32 AttributesExC;                   //9 // Flags to
-	uint32 AttributesExD;                   //10 // Flags....
-	uint32 AttributesExE;                   //11 // Flags 2.0.1 unknown one
-	uint32 AttributesExF;					//12
-	uint32 RequiredShapeShift;              //13 // Flags BitMask for shapeshift spells
-	uint32 ShapeshiftExclude;               //14-> this is wrong // Flags BitMask for which shapeshift forms this spell can NOT be used in.
-	uint32 Targets;                         //15 - N / M
-	uint32 TargetCreatureType;              //16
-	uint32 RequiresSpellFocus;              //17
-	uint32 FacingCasterFlags;				//18
-	uint32 CasterAuraState;                 //19
-	uint32 TargetAuraState;                 //20
-	uint32 ExcludeCasterAuraState;          //21 2.0.1 unknown two
-	uint32 ExcludeTargetAuraState;          //22 2.0.1 unknown three
-	uint32 CastingTimeIndex;                //23
-	uint32 RecoveryTime;                    //24
-	uint32 CategoryRecoveryTime;            //25 recoverytime
-	uint32 InterruptFlags;                  //26
-	uint32 AuraInterruptFlags;              //27
-	uint32 ChannelInterruptFlags;           //28
-	uint32 procFlags;                       //29
-	uint32 procChance;                      //30
-	int32 procCharges;                      //31
-	uint32 maxLevel;                        //32
-	uint32 baseLevel;                       //33
-	uint32 spellLevel;                      //34
-	uint32 DurationIndex;                   //35
-	uint32 powerType;                       //36
-	uint32 manaCost;                        //37
-	uint32 manaCostPerlevel;                //38
-	uint32 manaPerSecond;                   //39
-	uint32 manaPerSecondPerLevel;           //40
-	uint32 rangeIndex;                      //41
-	float  speed;                           //42
-	uint32 modalNextSpell;                  //43
-	uint32 maxstack;                        //44
-	uint32 Totem[2];                        //45 - 46
-	uint32 Reagent[8];                      //47 - 54
-	uint32 ReagentCount[8];                 //55 - 62
-	int32 EquippedItemClass;                //63
-	uint32 EquippedItemSubClass;            //64
-	uint32 RequiredItemFlags;               //65
-	uint32 Effect[3];                       //66 - 68
-	uint32 EffectDieSides[3];               //69 - 71
-	uint32 EffectBaseDice[3];               //72 - 74
-	float  EffectDicePerLevel[3];           //75 - 77
-	float  EffectRealPointsPerLevel[3];     //78 - 80
-	int32  EffectBasePoints[3];             //81 - 83
-	int32  EffectMechanic[3];               //84 - 86       Related to SpellMechanic.dbc
-	uint32 EffectImplicitTargetA[3];        //87 - 89
-	uint32 EffectImplicitTargetB[3];        //90 - 92
-	uint32 EffectRadiusIndex[3];            //93 - 95
-	uint32 EffectApplyAuraName[3];          //96 - 98
-	uint32 EffectAmplitude[3];              //99 - 101
-	float  Effectunknown[3];                //102 - 104     This value is the $ value from description
-	uint32 EffectChainTarget[3];            //105 - 107
-	uint32 EffectSpellGroupRelation[3];     //108 - 110     Not sure maybe we should rename it. its the relation to field: SpellGroupType
-	uint32 EffectMiscValue[3];              //111 - 113
-	uint32 EffectMiscValueB[3];             //114 - 116  2.4.3
-	uint32 EffectTriggerSpell[3];           //117 - 119
-	float  EffectPointsPerComboPoint[3];    //120 - 122
-	uint32 SpellVisual;                     //123
-	uint32 field114;                        //124
-	uint32 spellIconID;                     //125
-	uint32 activeIconID;                    //126   activeIconID;
-	uint32 spellPriority;                   //127
-	char* Name;                             //128
-	//uint32 NameAlt1;                        //129
-	//uint32 NameAlt2;                        //130
-	//uint32 NameAlt3;                        //131
-	//uint32 NameAlt4;                        //132
-	//uint32 NameAlt5;                        //133
-	//uint32 NameAlt6;                        //134
-	//uint32 NameAlt7;                        //135
-	//uint32 NameAlt8;                        //136
-	//uint32 NameAlt9;                        //137
-	//uint32 NameAlt10;                       //138
-	//uint32 NameAlt11;                       //139
-	//uint32 NameAlt12;                       //140
-	//uint32 NameAlt13;                       //141
-	//uint32 NameAlt14;                       //142
-	//uint32 NameAlt15;                       //143
-	//uint32 NameFlags;                       //144
-	char * Rank;                            //145
-	//uint32 RankAlt1;                        //146
-	//uint32 RankAlt2;                        //147
-	//uint32 RankAlt3;                        //148
-	//uint32 RankAlt4;                        //149
-	//uint32 RankAlt5;                        //150
-	//uint32 RankAlt6;                        //151
-	//uint32 RankAlt7;                        //152
-	//uint32 RankAlt8;                        //153
-	//uint32 RankAlt9;                        //154
-	//uint32 RankAlt10;                       //155
-	//uint32 RankAlt11;                       //156
-	//uint32 RankAlt12;                       //157
-	//uint32 RankAlt13;                       //158
-	//uint32 RankAlt14;                       //159
-	//uint32 RankAlt15;                       //160
-	//uint32 RankFlags;                       //161
-	char * Description;                     //162
-	//uint32 DescriptionAlt1;                 //163
-	//uint32 DescriptionAlt2;                 //164
-	//uint32 DescriptionAlt3;                 //165
-	//uint32 DescriptionAlt4;                 //166
-	//uint32 DescriptionAlt5;                 //167
-	//uint32 DescriptionAlt6;                 //168
-	//uint32 DescriptionAlt7;                 //169
-	//uint32 DescriptionAlt8;                 //170
-	//uint32 DescriptionAlt9;                 //171
-	//uint32 DescriptionAlt10;                //172
-	//uint32 DescriptionAlt11;                //173
-	//uint32 DescriptionAlt12;                //174
-	//uint32 DescriptionAlt13;                //175
-	//uint32 DescriptionAlt14;                //176
-	//uint32 DescriptionAlt15;                //177
-	//uint32 DescriptionFlags;                //178
-	char * BuffDescription;                 //179
-	//uint32 BuffDescriptionAlt1;             //180
-	//uint32 BuffDescriptionAlt2;             //181
-	//uint32 BuffDescriptionAlt3;             //182
-	//uint32 BuffDescriptionAlt4;             //183
-	//uint32 BuffDescriptionAlt5;             //184
-	//uint32 BuffDescriptionAlt6;             //185
-	//uint32 BuffDescriptionAlt7;             //186
-	//uint32 BuffDescriptionAlt8;             //187
-	//uint32 BuffDescriptionAlt9;             //188
-	//uint32 BuffDescriptionAlt10;            //189
-	//uint32 BuffDescriptionAlt11;            //190
-	//uint32 BuffDescriptionAlt12;            //191
-	//uint32 BuffDescriptionAlt13;            //192
-	//uint32 BuffDescriptionAlt14;            //193
-	//uint32 BuffDescriptionAlt15;            //194
-	//uint32 buffdescflags;                   //195
-	uint32 ManaCostPercentage;              //196
-	uint32 unkflags;                        //197 
-	uint32 StartRecoveryTime;               //198
-	uint32 StartRecoveryCategory;           //199
-//	uint32 MaxTargetLevel						from 3.0.1
-	uint32 SpellFamilyName;                 //200
-	uint64 SpellGroupType;					//201+202
-	uint32 MaxTargets;                      //203 
-	uint32 Spell_Dmg_Type;                  //204   dmg_class Integer      0=None, 1=Magic, 2=Melee, 3=Ranged
-	uint32 PreventionType;                  //205   0,1,2 related to Spell_Dmg_Type I think
-	int32 StanceBarOrder;                   //206   related to paladin aura's 
-	float dmg_multiplier[3];                //207 - 208   if the name is correct I dono
-	uint32 MinFactionID;                    //209   only one spellid:6994 has this value = 369 UNUSED
-	uint32 MinReputation;                   //210   only one spellid:6994 has this value = 4 UNUSED
-	uint32 RequiredAuraVision;              //211  3 spells 1 or 2   
-	uint32 TotemCategory[2];				//212-213
-	uint32 RequiresAreaId;					//214 
-	uint32 School;							//215
-//	uint32 RuneCostID;						//216 from 3.0.1
-//	uint32 SpellMissileID;					//217 from 3.0.1
+    uint32 Id;                              //1
+    uint32 Category;                        //2
+    uint32 castUI;                          //3 something like spelltype 0: general spells 1: Pet spells 2: Disguise / transormation spells 3: enchantment spells
+    uint32 DispelType;                      //4
+    uint32 MechanicsType;                   //5
+    uint32 Attributes;                      //6
+    uint32 AttributesEx;                    //7
+    uint32 AttributesExB;                   //8
+    uint32 AttributesExC;                   //9 // Flags to
+    uint32 AttributesExD;                   //10 // Flags....
+    uint32 AttributesExE;                   //11 // Flags 2.0.1 unknown one
+    uint32 AttributesExF;					//12
+    uint32 RequiredShapeShift;              //13 // Flags BitMask for shapeshift spells
+    uint32 ShapeshiftExclude;               //14-> this is wrong // Flags BitMask for which shapeshift forms this spell can NOT be used in.
+    uint32 Targets;                         //15 - N / M
+    uint32 TargetCreatureType;              //16
+    uint32 RequiresSpellFocus;              //17
+    uint32 FacingCasterFlags;				//18
+    uint32 CasterAuraState;                 //19
+    uint32 TargetAuraState;                 //20
+    uint32 ExcludeCasterAuraState;          //21 2.0.1 unknown two
+    uint32 ExcludeTargetAuraState;          //22 2.0.1 unknown three
+    uint32 CastingTimeIndex;                //23
+    uint32 RecoveryTime;                    //24
+    uint32 CategoryRecoveryTime;            //25 recoverytime
+    uint32 InterruptFlags;                  //26
+    uint32 AuraInterruptFlags;              //27
+    uint32 ChannelInterruptFlags;           //28
+    uint32 procFlags;                       //29
+    uint32 procChance;                      //30
+    int32 procCharges;                      //31
+    uint32 maxLevel;                        //32
+    uint32 baseLevel;                       //33
+    uint32 spellLevel;                      //34
+    uint32 DurationIndex;                   //35
+    uint32 powerType;                       //36
+    uint32 manaCost;                        //37
+    uint32 manaCostPerlevel;                //38
+    uint32 manaPerSecond;                   //39
+    uint32 manaPerSecondPerLevel;           //40
+    uint32 rangeIndex;                      //41
+    float  speed;                           //42
+    uint32 modalNextSpell;                  //43
+    uint32 maxstack;                        //44
+    uint32 Totem[2];                        //45 - 46
+    uint32 Reagent[8];                      //47 - 54
+    uint32 ReagentCount[8];                 //55 - 62
+    int32 EquippedItemClass;                //63
+    uint32 EquippedItemSubClass;            //64
+    uint32 RequiredItemFlags;               //65
+    uint32 Effect[3];                       //66 - 68
+    uint32 EffectDieSides[3];               //69 - 71
+    uint32 EffectBaseDice[3];               //72 - 74
+    float  EffectDicePerLevel[3];           //75 - 77
+    float  EffectRealPointsPerLevel[3];     //78 - 80
+    int32  EffectBasePoints[3];             //81 - 83
+    int32  EffectMechanic[3];               //84 - 86       Related to SpellMechanic.dbc
+    uint32 EffectImplicitTargetA[3];        //87 - 89
+    uint32 EffectImplicitTargetB[3];        //90 - 92
+    uint32 EffectRadiusIndex[3];            //93 - 95
+    uint32 EffectApplyAuraName[3];          //96 - 98
+    uint32 EffectAmplitude[3];              //99 - 101
+    float  Effectunknown[3];                //102 - 104     This value is the $ value from description
+    uint32 EffectChainTarget[3];            //105 - 107
+    uint32 EffectSpellGroupRelation[3];     //108 - 110     Not sure maybe we should rename it. its the relation to field: SpellGroupType
+    uint32 EffectMiscValue[3];              //111 - 113
+    uint32 EffectMiscValueB[3];             //114 - 116  2.4.3
+    uint32 EffectTriggerSpell[3];           //117 - 119
+    float  EffectPointsPerComboPoint[3];    //120 - 122
+    uint32 SpellVisual;                     //123
+    uint32 field114;                        //124
+    uint32 spellIconID;                     //125
+    uint32 activeIconID;                    //126   activeIconID;
+    uint32 spellPriority;                   //127
+    char* Name;                             //128
+    //uint32 NameAlt1;                        //129
+    //uint32 NameAlt2;                        //130
+    //uint32 NameAlt3;                        //131
+    //uint32 NameAlt4;                        //132
+    //uint32 NameAlt5;                        //133
+    //uint32 NameAlt6;                        //134
+    //uint32 NameAlt7;                        //135
+    //uint32 NameAlt8;                        //136
+    //uint32 NameAlt9;                        //137
+    //uint32 NameAlt10;                       //138
+    //uint32 NameAlt11;                       //139
+    //uint32 NameAlt12;                       //140
+    //uint32 NameAlt13;                       //141
+    //uint32 NameAlt14;                       //142
+    //uint32 NameAlt15;                       //143
+    //uint32 NameFlags;                       //144
+    char * Rank;                            //145
+    //uint32 RankAlt1;                        //146
+    //uint32 RankAlt2;                        //147
+    //uint32 RankAlt3;                        //148
+    //uint32 RankAlt4;                        //149
+    //uint32 RankAlt5;                        //150
+    //uint32 RankAlt6;                        //151
+    //uint32 RankAlt7;                        //152
+    //uint32 RankAlt8;                        //153
+    //uint32 RankAlt9;                        //154
+    //uint32 RankAlt10;                       //155
+    //uint32 RankAlt11;                       //156
+    //uint32 RankAlt12;                       //157
+    //uint32 RankAlt13;                       //158
+    //uint32 RankAlt14;                       //159
+    //uint32 RankAlt15;                       //160
+    //uint32 RankFlags;                       //161
+    char * Description;                     //162
+    //uint32 DescriptionAlt1;                 //163
+    //uint32 DescriptionAlt2;                 //164
+    //uint32 DescriptionAlt3;                 //165
+    //uint32 DescriptionAlt4;                 //166
+    //uint32 DescriptionAlt5;                 //167
+    //uint32 DescriptionAlt6;                 //168
+    //uint32 DescriptionAlt7;                 //169
+    //uint32 DescriptionAlt8;                 //170
+    //uint32 DescriptionAlt9;                 //171
+    //uint32 DescriptionAlt10;                //172
+    //uint32 DescriptionAlt11;                //173
+    //uint32 DescriptionAlt12;                //174
+    //uint32 DescriptionAlt13;                //175
+    //uint32 DescriptionAlt14;                //176
+    //uint32 DescriptionAlt15;                //177
+    //uint32 DescriptionFlags;                //178
+    char * BuffDescription;                 //179
+    //uint32 BuffDescriptionAlt1;             //180
+    //uint32 BuffDescriptionAlt2;             //181
+    //uint32 BuffDescriptionAlt3;             //182
+    //uint32 BuffDescriptionAlt4;             //183
+    //uint32 BuffDescriptionAlt5;             //184
+    //uint32 BuffDescriptionAlt6;             //185
+    //uint32 BuffDescriptionAlt7;             //186
+    //uint32 BuffDescriptionAlt8;             //187
+    //uint32 BuffDescriptionAlt9;             //188
+    //uint32 BuffDescriptionAlt10;            //189
+    //uint32 BuffDescriptionAlt11;            //190
+    //uint32 BuffDescriptionAlt12;            //191
+    //uint32 BuffDescriptionAlt13;            //192
+    //uint32 BuffDescriptionAlt14;            //193
+    //uint32 BuffDescriptionAlt15;            //194
+    //uint32 buffdescflags;                   //195
+    uint32 ManaCostPercentage;              //196
+    uint32 unkflags;                        //197 
+    uint32 StartRecoveryTime;               //198
+    uint32 StartRecoveryCategory;           //199
+    //	uint32 MaxTargetLevel						from 3.0.1
+    uint32 SpellFamilyName;                 //200
+    uint64 SpellGroupType;					//201+202
+    uint32 MaxTargets;                      //203 
+    uint32 Spell_Dmg_Type;                  //204   dmg_class Integer      0=None, 1=Magic, 2=Melee, 3=Ranged
+    uint32 PreventionType;                  //205   0,1,2 related to Spell_Dmg_Type I think
+    int32 StanceBarOrder;                   //206   related to paladin aura's 
+    float dmg_multiplier[3];                //207 - 208   if the name is correct I dono
+    uint32 MinFactionID;                    //209   only one spellid:6994 has this value = 369 UNUSED
+    uint32 MinReputation;                   //210   only one spellid:6994 has this value = 4 UNUSED
+    uint32 RequiredAuraVision;              //211  3 spells 1 or 2   
+    uint32 TotemCategory[2];				//212-213
+    uint32 RequiresAreaId;					//214 
+    uint32 School;							//215
+    //	uint32 RuneCostID;						//216 from 3.0.1
+    //	uint32 SpellMissileID;					//217 from 3.0.1
     /// CUSTOM: these fields are used for the modifications made in the world.cpp
     uint32 DiminishStatus;                  //
     uint32 proc_interval;                   //!!! CUSTOM, <Fill description for variable>
-	//Buff Groupin Rule -> caster can cast this spell only on 1 target. Value represents the group spell is part of. Can be part of only 1 group
-	//caster can only cast on 1 target these spells
+    //Buff Groupin Rule -> caster can cast this spell only on 1 target. Value represents the group spell is part of. Can be part of only 1 group
+    //caster can only cast on 1 target these spells
     uint32 BGR_one_buff_from_caster_on_1target;		//!!! CUSTOM, <Fill description for variable>
-	//target can have only buff of this type on self. Value represents the group spell is part of. Can be part of only 1 group
+    //target can have only buff of this type on self. Value represents the group spell is part of. Can be part of only 1 group
     uint32 BGR_one_buff_on_target;          //!!! CUSTOM, these are related to creating a item through a spell
-	//caster can have only 1 Aura per spell group, ex pal auras
+    //caster can have only 1 Aura per spell group, ex pal auras
     uint32 BGR_one_buff_from_caster_on_self;        //!!! CUSTOM, these are related to creating a item through a spell
-//    uint32 buffIndexType;					//!!! CUSTOM, <Fill description for variable>
+    //    uint32 buffIndexType;					//!!! CUSTOM, <Fill description for variable>
     uint32 c_is_flags;						//!!! CUSTOM, store spell checks in a static way : isdamageind,ishealing
-//    uint32 buffType;                        //!!! CUSTOM, these are related to creating a item through a spell
+    //    uint32 buffType;                        //!!! CUSTOM, these are related to creating a item through a spell
     uint32 RankNumber;                      //!!! CUSTOM, this protects players from having >1 rank of a spell
     uint32 NameHash;                        //!!! CUSTOM, related to custom spells, summon spell quest related spells
-	uint32 talent_tree;						//!!! CUSTOM,
+    uint32 talent_tree;						//!!! CUSTOM,
     uint32 EffectSpellGroupRelation_high[3];     //!!! this is not contained in client dbc but server must have it
-	uint32 ThreatForSpell;
-	float ThreatForSpellCoef;
-	uint32 ProcOnNameHash[3];
-	uint32 spell_coef_flags;                                //!!! CUSTOM, store flags for spell coefficient calculations
+    uint32 ThreatForSpell;
+    float ThreatForSpellCoef;
+    uint32 ProcOnNameHash[3];
+    uint32 spell_coef_flags;                                //!!! CUSTOM, store flags for spell coefficient calculations
 
-	float base_range_or_radius_sqr;         //!!! CUSTOM, needed for aoe spells most of the time
-	// love me or hate me, all "In a cone in front of the caster" spells don't necessarily mean "in front"
-	float cone_width;
-	//Spell Coefficient
-	float casttime_coef;                                    //!!! CUSTOM, faster spell bonus calculation
-	float fixed_dddhcoef;                                   //!!! CUSTOM, fixed DD-DH coefficient for some spells
-	float fixed_hotdotcoef;                                 //!!! CUSTOM, fixed HOT-DOT coefficient for some spells
-	float Dspell_coef_override;                             //!!! CUSTOM, overrides any spell coefficient calculation and use this value in DD&DH
-	float OTspell_coef_override;							//!!! CUSTOM, overrides any spell coefficient calculation and use this value in HOT&DOT
-	int	ai_target_type;
+    float base_range_or_radius_sqr;         //!!! CUSTOM, needed for aoe spells most of the time
+    // love me or hate me, all "In a cone in front of the caster" spells don't necessarily mean "in front"
+    float cone_width;
+    //Spell Coefficient
+    float casttime_coef;                                    //!!! CUSTOM, faster spell bonus calculation
+    float fixed_dddhcoef;                                   //!!! CUSTOM, fixed DD-DH coefficient for some spells
+    float fixed_hotdotcoef;                                 //!!! CUSTOM, fixed HOT-DOT coefficient for some spells
+    float Dspell_coef_override;                             //!!! CUSTOM, overrides any spell coefficient calculation and use this value in DD&DH
+    float OTspell_coef_override;							//!!! CUSTOM, overrides any spell coefficient calculation and use this value in HOT&DOT
+    int	ai_target_type;
 
-	bool self_cast_only;
-	bool apply_on_shapeshift_change;
-	bool always_apply;
-	bool is_melee_spell;					//!!! CUSTOM,
-	bool is_ranged_spell;					//!!! CUSTOM,
-	bool spell_can_crit;					//!!! CUSTOM,
-	bool noproc;
+    bool self_cast_only;
+    bool apply_on_shapeshift_change;
+    bool always_apply;
+    bool is_melee_spell;					//!!! CUSTOM,
+    bool is_ranged_spell;					//!!! CUSTOM,
+    bool spell_can_crit;					//!!! CUSTOM,
+    bool noproc;
 
-	uint32 SchoolMask;						// Custom
-/*
-//3.0.1 client column namings
-m_id
-m_category
-m_castUI
-m_dispelType
-m_mechanic
-m_attributes
-m_attributesEx
-m_attributesExB
-m_attributesExC
-m_attributesExD
-m_attributesExE
-m_attributesExF
-m_shapeshiftMask
-m_shapeshiftExclude
-m_targets
-m_targetCreatureType
-m_requiresSpellFocus
-m_facingCasterFlags
-m_casterAuraState
-m_targetAuraState
-m_excludeCasterAuraState
-m_excludeTargetAuraState
-m_castingTimeIndex
-m_recoveryTime
-m_categoryRecoveryTime
-m_interruptFlags
-m_auraInterruptFlags
-m_channelInterruptFlags
-m_procTypeMask
-m_procChance
-m_procCharges
-m_maxLevel
-m_baseLevel
-m_spellLevel
-m_durationIndex
-m_powerType
-m_manaCost
-m_manaCostPerLevel
-m_manaPerSecond
-m_manaPerSecondPerLevel
-m_rangeIndex
-m_speed
-m_modalNextSpell
-m_cumulativeAura
-m_totem
-m_reagent
-m_reagentCount
-m_equippedItemClass
-m_equippedItemSubclass
-m_equippedItemInvTypes
-m_effect
-m_effectDieSides
-m_effectBaseDice
-m_effectDicePerLevel
-m_effectRealPointsPerLevel
-m_effectBasePoints
-m_effectMechanic
-m_implicitTargetA
-m_implicitTargetB
-m_effectRadiusIndex
-m_effectAura
-m_effectAuraPeriod
-m_effectAmplitude
-m_effectChainTargets
-m_effectItemType
-m_effectMiscValue
-m_effectMiscValueB
-m_effectTriggerSpell
-m_effectPointsPerCombo
-m_spellVisualID
-m_spellIconID
-m_activeIconID
-m_spellPriority
-m_name_lang
-m_nameSubtext_lang
-m_description_lang
-m_auraDescription_lang
-m_manaCostPct
-m_startRecoveryCategory
-m_startRecoveryTime
-m_maxTargetLevel
-m_spellClassSet
-m_spellClassMask
-m_maxTargets
-m_defenseType
-m_preventionType
-m_stanceBarOrder
-m_effectChainAmplitude
-m_minFactionID
-m_minReputation
-m_requiredAuraVision
-m_requiredTotemCategoryID
-m_requiredAreaID
-m_schoolMask
-m_runeCostID
-m_spellMissileID
-*/
+    uint32 SchoolMask;						// Custom
+    /*
+    //3.0.1 client column namings
+    m_id
+    m_category
+    m_castUI
+    m_dispelType
+    m_mechanic
+    m_attributes
+    m_attributesEx
+    m_attributesExB
+    m_attributesExC
+    m_attributesExD
+    m_attributesExE
+    m_attributesExF
+    m_shapeshiftMask
+    m_shapeshiftExclude
+    m_targets
+    m_targetCreatureType
+    m_requiresSpellFocus
+    m_facingCasterFlags
+    m_casterAuraState
+    m_targetAuraState
+    m_excludeCasterAuraState
+    m_excludeTargetAuraState
+    m_castingTimeIndex
+    m_recoveryTime
+    m_categoryRecoveryTime
+    m_interruptFlags
+    m_auraInterruptFlags
+    m_channelInterruptFlags
+    m_procTypeMask
+    m_procChance
+    m_procCharges
+    m_maxLevel
+    m_baseLevel
+    m_spellLevel
+    m_durationIndex
+    m_powerType
+    m_manaCost
+    m_manaCostPerLevel
+    m_manaPerSecond
+    m_manaPerSecondPerLevel
+    m_rangeIndex
+    m_speed
+    m_modalNextSpell
+    m_cumulativeAura
+    m_totem
+    m_reagent
+    m_reagentCount
+    m_equippedItemClass
+    m_equippedItemSubclass
+    m_equippedItemInvTypes
+    m_effect
+    m_effectDieSides
+    m_effectBaseDice
+    m_effectDicePerLevel
+    m_effectRealPointsPerLevel
+    m_effectBasePoints
+    m_effectMechanic
+    m_implicitTargetA
+    m_implicitTargetB
+    m_effectRadiusIndex
+    m_effectAura
+    m_effectAuraPeriod
+    m_effectAmplitude
+    m_effectChainTargets
+    m_effectItemType
+    m_effectMiscValue
+    m_effectMiscValueB
+    m_effectTriggerSpell
+    m_effectPointsPerCombo
+    m_spellVisualID
+    m_spellIconID
+    m_activeIconID
+    m_spellPriority
+    m_name_lang
+    m_nameSubtext_lang
+    m_description_lang
+    m_auraDescription_lang
+    m_manaCostPct
+    m_startRecoveryCategory
+    m_startRecoveryTime
+    m_maxTargetLevel
+    m_spellClassSet
+    m_spellClassMask
+    m_maxTargets
+    m_defenseType
+    m_preventionType
+    m_stanceBarOrder
+    m_effectChainAmplitude
+    m_minFactionID
+    m_minReputation
+    m_requiredAuraVision
+    m_requiredTotemCategoryID
+    m_requiredAreaID
+    m_schoolMask
+    m_runeCostID
+    m_spellMissileID
+    */
 };
 
 struct ItemExtendedCostEntry
@@ -470,7 +471,7 @@ struct ItemExtendedCostEntry
     uint32 arena;
     uint32 item[5];
     uint32 count[5];
-	uint32 personalrating;
+    uint32 personalrating;
 };
 
 struct TalentEntry
@@ -491,24 +492,24 @@ struct TalentTabEntry
 {
     uint32	TalentTabID;
     //char*	Name;
-	//unit32  unk3
-	//unit32  unk4
-	//unit32  unk5
-	//unit32  unk6
-	//unit32  unk7
-	//unit32  unk8
-	//unit32  unk9
-	//unit32  unk10
-	//unit32  unk11
-	//unit32  unk12
-	//unit32  unk13
-	//unit32  unk14
-	//unit32  unk15
-	//unit32  unk16
-	//unit32  unk17
-	//unit32  unk18
-	//unit32  unk19
-	//unit32  unk20
+    //unit32  unk3
+    //unit32  unk4
+    //unit32  unk5
+    //unit32  unk6
+    //unit32  unk7
+    //unit32  unk8
+    //unit32  unk9
+    //unit32  unk10
+    //unit32  unk11
+    //unit32  unk12
+    //unit32  unk13
+    //unit32  unk14
+    //unit32  unk15
+    //unit32  unk16
+    //unit32  unk17
+    //unit32  unk18
+    //unit32  unk19
+    //unit32  unk20
     uint32	ClassMask;
     uint32	TabPage;
     //char*	InternalName;
@@ -697,10 +698,10 @@ struct CreatureSpellDataEntry
 
 struct CharRaceEntry
 {
-	uint32 race_id;
-	uint32 team_id;
-	uint32 cinematic_id;
-	char* name1;
+    uint32 race_id;
+    uint32 team_id;
+    uint32 cinematic_id;
+    char* name1;
 };
 
 struct CharClassEntry
@@ -784,25 +785,25 @@ struct MapEntry
 
 struct ItemRandomSuffixEntry
 {
-	uint32 id;
-	uint32 enchantments[3];
-	uint32 prefixes[3];
+    uint32 id;
+    uint32 enchantments[3];
+    uint32 prefixes[3];
 };
 
 struct gtFloat
 {
-	float val;
+    float val;
 };
 
 struct CombatRatingDBC
 {
-	float val;
+    float val;
 };
 
 struct ChatChannelDBC
 {
-	uint32 id;
-	uint32 flags;
+    uint32 id;
+    uint32 flags;
 };
 
 struct DurabilityQualityEntry
@@ -833,19 +834,19 @@ struct AreaTriggerEntry
 
 struct WMOAreaTableEntry
 {
-	uint32 id; // 0
-	int32 rootId; // 1
-	int32 adtId; // 2
-	int32 groupId; // 3
-	//uint32 field4;
-	//uint32 field5;
-	//uint32 field6;
-	//uint32 field7;
-	//uint32 field8;
-	uint32 flags; // 9
-	uint32 areaId; // 10  ref -> AreaTableEntry
-	//char Name[16];
-	//uint32 nameflags;
+    uint32 id; // 0
+    int32 rootId; // 1
+    int32 adtId; // 2
+    int32 groupId; // 3
+    //uint32 field4;
+    //uint32 field5;
+    //uint32 field6;
+    //uint32 field7;
+    //uint32 field8;
+    uint32 flags; // 9
+    uint32 areaId; // 10  ref -> AreaTableEntry
+    //char Name[16];
+    //uint32 nameflags;
 };
 
 struct NameGenEntry
@@ -865,9 +866,9 @@ struct LFGDungeonEntry
 
 /*struct CharTitlesEntry
 {
-	uint32		ID;
-	char*		name;										// Field [2], Name
-	uint32		bit_index;									// Field [36], used in PLAYER_CHOSEN_TITLE and (uint32(1) << bit_index) in PLAYER_FIELD_KNOWN_TITLES and PLAYER_FIELD_KNOWN_TITLES_X
+uint32		ID;
+char*		name;										// Field [2], Name
+uint32		bit_index;									// Field [36], used in PLAYER_CHOSEN_TITLE and (uint32(1) << bit_index) in PLAYER_FIELD_KNOWN_TITLES and PLAYER_FIELD_KNOWN_TITLES_X
 };*/
 
 #pragma pack(pop)
@@ -898,302 +899,302 @@ inline uint32 GetDuration(SpellDuration *dur)
 template<class T>
 class SERVER_DECL DBCStorage
 {
-	T * m_heapBlock;
-	T * m_firstEntry;
+    T * m_heapBlock;
+    T * m_firstEntry;
 
-	T ** m_entries;
-	uint32 m_max;
-	uint32 m_numrows;
-	uint32 m_stringlength;
-	char * m_stringData;
+    T ** m_entries;
+    uint32 m_max;
+    uint32 m_numrows;
+    uint32 m_stringlength;
+    char * m_stringData;
 
-	uint32 rows;
-	uint32 cols;
-	uint32 useless_shit;
-	uint32 header;
+    uint32 rows;
+    uint32 cols;
+    uint32 useless_shit;
+    uint32 header;
 
-public:
-	
-class iterator
-        {
-            private:
-                T* p;
-            public:
-                iterator(T* ip = 0) : p(ip) { }
-                iterator & operator++() { ++p; return *this; }
-                iterator & operator--() { --p; return *this; }
-                bool operator!=(const iterator & i) { return (p != i.p); }
-                T* operator*() { return p; }
-        };
+    public:
 
-        iterator begin()
-        {
-            return iterator(&m_heapBlock[0]);
-        }
-        iterator end()
-        {
-            return iterator(&m_heapBlock[m_numrows]);
-        }
+    class iterator
+    {
+        private:
+        T* p;
+        public:
+        iterator(T* ip = 0) : p(ip) {}
+        iterator & operator++() { ++p; return *this; }
+        iterator & operator--() { --p; return *this; }
+        bool operator!=(const iterator & i) { return (p != i.p); }
+        T* operator*() { return p; }
+    };
 
-	DBCStorage()
-	{
-		m_heapBlock = NULL;
-		m_entries = NULL;
-		m_firstEntry = NULL;
-		m_max = 0;
-		m_numrows = 0;
-		m_stringlength=0;
-		m_stringData = NULL;
-	}
+    iterator begin()
+    {
+        return iterator(&m_heapBlock[0]);
+    }
+    iterator end()
+    {
+        return iterator(&m_heapBlock[m_numrows]);
+    }
 
-	~DBCStorage()
-	{
-		if(m_heapBlock)
-			free(m_heapBlock);
-		if(m_entries)
-			free(m_entries);
-		if( m_stringData != NULL )
-			free(m_stringData);
-		// points done
-		m_heapBlock = NULL;
-		m_entries = NULL;
-		m_firstEntry = NULL;
-		m_stringData = NULL;
-	}
+    DBCStorage()
+    {
+        m_heapBlock = NULL;
+        m_entries = NULL;
+        m_firstEntry = NULL;
+        m_max = 0;
+        m_numrows = 0;
+        m_stringlength = 0;
+        m_stringData = NULL;
+    }
 
-	bool Load(const char * filename, const char * format, bool load_indexed, bool load_strings)
-	{
-		uint32 i;
-		uint32 string_length;
-		long pos;
+    ~DBCStorage()
+    {
+        if (m_heapBlock)
+            free(m_heapBlock);
+        if (m_entries)
+            free(m_entries);
+        if (m_stringData != NULL)
+            free(m_stringData);
+        // points done
+        m_heapBlock = NULL;
+        m_entries = NULL;
+        m_firstEntry = NULL;
+        m_stringData = NULL;
+    }
 
-		FILE * f = fopen(filename, "rb");
-		if(f == NULL)
-			return false;
+    bool Load(const char * filename, const char * format, bool load_indexed, bool load_strings)
+    {
+        uint32 i;
+        uint32 string_length;
+        long pos;
 
-		/* read the number of rows, and allocate our block on the heap */
-		fread(&header,4,1,f);
-		fread(&rows, 4, 1, f);
-		fread(&cols, 4, 1, f);
-		fread(&useless_shit, 4, 1, f);
-		fread(&string_length, 4, 1, f);
-		pos = ftell(f);
+        FILE * f = fopen(filename, "rb");
+        if (f == NULL)
+            return false;
+
+        /* read the number of rows, and allocate our block on the heap */
+        fread(&header, 4, 1, f);
+        fread(&rows, 4, 1, f);
+        fread(&cols, 4, 1, f);
+        fread(&useless_shit, 4, 1, f);
+        fread(&string_length, 4, 1, f);
+        pos = ftell(f);
 
 #ifdef USING_BIG_ENDIAN
-		swap32(&rows); swap32(&cols); swap32(&useless_shit); swap32(&string_length);
+        swap32(&rows); swap32(&cols); swap32(&useless_shit); swap32(&string_length);
 #endif
 
-		if( load_strings )
-		{
-			fseek( f, 20 + ( rows * cols * 4 ), SEEK_SET );
-			m_stringData = (char*)malloc(string_length);
-			m_stringlength = string_length;
-			if (m_stringData)
-				fread( m_stringData, string_length, 1, f );
-		}
+        if (load_strings)
+        {
+            fseek(f, 20 + (rows * cols * 4), SEEK_SET);
+            m_stringData = (char*)malloc(string_length);
+            m_stringlength = string_length;
+            if (m_stringData)
+                fread(m_stringData, string_length, 1, f);
+        }
 
-		fseek(f, pos, SEEK_SET);
+        fseek(f, pos, SEEK_SET);
 
-		m_heapBlock = (T*)malloc(rows * sizeof(T));
-		ASSERT(m_heapBlock);
+        m_heapBlock = (T*)malloc(rows * sizeof(T));
+        ASSERT(m_heapBlock);
 
-		/* read the data for each row */
-		for(i = 0; i < rows; ++i)
-		{
-			memset(&m_heapBlock[i], 0, sizeof(T));
-			ReadEntry(f, &m_heapBlock[i], format, cols, filename);
+        /* read the data for each row */
+        for (i = 0; i < rows; ++i)
+        {
+            memset(&m_heapBlock[i], 0, sizeof(T));
+            ReadEntry(f, &m_heapBlock[i], format, cols, filename);
 
-			if(load_indexed)
-			{
-				/* all the time the first field in the dbc is our unique entry */
-				if(*(uint32*)&m_heapBlock[i] > m_max)
-					m_max = *(uint32*)&m_heapBlock[i];
-			}
-		}
+            if (load_indexed)
+            {
+                /* all the time the first field in the dbc is our unique entry */
+                if (*(uint32*)&m_heapBlock[i] > m_max)
+                    m_max = *(uint32*)&m_heapBlock[i];
+            }
+        }
 
-		if(load_indexed)
-		{
-			m_entries = (T**)malloc(sizeof(T*) * (m_max+1));
-			ASSERT(m_entries);
+        if (load_indexed)
+        {
+            m_entries = (T**)malloc(sizeof(T*) * (m_max + 1));
+            ASSERT(m_entries);
 
-			memset(m_entries, 0, (sizeof(T*) * (m_max+1)));
-			for(i = 0; i < rows; ++i)
-			{
-				if(m_firstEntry == NULL)
-					m_firstEntry = &m_heapBlock[i];
+            memset(m_entries, 0, (sizeof(T*) * (m_max + 1)));
+            for (i = 0; i < rows; ++i)
+            {
+                if (m_firstEntry == NULL)
+                    m_firstEntry = &m_heapBlock[i];
 
-				m_entries[*(uint32*)&m_heapBlock[i]] = &m_heapBlock[i];
-			}
-		}
+                m_entries[*(uint32*)&m_heapBlock[i]] = &m_heapBlock[i];
+            }
+        }
 
-		m_numrows = rows;
+        m_numrows = rows;
 
-		fclose(f);
-		return true;
-	}
+        fclose(f);
+        return true;
+    }
 
-	void ReadEntry(FILE * f, T * dest, const char * format, uint32 cols, const char * filename)
-	{
-		const char * t = format;
-		uint32 * dest_ptr = (uint32*)dest;
-		uint32 c = 0;
-		uint32 val;
-		size_t len = strlen(format);
-		if(len!= cols)
-			printf("!!! possible invalid format in file %s (us: %zd, them: %u)\n", filename, len, cols);
+    void ReadEntry(FILE * f, T * dest, const char * format, uint32 cols, const char * filename)
+    {
+        const char * t = format;
+        uint32 * dest_ptr = (uint32*)dest;
+        uint32 c = 0;
+        uint32 val;
+        size_t len = strlen(format);
+        if (len != cols)
+            printf("!!! possible invalid format in file %s (us: %zd, them: %u)\n", filename, len, cols);
 
-		while(*t != 0)
-		{
-			if((++c) > cols)
-			{
-				++t;
-				printf("!!! Read buffer overflow in DBC reading of file %s\n", filename);
-				continue;
-			}
+        while (*t != 0)
+        {
+            if ((++c) > cols)
+            {
+                ++t;
+                printf("!!! Read buffer overflow in DBC reading of file %s\n", filename);
+                continue;
+            }
 
-			fread(&val, 4, 1, f);
-			if(*t == 'x')
-			{
-				++t;
-				continue;		// skip!
-			}
+            fread(&val, 4, 1, f);
+            if (*t == 'x')
+            {
+                ++t;
+                continue;		// skip!
+            }
 #ifdef USING_BIG_ENDIAN
-			swap32(&val);
+            swap32(&val);
 #endif
-			if(*t == 's')
-			{
-				char ** new_ptr = (char**)dest_ptr;
-				static const char * null_str = "";
-				char * ptr;
-				if( val < m_stringlength )
-					ptr = m_stringData + val;
-				else
-					ptr = (char*)null_str;
+            if (*t == 's')
+            {
+                char ** new_ptr = (char**)dest_ptr;
+                static const char * null_str = "";
+                char * ptr;
+                if (val < m_stringlength)
+                    ptr = m_stringData + val;
+                else
+                    ptr = (char*)null_str;
 
-				*new_ptr = ptr;
-				new_ptr++;
-				dest_ptr = (uint32*)new_ptr;
-			}
-			else
-			{
-				*dest_ptr = val;
-				dest_ptr++;
-			}
+                *new_ptr = ptr;
+                new_ptr++;
+                dest_ptr = (uint32*)new_ptr;
+            }
+            else
+            {
+                *dest_ptr = val;
+                dest_ptr++;
+            }
 
-			++t;
-		}
-	}
+            ++t;
+        }
+    }
 
-	inline uint32 GetNumRows()
-	{
-		return m_numrows;
-	}
+    inline uint32 GetNumRows()
+    {
+        return m_numrows;
+    }
 
-	T * LookupEntryForced(uint32 i)
-	{
+    T * LookupEntryForced(uint32 i)
+    {
 #if 0
-		if(m_entries)
-		{
-			if(i > m_max || m_entries[i] == NULL)
-			{
-				printf("LookupEntryForced failed for entry %u\n", i);
-				return NULL;
-			}
-			else
-				return m_entries[i];
-		}
-		else
-		{
-			if(i >= m_numrows)
-				return NULL;
-			else
-				return &m_heapBlock[i];
-		}
+        if(m_entries)
+        {
+            if(i > m_max || m_entries[i] == NULL)
+            {
+                printf("LookupEntryForced failed for entry %u\n", i);
+                return NULL;
+            }
+            else
+                return m_entries[i];
+        }
+        else
+        {
+            if(i >= m_numrows)
+                return NULL;
+            else
+                return &m_heapBlock[i];
+        }
 #else
-		if(m_entries)
-		{
-			if(i > m_max || m_entries[i] == NULL)
-				return NULL;
-			else
-				return m_entries[i];
-		}
-		else
-		{
-			if(i >= m_numrows)
-				return NULL;
-			else
-				return &m_heapBlock[i];
-		}
+        if (m_entries)
+        {
+            if (i > m_max || m_entries[i] == NULL)
+                return NULL;
+            else
+                return m_entries[i];
+        }
+        else
+        {
+            if (i >= m_numrows)
+                return NULL;
+            else
+                return &m_heapBlock[i];
+        }
 #endif
-	}
+    }
 
-	T * CreateCopy(T * obj)
-	{
-		T * oCopy = (T*)malloc(sizeof(T));
-		ASSERT(oCopy);
-		memcpy(oCopy,obj,sizeof(T));
-		return oCopy;
-	}
-	void SetRow(uint32 i, T * t)
-	{
-		if(i < m_max && m_entries)
-			m_entries[i] = t;
-	}
+    T * CreateCopy(T * obj)
+    {
+        T * oCopy = (T*)malloc(sizeof(T));
+        ASSERT(oCopy);
+        memcpy(oCopy, obj, sizeof(T));
+        return oCopy;
+    }
+    void SetRow(uint32 i, T * t)
+    {
+        if (i < m_max && m_entries)
+            m_entries[i] = t;
+    }
 
 #ifdef SAFE_DBC_CODE_RETURNS
-	T * LookupEntry(uint32 i)
-	{
-		if(m_entries)
-		{
-			if(i > m_max || m_entries[i] == NULL)
-				return m_firstEntry;
-			else
-				return m_entries[i];
-		}
-		else
-		{
-			if(i >= m_numrows)
-				return &m_heapBlock[0];
-			else
-				return &m_heapBlock[i];
-		}
-	}
+    T * LookupEntry(uint32 i)
+    {
+        if (m_entries)
+        {
+            if (i > m_max || m_entries[i] == NULL)
+                return m_firstEntry;
+            else
+                return m_entries[i];
+        }
+        else
+        {
+            if (i >= m_numrows)
+                return &m_heapBlock[0];
+            else
+                return &m_heapBlock[i];
+        }
+    }
 
-	T * LookupRow(uint32 i)
-	{
-		if(i >= m_numrows)
-			return &m_heapBlock[0];
-		else
-			return &m_heapBlock[i];
-	}
+    T * LookupRow(uint32 i)
+    {
+        if (i >= m_numrows)
+            return &m_heapBlock[0];
+        else
+            return &m_heapBlock[i];
+    }
 
 #else
 
-	T * LookupEntry(uint32 i)
-	{
-		if(m_entries)
-		{
-			if(i > m_max || m_entries[i] == NULL)
-				return NULL;
-			else
-				return m_entries[i];
-		}
-		else
-		{
-			if(i >= m_numrows)
-				return NULL;
-			else
-				return m_heapBlock[i];
-		}
-	}
+    T * LookupEntry(uint32 i)
+    {
+        if(m_entries)
+        {
+            if(i > m_max || m_entries[i] == NULL)
+                return NULL;
+            else
+                return m_entries[i];
+        }
+        else
+        {
+            if(i >= m_numrows)
+                return NULL;
+            else
+                return m_heapBlock[i];
+        }
+    }
 
-	T * LookupRow(uint32 i)
-	{
-		if(i >= m_numrows)
-			return NULL;
-		else
-			return m_heapBlock[i];
-	}
+    T * LookupRow(uint32 i)
+    {
+        if(i >= m_numrows)
+            return NULL;
+        else
+            return m_heapBlock[i];
+    }
 
 #endif
 };

@@ -25,7 +25,7 @@ namespace MapManagement
 {
     namespace AreaManagement
     {
-        
+
     } // </ AreaManagementNamespace>
 } // </ MapManagementNamespace>
 

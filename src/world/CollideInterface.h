@@ -1,7 +1,8 @@
 /*
- * ArcEmu MMORPG Server
- * Copyright (C) 2005-2007 Ascent Team <http://www.ascentemu.com/>
+ * AscEmu Framework based on ArcEmu MMORPG Server
+ * Copyright (C) 2014-2015 AscEmu Team <http://www.ascemu.org/>
  * Copyright (C) 2008 <http://www.ArcEmu.org/>
+ * Copyright (C) 2005-2007 Ascent Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -10,12 +11,11 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #ifndef _COLLIDEINTERFACE_H
@@ -34,108 +34,108 @@
 
 class CCollideInterface
 {
-public:
-	void Init();
-	void DeInit();
+    public:
+    void Init();
+    void DeInit();
 
-	void ActivateTile(uint32 mapId, uint32 tileX, uint32 tileY);
-	void DeactivateTile(uint32 mapId, uint32 tileX, uint32 tileY);
+    void ActivateTile(uint32 mapId, uint32 tileX, uint32 tileY);
+    void DeactivateTile(uint32 mapId, uint32 tileX, uint32 tileY);
 
 #ifdef COLLISION_DEBUG
 
-	bool CheckLOS(uint32 mapId, float x1, float y1, float z1, float x2, float y2, float z2);
-	bool GetFirstPoint(uint32 mapId, float x1, float y1, float z1, float x2, float y2, float z2, float & outx, float & outy, float & outz, float distmod);
-	bool IsIndoor(uint32 mapId, float x, float y, float z);
-	bool IsOutdoor(uint32 mapId, float x, float y, float z);
+    bool CheckLOS(uint32 mapId, float x1, float y1, float z1, float x2, float y2, float z2);
+    bool GetFirstPoint(uint32 mapId, float x1, float y1, float z1, float x2, float y2, float z2, float & outx, float & outy, float & outz, float distmod);
+    bool IsIndoor(uint32 mapId, float x, float y, float z);
+    bool IsOutdoor(uint32 mapId, float x, float y, float z);
 
-	float GetHeight(uint32 mapId, float x, float y, float z);
-	bool CheckLOS(uint32 mapId, LocationVector & pos1, LocationVector & pos2);
-	bool GetFirstPoint(uint32 mapId, LocationVector & pos1, LocationVector & pos2, LocationVector & outvec, float distmod);
-	bool IsIndoor(uint32 mapId, LocationVector & pos);
-	bool IsOutdoor(uint32 mapId, LocationVector & pos);
-	float GetHeight(uint32 mapId, LocationVector & pos);
+    float GetHeight(uint32 mapId, float x, float y, float z);
+    bool CheckLOS(uint32 mapId, LocationVector & pos1, LocationVector & pos2);
+    bool GetFirstPoint(uint32 mapId, LocationVector & pos1, LocationVector & pos2, LocationVector & outvec, float distmod);
+    bool IsIndoor(uint32 mapId, LocationVector & pos);
+    bool IsOutdoor(uint32 mapId, LocationVector & pos);
+    float GetHeight(uint32 mapId, LocationVector & pos);
 
 #else
 
-	inline bool CheckLOS(uint32 mapId, float x1, float y1, float z1, float x2, float y2, float z2)
-	{
-		VMAP::IVMapManager* mgr = VMAP::VMapFactory::createOrGetVMapManager();
-		return mgr->isInLineOfSight( mapId, x1, y1, z1, x2, y2, z2 );
-	}
+    inline bool CheckLOS(uint32 mapId, float x1, float y1, float z1, float x2, float y2, float z2)
+    {
+        VMAP::IVMapManager* mgr = VMAP::VMapFactory::createOrGetVMapManager();
+        return mgr->isInLineOfSight(mapId, x1, y1, z1, x2, y2, z2);
+    }
 
-	inline bool GetFirstPoint(uint32 mapId, float x1, float y1, float z1, float x2, float y2, float z2, float & outx, float & outy, float & outz, float distmod)
-	{
-		VMAP::IVMapManager* mgr = VMAP::VMapFactory::createOrGetVMapManager();
-		return mgr->getObjectHitPos( mapId, x1, y1, z1, x2, y2, z2, outx, outy, outz, distmod );
-	}
-	
-	inline bool IsIndoor(uint32 mapId, float x, float y, float z)
-	{
-		return !IsOutdoor(mapId, x, y, z);
-	}
+    inline bool GetFirstPoint(uint32 mapId, float x1, float y1, float z1, float x2, float y2, float z2, float & outx, float & outy, float & outz, float distmod)
+    {
+        VMAP::IVMapManager* mgr = VMAP::VMapFactory::createOrGetVMapManager();
+        return mgr->getObjectHitPos(mapId, x1, y1, z1, x2, y2, z2, outx, outy, outz, distmod);
+    }
 
-	inline bool IsOutdoor(uint32 mapId, float x, float y, float z)
-	{
-		VMAP::IVMapManager* mgr = VMAP::VMapFactory::createOrGetVMapManager();
+    inline bool IsIndoor(uint32 mapId, float x, float y, float z)
+    {
+        return !IsOutdoor(mapId, x, y, z);
+    }
 
-		uint32 flags;
-		int32 adtid, rootid, groupid;
+    inline bool IsOutdoor(uint32 mapId, float x, float y, float z)
+    {
+        VMAP::IVMapManager* mgr = VMAP::VMapFactory::createOrGetVMapManager();
 
-		if (!mgr->getAreaInfo(mapId, x, y, z, flags, adtid, rootid, groupid))
-			return true;
+        uint32 flags;
+        int32 adtid, rootid, groupid;
 
-		WMOAreaTableEntry* wmoArea = sWorld.GetWMOAreaData(rootid, adtid, groupid);
+        if (!mgr->getAreaInfo(mapId, x, y, z, flags, adtid, rootid, groupid))
+            return true;
 
-		if (wmoArea != NULL)
-		{
+        WMOAreaTableEntry* wmoArea = sWorld.GetWMOAreaData(rootid, adtid, groupid);
+
+        if (wmoArea != NULL)
+        {
             auto area = sAreaStore.LookupEntry(wmoArea->areaId);
 
-			if (area != NULL)
-			{
+            if (area != NULL)
+            {
                 if (area->flags & 0x04000000) //outdoor
-					return true;
+                    return true;
                 if (area->flags & 0x02000000) //indoor
-					return false;
-			}
+                    return false;
+            }
 
-			if (wmoArea->flags & 4) //outdoor
-				return true;
-			if (wmoArea->flags & 2)
-				return false;
-		}
+            if (wmoArea->flags & 4) //outdoor
+                return true;
+            if (wmoArea->flags & 2)
+                return false;
+        }
         return (flags & 0x08) != 0;
-	}
+    }
 
-	inline float GetHeight(uint32 mapId, float x, float y, float z)
-	{
-		VMAP::IVMapManager* mgr = VMAP::VMapFactory::createOrGetVMapManager();
-		return mgr->getHeight(mapId, x, y, z, 10000.0f);
-	}
+    inline float GetHeight(uint32 mapId, float x, float y, float z)
+    {
+        VMAP::IVMapManager* mgr = VMAP::VMapFactory::createOrGetVMapManager();
+        return mgr->getHeight(mapId, x, y, z, 10000.0f);
+    }
 
-	inline bool CheckLOS(uint32 mapId, LocationVector & pos1, LocationVector & pos2)
-	{
-		return CheckLOS(mapId, pos1.x, pos1.y, pos1.z + 2, pos2.x, pos2.y, pos2.z + 2);
-	}
+    inline bool CheckLOS(uint32 mapId, LocationVector & pos1, LocationVector & pos2)
+    {
+        return CheckLOS(mapId, pos1.x, pos1.y, pos1.z + 2, pos2.x, pos2.y, pos2.z + 2);
+    }
 
-	inline bool GetFirstPoint(uint32 mapId, LocationVector & pos1, LocationVector & pos2, LocationVector & outvec, float distmod)
-	{
-		return GetFirstPoint(mapId, pos1.x, pos1.y, pos1.z, pos2.x, pos2.y, pos2.z, outvec.x, outvec.y, outvec.z, distmod);
-	}
+    inline bool GetFirstPoint(uint32 mapId, LocationVector & pos1, LocationVector & pos2, LocationVector & outvec, float distmod)
+    {
+        return GetFirstPoint(mapId, pos1.x, pos1.y, pos1.z, pos2.x, pos2.y, pos2.z, outvec.x, outvec.y, outvec.z, distmod);
+    }
 
-	inline bool IsIndoor(uint32 mapId, LocationVector & pos)
-	{
-		return !IsOutdoor(mapId, pos);
-	}
+    inline bool IsIndoor(uint32 mapId, LocationVector & pos)
+    {
+        return !IsOutdoor(mapId, pos);
+    }
 
-	inline bool IsOutdoor(uint32 mapId, LocationVector & pos)
-	{
-		return IsOutdoor(mapId, pos.x, pos.y, pos.z);
-	}
+    inline bool IsOutdoor(uint32 mapId, LocationVector & pos)
+    {
+        return IsOutdoor(mapId, pos.x, pos.y, pos.z);
+    }
 
-	inline float GetHeight(uint32 mapId, LocationVector & pos)
-	{
-		return GetHeight(mapId, pos.x, pos.y, pos.z);
-	}
+    inline float GetHeight(uint32 mapId, LocationVector & pos)
+    {
+        return GetHeight(mapId, pos.x, pos.y, pos.z);
+    }
 
 #endif
 

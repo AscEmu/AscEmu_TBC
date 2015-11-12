@@ -1,7 +1,8 @@
 /*
- * ArcEmu MMORPG Server
- * Copyright (C) 2005-2007 Ascent Team <http://www.ascentemu.com/>
+ * AscEmu Framework based on ArcEmu MMORPG Server
+ * Copyright (C) 2014-2015 AscEmu Team <http://www.ascemu.org/>
  * Copyright (C) 2008 <http://www.ArcEmu.org/>
+ * Copyright (C) 2005-2007 Ascent Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -10,79 +11,80 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include "StdAfx.h"
 
-initialiseSingleton( AuctionMgr );
+initialiseSingleton(AuctionMgr);
 
 void AuctionMgr::LoadAuctionHouses()
 {
-	Log.Notice("AuctionMgr", "Loading Auction Houses...");
+    Log.Notice("AuctionMgr", "Loading Auction Houses...");
 
-	QueryResult * res = CharacterDatabase.Query("SELECT MAX(auctionId) FROM auctions");
-	if(res)
-	{
-		maxId = res->Fetch()[0].GetUInt32();
-		delete res;
-	}
+    QueryResult * res = CharacterDatabase.Query("SELECT MAX(auctionId) FROM auctions");
+    if (res)
+    {
+        maxId = res->Fetch()[0].GetUInt32();
+        delete res;
+    }
 
-	res = WorldDatabase.Query("SELECT DISTINCT `group` FROM auctionhouse");
-	AuctionHouse * ah;
+    res = WorldDatabase.Query("SELECT DISTINCT `group` FROM auctionhouse");
+    AuctionHouse * ah;
     std::map<uint32, AuctionHouse*> tempmap;
-	if(res)
-	{
-		uint32 period = (res->GetRowCount() / 20) + 1;
-		uint32 c = 0;
-		do
-		{
-			ah = new AuctionHouse(res->Fetch()[0].GetUInt32());
-			ah->LoadAuctions();
-			auctionHouses.push_back(ah);
+    if (res)
+    {
+        uint32 period = (res->GetRowCount() / 20) + 1;
+        uint32 c = 0;
+        do
+        {
+            ah = new AuctionHouse(res->Fetch()[0].GetUInt32());
+            ah->LoadAuctions();
+            auctionHouses.push_back(ah);
             tempmap.insert(std::make_pair(res->Fetch()[0].GetUInt32(), ah));
-			if( !((++c) % period) )
-				Log.Notice("AuctionHouse", "Done %u/%u, %u%% complete.", c, res->GetRowCount(), float2int32( (float(c) / float(res->GetRowCount()))*100.0f ));
+            if (!((++c) % period))
+                Log.Notice("AuctionHouse", "Done %u/%u, %u%% complete.", c, res->GetRowCount(), float2int32((float(c) / float(res->GetRowCount()))*100.0f));
 
-		}while(res->NextRow());
-		delete res;
-	}
+        }
+        while (res->NextRow());
+        delete res;
+    }
 
-	res = WorldDatabase.Query("SELECT creature_entry, `group` FROM auctionhouse");
-	if(res)
-	{
-		do 
-		{
+    res = WorldDatabase.Query("SELECT creature_entry, `group` FROM auctionhouse");
+    if (res)
+    {
+        do
+        {
             auctionHouseEntryMap.insert(std::make_pair(res->Fetch()[0].GetUInt32(), tempmap[res->Fetch()[1].GetUInt32()]));
-		} while(res->NextRow());
-		delete res;
-	}
+        }
+        while (res->NextRow());
+        delete res;
+    }
 }
 
 AuctionHouse * AuctionMgr::GetAuctionHouse(uint32 Entry)
 {
-	HM_NAMESPACE::hash_map<uint32, AuctionHouse*>::iterator itr = auctionHouseEntryMap.find(Entry);
-	if(itr == auctionHouseEntryMap.end()) return NULL;
-	return itr->second;
+    HM_NAMESPACE::hash_map<uint32, AuctionHouse*>::iterator itr = auctionHouseEntryMap.find(Entry);
+    if (itr == auctionHouseEntryMap.end()) return NULL;
+    return itr->second;
 }
 
 void AuctionMgr::Update()
 {
-	if((++loopcount % 100))
-		return;
-		
-    std::vector<AuctionHouse*>::iterator itr = auctionHouses.begin();
-	for(; itr != auctionHouses.end(); ++itr)
-	{
-		(*itr)->UpdateDeletionQueue();
+    if ((++loopcount % 100))
+        return;
 
-		// Actual auction loop is on a seperate timer.
-		if(!(loopcount % 1200))
-			(*itr)->UpdateAuctions();
-	}
+    std::vector<AuctionHouse*>::iterator itr = auctionHouses.begin();
+    for (; itr != auctionHouses.end(); ++itr)
+    {
+        (*itr)->UpdateDeletionQueue();
+
+        // Actual auction loop is on a seperate timer.
+        if (!(loopcount % 1200))
+            (*itr)->UpdateAuctions();
+    }
 }

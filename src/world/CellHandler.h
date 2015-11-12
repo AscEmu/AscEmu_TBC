@@ -1,7 +1,8 @@
 /*
- * ArcEmu MMORPG Server
- * Copyright (C) 2005-2007 Ascent Team <http://www.ascentemu.com/>
+ * AscEmu Framework based on ArcEmu MMORPG Server
+ * Copyright (C) 2014-2015 AscEmu Team <http://www.ascemu.org/>
  * Copyright (C) 2008 <http://www.ArcEmu.org/>
+ * Copyright (C) 2005-2007 Ascent Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -10,17 +11,12 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-//
-// CellHandler.h
-//
 
 #ifndef __CELLHANDLER_H
 #define __CELLHANDLER_H
@@ -45,39 +41,39 @@ class Map;
 template < class Class >
 class CellHandler
 {
-public:
-	CellHandler(Map *map);
-	~CellHandler();
+    public:
+    CellHandler(Map *map);
+    ~CellHandler();
 
-	Class *GetCell(uint32 x, uint32 y);
-	Class *GetCellByCoords(float x, float y);
-	Class *Create(uint32 x, uint32 y);
-	Class *CreateByCoords(float x, float y);
-	void Remove(uint32 x, uint32 y);
+    Class *GetCell(uint32 x, uint32 y);
+    Class *GetCellByCoords(float x, float y);
+    Class *Create(uint32 x, uint32 y);
+    Class *CreateByCoords(float x, float y);
+    void Remove(uint32 x, uint32 y);
 
-	inline bool Allocated(uint32 x, uint32 y) { return _cells[x][y] != NULL; }
+    inline bool Allocated(uint32 x, uint32 y) { return _cells[x][y] != NULL; }
 
-	static uint32 GetPosX(float x); 
-	static uint32 GetPosY(float y);
+    static uint32 GetPosX(float x);
+    static uint32 GetPosY(float y);
 
-	inline Map *GetBaseMap() { return _map; }
+    inline Map *GetBaseMap() { return _map; }
 
-protected:
-	void _Init();
+    protected:
+    void _Init();
 
 
-	Class ***_cells;
+    Class ***_cells;
 
-	Map* _map;
+    Map* _map;
 };
 
 template <class Class>
 CellHandler<Class>::CellHandler(Map* map)
 {
-	_map = map;
+    _map = map;
 
 
-	_Init();
+    _Init();
 }
 
 
@@ -86,110 +82,110 @@ template <class Class>
 void CellHandler<Class>::_Init()
 {
 
-	_cells = new Class**[_sizeX];
+    _cells = new Class**[_sizeX];
 
-	ASSERT(_cells);
-	for (uint32 i = 0; i < _sizeX; i++)
-	{
-		//_cells[i] = new Class*[_sizeY];
-		_cells[i]=NULL;
-		//ASSERT(_cells[i]);
-	}
+    ASSERT(_cells);
+    for (uint32 i = 0; i < _sizeX; i++)
+    {
+        //_cells[i] = new Class*[_sizeY];
+        _cells[i] = NULL;
+        //ASSERT(_cells[i]);
+    }
 
-	/*for (uint32 posX = 0; posX < _sizeX; posX++ )
-	{
-		for (uint32 posY = 0; posY < _sizeY; posY++ )
-		{
-			_cells[posX][posY] = NULL;
-		}
-	}*/
+    /*for (uint32 posX = 0; posX < _sizeX; posX++ )
+    {
+    for (uint32 posY = 0; posY < _sizeY; posY++ )
+    {
+    _cells[posX][posY] = NULL;
+    }
+    }*/
 }
 
 template <class Class>
 CellHandler<Class>::~CellHandler()
 {
-	if(_cells)
-	{
-		for (uint32 i = 0; i < _sizeX; i++)
-		{
-			if(!_cells[i])
-				continue;
+    if (_cells)
+    {
+        for (uint32 i = 0; i < _sizeX; i++)
+        {
+            if (!_cells[i])
+                continue;
 
-			for (uint32 j = 0; j < _sizeY; j++)
-			{
-				if(_cells[i][j])
-					delete _cells[i][j];
-			}
-			delete [] _cells[i];	
-		}
-		delete [] _cells;
-	}
+            for (uint32 j = 0; j < _sizeY; j++)
+            {
+                if (_cells[i][j])
+                    delete _cells[i][j];
+            }
+            delete[] _cells[i];
+        }
+        delete[] _cells;
+    }
 }
 
 template <class Class>
 Class* CellHandler<Class>::Create(uint32 x, uint32 y)
 {
-	if( x >= _sizeX ||  y >= _sizeY )
-		return NULL;
-	if(!_cells[x])
-	{
-		_cells[x] = new Class*[_sizeY];
-		memset(_cells[x],0,sizeof(Class*)*_sizeY);
-	}
+    if (x >= _sizeX || y >= _sizeY)
+        return NULL;
+    if (!_cells[x])
+    {
+        _cells[x] = new Class*[_sizeY];
+        memset(_cells[x], 0, sizeof(Class*)*_sizeY);
+    }
 
-	ASSERT(_cells[x][y] == NULL);
+    ASSERT(_cells[x][y] == NULL);
 
-	Class *cls = new Class;
-	_cells[x][y] = cls;
+    Class *cls = new Class;
+    _cells[x][y] = cls;
 
-	return cls;
+    return cls;
 }
 
 template <class Class>
 Class* CellHandler<Class>::CreateByCoords(float x, float y)
 {
-	return Create(GetPosX(x),GetPosY(y));
+    return Create(GetPosX(x), GetPosY(y));
 }
 
 template <class Class>
 void CellHandler<Class>::Remove(uint32 x, uint32 y)
 {
-	if( x >= _sizeX ||  y >= _sizeY )
-		return;
-	if(!_cells[x]) return;
-	ASSERT(_cells[x][y] != NULL);
+    if (x >= _sizeX || y >= _sizeY)
+        return;
+    if (!_cells[x]) return;
+    ASSERT(_cells[x][y] != NULL);
 
-	Class *cls = _cells[x][y];
-	_cells[x][y] = NULL;
+    Class *cls = _cells[x][y];
+    _cells[x][y] = NULL;
 
-	delete cls;
+    delete cls;
 }
 
 template <class Class>
 Class* CellHandler<Class>::GetCell(uint32 x, uint32 y)
 {
-	if( x >= _sizeX || y >= _sizeY || !_cells[x] ) return NULL;
-	return _cells[x][y];
+    if (x >= _sizeX || y >= _sizeY || !_cells[x]) return NULL;
+    return _cells[x][y];
 }
 
 template <class Class>
 Class* CellHandler<Class>::GetCellByCoords(float x, float y)
 {
-	return GetCell(GetPosX(x),GetPosY(y));
+    return GetCell(GetPosX(x), GetPosY(y));
 }
 
 template <class Class>
 uint32 CellHandler<Class>::GetPosX(float x)
 {
-	ASSERT((x >= _minX) && (x <= _maxX));
-	return (uint32)((_maxX-x)/_cellSize);
+    ASSERT((x >= _minX) && (x <= _maxX));
+    return (uint32)((_maxX - x) / _cellSize);
 }
 
 template <class Class>
 uint32 CellHandler<Class>::GetPosY(float y)
 {
-	ASSERT((y >= _minY) && (y <= _maxY));
-	return (uint32)((_maxY-y)/_cellSize);
+    ASSERT((y >= _minY) && (y <= _maxY));
+    return (uint32)((_maxY - y) / _cellSize);
 
 }
 

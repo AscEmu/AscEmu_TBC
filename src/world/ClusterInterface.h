@@ -1,7 +1,8 @@
 /*
- * ArcEmu MMORPG Server
- * Copyright (C) 2005-2007 Ascent Team <http://www.ascentemu.com/>
+ * AscEmu Framework based on ArcEmu MMORPG Server
+ * Copyright (C) 2014-2015 AscEmu Team <http://www.ascemu.org/>
  * Copyright (C) 2008 <http://www.ArcEmu.org/>
+ * Copyright (C) 2005-2007 Ascent Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -10,12 +11,11 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #ifdef CLUSTERING
@@ -30,62 +30,62 @@ typedef void(ClusterInterface::*ClusterInterfaceHandler)(WorldPacket&);
 
 class ClusterInterface : public Singleton<ClusterInterface>
 {
-	Mutex m_onlinePlayerMapMutex;
-	typedef HM_NAMESPACE::hash_map<uint32,RPlayerInfo*> OnlinePlayerStorageMap;
-	OnlinePlayerStorageMap _onlinePlayers;
-	WSClient * _clientSocket;
-	FastQueue<WorldPacket*, Mutex> _pckQueue;
-	time_t _lastConnectTime;
-	WorldSession * _sessions[MAX_SESSIONS];
-	bool m_connected;
-	uint8 key[20];
-	uint32 m_latency;
-	Mutex m_mapMutex;
+    Mutex m_onlinePlayerMapMutex;
+    typedef HM_NAMESPACE::hash_map<uint32,RPlayerInfo*> OnlinePlayerStorageMap;
+    OnlinePlayerStorageMap _onlinePlayers;
+    WSClient * _clientSocket;
+    FastQueue<WorldPacket*, Mutex> _pckQueue;
+    time_t _lastConnectTime;
+    WorldSession * _sessions[MAX_SESSIONS];
+    bool m_connected;
+    uint8 key[20];
+    uint32 m_latency;
+    Mutex m_mapMutex;
 
-public:
+    public:
 
-	string GenerateVersionString();
+    string GenerateVersionString();
 
-	static ClusterInterfaceHandler PHandlers[IMSG_NUM_TYPES];
-	static void InitHandlers();
+    static ClusterInterfaceHandler PHandlers[IMSG_NUM_TYPES];
+    static void InitHandlers();
 
-	ClusterInterface();
-	~ClusterInterface();
+    ClusterInterface();
+    ~ClusterInterface();
 
-	void ForwardWoWPacket(uint16 opcode, uint32 size, const void * data, uint32 sessionid);
-	void ConnectToRealmServer();
-	
-	RPlayerInfo * GetPlayer(uint32 guid)
-	{
-		RPlayerInfo * inf;
-		OnlinePlayerStorageMap::iterator itr;
-		m_onlinePlayerMapMutex.Acquire();
-		itr = _onlinePlayers.find(guid);
-		m_onlinePlayerMapMutex.Release();
-		return (itr == _onlinePlayers.end()) ? 0 : itr->second;
-	}
+    void ForwardWoWPacket(uint16 opcode, uint32 size, const void * data, uint32 sessionid);
+    void ConnectToRealmServer();
 
-	inline WorldSession * GetSession(uint32 sid) { return _sessions[sid]; }
+    RPlayerInfo * GetPlayer(uint32 guid)
+    {
+        RPlayerInfo * inf;
+        OnlinePlayerStorageMap::iterator itr;
+        m_onlinePlayerMapMutex.Acquire();
+        itr = _onlinePlayers.find(guid);
+        m_onlinePlayerMapMutex.Release();
+        return (itr == _onlinePlayers.end()) ? 0 : itr->second;
+    }
 
-	void HandleAuthRequest(WorldPacket & pck);
-	void HandleAuthResult(WorldPacket & pck);
-	void HandleRegisterResult(WorldPacket & pck);
-	void HandleCreateInstance(WorldPacket & pck);
-	void HandleDestroyInstance(WorldPacket & pck);
-	void HandlePlayerLogin(WorldPacket & pck);
-	void HandlePackedPlayerInfo(WorldPacket & pck);
-	void HandleWoWPacket(WorldPacket & pck);
-	void HandlePlayerChangedServers(WorldPacket & pck);
+    inline WorldSession * GetSession(uint32 sid) { return _sessions[sid]; }
 
-	inline void QueuePacket(WorldPacket * pck) { _pckQueue.Push(pck); }
+    void HandleAuthRequest(WorldPacket & pck);
+    void HandleAuthResult(WorldPacket & pck);
+    void HandleRegisterResult(WorldPacket & pck);
+    void HandleCreateInstance(WorldPacket & pck);
+    void HandleDestroyInstance(WorldPacket & pck);
+    void HandlePlayerLogin(WorldPacket & pck);
+    void HandlePackedPlayerInfo(WorldPacket & pck);
+    void HandleWoWPacket(WorldPacket & pck);
+    void HandlePlayerChangedServers(WorldPacket & pck);
 
-	void Update();
-	void DestroySession(uint32 sid);
+    inline void QueuePacket(WorldPacket * pck) { _pckQueue.Push(pck); }
 
-	inline void SendPacket(WorldPacket * data) { if(_clientSocket) _clientSocket->SendPacket(data); }
-	inline void SetSocket(WSClient * s) { _clientSocket = s; }
+    void Update();
+    void DestroySession(uint32 sid);
 
-	void RequestTransfer(Player * plr, uint32 MapId, uint32 InstanceId, LocationVector & vec);
+    inline void SendPacket(WorldPacket * data) { if(_clientSocket) _clientSocket->SendPacket(data); }
+    inline void SetSocket(WSClient * s) { _clientSocket = s; }
+
+    void RequestTransfer(Player * plr, uint32 MapId, uint32 InstanceId, LocationVector & vec);
 };
 
 #define sClusterInterface ClusterInterface::getSingleton()

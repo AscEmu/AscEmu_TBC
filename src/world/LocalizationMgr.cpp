@@ -1,7 +1,8 @@
 /*
- * arcemu MMORPG Server
- * String Localization Manager
- * Copyright (C) 2007 Burlex <burlex@gmail.com>
+ * AscEmu Framework based on ArcEmu MMORPG Server
+ * Copyright (C) 2014-2015 AscEmu Team <http://www.ascemu.org/>
+ * Copyright (C) 2008 <http://www.ArcEmu.org/>
+ * Copyright (C) 2005-2007 Ascent Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -10,12 +11,11 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include "StdAfx.h"
@@ -24,544 +24,554 @@ LocalizationMgr sLocalizationMgr;
 
 void LocalizationMgr::Shutdown()
 {
-	if(m_disabled)
-		return;
+    if (m_disabled)
+        return;
 
 #define SAFE_FREE_PTR(x) if(deletedPointers.find((x)) == deletedPointers.end()) { deletedPointers.insert((x)); free((x)); }
 
     std::set<void*> deletedPointers;
-	uint32 maxid=0;
-	uint32 i,j;
+    uint32 maxid = 0;
+    uint32 i, j;
     std::vector<std::pair<uint32, uint32> >::iterator xtr = m_languages.begin();
-	for(; xtr != m_languages.end(); ++xtr)
-		if(xtr->second>maxid)
-			maxid=xtr->second;
+    for (; xtr != m_languages.end(); ++xtr)
+        if (xtr->second > maxid)
+            maxid = xtr->second;
 
-	maxid++;
-	Log.Notice("LocalizationMgr", "Beginning pointer cleanup...");
-	uint32 t = getMSTime();
+    maxid++;
+    Log.Notice("LocalizationMgr", "Beginning pointer cleanup...");
+    uint32 t = getMSTime();
 
-    for(i = 0; i < maxid; ++i)
-	{
-		for(HM_NAMESPACE::hash_map<uint32, LocalizedQuest>::iterator itr = m_Quests[i].begin(); itr != m_Quests[i].end(); ++itr)
-		{
-			SAFE_FREE_PTR(itr->second.Title);
-			SAFE_FREE_PTR(itr->second.Details);
-			SAFE_FREE_PTR(itr->second.Objectives);
-			SAFE_FREE_PTR(itr->second.CompletionText);
-			SAFE_FREE_PTR(itr->second.IncompleteText);
-			SAFE_FREE_PTR(itr->second.EndText);
-			SAFE_FREE_PTR(itr->second.ObjectiveText[0]);
-			SAFE_FREE_PTR(itr->second.ObjectiveText[1]);
-			SAFE_FREE_PTR(itr->second.ObjectiveText[2]);
-			SAFE_FREE_PTR(itr->second.ObjectiveText[3]);
-		}
+    for (i = 0; i < maxid; ++i)
+    {
+        for (HM_NAMESPACE::hash_map<uint32, LocalizedQuest>::iterator itr = m_Quests[i].begin(); itr != m_Quests[i].end(); ++itr)
+        {
+            SAFE_FREE_PTR(itr->second.Title);
+            SAFE_FREE_PTR(itr->second.Details);
+            SAFE_FREE_PTR(itr->second.Objectives);
+            SAFE_FREE_PTR(itr->second.CompletionText);
+            SAFE_FREE_PTR(itr->second.IncompleteText);
+            SAFE_FREE_PTR(itr->second.EndText);
+            SAFE_FREE_PTR(itr->second.ObjectiveText[0]);
+            SAFE_FREE_PTR(itr->second.ObjectiveText[1]);
+            SAFE_FREE_PTR(itr->second.ObjectiveText[2]);
+            SAFE_FREE_PTR(itr->second.ObjectiveText[3]);
+        }
 
-		for(HM_NAMESPACE::hash_map<uint32, LocalizedItem>::iterator itr = m_Items[i].begin(); itr != m_Items[i].end(); ++itr)
-		{
-			SAFE_FREE_PTR(itr->second.Name);
-			SAFE_FREE_PTR(itr->second.Description);
-		}
+        for (HM_NAMESPACE::hash_map<uint32, LocalizedItem>::iterator itr = m_Items[i].begin(); itr != m_Items[i].end(); ++itr)
+        {
+            SAFE_FREE_PTR(itr->second.Name);
+            SAFE_FREE_PTR(itr->second.Description);
+        }
 
-		for(HM_NAMESPACE::hash_map<uint32, LocalizedNpcText>::iterator itr = m_NpcTexts[i].begin(); itr != m_NpcTexts[i].end(); ++itr)
-		{
-			for(j = 0; j < 8; ++j)
-			{
-				SAFE_FREE_PTR(itr->second.Texts[j][0]);
-				SAFE_FREE_PTR(itr->second.Texts[j][1]);
-			}
-		}
+        for (HM_NAMESPACE::hash_map<uint32, LocalizedNpcText>::iterator itr = m_NpcTexts[i].begin(); itr != m_NpcTexts[i].end(); ++itr)
+        {
+            for (j = 0; j < 8; ++j)
+            {
+                SAFE_FREE_PTR(itr->second.Texts[j][0]);
+                SAFE_FREE_PTR(itr->second.Texts[j][1]);
+            }
+        }
 
-		for(HM_NAMESPACE::hash_map<uint32, LocalizedCreatureName>::iterator itr = m_CreatureNames[i].begin(); itr != m_CreatureNames[i].end(); ++itr)
-		{
-			SAFE_FREE_PTR(itr->second.Name);
-			SAFE_FREE_PTR(itr->second.SubName);
-		}
+        for (HM_NAMESPACE::hash_map<uint32, LocalizedCreatureName>::iterator itr = m_CreatureNames[i].begin(); itr != m_CreatureNames[i].end(); ++itr)
+        {
+            SAFE_FREE_PTR(itr->second.Name);
+            SAFE_FREE_PTR(itr->second.SubName);
+        }
 
-		for(HM_NAMESPACE::hash_map<uint32, LocalizedGameObjectName>::iterator itr = m_GameObjectNames[i].begin(); itr != m_GameObjectNames[i].end(); ++itr)
-		{
-			SAFE_FREE_PTR(itr->second.Name);
-		}
+        for (HM_NAMESPACE::hash_map<uint32, LocalizedGameObjectName>::iterator itr = m_GameObjectNames[i].begin(); itr != m_GameObjectNames[i].end(); ++itr)
+        {
+            SAFE_FREE_PTR(itr->second.Name);
+        }
 
-		for(HM_NAMESPACE::hash_map<uint32, LocalizedItemPage>::iterator itr = m_ItemPages[i].begin(); itr != m_ItemPages[i].end(); ++itr)
-		{
-			SAFE_FREE_PTR(itr->second.Text);
-		}
+        for (HM_NAMESPACE::hash_map<uint32, LocalizedItemPage>::iterator itr = m_ItemPages[i].begin(); itr != m_ItemPages[i].end(); ++itr)
+        {
+            SAFE_FREE_PTR(itr->second.Text);
+        }
 
-		// (p2wow) world server common message going to be localized.
-		for(HM_NAMESPACE::hash_map<uint32, LocalizedWorldStringTable>::iterator itr = m_WorldStrings[i].begin(); itr != m_WorldStrings[i].end(); ++itr)
-		{
-			SAFE_FREE_PTR(itr->second.Text);
-		}
+        // (p2wow) world server common message going to be localized.
+        for (HM_NAMESPACE::hash_map<uint32, LocalizedWorldStringTable>::iterator itr = m_WorldStrings[i].begin(); itr != m_WorldStrings[i].end(); ++itr)
+        {
+            SAFE_FREE_PTR(itr->second.Text);
+        }
 
-		for(HM_NAMESPACE::hash_map<uint32, LocalizedWorldBroadCast>::iterator itr = m_WorldBroadCast[i].begin(); itr != m_WorldBroadCast[i].end(); ++itr)
-		{
-			SAFE_FREE_PTR(itr->second.Text);
-		}
+        for (HM_NAMESPACE::hash_map<uint32, LocalizedWorldBroadCast>::iterator itr = m_WorldBroadCast[i].begin(); itr != m_WorldBroadCast[i].end(); ++itr)
+        {
+            SAFE_FREE_PTR(itr->second.Text);
+        }
 
-		for(HM_NAMESPACE::hash_map<uint32, LocalizedWorldMapInfo>::iterator itr = m_WorldMapInfo[i].begin(); itr != m_WorldMapInfo[i].end(); ++itr)
-		{
-			SAFE_FREE_PTR(itr->second.Text);
-		}
+        for (HM_NAMESPACE::hash_map<uint32, LocalizedWorldMapInfo>::iterator itr = m_WorldMapInfo[i].begin(); itr != m_WorldMapInfo[i].end(); ++itr)
+        {
+            SAFE_FREE_PTR(itr->second.Text);
+        }
 
 
-	}
+    }
 
-	deletedPointers.clear();
-	delete [] m_ItemPages;
-	delete [] m_CreatureNames;
-	delete [] m_GameObjectNames;
-	delete [] m_Items;
-	delete [] m_NpcTexts;
-	delete [] m_Quests;
-	delete [] m_WorldStrings;
-	delete [] m_WorldBroadCast;
-	delete [] m_WorldMapInfo;
-	m_languages.clear();
-	Log.Notice("LocalizationMgr", "Pointer cleanup completed in %.4f seconds.", float(float(getMSTime()-t) / 1000.0f));
+    deletedPointers.clear();
+    delete[] m_ItemPages;
+    delete[] m_CreatureNames;
+    delete[] m_GameObjectNames;
+    delete[] m_Items;
+    delete[] m_NpcTexts;
+    delete[] m_Quests;
+    delete[] m_WorldStrings;
+    delete[] m_WorldBroadCast;
+    delete[] m_WorldMapInfo;
+    m_languages.clear();
+    Log.Notice("LocalizationMgr", "Pointer cleanup completed in %.4f seconds.", float(float(getMSTime() - t) / 1000.0f));
 #undef SAFE_FREE_PTR
 }
 
 void LocalizationMgr::Lower(std::string& conv)
 {
-	for(size_t i = 0; i < conv.length(); ++i)
-		conv[i] = tolower(conv[i]);
+    for (size_t i = 0; i < conv.length(); ++i)
+        conv[i] = tolower(conv[i]);
 }
 
 void GetDistinctLanguages(std::set<std::string>& dest, const char * table)
 {
-	QueryResult * result = WorldDatabase.Query("SELECT DISTINCT language_code FROM %s", table);
-	if(result == NULL)
-		return;
+    QueryResult * result = WorldDatabase.Query("SELECT DISTINCT language_code FROM %s", table);
+    if (result == NULL)
+        return;
 
     std::string lc;
-	do 
-	{
-		lc = result->Fetch()[0].GetString();
-		sLocalizationMgr.Lower(lc);
-        if(dest.find(lc)==dest.end())
-			dest.insert(lc);
+    do
+    {
+        lc = result->Fetch()[0].GetString();
+        sLocalizationMgr.Lower(lc);
+        if (dest.find(lc) == dest.end())
+            dest.insert(lc);
 
-	} while(result->NextRow());
-	delete result;
+    }
+    while (result->NextRow());
+    delete result;
 }
 
 uint32 LocalizationMgr::GetLanguageId(uint32 full)
 {
-	if(m_disabled)
-		return 0;
+    if (m_disabled)
+        return 0;
 
     for (std::vector<std::pair<uint32, uint32> >::iterator itr = m_languages.begin(); itr != m_languages.end(); ++itr)
-		if(itr->first == full)
-			return itr->second;
+        if (itr->first == full)
+            return itr->second;
 
-	return 0;
+    return 0;
 }
 
 void LocalizationMgr::Reload(bool first)
 {
-	if(first)
-		return;
+    if (first)
+        return;
 
-	QueryResult * result;
+    QueryResult * result;
     std::set<std::string> languages;
     std::map<std::string, std::string> bound_languages;
-	GetDistinctLanguages(languages, "creature_names_localized");
-	GetDistinctLanguages(languages, "gameobject_names_localized");
-	GetDistinctLanguages(languages, "items_localized");
-	GetDistinctLanguages(languages, "quests_localized");
-	GetDistinctLanguages(languages, "npc_text_localized");
-	GetDistinctLanguages(languages, "itempages_localized");
-	GetDistinctLanguages(languages, "worldstring_tables_localized");
-	GetDistinctLanguages(languages, "worldbroadcast_localized");
-	GetDistinctLanguages(languages, "worldmap_info_localized");
+    GetDistinctLanguages(languages, "creature_names_localized");
+    GetDistinctLanguages(languages, "gameobject_names_localized");
+    GetDistinctLanguages(languages, "items_localized");
+    GetDistinctLanguages(languages, "quests_localized");
+    GetDistinctLanguages(languages, "npc_text_localized");
+    GetDistinctLanguages(languages, "itempages_localized");
+    GetDistinctLanguages(languages, "worldstring_tables_localized");
+    GetDistinctLanguages(languages, "worldbroadcast_localized");
+    GetDistinctLanguages(languages, "worldmap_info_localized");
 
-	/************************************************************************/
-	/* Read Language Bindings From Config                                   */
-	/************************************************************************/
+    /************************************************************************/
+    /* Read Language Bindings From Config                                   */
+    /************************************************************************/
     std::string ls = Config.MainConfig.GetStringDefault("Localization", "LocaleBindings", "");
     std::vector<std::string> tbindings = StrSplit(ls, " ");
     for (std::vector<std::string>::iterator ztr = tbindings.begin(); ztr != tbindings.end(); ++ztr)
-	{
-		char lb[200];
+    {
+        char lb[200];
         std::string ll1, ll2;
-		strcpy(lb,(*ztr).c_str());
+        strcpy(lb, (*ztr).c_str());
 
-		char * lbp = strchr(lb,'=');
-		if(lbp==NULL)
-			continue;
-		*lbp=0;
-		lbp++;
+        char * lbp = strchr(lb, '=');
+        if (lbp == NULL)
+            continue;
+        *lbp = 0;
+        lbp++;
 
         ll1 = std::string(lb);
         ll2 = std::string(lbp);
-		Lower(ll1);
-		Lower(ll2);
+        Lower(ll1);
+        Lower(ll2);
 
-		if(languages.find(ll1) == languages.end())
-		{
-			bound_languages[ll1] = ll2;
-			languages.insert(ll1);
-		}
-	}
+        if (languages.find(ll1) == languages.end())
+        {
+            bound_languages[ll1] = ll2;
+            languages.insert(ll1);
+        }
+    }
 
-	/************************************************************************/
-	/* Generate Language IDs                                                */
-	/************************************************************************/
+    /************************************************************************/
+    /* Generate Language IDs                                                */
+    /************************************************************************/
 
-	uint32 langid=1;
+    uint32 langid = 1;
     std::pair<uint32, uint32> dpr;
     for (std::set<std::string>::iterator sitr = languages.begin(); sitr != languages.end(); ++sitr)
-	{
-		if((*sitr)=="enus")		// Default
-		{
-			dpr.first = *(uint32*)sitr->c_str();
-			dpr.second = 0;
-		}
-		else
-		{
-			dpr.first = *(uint32*)sitr->c_str();
-			dpr.second = langid++;
-		}
+    {
+        if ((*sitr) == "enus")		// Default
+        {
+            dpr.first = *(uint32*)sitr->c_str();
+            dpr.second = 0;
+        }
+        else
+        {
+            dpr.first = *(uint32*)sitr->c_str();
+            dpr.second = langid++;
+        }
 
-		m_languages.push_back(dpr);
-	}
+        m_languages.push_back(dpr);
+    }
 
-	if(m_languages.size() == 0)
-	{
-		m_disabled = true;
-		return;		// No localizations
-	}
-	else
-		m_disabled = false;
+    if (m_languages.size() == 0)
+    {
+        m_disabled = true;
+        return;		// No localizations
+    }
+    else
+        m_disabled = false;
 
-	m_CreatureNames = new HM_NAMESPACE::hash_map<uint32, LocalizedCreatureName>[langid];
-	m_GameObjectNames = new HM_NAMESPACE::hash_map<uint32, LocalizedGameObjectName>[langid];
-	m_Quests = new HM_NAMESPACE::hash_map<uint32, LocalizedQuest>[langid];
-	m_NpcTexts = new HM_NAMESPACE::hash_map<uint32, LocalizedNpcText>[langid];
-	m_Items = new HM_NAMESPACE::hash_map<uint32, LocalizedItem>[langid];
-	m_ItemPages = new HM_NAMESPACE::hash_map<uint32, LocalizedItemPage>[langid];
-	m_WorldStrings = new HM_NAMESPACE::hash_map<uint32, LocalizedWorldStringTable>[langid];
-	m_WorldBroadCast = new HM_NAMESPACE::hash_map<uint32, LocalizedWorldBroadCast>[langid];
-	m_WorldMapInfo = new HM_NAMESPACE::hash_map<uint32, LocalizedWorldMapInfo>[langid];
+    m_CreatureNames = new HM_NAMESPACE::hash_map<uint32, LocalizedCreatureName>[langid];
+    m_GameObjectNames = new HM_NAMESPACE::hash_map<uint32, LocalizedGameObjectName>[langid];
+    m_Quests = new HM_NAMESPACE::hash_map<uint32, LocalizedQuest>[langid];
+    m_NpcTexts = new HM_NAMESPACE::hash_map<uint32, LocalizedNpcText>[langid];
+    m_Items = new HM_NAMESPACE::hash_map<uint32, LocalizedItem>[langid];
+    m_ItemPages = new HM_NAMESPACE::hash_map<uint32, LocalizedItemPage>[langid];
+    m_WorldStrings = new HM_NAMESPACE::hash_map<uint32, LocalizedWorldStringTable>[langid];
+    m_WorldBroadCast = new HM_NAMESPACE::hash_map<uint32, LocalizedWorldBroadCast>[langid];
+    m_WorldMapInfo = new HM_NAMESPACE::hash_map<uint32, LocalizedWorldMapInfo>[langid];
 
-	/************************************************************************/
-	/* Creature Names                                                       */
-	/************************************************************************/
-	{
-		LocalizedCreatureName cn;
+    /************************************************************************/
+    /* Creature Names                                                       */
+    /************************************************************************/
+    {
+        LocalizedCreatureName cn;
         std::string str;
-		uint32 entry;
-		Field * f;
-		uint32 lid;
+        uint32 entry;
+        Field * f;
+        uint32 lid;
 
-		result = WorldDatabase.Query("SELECT * FROM creature_names_localized");
-		if(result)
-		{
-			do 
-			{
-				f = result->Fetch();
+        result = WorldDatabase.Query("SELECT * FROM creature_names_localized");
+        if (result)
+        {
+            do
+            {
+                f = result->Fetch();
                 str = std::string(f[1].GetString());
-				entry = f[0].GetUInt32();
+                entry = f[0].GetUInt32();
 
-				lid = GetLanguageId(str);
-				if(lid == 0)
-					continue;		// no loading enus stuff.. lawl
+                lid = GetLanguageId(str);
+                if (lid == 0)
+                    continue;		// no loading enus stuff.. lawl
 
-				cn.Name = strdup(f[2].GetString());
-				cn.SubName = strdup(f[3].GetString());
+                cn.Name = strdup(f[2].GetString());
+                cn.SubName = strdup(f[3].GetString());
                 m_CreatureNames[lid].insert(std::make_pair(entry, cn));
-			} while(result->NextRow());
-			delete result;
-		}
-	}
+            }
+            while (result->NextRow());
+            delete result;
+        }
+    }
 
-	/************************************************************************/
-	/* GameObject Names                                                     */
-	/************************************************************************/
-	{
-		LocalizedGameObjectName gn;
+    /************************************************************************/
+    /* GameObject Names                                                     */
+    /************************************************************************/
+    {
+        LocalizedGameObjectName gn;
         std::string str;
-		uint32 entry;
-		Field * f;
-		uint32 lid;
+        uint32 entry;
+        Field * f;
+        uint32 lid;
 
-		result = WorldDatabase.Query("SELECT * FROM gameobject_names_localized");
-		if(result)
-		{
-			do 
-			{
-				f = result->Fetch();
+        result = WorldDatabase.Query("SELECT * FROM gameobject_names_localized");
+        if (result)
+        {
+            do
+            {
+                f = result->Fetch();
                 str = std::string(f[1].GetString());
-				entry = f[0].GetUInt32();
+                entry = f[0].GetUInt32();
 
-				lid = GetLanguageId(str);
-				if(lid == 0)
-					continue;		// no loading enus stuff.. lawl
+                lid = GetLanguageId(str);
+                if (lid == 0)
+                    continue;		// no loading enus stuff.. lawl
 
-				gn.Name = strdup(f[2].GetString());
+                gn.Name = strdup(f[2].GetString());
                 m_GameObjectNames[lid].insert(std::make_pair(entry, gn));
-			} while(result->NextRow());
-			delete result;
-		}
-	}
+            }
+            while (result->NextRow());
+            delete result;
+        }
+    }
 
-	/************************************************************************/
-	/* Items                                                                */
-	/************************************************************************/
-	{
-		LocalizedItem it;
+    /************************************************************************/
+    /* Items                                                                */
+    /************************************************************************/
+    {
+        LocalizedItem it;
         std::string str;
-		uint32 entry;
-		Field * f;
-		uint32 lid;
+        uint32 entry;
+        Field * f;
+        uint32 lid;
 
-		result = WorldDatabase.Query("SELECT * FROM items_localized");
-		if(result)
-		{
-			do 
-			{
-				f = result->Fetch();
+        result = WorldDatabase.Query("SELECT * FROM items_localized");
+        if (result)
+        {
+            do
+            {
+                f = result->Fetch();
                 str = std::string(f[1].GetString());
-				entry = f[0].GetUInt32();
+                entry = f[0].GetUInt32();
 
-				lid = GetLanguageId(str);
-				if(lid == 0)
-					continue;		// no loading enus stuff.. lawl
+                lid = GetLanguageId(str);
+                if (lid == 0)
+                    continue;		// no loading enus stuff.. lawl
 
-				if(m_Items[lid].find(entry) != m_Items[lid].end())
-				{
-					continue;
-				}
+                if (m_Items[lid].find(entry) != m_Items[lid].end())
+                {
+                    continue;
+                }
 
-				it.Name = strdup(f[2].GetString());
-				it.Description = strdup(f[3].GetString());
+                it.Name = strdup(f[2].GetString());
+                it.Description = strdup(f[3].GetString());
                 m_Items[lid].insert(std::make_pair(entry, it));
-			} while(result->NextRow());
-			delete result;
-		}
-	}
+            }
+            while (result->NextRow());
+            delete result;
+        }
+    }
 
-	/************************************************************************/
-	/* Quests                                                               */
-	/************************************************************************/
-	{
-		LocalizedQuest q;
+    /************************************************************************/
+    /* Quests                                                               */
+    /************************************************************************/
+    {
+        LocalizedQuest q;
         std::string str;
-		uint32 entry;
-		Field * f;
-		uint32 lid;
+        uint32 entry;
+        Field * f;
+        uint32 lid;
 
-		result = WorldDatabase.Query("SELECT * FROM quests_localized");
-		if(result)
-		{
-			do 
-			{
-				f = result->Fetch();
+        result = WorldDatabase.Query("SELECT * FROM quests_localized");
+        if (result)
+        {
+            do
+            {
+                f = result->Fetch();
                 str = std::string(f[1].GetString());
-				entry = f[0].GetUInt32();
+                entry = f[0].GetUInt32();
 
-				lid = GetLanguageId(str);
-				if(lid == 0)
-					continue;		// no loading enus stuff.. lawl
+                lid = GetLanguageId(str);
+                if (lid == 0)
+                    continue;		// no loading enus stuff.. lawl
 
-				q.Title = strdup(f[2].GetString());
-				q.Details = strdup(f[3].GetString());
-				q.Objectives = strdup(f[4].GetString());
-				q.CompletionText = strdup(f[5].GetString());
-				q.IncompleteText = strdup(f[6].GetString());
-				q.EndText = strdup(f[7].GetString());
-				q.ObjectiveText[0] = strdup(f[8].GetString());
-				q.ObjectiveText[1] = strdup(f[9].GetString());
-				q.ObjectiveText[2] = strdup(f[10].GetString());
-				q.ObjectiveText[3] = strdup(f[11].GetString());
-				
+                q.Title = strdup(f[2].GetString());
+                q.Details = strdup(f[3].GetString());
+                q.Objectives = strdup(f[4].GetString());
+                q.CompletionText = strdup(f[5].GetString());
+                q.IncompleteText = strdup(f[6].GetString());
+                q.EndText = strdup(f[7].GetString());
+                q.ObjectiveText[0] = strdup(f[8].GetString());
+                q.ObjectiveText[1] = strdup(f[9].GetString());
+                q.ObjectiveText[2] = strdup(f[10].GetString());
+                q.ObjectiveText[3] = strdup(f[11].GetString());
+
                 m_Quests[lid].insert(std::make_pair(entry, q));
-			} while(result->NextRow());
-			delete result;
-		}
-	}
+            }
+            while (result->NextRow());
+            delete result;
+        }
+    }
 
-	/************************************************************************/
-	/* NPC Texts                                                            */
-	/************************************************************************/
-	{
-		LocalizedNpcText nt;
+    /************************************************************************/
+    /* NPC Texts                                                            */
+    /************************************************************************/
+    {
+        LocalizedNpcText nt;
         std::string str;
-		uint32 entry;
-		Field * f;
-		uint32 lid;
-		uint32 counter;
+        uint32 entry;
+        Field * f;
+        uint32 lid;
+        uint32 counter;
 
-		result = WorldDatabase.Query("SELECT * FROM npc_text_localized");
-		if(result)
-		{
-			do 
-			{
-				f = result->Fetch();
+        result = WorldDatabase.Query("SELECT * FROM npc_text_localized");
+        if (result)
+        {
+            do
+            {
+                f = result->Fetch();
                 str = std::string(f[1].GetString());
-				entry = f[0].GetUInt32();
+                entry = f[0].GetUInt32();
 
-				lid = GetLanguageId(str);
-				if(lid == 0)
-					continue;		// no loading enus stuff.. lawl
+                lid = GetLanguageId(str);
+                if (lid == 0)
+                    continue;		// no loading enus stuff.. lawl
 
-				counter = 2;
-				for(uint32 i = 0; i < 8; ++i)
-				{
-					nt.Texts[i][0] = strdup(f[counter++].GetString());
-					nt.Texts[i][1] = strdup(f[counter++].GetString());
-				}
+                counter = 2;
+                for (uint32 i = 0; i < 8; ++i)
+                {
+                    nt.Texts[i][0] = strdup(f[counter++].GetString());
+                    nt.Texts[i][1] = strdup(f[counter++].GetString());
+                }
 
                 m_NpcTexts[lid].insert(std::make_pair(entry, nt));
-			} while(result->NextRow());
-			delete result;
-		}
-	}
-	/************************************************************************/
-	/* Item Pages                                                           */
-	/************************************************************************/
-	{
-		LocalizedItemPage nt;
+            }
+            while (result->NextRow());
+            delete result;
+        }
+    }
+    /************************************************************************/
+    /* Item Pages                                                           */
+    /************************************************************************/
+    {
+        LocalizedItemPage nt;
         std::string str;
-		uint32 entry;
-		Field * f;
-		uint32 lid;
+        uint32 entry;
+        Field * f;
+        uint32 lid;
 
-		result = WorldDatabase.Query("SELECT * FROM itempages_localized");
-		if(result)
-		{
-			do 
-			{
-				f = result->Fetch();
+        result = WorldDatabase.Query("SELECT * FROM itempages_localized");
+        if (result)
+        {
+            do
+            {
+                f = result->Fetch();
                 str = std::string(f[1].GetString());
-				entry = f[0].GetUInt32();
+                entry = f[0].GetUInt32();
 
-				lid = GetLanguageId(str);
-				if(lid == 0)
-					continue;		// no loading enus stuff.. lawl
+                lid = GetLanguageId(str);
+                if (lid == 0)
+                    continue;		// no loading enus stuff.. lawl
 
-				nt.Text = strdup(f[2].GetString());
+                nt.Text = strdup(f[2].GetString());
                 m_ItemPages[lid].insert(std::make_pair(entry, nt));
-			} while(result->NextRow());
-			delete result;
-		}
-	}
+            }
+            while (result->NextRow());
+            delete result;
+        }
+    }
 
-	/************************************************************************/
-	/* World Common Message                                                 */
-	/************************************************************************/
-	{
-		LocalizedWorldStringTable nt;
+    /************************************************************************/
+    /* World Common Message                                                 */
+    /************************************************************************/
+    {
+        LocalizedWorldStringTable nt;
         std::string str;
-		uint32 entry;
-		Field * f;
-		uint32 lid;
+        uint32 entry;
+        Field * f;
+        uint32 lid;
 
-		result = WorldDatabase.Query("SELECT * FROM worldstring_tables_localized");
-		if(result)
-		{
-			do 
-			{
-				f = result->Fetch();
+        result = WorldDatabase.Query("SELECT * FROM worldstring_tables_localized");
+        if (result)
+        {
+            do
+            {
+                f = result->Fetch();
                 str = std::string(f[1].GetString());
-				entry = f[0].GetUInt32();
+                entry = f[0].GetUInt32();
 
-				lid = GetLanguageId(str);
-				if(lid == 0)
-					continue;
+                lid = GetLanguageId(str);
+                if (lid == 0)
+                    continue;
 
-				nt.Text = strdup(f[2].GetString());
+                nt.Text = strdup(f[2].GetString());
                 m_WorldStrings[lid].insert(std::make_pair(entry, nt));
-			} while(result->NextRow());
-			delete result;
-		}
-	}
+            }
+            while (result->NextRow());
+            delete result;
+        }
+    }
 
-	/************************************************************************/
-	/* World BroadCast Messages                                             */
-	/************************************************************************/
-	{
-		LocalizedWorldBroadCast nt;
+    /************************************************************************/
+    /* World BroadCast Messages                                             */
+    /************************************************************************/
+    {
+        LocalizedWorldBroadCast nt;
         std::string str;
-		uint32 entry;
-		Field * f;
-		uint32 lid;
+        uint32 entry;
+        Field * f;
+        uint32 lid;
 
-		result = WorldDatabase.Query("SELECT * FROM worldbroadcast_localized");
-		if(result)
-		{
-			do 
-			{
-				f = result->Fetch();
+        result = WorldDatabase.Query("SELECT * FROM worldbroadcast_localized");
+        if (result)
+        {
+            do
+            {
+                f = result->Fetch();
                 str = std::string(f[1].GetString());
-				entry = f[0].GetUInt32();
+                entry = f[0].GetUInt32();
 
-				lid = GetLanguageId(str);
-				if(lid == 0)
-					continue;
+                lid = GetLanguageId(str);
+                if (lid == 0)
+                    continue;
 
-				nt.Text = strdup(f[2].GetString());
+                nt.Text = strdup(f[2].GetString());
                 m_WorldBroadCast[lid].insert(std::make_pair(entry, nt));
-			} while(result->NextRow());
-			delete result;
-		}
-	}
+            }
+            while (result->NextRow());
+            delete result;
+        }
+    }
 
-	/************************************************************************/
-	/* World MapInfo Entry Name                                             */
-	/************************************************************************/
-	{
-		LocalizedWorldMapInfo nt;
+    /************************************************************************/
+    /* World MapInfo Entry Name                                             */
+    /************************************************************************/
+    {
+        LocalizedWorldMapInfo nt;
         std::string str;
-		uint32 entry;
-		Field * f;
-		uint32 lid;
+        uint32 entry;
+        Field * f;
+        uint32 lid;
 
-		result = WorldDatabase.Query("SELECT * FROM worldmap_info_localized");
-		if(result)
-		{
-			do 
-			{
-				f = result->Fetch();
+        result = WorldDatabase.Query("SELECT * FROM worldmap_info_localized");
+        if (result)
+        {
+            do
+            {
+                f = result->Fetch();
                 str = std::string(f[1].GetString());
-				entry = f[0].GetUInt32();
+                entry = f[0].GetUInt32();
 
-				lid = GetLanguageId(str);
-				if(lid == 0)
-					continue;
+                lid = GetLanguageId(str);
+                if (lid == 0)
+                    continue;
 
-				nt.Text = strdup(f[2].GetString());
+                nt.Text = strdup(f[2].GetString());
                 m_WorldMapInfo[lid].insert(std::make_pair(entry, nt));
-			} while(result->NextRow());
-			delete result;
-		}
-	}
+            }
+            while (result->NextRow());
+            delete result;
+        }
+    }
 
-	/************************************************************************/
-	/* Apply all the language bindings.                                     */
-	/************************************************************************/
+    /************************************************************************/
+    /* Apply all the language bindings.                                     */
+    /************************************************************************/
     for (std::map<std::string, std::string>::iterator itr = bound_languages.begin(); itr != bound_languages.end(); ++itr)
-	{
-		uint32 source_language_id = GetLanguageId(itr->second);
-		uint32 dest_language_id = GetLanguageId(itr->first);
-		if(source_language_id==0 || dest_language_id == 0)
-		{
-			Log.Error("LocalizationMgr", "Invalid locale conversion string specified: %u->%u (%s->%s)", source_language_id, dest_language_id, itr->second.c_str(), itr->first.c_str());
-			continue;
-		}
+    {
+        uint32 source_language_id = GetLanguageId(itr->second);
+        uint32 dest_language_id = GetLanguageId(itr->first);
+        if (source_language_id == 0 || dest_language_id == 0)
+        {
+            Log.Error("LocalizationMgr", "Invalid locale conversion string specified: %u->%u (%s->%s)", source_language_id, dest_language_id, itr->second.c_str(), itr->first.c_str());
+            continue;
+        }
 
-		/* duplicate the hashmaps (we can save the pointers here) */
-		CopyHashMap<LocalizedItem>(&m_Items[source_language_id], &m_Items[dest_language_id]);
-		CopyHashMap<LocalizedCreatureName>(&m_CreatureNames[source_language_id], &m_CreatureNames[dest_language_id]);
-		CopyHashMap<LocalizedGameObjectName>(&m_GameObjectNames[source_language_id], &m_GameObjectNames[dest_language_id]);
-		CopyHashMap<LocalizedItemPage>(&m_ItemPages[source_language_id], &m_ItemPages[dest_language_id]);
-		CopyHashMap<LocalizedQuest>(&m_Quests[source_language_id], &m_Quests[dest_language_id]);
-		CopyHashMap<LocalizedNpcText>(&m_NpcTexts[source_language_id], &m_NpcTexts[dest_language_id]);
-		CopyHashMap<LocalizedWorldStringTable>(&m_WorldStrings[source_language_id], &m_WorldStrings[dest_language_id]);
-		CopyHashMap<LocalizedWorldBroadCast>(&m_WorldBroadCast[source_language_id], &m_WorldBroadCast[dest_language_id]);
-		CopyHashMap<LocalizedWorldMapInfo>(&m_WorldMapInfo[source_language_id], &m_WorldMapInfo[dest_language_id]);
-	}
+        /* duplicate the hashmaps (we can save the pointers here) */
+        CopyHashMap<LocalizedItem>(&m_Items[source_language_id], &m_Items[dest_language_id]);
+        CopyHashMap<LocalizedCreatureName>(&m_CreatureNames[source_language_id], &m_CreatureNames[dest_language_id]);
+        CopyHashMap<LocalizedGameObjectName>(&m_GameObjectNames[source_language_id], &m_GameObjectNames[dest_language_id]);
+        CopyHashMap<LocalizedItemPage>(&m_ItemPages[source_language_id], &m_ItemPages[dest_language_id]);
+        CopyHashMap<LocalizedQuest>(&m_Quests[source_language_id], &m_Quests[dest_language_id]);
+        CopyHashMap<LocalizedNpcText>(&m_NpcTexts[source_language_id], &m_NpcTexts[dest_language_id]);
+        CopyHashMap<LocalizedWorldStringTable>(&m_WorldStrings[source_language_id], &m_WorldStrings[dest_language_id]);
+        CopyHashMap<LocalizedWorldBroadCast>(&m_WorldBroadCast[source_language_id], &m_WorldBroadCast[dest_language_id]);
+        CopyHashMap<LocalizedWorldMapInfo>(&m_WorldMapInfo[source_language_id], &m_WorldMapInfo[dest_language_id]);
+    }
 }
 
 #define MAKE_LOOKUP_FUNCTION(t, hm, fn) t * LocalizationMgr::fn(uint32 id, uint32 language) { \

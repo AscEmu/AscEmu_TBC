@@ -1,7 +1,8 @@
 /*
- * ArcEmu MMORPG Server
- * Copyright (C) 2005-2007 Ascent Team <http://www.ascentemu.com/>
+ * AscEmu Framework based on ArcEmu MMORPG Server
+ * Copyright (C) 2014-2015 AscEmu Team <http://www.ascemu.org/>
  * Copyright (C) 2008 <http://www.ArcEmu.org/>
+ * Copyright (C) 2005-2007 Ascent Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -10,12 +11,11 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #ifndef _WORDFILTER_H
@@ -23,27 +23,27 @@
 
 struct WordFilterMatch
 {
-	char * szMatch;
-	char * szIgnoreMatch;
-	void* pCompiledExpression;
-	void* pCompiledIgnoreExpression;
-	void* pCompiledExpressionOptions;
-	void* pCompiledIgnoreExpressionOptions;
-	int iType;
+    char * szMatch;
+    char * szIgnoreMatch;
+    void* pCompiledExpression;
+    void* pCompiledIgnoreExpression;
+    void* pCompiledExpressionOptions;
+    void* pCompiledIgnoreExpressionOptions;
+    int iType;
 };
 
 class WordFilter
 {
-	WordFilterMatch ** m_filters;
-	size_t m_filterCount;
+    WordFilterMatch ** m_filters;
+    size_t m_filterCount;
 
-	bool CompileExpression(const char * szExpression, void** pOutput, void** pExtraOutput);
+    bool CompileExpression(const char * szExpression, void** pOutput, void** pExtraOutput);
 
-public:
-	WordFilter() : m_filters(NULL),m_filterCount(0) {}
-	~WordFilter();
+    public:
+    WordFilter() : m_filters(NULL), m_filterCount(0) {}
+    ~WordFilter();
 
-	void Load(const char * szTableName);
+    void Load(const char * szTableName);
     bool Parse(std::string& sMessage, bool bAllowReplace = true);
 };
 

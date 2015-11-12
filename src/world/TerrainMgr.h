@@ -1,7 +1,8 @@
 /*
- * ArcEmu MMORPG Server
- * Copyright (C) 2005-2007 Ascent Team <http://www.ascentemu.com/>
- * Copyright (C) 2008-2010 <http://www.ArcEmu.org/>
+ * AscEmu Framework based on ArcEmu MMORPG Server
+ * Copyright (C) 2014-2015 AscEmu Team <http://www.ascemu.org/>
+ * Copyright (C) 2008 <http://www.ArcEmu.org/>
+ * Copyright (C) 2005-2007 Ascent Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -10,12 +11,11 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #ifndef _TERRAIN_H
@@ -41,198 +41,198 @@ class TerrainTile;
 
 struct TileMapHeader
 {
-	uint32 mapMagic;
-	uint32 versionMagic;
-	uint32 buildMagic;
-	uint32 areaMapOffset;
-	uint32 areaMapSize;
-	uint32 heightMapOffset;
-	uint32 heightMapSize;
-	uint32 liquidMapOffset;
-	uint32 liquidMapSize;
-	uint32 holesOffset;
-	uint32 holesSize;
+    uint32 mapMagic;
+    uint32 versionMagic;
+    uint32 buildMagic;
+    uint32 areaMapOffset;
+    uint32 areaMapSize;
+    uint32 heightMapOffset;
+    uint32 heightMapSize;
+    uint32 liquidMapOffset;
+    uint32 liquidMapSize;
+    uint32 holesOffset;
+    uint32 holesSize;
 };
 
 struct TileMapAreaHeader
 {
-	uint32 fourcc;
-	uint16 flags;
-	uint16 gridArea;
+    uint32 fourcc;
+    uint16 flags;
+    uint16 gridArea;
 };
 
 struct TileMapHeightHeader
 {
-	uint32 fourcc;
-	uint32 flags;
-	float gridHeight;
-	float gridMaxHeight;
+    uint32 fourcc;
+    uint32 flags;
+    float gridHeight;
+    float gridMaxHeight;
 };
 
 struct TileMapLiquidHeader
 {
-	uint32 fourcc;
-	uint16 flags;
-	uint16 liquidType;
-	uint8 offsetX;
-	uint8 offsetY;
-	uint8 width;
-	uint8 height;
-	float liquidLevel;
+    uint32 fourcc;
+    uint16 flags;
+    uint16 liquidType;
+    uint8 offsetX;
+    uint8 offsetY;
+    uint8 width;
+    uint8 height;
+    float liquidLevel;
 };
 
 class TileMap
 {
-public:
+    public:
 
-	//Area Map
-	uint16 m_area;
-	uint16* m_areaMap;
+    //Area Map
+    uint16 m_area;
+    uint16* m_areaMap;
 
-	//Height Map
-	union
-	{
-		float* m_heightMap8F;
-		uint16* m_heightMap8S;
-		uint8* m_heightMap8B;
-	};
-	union
-	{
-		float* m_heightMap9F;
-		uint16* m_heightMap9S;
-		uint8* m_heightMap9B;
-	};
-	uint32 m_heightMapFlags;
-	float m_heightMapMult;
-	float m_tileHeight;
+    //Height Map
+    union
+    {
+        float* m_heightMap8F;
+        uint16* m_heightMap8S;
+        uint8* m_heightMap8B;
+    };
+    union
+    {
+        float* m_heightMap9F;
+        uint16* m_heightMap9S;
+        uint8* m_heightMap9B;
+    };
+    uint32 m_heightMapFlags;
+    float m_heightMapMult;
+    float m_tileHeight;
 
-	//Liquid Map
-	uint8* m_liquidType;
-	float* m_liquidMap;
-	float m_liquidLevel;
-	uint8 m_liquidOffX;
-	uint8 m_liquidOffY;
-	uint8 m_liquidHeight;
-	uint8 m_liquidWidth;
-	uint16 m_defaultLiquidType;
+    //Liquid Map
+    uint8* m_liquidType;
+    float* m_liquidMap;
+    float m_liquidLevel;
+    uint8 m_liquidOffX;
+    uint8 m_liquidOffY;
+    uint8 m_liquidHeight;
+    uint8 m_liquidWidth;
+    uint16 m_defaultLiquidType;
 
-	TileMap()
-	{
-		m_areaMap = NULL;
-		m_area = 0;
-		m_tileHeight = 0;
-		m_heightMapFlags = 0;
-		m_heightMap8F = NULL;
+    TileMap()
+    {
+        m_areaMap = NULL;
+        m_area = 0;
+        m_tileHeight = 0;
+        m_heightMapFlags = 0;
+        m_heightMap8F = NULL;
         m_heightMap9F = NULL;
-		m_heightMapMult = 1;
+        m_heightMapMult = 1;
 
-		m_liquidType = NULL;
-		m_liquidMap = NULL;
-		m_liquidLevel = 0;
-		m_liquidOffX = 0;
-		m_liquidOffY = 0;
-		m_liquidHeight = 0;
-		m_liquidWidth = 0;
-		m_defaultLiquidType = 0;
-	}
+        m_liquidType = NULL;
+        m_liquidMap = NULL;
+        m_liquidLevel = 0;
+        m_liquidOffX = 0;
+        m_liquidOffY = 0;
+        m_liquidHeight = 0;
+        m_liquidWidth = 0;
+        m_defaultLiquidType = 0;
+    }
 
-	~TileMap()
-	{
-		delete[] m_areaMap;
-		delete[] m_heightMap8F;
-		delete[] m_heightMap9F;
+    ~TileMap()
+    {
+        delete[] m_areaMap;
+        delete[] m_heightMap8F;
+        delete[] m_heightMap9F;
 
-		delete[] m_liquidType;
-		delete[] m_liquidMap;
-	}
+        delete[] m_liquidType;
+        delete[] m_liquidMap;
+    }
 
 
-	void Load(char* filename);
+    void Load(char* filename);
 
-	void LoadLiquidData( FILE* f, TileMapHeader &header );
-	void LoadHeightData( FILE* f, TileMapHeader &header );
-	void LoadAreaData( FILE* f, TileMapHeader &header );
+    void LoadLiquidData(FILE* f, TileMapHeader &header);
+    void LoadHeightData(FILE* f, TileMapHeader &header);
+    void LoadAreaData(FILE* f, TileMapHeader &header);
 
-	float GetHeight(float x, float y);
-	float GetHeightB(float x, float y, int x_int, int y_int);
-	float GetHeightS(float x, float y, int x_int, int y_int);
-	float GetHeightF(float x, float y, int x_int, int y_int);
+    float GetHeight(float x, float y);
+    float GetHeightB(float x, float y, int x_int, int y_int);
+    float GetHeightS(float x, float y, int x_int, int y_int);
+    float GetHeightF(float x, float y, int x_int, int y_int);
 
-	float GetLiquidHeight(float x, float y);
-	uint8 GetLiquidType(float x, float y);
+    float GetLiquidHeight(float x, float y);
+    uint8 GetLiquidType(float x, float y);
 
-	uint32 GetArea(float x, float y);
+    uint32 GetArea(float x, float y);
 };
 
 class TerrainTile
 {
-public:
-	Arcemu::Threading::AtomicCounter m_refs;
+    public:
+    Arcemu::Threading::AtomicCounter m_refs;
 
-	TerrainHolder* m_parent;
-	uint32 m_mapid;
-	int32 m_tx;
-	int32 m_ty;
-	
-	//Children
-	TileMap m_map;
+    TerrainHolder* m_parent;
+    uint32 m_mapid;
+    int32 m_tx;
+    int32 m_ty;
 
-	TerrainTile(TerrainHolder* parent, uint32 mapid, int32 x, int32 y);
-	~TerrainTile();
-	void AddRef() { ++m_refs; }
-	void DecRef() { if (--m_refs == 0) delete this; }
+    //Children
+    TileMap m_map;
 
-	void Load()
-	{
-		char filename[1024];
+    TerrainTile(TerrainHolder* parent, uint32 mapid, int32 x, int32 y);
+    ~TerrainTile();
+    void AddRef() { ++m_refs; }
+    void DecRef() { if (--m_refs == 0) delete this; }
 
-		//Normal map stuff
-		sprintf(filename, "maps/%03u%02u%02u.map", m_mapid, m_tx, m_ty);
-		m_map.Load(filename);
-	}
+    void Load()
+    {
+        char filename[1024];
+
+        //Normal map stuff
+        sprintf(filename, "maps/%03u%02u%02u.map", m_mapid, m_tx, m_ty);
+        m_map.Load(filename);
+    }
 };
 
 class TerrainHolder
 {
     public:
 
-        const bool GetAreaInfo(float x, float y, float z, uint32 &mogp_flags, int32 &adt_id, int32 &root_id, int32 &group_id);
+    const bool GetAreaInfo(float x, float y, float z, uint32 &mogp_flags, int32 &adt_id, int32 &root_id, int32 &group_id);
 
-	    uint32 m_mapid;
-	    TerrainTile* m_tiles[TERRAIN_NUM_TILES][TERRAIN_NUM_TILES];
-	    FastMutex m_lock[TERRAIN_NUM_TILES][TERRAIN_NUM_TILES];
-	    Arcemu::Threading::AtomicCounter m_tilerefs[TERRAIN_NUM_TILES][TERRAIN_NUM_TILES];
+    uint32 m_mapid;
+    TerrainTile* m_tiles[TERRAIN_NUM_TILES][TERRAIN_NUM_TILES];
+    FastMutex m_lock[TERRAIN_NUM_TILES][TERRAIN_NUM_TILES];
+    Arcemu::Threading::AtomicCounter m_tilerefs[TERRAIN_NUM_TILES][TERRAIN_NUM_TILES];
 
-        TerrainHolder(uint32 mapid);
-        ~TerrainHolder();
+    TerrainHolder(uint32 mapid);
+    ~TerrainHolder();
 
-        uint16 GetAreaFlagWithoutAdtId(float x, float y);
-	    TerrainTile* GetTile(float x, float y);
-        TerrainTile* GetTile(int32 tx, int32 ty);
+    uint16 GetAreaFlagWithoutAdtId(float x, float y);
+    TerrainTile* GetTile(float x, float y);
+    TerrainTile* GetTile(int32 tx, int32 ty);
 
 
-        void LoadTile(float x, float y);
+    void LoadTile(float x, float y);
 
-        void LoadTile(int32 tx, int32 ty);
+    void LoadTile(int32 tx, int32 ty);
 
-        void UnloadTile(float x, float y);
+    void UnloadTile(float x, float y);
 
-        void UnloadTile(int32 tx, int32 ty);
+    void UnloadTile(int32 tx, int32 ty);
 
-	    //test
-        float GetADTLandHeight(float x, float y);
+    //test
+    float GetADTLandHeight(float x, float y);
 
-        float GetLandHeight(float x, float y, float z);
+    float GetLandHeight(float x, float y, float z);
 
-        float GetLiquidHeight(float x, float y);
+    float GetLiquidHeight(float x, float y);
 
-        uint8 GetLiquidType(float x, float y);
+    uint8 GetLiquidType(float x, float y);
 
-        uint32 GetAreaFlag(float x, float y);
+    uint32 GetAreaFlag(float x, float y);
 
-        bool GetLiquidInfo(float x, float y, float z, float & liquidlevel, uint32 & liquidtype);
+    bool GetLiquidInfo(float x, float y, float z, float & liquidlevel, uint32 & liquidtype);
 
-        bool InLineOfSight(float x, float y, float z, float x2, float y2, float z2);
+    bool InLineOfSight(float x, float y, float z, float x2, float y2, float z2);
 
 };
 
