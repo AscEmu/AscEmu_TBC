@@ -170,6 +170,27 @@ void oLog::outDebug( const char * str, ... )
     outFile(m_errorFile, buf);
 }
 
+void oLog::logBasic(const char* file, int line, const char* fncname, const char* msg, ...)
+{
+    if (m_normalFile == NULL)
+        return;
+
+    char buf[32768];
+    char message[32768];
+
+    snprintf(message, 32768, "[BSC] %s %s", fncname, msg);
+    //snprintf(message, 32768, "[BSC] %s:%d %s %s", file, line, fncname, msg);
+    va_list ap;
+
+    va_start(ap, msg);
+    vsnprintf(buf, 32768, message, ap);
+    va_end(ap);
+    SetColor(TWHITE);
+    printf("%s\n", buf);
+    SetColor(TNORMAL);
+    outFile(m_normalFile, buf);
+}
+
 void oLog::outMenu( const char * str, ... )
 {
 	va_list ap;

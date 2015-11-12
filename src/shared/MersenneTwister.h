@@ -1,5 +1,6 @@
 /*
- * ArcEmu MMORPG Server
+ * AscEmu Framework based on ArcEmu MMORPG Server
+ * Copyright (C) 2014-2015 AscEmu Team <http://www.ascemu.org>
  * Copyright (C) 2008 <http://www.ArcEmu.org/>
  *
  * This program is free software: you can redistribute it and/or modify
@@ -9,12 +10,11 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #ifndef _RANDOMGEN_H
@@ -32,6 +32,7 @@ SERVER_DECL float RandomFloat();
 SERVER_DECL float RandomFloat(float n);
 SERVER_DECL uint32 RandomUInt();
 SERVER_DECL uint32 RandomUInt(uint32 n);
+SERVER_DECL uint32 RandomUInt(uint32 n1, uint32 n2);
 
 /*************************** RANDOMC.H ***************** 2007-09-22 Agner Fog *
 *
@@ -126,7 +127,8 @@ SERVER_DECL uint32 RandomUInt(uint32 n);
 Define random number generator classes
 ***********************************************************************/
 
-class CRandomMersenne {                // Encapsulate random number generator
+class CRandomMersenne           // Encapsulate random number generator
+{
 #if 0
 	// Define constants for type MT11213A:
 #define MERS_N   351
@@ -152,24 +154,38 @@ class CRandomMersenne {                // Encapsulate random number generator
 #define MERS_B   0x9D2C5680
 #define MERS_C   0xEFC60000
 #endif
-public:
-	CRandomMersenne(uint32 seed) {      // Constructor
-		RandomInit(seed); LastInterval = 0;}
-	void RandomInit(uint32 seed);       // Re-seed
-	void RandomInitByArray(uint32 seeds[], int length); // Seed by more than 32 bits
-	int IRandom (int min, int max);     // Output random integer
-	int IRandomX(int min, int max);     // Output random integer, exact
-	double Random();                    // Output random float
-	uint32 BRandom();                   // Output random bits
-private:
-	void Init0(uint32 seed);            // Basic initialization procedure
-	uint32 mt[MERS_N];                  // State vector
-	int mti;                            // Index into mt
-	uint32 LastInterval;                // Last interval length for IRandomX
-	uint32 RLimit;                      // Rejection limit used by IRandomX
-	enum TArch {LITTLE_ENDIAN1, BIG_ENDIAN1, NONIEEE}; // Definition of architecture
-	TArch Architecture;                 // Conversion to float depends on architecture
-};    
+    public:
 
-#endif
+	    CRandomMersenne(uint32 seed)    // Constructor
+        {
+            RandomInit(seed);
+            LastInterval = 0;
+            RLimit = 0;
+        }
 
+	    void RandomInit(uint32 seed);       // Re-seed
+	    void RandomInitByArray(uint32 seeds[], int length); // Seed by more than 32 bits
+
+	    int IRandom (int min, int max);     // Output random integer
+	    int IRandomX(int min, int max);     // Output random integer, exact
+
+	    double Random();                    // Output random float
+	    uint32 BRandom();                   // Output random bits
+
+    private:
+
+	    void Init0(uint32 seed);            // Basic initialization procedure
+
+	    uint32 mt[MERS_N];                  // State vector
+
+	    int mti;                            // Index into mt
+
+	    uint32 LastInterval;                // Last interval length for IRandomX
+	    uint32 RLimit;                      // Rejection limit used by IRandomX
+
+	    enum TArch {LITTLE_ENDIAN1, BIG_ENDIAN1, NONIEEE}; // Definition of architecture
+
+	    TArch Architecture;                 // Conversion to float depends on architecture
+    };    
+
+#endif //_RANDOMGEN_H

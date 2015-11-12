@@ -143,14 +143,14 @@ PatchMgr::PatchMgr()
         read_fd = open(Buffer3, O_RDONLY);
         if(read_fd < 0)
         {
-            sLog.outError("Cannot open %s", Buffer3);
+            LOG_ERROR("Cannot open %s", Buffer3);
             close(read_fd);
             continue;
         }
 
         if(fstat(read_fd, &sb) < 0)
         {
-            sLog.outError("Cannot stat %s", Buffer3);
+            LOG_ERROR("Cannot stat %s", Buffer3);
             close(read_fd);
             continue;
         }
@@ -304,11 +304,11 @@ bool PatchJob::Update()
 {
     // don't update unless the write buffer is empty
     m_client->BurstBegin();
-    /*if(m_client->writeBuffer.GetSize() != 0)
+    if(m_client->writeBuffer.GetSize() != 0)
     {
         m_client->BurstEnd();
         return true;
-    }*/
+    }
 
     // send 1500 byte chunks
     TransferDataPacket header;

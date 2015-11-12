@@ -22,7 +22,7 @@ set(sources
    Threading/ConditionVariable.cpp
    Threading/Mutex.cpp
    Threading/ThreadPool.cpp
-   arcemu_getopt.cpp
+   ascemu_getopt.cpp
    CoreMemoryAllocator.cpp
    CoreMemoryAllocator_Core.cpp
    CrashHandler.cpp
@@ -34,6 +34,8 @@ set(sources
    MemoryLeaks.cpp
    MersenneTwister.cpp
    PacketLog.cpp
+   PerformanceCounter.cpp
+   SysInfo.cpp
    Util.cpp
 	)
 
@@ -73,8 +75,8 @@ set(headers
    Threading/Threading.h
    Threading/ThreadPool.h
    Threading/ThreadStarter.h
-   arcemu_getopt.h
-   arcemuConfig.h
+   ascemu_getopt.h
+   ascemuConfig.h
    AuthCodes.h
    ByteBuffer.h
    CallBack.h
@@ -98,6 +100,7 @@ set(headers
    MersenneTwister.h
    New-Bytebuffer.h
    PacketLog.h
+   PerformanceCounter.hpp
    PreallocatedQueue.h
    RC4Engine.h
    RealmPacket.h
@@ -106,6 +109,7 @@ set(headers
    StackBuffer.h
    StackWalker.h
    Storage.h
+   SysInfo.hpp
    Util.h
    WorldPacket.h
    WoWGuid.h

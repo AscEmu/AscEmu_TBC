@@ -69,8 +69,7 @@ public:
     void OnCombatStart(Unit* mTarget)
     {
       CastTime();
-      _unit->SendChatMessage(CHAT_MSG_MONSTER_YELL, LANG_UNIVERSAL, "If you will not cease this foolish quest, then you will die!");
-      _unit->PlaySoundToSet(10271);
+      _unit->SendScriptTextChatMessage(3563);   // If you will not cease this foolish quest, then you will die!
       RegisterAIUpdateEvent(_unit->GetUInt32Value(UNIT_FIELD_BASEATTACKTIME));
     }
 
@@ -81,26 +80,20 @@ public:
    }
 
    void OnTargetDied(Unit* mTarget)
-    {
-      if(_unit->GetHealthPct() > 0)
-      {
-         uint32 sound = 0;
-         char *text;
-         switch(RandomUInt(1))
-         {
-         case 0:
-            sound = 10271;
-            text = "I told you it was a fool's quest!";
-            break;
-         case 1:
-            sound = 10271;
-            text = "Leaving so soon?";
-            break;
-         }
-         _unit->PlaySoundToSet(sound);
-         _unit->SendChatMessage(CHAT_MSG_MONSTER_YELL, LANG_UNIVERSAL, text);
-      }
-    }
+   {
+       if (_unit->GetHealthPct() > 0)
+       {
+           switch (RandomUInt(1))
+           {
+               case 0:
+                   _unit->SendScriptTextChatMessage(3565);  // I told you it was a fool's quest!
+                   break;
+               case 1:
+                   _unit->SendScriptTextChatMessage(3566);  // Leaving so soon?
+                   break;
+           }
+       }
+   }
 
     void OnCombatStop(Unit *mTarget)
     {
@@ -110,12 +103,11 @@ public:
         RemoveAIUpdateEvent();
     }
 
-    void OnDied(Unit * mKiller)
+    void OnDied(Unit* mKiller)
     {
-      CastTime();
-      _unit->SendChatMessage(CHAT_MSG_MONSTER_YELL, LANG_UNIVERSAL, "Time ... is on our side.");
-      _unit->PlaySoundToSet(10271);
-       RemoveAIUpdateEvent();
+        CastTime();
+        _unit->SendScriptTextChatMessage(3567); // Time... is on our side.
+        RemoveAIUpdateEvent();
     }
 
     void AIUpdate()

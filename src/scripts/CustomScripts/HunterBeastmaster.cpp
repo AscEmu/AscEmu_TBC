@@ -64,6 +64,8 @@ public:
 		if(Plr->getClass() != HUNTER)
 		{
 			SendQuickMenu(200016);
+			Plr->BroadcastMessage("You are not a hunter!");
+			Plr->Gossip_Complete();
 			return;
 		}
 
