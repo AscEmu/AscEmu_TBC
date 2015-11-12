@@ -5,10 +5,9 @@ if(NOT BUILD_EVENTSCRIPTS)
   return()
 endif(NOT BUILD_EVENTSCRIPTS)
 
-project(EventScripts)
+PROJECT(EventScripts)
 
 file(GLOB sources_localdir *.cpp *.h)
-
 
 set(ascemu_eventscripts_SRCS
   ${ascemu_eventscripts_SRCS}

@@ -1,3 +1,5 @@
+# Copyright (C) 2014-2015 AscEmu Team <http://www.ascemu.org>
+
 if(NOT BUILD_CUSTOMSCRIPTS)
   message("\tCustomScripts was skipped because BUILD_CUSTOMSCRIPTS is unchecked.")
   return()
