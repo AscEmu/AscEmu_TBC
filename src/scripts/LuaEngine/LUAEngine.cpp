@@ -1143,12 +1143,12 @@ public:
 		if(pObject->GetTypeId() == TYPEID_UNIT)
         {
            if( m_unit_gossip_binding->Functions[GOSSIP_EVENT_ON_TALK] != NULL )
-               g_engine->OnGossipEvent(pObject, m_unit_gossip_binding->Functions[GOSSIP_EVENT_ON_TALK], GOSSIP_EVENT_ON_TALK, Plr, NULL, NULL, 0);
+               g_engine->OnGossipEvent(pObject, m_unit_gossip_binding->Functions[GOSSIP_EVENT_ON_TALK], GOSSIP_EVENT_ON_TALK, Plr, 0, 0, nullptr);
        }
         else if(pObject->GetTypeId() == TYPEID_ITEM)
         {
             if( m_item_gossip_binding->Functions[GOSSIP_EVENT_ON_TALK] != NULL )
-                g_engine->OnGossipEvent(pObject, m_item_gossip_binding->Functions[GOSSIP_EVENT_ON_TALK], GOSSIP_EVENT_ON_TALK, Plr, NULL, NULL, 0);
+                g_engine->OnGossipEvent(pObject, m_item_gossip_binding->Functions[GOSSIP_EVENT_ON_TALK], GOSSIP_EVENT_ON_TALK, Plr, 0, 0, nullptr);
         }
 	}
 
@@ -1176,17 +1176,17 @@ public:
 		if(pObject->GetTypeId() == TYPEID_UNIT)
         {
 		    if( m_unit_gossip_binding->Functions[GOSSIP_EVENT_ON_END] != NULL )
-                g_engine->OnGossipEvent(pObject, m_unit_gossip_binding->Functions[GOSSIP_EVENT_ON_END], GOSSIP_EVENT_ON_END, Plr, NULL, NULL, 0);
+                g_engine->OnGossipEvent(pObject, m_unit_gossip_binding->Functions[GOSSIP_EVENT_ON_END], GOSSIP_EVENT_ON_END, Plr, 0, 0, nullptr);
         }
         else if(pObject->GetTypeId() == TYPEID_ITEM)
         {
             if( m_item_gossip_binding->Functions[GOSSIP_EVENT_ON_END] != NULL )
-                g_engine->OnGossipEvent(pObject, m_item_gossip_binding->Functions[GOSSIP_EVENT_ON_END], GOSSIP_EVENT_ON_END, Plr, NULL, NULL, 0);
+                g_engine->OnGossipEvent(pObject, m_item_gossip_binding->Functions[GOSSIP_EVENT_ON_END], GOSSIP_EVENT_ON_END, Plr, 0, 0, nullptr);
         }
         else if(pObject->GetTypeId() == TYPEID_GAMEOBJECT)
         {
             if( m_go_gossip_binding->Functions[GOSSIP_EVENT_ON_END] != NULL )
-                g_engine->OnGossipEvent(pObject, m_go_gossip_binding->Functions[GOSSIP_EVENT_ON_END], GOSSIP_EVENT_ON_END, Plr, NULL, NULL, 0);
+                g_engine->OnGossipEvent(pObject, m_go_gossip_binding->Functions[GOSSIP_EVENT_ON_END], GOSSIP_EVENT_ON_END, Plr, 0, 0, nullptr);
         }
 	}
 
@@ -1215,7 +1215,7 @@ public:
 	void OnQuestCancel(Player* mTarget)
 	{
 		if( m_binding->Functions[QUEST_EVENT_ON_CANCEL] != NULL )
-			g_engine->OnQuestEvent( mTarget, m_binding->Functions[QUEST_EVENT_ON_CANCEL], NULL, QUEST_EVENT_ON_CANCEL, mTarget, 0 , 0 );
+			g_engine->OnQuestEvent( mTarget, m_binding->Functions[QUEST_EVENT_ON_CANCEL], 0, QUEST_EVENT_ON_CANCEL, mTarget, 0 , 0 );
 	}
 	void OnGameObjectActivate(uint32 entry, Player* mTarget, QuestLogEntry *qLogEntry)
 	{
