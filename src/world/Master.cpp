@@ -176,45 +176,6 @@ bool Master::Run(int argc, char ** argv)
     sLog.outErrorSilent(BANNER, BUILD_HASH_STR, CONFIG, PLATFORM_TEXT, ARCH); // Echo off.
     sLog.outErrorSilent("========================================================"); // Echo off.
 
-    sLog.outBasic("Copyright (C) 2014 - 2015 AscEmu. http://www.ascemu.org/");
-    sLog.outBasic("This program is free software: you can redistribute it and/or modify");
-    sLog.outBasic("it under the terms of the GNU Affero General Public License as published by");
-    sLog.outBasic("the Free Software Foundation, either version 3 of the License, or");
-    sLog.outBasic("any later version.");
-    sLog.outBasic("This program is distributed in the hope that it will be useful,");
-    sLog.outBasic("but WITHOUT ANY WARRANTY; without even the implied warranty of");
-    sLog.outBasic("MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the");
-    sLog.outBasic("GNU Affero General Public License for more details.");
-    sLog.outBasic("                                                ");
-    sLog.outBasic("                     ``````                     ");
-    sLog.outBasic("    AscEmu!        `/o/::-:/-                   ");
-    sLog.outBasic("                   oho/-.-:yN-                  ");
-    sLog.outBasic("                    os+/-.:::                   ");
-    sLog.outBasic("                    :ysyoo+:`                   ");
-    sLog.outBasic("                    `ohdys/.                    ");
-    sLog.outBasic("                     oyho/-`   ``               ");
-    sLog.outBasic("                   `shyo+:./ssmdsyo:`           ");
-    sLog.outBasic("                    .shss+:yNMMNNMNmms.         ");
-    sLog.outBasic("                    :ysss+:mNMMMMNNmmds.        ");
-    sLog.outBasic("                `-//sssoo/:NMNMMMNMNNdy-        ");
-    sLog.outBasic("    -`/`       `omhyyhyyyshNMMNNNMMMNmy:        ");
-    sLog.outBasic("    :/::-`     `sdmdmmNMNMMMMMMNMNNNNms-        ");
-    sLog.outBasic("     /+++/-.....shdmmNMMNMMMMMMMMMNNNd+         ");
-    sLog.outBasic("     ./+oshyhhhddmhdmNMMMMMMMMMMMMNNds.         ");
-    sLog.outBasic("       `:/:.`````.:+ymmNMMNMMMNMMNNd/           ");
-    sLog.outBasic("                     -+shmNNMMMNmhy/            ");
-    sLog.outBasic("                          `..-ods:.             ");
-    sLog.outBasic("                               o:.`             ");
-    sLog.outBasic("                               :-.              ");
-    sLog.outBasic("                              `/-...            ");
-    sLog.outBasic("    Introducing the emu!     --``-/:`           ");
-    sLog.outBasic("                           .:/+:-.-::.          ");
-    sLog.outBasic("                          `.-///:-.`            ");
-    sLog.outBasic(" Website: http://www.AscEmu.org                 ");
-    sLog.outBasic(" Forums: http://www.board.ascemu.org/           ");
-    sLog.outBasic(" GIT: https://github.com/AscEmu/AscEmu_TBC      ");
-    sLog.outBasic(" Have fun!                                      ");
-
     if (do_version)
         return true;
 
