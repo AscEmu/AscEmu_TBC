@@ -211,8 +211,7 @@ public:
     void OnCombatStart(Unit* mTarget)
     {
       CastTime();
-      _unit->SendChatMessage(CHAT_MSG_MONSTER_YELL, LANG_UNIVERSAL, "So be it ... you have been warned.");
-      _unit->PlaySoundToSet(10271);
+      _unit->SendScriptTextChatMessage(3585);       // So be it... you have been warned.
       RegisterAIUpdateEvent(_unit->GetUInt32Value(UNIT_FIELD_BASEATTACKTIME));
     }
 
@@ -223,26 +222,20 @@ public:
    }
 
    void OnTargetDied(Unit* mTarget)
-    {
-      if(_unit->GetHealthPct() > 0)
-      {
-         uint32 sound = 0;
-         char *text;
-         switch(RandomUInt(1))
-         {
-         case 0:
-            sound = 10271;
-            text = "You should have left when you had the chance.";
-            break;
-         case 1:
-            sound = 10271;
-            text = "Your days are done.";
-            break;
-         }
-         _unit->PlaySoundToSet(sound);
-         _unit->SendChatMessage(CHAT_MSG_MONSTER_YELL, LANG_UNIVERSAL, text);
-      }
-    }
+   {
+       if (_unit->GetHealthPct() > 0)
+       {
+           switch (RandomUInt(1))
+           {
+               case 0:
+                   _unit->SendScriptTextChatMessage(3587);  // You should have left when you had the chance.
+                   break;
+               case 1:
+                   _unit->SendScriptTextChatMessage(3588);  // Your days are done.
+                   break;
+           }
+       }
+   }
 
     void OnCombatStop(Unit *mTarget)
     {
@@ -252,11 +245,10 @@ public:
         RemoveAIUpdateEvent();
     }
 
-    void OnDied(Unit * mKiller)
+    void OnDied(Unit* mKiller)
     {
       CastTime();
-      _unit->SendChatMessage(CHAT_MSG_MONSTER_YELL, LANG_UNIVERSAL, "My death means ... little.");
-      _unit->PlaySoundToSet(10271);
+      _unit->SendScriptTextChatMessage(3589);  // My death means... little.
        RemoveAIUpdateEvent();
     }
 
@@ -361,8 +353,7 @@ public:
     void OnCombatStart(Unit* mTarget)
     {
       CastTime();
-      _unit->SendChatMessage(CHAT_MSG_MONSTER_YELL, LANG_UNIVERSAL, "Let us see what fate lays in store...");
-      _unit->PlaySoundToSet(10271);
+      _unit->SendScriptTextChatMessage(3569);       // Let us see what fate has in store....
       RegisterAIUpdateEvent(_unit->GetUInt32Value(UNIT_FIELD_BASEATTACKTIME));
     }
 
@@ -373,26 +364,20 @@ public:
    }
 
    void OnTargetDied(Unit* mTarget)
-    {
-      if(_unit->GetHealthPct() > 0)
-      {
-         uint32 sound = 0;
-         char *text;
-         switch(RandomUInt(1))
-         {
-         case 0:
-            sound = 10271;
-            text = "No one can stop us! No one!";
-            break;
-         case 1:
-            sound = 10271;
-            text = "One less obstacle in our way!";
-            break;
-         }
-         _unit->PlaySoundToSet(sound);
-         _unit->SendChatMessage(CHAT_MSG_MONSTER_YELL, LANG_UNIVERSAL, text);
-      }
-    }
+   {
+       if (_unit->GetHealthPct() > 0)
+       {
+           switch (RandomUInt(1))
+           {
+               case 0:
+                   _unit->SendScriptTextChatMessage(3572);      // No one will stop us! old:No one can stop us! No one!
+                   break;
+               case 1:
+                   _unit->SendScriptTextChatMessage(3571);      // One less obstacle in our way!
+                   break;
+           }
+       }
+   }
 
     void OnCombatStop(Unit *mTarget)
     {
@@ -405,8 +390,7 @@ public:
     void OnDied(Unit * mKiller)
     {
       CastTime();
-      _unit->SendChatMessage(CHAT_MSG_MONSTER_YELL, LANG_UNIVERSAL, "It is only a matter...of time.");
-      _unit->PlaySoundToSet(10271);
+      _unit->SendScriptTextChatMessage(3573);       // It is only a matter...of time.
        RemoveAIUpdateEvent();
     }
 

@@ -282,7 +282,7 @@ ProcCondHandlerRes UnbridledWrath(ProcCondSharedDataStruct *shareddata)
 void InitProcCondHandlers()
 {
 	//we set all handlers to null. A function pointer or a normal pointer still take up the same space
-	memset(G_ProcCondHandlers, NULL, MAX_SPELL_ID_FROMDBC * sizeof( void * ) );
+	memset(G_ProcCondHandlers, 0, MAX_SPELL_ID_FROMDBC * sizeof(void*));
 
 	G_ProcCondHandlers[ 16959 ] = PrimalFury;
 	G_ProcCondHandlers[ 16953 ] = BloodFrenzy;
