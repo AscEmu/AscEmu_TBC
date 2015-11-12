@@ -20,5 +20,6 @@
 #ifndef EVENT_SCRIPTS_SETUP_H
 #define EVENT_SCRIPTS_SETUP_H
 
+void SetupWinterVeil(ScriptMgr* mgr);
 
 #endif  //EVENT_SCRIPTS_SETUP_H

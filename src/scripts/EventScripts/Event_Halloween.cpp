@@ -1,7 +1,6 @@
 /*
- * ArcScript Sccripts for Arcemu MMORPG Server
- * Copyright (C) 2008 Arcemu Team
- * Copyright (C) 2007 Moon++  <http://www.moonplusplus.info/>
+ * ArcScripts2 Scripts for Arcemu MMORPG Server
+ * Copyright (C) 2011-2012 ArcScripts2 team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,15 +16,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "StdAfx.h"
-#ifndef GOSSIP_SCRIPTS_SETUP_H
-#define GOSSIP_SCRIPTS_SETUP_H
+#include "Setup.h"
 
-void SetupGMAnnounce(ScriptMgr * mgr);
-void SetupGMOnline(ScriptMgr * mgr);
-void SetupAldorSkyrGuard(ScriptMgr * mgr);
-void SetupTeleNPC(ScriptMgr * mgr);
-void SetupHunterTrainer(ScriptMgr * mgr);
-void SetupSkillNPC(ScriptMgr * mgr);
+/*
+Event : Halloween
+Author: Angelis
+Team  : Sun++
+*/
 
-#endif
+//Black Cat
