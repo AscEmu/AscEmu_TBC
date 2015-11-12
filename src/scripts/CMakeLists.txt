@@ -18,8 +18,8 @@ set(script_linkages world)
 
 #All script libraries have SCRIPTLIB defined.
 add_definitions(-DSCRIPTLIB -DSKIP_ALLOCATOR_SHARING)
-set(BUILD_CUSTOMSCRIPTS FALSE CACHE BOOL "Build ascCustomScripts.")
-set(BUILD_EVENTSCRIPTS FALSE CACHE BOOL "Build ascEventScripts.")
+set(BUILD_CUSTOMSCRIPTS TRUE CACHE BOOL "Build ascCustomScripts.")
+set(BUILD_EVENTSCRIPTS TRUE CACHE BOOL "Build ascEventScripts.")
 set(BUILD_INSTANCESCRIPTS TRUE CACHE BOOL "Build ascInstanceScripts.")
 set(BUILD_EXTRASCRIPTS TRUE CACHE BOOL "Build ascExtraScripts.")
 set(BUILD_GOSSIPSCRIPTS TRUE CACHE BOOL "Build ascGossipScripts.")
