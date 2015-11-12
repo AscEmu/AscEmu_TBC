@@ -112,5 +112,5 @@ void WinterVeilEmote(Player* pPlayer, uint32 Emote, Unit* pUnit)
 void SetupWinterVeil(ScriptMgr* mgr)
 {
     mgr->register_gameobject_script(180796, &PX238WinterWondervolt::Create);
-    mgr->register_hook(SERVER_HOOK_EVENT_ON_EMOTE, &WinterVeilEmote);
+    mgr->register_hook(SERVER_HOOK_EVENT_ON_EMOTE, (void*)WinterVeilEmote);
 }
