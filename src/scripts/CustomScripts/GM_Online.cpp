@@ -20,14 +20,14 @@
 #pragma warning(disable:4309)		  // truncation const
 void GmCheck(Player* pPlayer)
 {
-    if (pPlayer->GetSession()->CanUseCommand('az'))
+    if (pPlayer->GetSession()->CanUseCommand('z'))
     {
         char *message = new char[255];
         sprintf(message, "%s[AscEmu] %s<Admin>%s %s has come online!", MSG_COLOR_YELLOW, MSG_COLOR_RED, MSG_COLOR_CYAN, pPlayer->GetName());
         sWorld.SendWorldText(message);
         delete message;
     }
-    else if (pPlayer->GetSession()->CanUseCommand('a'))
+    else if (pPlayer->GetSession()->CanUseCommand('a') && !pPlayer->GetSession()->CanUseCommand('z'))
     {
         char *messagew = new char[255];
         sprintf(messagew, "%s[AscEmu] %s<GM>%s %s has come online!", MSG_COLOR_YELLOW, MSG_COLOR_RED, MSG_COLOR_CYAN, pPlayer->GetName());

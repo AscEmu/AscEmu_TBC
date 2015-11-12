@@ -3263,7 +3263,7 @@ int luaUnit_GetCurrentSpell(lua_State * L, Unit * ptr)
 	if(ptr)
 		if(ptr->GetCurrentSpell() != NULL)
 		{
-			lua_pushlstring(L,ptr->GetCurrentSpell()->GetProto()->Name,NULL);
+			lua_pushlstring(L,ptr->GetCurrentSpell()->GetProto()->Name, 0);
 		}
 	return 1;
 }
@@ -3816,7 +3816,7 @@ int luaUnit_CalcAngle(lua_State * L, Unit * ptr)
 }
 int luaUnit_CalcRadAngle(lua_State * L, Unit * ptr)
 {
-	float ang = NULL;
+	float ang = 0.0f;
 	float x = (float)luaL_checkinteger(L,1 );
 	float y = (float)luaL_checkinteger(L, 2);
 	float dx = (float)luaL_checkinteger(L, 3);
@@ -3982,9 +3982,10 @@ int luaUnit_GetMapId(lua_State * L, Unit * ptr)
 {
 	CHECK_TYPEID_RET(TYPEID_UNIT || TYPEID_PLAYER);
 
-	if(ptr->GetMapId() == NULL)
+    //This makes no sense we have a map with id 0!!
+	/*if(ptr->GetMapId() == NULL)
 		lua_pushnil(L);
-	else
+	else*/
 		lua_pushinteger(L,ptr->GetMapId());
 	return 1;
 }
@@ -4311,7 +4312,7 @@ int luaGameObject_GetCreatureNearestCoords(lua_State * L, GameObject * ptr)
     float x = (float)luaL_checknumber(L,1);
     float y = (float)luaL_checknumber(L,2);
     float z = (float)luaL_checknumber(L,3);
-    if(entryid==NULL) 
+    if(entryid==0) 
         lua_pushnil(L);
     else
         Lunar<Unit>::push(L,ptr->GetMapMgr()->GetInterface()->GetCreatureNearestCoords(x, y, z, entryid), false);
@@ -4325,7 +4326,7 @@ int luaGameObject_GetGameObjectNearestCoords(lua_State *L, GameObject * ptr)
     float x = (float)luaL_checknumber(L,1);
     float y = (float)luaL_checknumber(L,2);
     float z = (float)luaL_checknumber(L,3);
-    if(entryid==NULL) 
+    if(entryid==0) 
         lua_pushnil(L);
     else
         Lunar<GameObject>::push(L,ptr->GetMapMgr()->GetInterface()->GetGameObjectNearestCoords(x, y, z, entryid), false);
@@ -4418,7 +4419,7 @@ int luaGameObject_PlaySoundToSet(lua_State * L, GameObject * ptr)
 }
 int luaGameObject_SpawnCreature(lua_State * L, GameObject * ptr)
 {
-	if(ptr == NULL) return 0;
+	if(ptr == nullptr) return 0;
 	uint32 entry_id = luaL_checkinteger(L, 1);
 	float x = (float)luaL_checkinteger(L, 2);
 	float y = (float)luaL_checkinteger(L, 3);
@@ -4434,8 +4435,8 @@ int luaGameObject_SpawnCreature(lua_State * L, GameObject * ptr)
 	}
 	CreatureProto *p = CreatureProtoStorage.LookupEntry(entry_id);
     
-    if(p == NULL)
-      return NULL;
+    if(p == nullptr)
+      return 0;
 
     Creature *pCreature = ptr->GetMapMgr()->CreateCreature(entry_id);
     pCreature->spawnid = 0;
