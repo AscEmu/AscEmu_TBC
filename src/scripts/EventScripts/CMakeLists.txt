@@ -7,32 +7,28 @@ endif(NOT BUILD_EVENTSCRIPTS)
 
 project(EventScripts)
 
-set(prefix ${SCRIPTS_PATH}/EventScripts)
+file(GLOB sources_localdir *.cpp *.h)
 
-#sources -contains source files for our library.
-set(sources
-   Setup.cpp
-   )
 
-set(headers
-   Setup.h
-   )
+set(ascemu_eventscripts_SRCS
+  ${ascemu_eventscripts_SRCS}
+  ${sources_localdir}
+)
 
-foreach(src IN ITEMS ${sources})
-   set(SRCS ${SRCS} ${prefix}/${src})
-endforeach(src)
-foreach(src IN ITEMS ${headers})
-   set(HEADERS ${HEADERS} ${prefix}/${src})
-endforeach(src)
+include_directories( ${GLOBAL_INCLUDE_DIRS} ${ascemu_eventscripts_SRCS} )
 
-include_directories(${include_dirs} ${DEPENDENCY_ROOT}/zlib)
-add_library(${PROJECT_NAME} SHARED ${SRCS} ${HEADERS})
-add_dependencies(${PROJECT_NAME} ${script_dependencies})
-target_link_libraries(${PROJECT_NAME} ${script_linkages})
+add_library( ${PROJECT_NAME} SHARED ${ascemu_eventscripts_SRCS} )
+
+#common include directories that script libraries might include.
+SET( include_dirs ${GLOBAL_INCLUDE_DIRS} )
+
+add_dependencies( ${PROJECT_NAME} shared world )
+add_definitions( -DSCRIPTLIB -DSKIP_ALLOCATOR_SHARING )
+target_link_libraries( ${PROJECT_NAME} world )
 
 include(PCHSupport)
-if(CMAKE_GENERATOR MATCHES Visual*)
-   ADD_NATIVE_PRECOMPILED_HEADER(${PROJECT_NAME} Setup.h ${prefix}/Setup.cpp)
-endif()
+IF( CMAKE_GENERATOR MATCHES Visual*)
+	ADD_NATIVE_PRECOMPILED_HEADER(${PROJECT_NAME} Setup.h ${sources_localdir}/Setup.cpp)
+ENDIF()
 
-install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION ${ASCEMU_SCRIPTLIB_PATH} LIBRARY DESTINATION ${ASCEMU_SCRIPTLIB_PATH} )
+install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION ${ASCEMU_SCRIPTLIB_PATH} LIBRARY DESTINATION ${ASCEMU_SCRIPTLIB_PATH})
