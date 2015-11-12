@@ -1097,7 +1097,7 @@ bool ChatHandler::HandleFlySpeedCheatCommand(const char* args, WorldSession* m_s
     if (plr != m_session->GetPlayer())
         sGMLog.writefromsession(m_session, "set %s's fly speed to %2.2f", plr->GetName(), Speed);
 
-    WorldPacket data(SMSG_FORCE_MOVE_SET_FLY_SPEED, 16);
+    WorldPacket data(SMSG_FORCE_FLIGHT_SPEED_CHANGE, 16);
     data << plr->GetNewGUID();
     data << uint32(0) << Speed;
     plr->SendMessageToSet(&data, true);

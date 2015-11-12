@@ -782,7 +782,7 @@ void InstanceMgr::ResetSavedInstances(Player * plr)
                 {
                     if (in->m_mapMgr && in->m_mapMgr->HasPlayers())
                     {
-                        pData = new WorldPacket(SMSG_RESET_INSTANCE_FAILED, 8);
+                        pData = new WorldPacket(SMSG_INSTANCE_RESET_FAILED, 8);
                         *pData << uint32(INSTANCE_RESET_ERROR_PLAYERS_INSIDE);
                         *pData << uint32(in->m_mapId);
                         plr->GetSession()->SendPacket(pData);
@@ -796,7 +796,7 @@ void InstanceMgr::ResetSavedInstances(Player * plr)
                     }
 
                     // <mapid> has been reset.
-                    pData = new WorldPacket(SMSG_RESET_INSTANCE, 4);
+                    pData = new WorldPacket(SMSG_INSTANCE_RESET, 4);
                     *pData << uint32(in->m_mapId);
                     plr->GetSession()->SendPacket(pData);
                     delete pData;
@@ -1010,11 +1010,11 @@ void InstanceMgr::BuildSavedInstancesForPlayer(Player * plr)
                     {
                         m_mapLock.Release();
 
-                        data.SetOpcode(SMSG_INSTANCE_SAVE);
+                        data.SetOpcode(SMSG_UPDATE_LAST_INSTANCE);
                         data << uint32(in->m_mapId);
                         plr->GetSession()->SendPacket(&data);
 
-                        data.Initialize(SMSG_INSTANCE_RESET_ACTIVATE);
+                        data.Initialize(SMSG_UPDATE_INSTANCE_OWNERSHIP);
                         data << uint32(0x01);
                         plr->GetSession()->SendPacket(&data);
 
@@ -1026,7 +1026,7 @@ void InstanceMgr::BuildSavedInstancesForPlayer(Player * plr)
         m_mapLock.Release();
     }
 
-    data.SetOpcode(SMSG_INSTANCE_RESET_ACTIVATE);
+    data.SetOpcode(SMSG_UPDATE_INSTANCE_OWNERSHIP);
     data << uint32(0x00);
     plr->GetSession()->SendPacket(&data);
 }

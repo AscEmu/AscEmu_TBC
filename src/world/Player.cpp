@@ -934,7 +934,7 @@ void Player::Update(uint32 p_time)
         float curHeight = ascendStartHeight + curSpeed * (tDiff / 1000.0f);
         if (curHeight + 1.0f >= waterHeight)
         {
-            WorldPacket data(SMSG_MOVE_SET_UNFLY, 13);
+            WorldPacket data(SMSG_MOVE_UNSET_CAN_FLY, 13);
             data << GetNewGUID();
             data << uint32(5);
             SendMessageToSet(&data, true);
@@ -3521,7 +3521,7 @@ void Player::OnPushToWorld()
     m_lockTransportVariables = false;
 
     // delay the unlock movement packet
-    WorldPacket * data = new WorldPacket(SMSG_MOVE_UNLOCK_MOVEMENT, 4);
+    WorldPacket * data = new WorldPacket(SMSG_TIME_SYNC_REQ, 4);
     *data << uint32(0);
     delayedPackets.add(data);
     sWorld.mInWorldPlayerCount++;
@@ -4170,7 +4170,7 @@ void Player::SetPlayerSpeed(uint8 SpeedType, float value)
             if (value == m_lastFlySpeed)
                 return;
 
-            data.SetOpcode(SMSG_FORCE_MOVE_SET_FLY_SPEED);
+            data.SetOpcode(SMSG_FORCE_FLIGHT_SPEED_CHANGE);
             m_flySpeed = value;
             m_lastFlySpeed = value;
         }break;
@@ -4184,7 +4184,7 @@ void Player::SendDungeonDifficulty()
 {
     // Why CMSG_DUNGEON_DIFFICULTY ? CMSG == Client Message...
     //TODO: Should rename it to MSG_DUNGEON_DIFFICULTY
-    WorldPacket data(CMSG_DUNGEON_DIFFICULTY, 12);
+    WorldPacket data(MSG_SET_DUNGEON_DIFFICULTY, 12);
     data << (uint32)iInstanceType;
     data << (uint32)0x1;
     data << (uint32)InGroup();
@@ -4303,7 +4303,7 @@ void Player::RepopRequestedPlayer()
         if (myCorpse != NULL) myCorpse->ResetDeathClock();
 
         /* Send Spirit Healer Location */
-        WorldPacket data(SMSG_SPIRIT_HEALER_POS, 16);
+        WorldPacket data(SMSG_DEATH_RELEASE_LOC, 16);
         data << m_mapId << m_position;
         m_session->SendPacket(&data);
 
@@ -6174,7 +6174,7 @@ int32 Player::CanShootRangedWeapon(uint32 spellid, Unit* target, bool autoshot)
         cr.SpellId = autoshot ? 75 : spellid;
         cr.ErrorMessage = fail;
         cr.MultiCast = 0;
-        m_session->OutPacket(SMSG_CAST_RESULT, sizeof(packetSMSG_CASTRESULT), &cr);
+        m_session->OutPacket(SMSG_CAST_FAILED, sizeof(packetSMSG_CASTRESULT), &cr);
         if (fail != SPELL_FAILED_OUT_OF_RANGE)
         {
             uint32 spellid2 = autoshot ? 75 : spellid;
@@ -8127,7 +8127,7 @@ void Player::EventTeleportTaxi(uint32 mapid, float x, float y, float z)
 {
     if (mapid == 530 && !m_session->HasFlag(ACCOUNT_FLAG_XPACK_01))
     {
-        WorldPacket msg(SMSG_BROADCAST_MSG, 50);
+        WorldPacket msg(SMSG_MOTD, 50);
         msg << uint32(3) << "You must have The Burning Crusade Expansion to access this content." << uint8(0);
         m_session->SendPacket(&msg);
         RepopAtGraveyard(GetPositionX(), GetPositionY(), GetPositionZ(), GetMapId());
@@ -8375,7 +8375,7 @@ bool Player::SafeTeleport(uint32 MapID, uint32 InstanceID, const LocationVector 
     // Lookup map info
     if (mi && mi->flags & WMI_INSTANCE_XPACK_01 && !m_session->HasFlag(ACCOUNT_FLAG_XPACK_01))
     {
-        WorldPacket msg(SMSG_BROADCAST_MSG, 50);
+        WorldPacket msg(SMSG_MOTD, 50);
         msg << uint32(3) << "You must have The Burning Crusade Expansion to access this content." << uint8(0);
         m_session->SendPacket(&msg);
         return false;
@@ -9584,7 +9584,7 @@ void Player::UpdateComboPoints()
     else
         buffer[0] = buffer[1] = 0;
 
-    m_session->OutPacket(SMSG_SET_COMBO_POINTS, c, buffer);
+    m_session->OutPacket(SMSG_UPDATE_COMBO_POINTS, c, buffer);
 }
 
 void Player::SendAreaTriggerMessage(const char * message, ...)
@@ -11437,7 +11437,7 @@ void Player::Social_TellFriendsOffline()
 
 void Player::Social_SendFriendList(uint32 flag)
 {
-    WorldPacket data(SMSG_FRIEND_LIST, 500);
+    WorldPacket data(SMSG_CONTACT_LIST, 500);
     std::map<uint32, char*>::iterator itr;
     std::set<uint32>::iterator itr2;
     Player * plr;

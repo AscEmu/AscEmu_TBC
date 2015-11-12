@@ -720,9 +720,9 @@ void WorldSession::FullLogin(Player * plr)
 
     // account data == UI config
 #ifndef USING_BIG_ENDIAN
-    StackWorldPacket<128> data(SMSG_ACCOUNT_DATA_MD5);
+    StackWorldPacket<128> data(SMSG_ACCOUNT_DATA_TIMES);
 #else
-    WorldPacket data(SMSG_ACCOUNT_DATA_MD5, 128);
+    WorldPacket data(SMSG_ACCOUNT_DATA_TIMES, 128);
 #endif
 
     MD5Hash md5hash;

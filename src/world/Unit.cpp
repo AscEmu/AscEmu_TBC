@@ -4285,7 +4285,7 @@ void Unit::AddAura(Aura *aur)
                                 ((Player*)this)->GetSession()->SendPacket(&data);
                             }
 
-                            data.Initialize(SMSG_SET_AURA_SINGLE);
+                            data.Initialize(SMSG_SET_EXTRA_AURA_INFO);
                             data << GetNewGUID() << m_auras[x]->m_visualSlot << uint32(m_auras[x]->GetSpellProto()->Id) << uint32(aur->GetDuration()) << uint32(aur->GetDuration());
                             SendMessageToSet(&data, false);
                         }
@@ -4644,7 +4644,7 @@ bool Unit::SetAurDuration(uint32 spellId, Unit* caster, uint32 duration)
         static_cast<Player*>(this)->GetSession()->SendPacket(&data);
     }
 
-    WorldPacket data(SMSG_SET_AURA_SINGLE, 21);
+    WorldPacket data(SMSG_SET_EXTRA_AURA_INFO, 21);
     data << GetNewGUID() << aur->m_visualSlot << uint32(spellId) << uint32(duration) << uint32(duration);
     SendMessageToSet(&data, false);
 
@@ -4669,7 +4669,7 @@ bool Unit::SetAurDuration(uint32 spellId, uint32 duration)
         data << (uint8)(aur)->m_visualSlot << duration;
         static_cast<Player*>(this)->GetSession()->SendPacket(&data);
     }
-    WorldPacket data(SMSG_SET_AURA_SINGLE, 21);
+    WorldPacket data(SMSG_SET_EXTRA_AURA_INFO, 21);
     data << GetNewGUID() << aur->m_visualSlot << uint32(spellId) << uint32(duration) << uint32(duration);
     SendMessageToSet(&data, false);
 
@@ -5371,7 +5371,7 @@ void Unit::SetStandState(uint8 standstate)
         RemoveAurasByInterruptFlag(AURA_INTERRUPT_ON_STAND_UP);
 
     if (m_objectTypeId == TYPEID_PLAYER)
-        static_cast<Player*>(this)->GetSession()->OutPacket(SMSG_STANDSTATE_CHANGE_ACK, 1, &standstate);
+        static_cast<Player*>(this)->GetSession()->OutPacket(SMSG_STANDSTATE_UPDATE, 1, &standstate);
 }
 
 void Unit::RemoveAurasByInterruptFlag(uint32 flag)
@@ -6016,7 +6016,7 @@ void Unit::EnableFlight()
 {
     if (m_objectTypeId != TYPEID_PLAYER || ((Player*)this)->m_changingMaps)
     {
-        WorldPacket data(SMSG_MOVE_SET_FLY, 13);
+        WorldPacket data(SMSG_MOVE_SET_CAN_FLY, 13);
         data << GetNewGUID();
         data << uint32(2);
         SendMessageToSet(&data, true);
@@ -6028,7 +6028,7 @@ void Unit::EnableFlight()
     }
     else
     {
-        WorldPacket * data = new WorldPacket(SMSG_MOVE_SET_FLY, 13);
+        WorldPacket * data = new WorldPacket(SMSG_MOVE_SET_CAN_FLY, 13);
         *data << GetNewGUID();
         *data << uint32(2);
         SendMessageToSet(data, false);
@@ -6042,7 +6042,7 @@ void Unit::DisableFlight()
 {
     if (m_objectTypeId != TYPEID_PLAYER || ((Player*)this)->m_changingMaps)
     {
-        WorldPacket data(SMSG_MOVE_SET_UNFLY, 13);
+        WorldPacket data(SMSG_MOVE_UNSET_CAN_FLY, 13);
         data << GetNewGUID();
         data << uint32(5);
         SendMessageToSet(&data, true);
@@ -6052,7 +6052,7 @@ void Unit::DisableFlight()
     }
     else
     {
-        WorldPacket * data = new WorldPacket(SMSG_MOVE_SET_UNFLY, 13);
+        WorldPacket * data = new WorldPacket(SMSG_MOVE_UNSET_CAN_FLY, 13);
         *data << GetNewGUID();
         *data << uint32(5);
         SendMessageToSet(data, false);
@@ -6731,7 +6731,7 @@ void Unit::Heal(Unit *target, uint32 SpellId, uint32 amount)
         else
             target->SetUInt32Value(UNIT_FIELD_HEALTH, ch);
 
-        WorldPacket data(SMSG_HEALSPELL_ON_PLAYER, 25);
+        WorldPacket data(SMSG_SPELLHEALLOG, 25);
         data << target->GetNewGUID();
         data << this->GetNewGUID();
         data << uint32(SpellId);

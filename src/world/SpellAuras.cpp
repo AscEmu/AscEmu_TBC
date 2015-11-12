@@ -973,7 +973,7 @@ void Aura::AddAuraVisual()
         static_cast<Player*>(m_target)->GetSession()->OutPacket(SMSG_UPDATE_AURA_DURATION, sizeof(packetSMSG_SET_AURA_DURATION), &datasa);
     }
 
-    WorldPacket data(SMSG_SET_AURA_SINGLE, 22);
+    WorldPacket data(SMSG_SET_EXTRA_AURA_INFO, 22);
     data << m_target->GetNewGUID() << m_visualSlot << uint32(m_spellProto->Id) << uint32(m_duration) << uint32(m_duration);
     m_target->SendMessageToSet(&data, false);
 

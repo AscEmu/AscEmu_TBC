@@ -107,7 +107,7 @@ void Player::SendCastResult(uint32 SpellId, uint8 ErrorMessage, uint8 MultiCast,
         pe.ErrorMessage = ErrorMessage;
         pe.MultiCast = MultiCast;
         pe.Extra = Extra;
-        m_session->OutPacket(SMSG_CAST_RESULT, sizeof(packetSMSG_CASTRESULT_EXTRA), &pe);
+        m_session->OutPacket(SMSG_CAST_FAILED, sizeof(packetSMSG_CASTRESULT_EXTRA), &pe);
     }
     else
     {
@@ -115,7 +115,7 @@ void Player::SendCastResult(uint32 SpellId, uint8 ErrorMessage, uint8 MultiCast,
         pe.SpellId = SpellId;
         pe.ErrorMessage = ErrorMessage;
         pe.MultiCast = MultiCast;
-        m_session->OutPacket(SMSG_CAST_RESULT, sizeof(packetSMSG_CASTRESULT), &pe);
+        m_session->OutPacket(SMSG_CAST_FAILED, sizeof(packetSMSG_CASTRESULT), &pe);
     }
 }
 

@@ -1601,7 +1601,7 @@ void WorldSession::HandleInspectOpcode(WorldPacket & recv_data)
     if (_player->m_comboPoints)
         _player->UpdateComboPoints();
 
-    WorldPacket data(SMSG_INSPECT_TALENTS, 4 + talent_points);
+    WorldPacket data(SMSG_INSPECT_TALENT, 4 + talent_points);
 
     m_Packed_GUID.appendPackGUID(player->GetGUID());
     uint32 guid_size;
@@ -1721,7 +1721,7 @@ void WorldSession::HandleAcknowledgementOpcodes(WorldPacket & recv_data)
             _player->m_waterwalk = _player->m_setwaterwalk;
             break;
 
-        case CMSG_MOVE_SET_FLY_ACK:
+        case CMSG_MOVE_SET_CAN_FLY_ACK:
             _player->FlyCheat = _player->m_setflycheat;
             break;
     }

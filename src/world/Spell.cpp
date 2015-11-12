@@ -2070,7 +2070,7 @@ void Spell::SendCastResult(uint8 result)
         pe.ErrorMessage = result;
         pe.MultiCast = extra_cast_number;
         pe.Extra = Extra;
-        plr->GetSession()->OutPacket(SMSG_CAST_RESULT, sizeof(packetSMSG_CASTRESULT_EXTRA), &pe);
+        plr->GetSession()->OutPacket(SMSG_CAST_FAILED, sizeof(packetSMSG_CASTRESULT_EXTRA), &pe);
     }
     else
     {
@@ -2078,7 +2078,7 @@ void Spell::SendCastResult(uint8 result)
         pe.SpellId = GetProto()->Id;
         pe.ErrorMessage = result;
         pe.MultiCast = extra_cast_number;
-        plr->GetSession()->OutPacket(SMSG_CAST_RESULT, sizeof(packetSMSG_CASTRESULT), &pe);
+        plr->GetSession()->OutPacket(SMSG_CAST_FAILED, sizeof(packetSMSG_CASTRESULT), &pe);
     }
 }
 
@@ -4642,7 +4642,7 @@ void Spell::SendHealSpellOnPlayer(Object* caster, Object* target, uint32 dmg, bo
 {
     if (!caster || !target || !target->IsPlayer())
         return;
-    WorldPacket data(SMSG_HEALSPELL_ON_PLAYER, 27);
+    WorldPacket data(SMSG_SPELLHEALLOG, 27);
     // Bur: I know it says obsolete, but I just logged this tonight and got this packet.
 
     data << target->GetNewGUID();
@@ -5263,7 +5263,7 @@ void Spell::SendCastSuccess(Object * target)
     if (!plr || !plr->IsPlayer())
         return;
 
-    WorldPacket data(SMSG_TARGET_CAST_RESULT, 13);
+    WorldPacket data(SMSG_CLEAR_EXTRA_AURA_INFO, 13);
     data << ((target != 0) ? target->GetNewGUID() : uint64(0));
     data << GetProto()->Id;
 
@@ -5287,7 +5287,7 @@ void Spell::SendCastSuccess(const uint64& guid)
     *(uint32*)&buffer[c] = GetProto()->Id;                 c += 4;
 #endif
 
-    plr->GetSession()->OutPacket(SMSG_TARGET_CAST_RESULT, c, buffer);
+    plr->GetSession()->OutPacket(SMSG_CLEAR_EXTRA_AURA_INFO, c, buffer);
 }
 /*
 bool IsBeneficSpell(SpellEntry *sp)

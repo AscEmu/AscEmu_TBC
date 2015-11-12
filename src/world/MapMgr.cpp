@@ -2098,7 +2098,7 @@ void MapMgr::SendPvPCaptureMessage(int32 ZoneMask, uint32 ZoneId, const char * M
     va_list ap;
     va_start(ap, Message);
 
-    WorldPacket data(SMSG_PVP_CAPTURE_STATE_MSG, 208);
+    WorldPacket data(SMSG_DEFENSE_MESSAGE, 208);
     char msgbuf[200];
     vsnprintf(msgbuf, 200, Message, ap);
     va_end(ap);

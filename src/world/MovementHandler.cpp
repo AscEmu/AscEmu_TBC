@@ -338,15 +338,15 @@ void WorldSession::HandleMovementOpcodes(WorldPacket & recv_data)
             _player->activeMoveFlags &= (~Player::ACTIVE_MOVEMENT_JUMP);
             _player->jumping = false;
         } break;
-        case CMSG_FLY_PITCH_UP_Z:
-        case CMSG_MOVE_FLY_START_AND_END:
+        case MSG_MOVE_START_ASCEND:
+        case CMSG_MOVE_SET_FLY:
         { // Dword added this case for swimming (up)
             _player->ascending = true;
             _player->ascendStartHeight = movement_info.z;
             _player->ascendStartTime = getMSTime();
             moved = false;
         } break;
-        case CMSG_FLY_PITCH_DOWN_AFTER_UP:
+        case MSG_MOVE_STOP_ASCEND:
         { // Dword added this case for swimming bug fix
             _player->ascending = false;
         }
@@ -367,7 +367,7 @@ void WorldSession::HandleMovementOpcodes(WorldPacket & recv_data)
     /************************************************************************/
     /* Anti-Fly Hack Checks                                                 */
     /************************************************************************/
-    if (sWorld.antihack_flight && (recv_data.GetOpcode() == CMSG_MOVE_FLY_START_AND_END || recv_data.GetOpcode() == CMSG_FLY_PITCH_DOWN_AFTER_UP) && !(movement_info.flags & MOVEFLAG_SWIMMING || movement_info.flags & MOVEFLAG_FALLING || movement_info.flags & MOVEFLAG_FALLING_FAR || movement_info.flags & MOVEFLAG_FREE_FALLING) && _player->flying_aura == 0)
+    if (sWorld.antihack_flight && (recv_data.GetOpcode() == CMSG_MOVE_SET_FLY || recv_data.GetOpcode() == MSG_MOVE_STOP_ASCEND) && !(movement_info.flags & MOVEFLAG_SWIMMING || movement_info.flags & MOVEFLAG_FALLING || movement_info.flags & MOVEFLAG_FALLING_FAR || movement_info.flags & MOVEFLAG_FREE_FALLING) && _player->flying_aura == 0)
     {
         if (sWorld.no_antihack_on_gm && _player->GetSession()->HasGMPermissions())
         {
@@ -630,16 +630,16 @@ void WorldSession::HandleMovementOpcodes(WorldPacket & recv_data)
         _player->waterHeight = 0.0f;
     else
     {
-        if (recv_data.GetOpcode() == MSG_MOVE_FLY_DOWN_UNK)
+        if (recv_data.GetOpcode() == MSG_MOVE_START_DESCEND)
         {
             if (_player->waterHeight == 0.0f)
                 _player->waterHeight = movement_info.z;
         }
-        else if (recv_data.GetOpcode() == CMSG_FLY_PITCH_DOWN_AFTER_UP && _player->waterHeight != 0.0f)
+        else if (recv_data.GetOpcode() == MSG_MOVE_STOP_ASCEND && _player->waterHeight != 0.0f)
         {
             if (movement_info.z + 1.0f < _player->waterHeight)
             {
-                WorldPacket data(SMSG_MOVE_SET_FLY, 13);
+                WorldPacket data(SMSG_MOVE_SET_CAN_FLY, 13);
                 data << _player->GetNewGUID();
                 data << uint32(2);
                 _player->SendMessageToSet(&data, true);
