@@ -1,31 +1,44 @@
+# Copyright (C) 2014-2015 AscEmu Team <http://www.ascemu.org>
 if(NOT BUILD_CUSTOMSCRIPTS)
   message("\tCustomScripts was skipped because BUILD_CUSTOMSCRIPTS is unchecked.")
   return()
 endif(NOT BUILD_CUSTOMSCRIPTS)
 
-PROJECT(CustomScripts)
+# set up our project name
+project(CustomScripts)
 
-file(GLOB sources_localdir *.cpp *.h)
+set(prefix ${SCRIPTS_PATH}/${PROJECT_NAME})
 
-set(ascemu_customscripts_SRCS
-  ${ascemu_customscripts_SRCS}
-  ${sources_localdir}
-)
+#sources -contains source files for our library.
+set(sources
+   AldorSkyGuards.cpp
+   GM_Announce_System.cpp
+   GM_Online.cpp
+   HunterBeastmaster.cpp
+   Skillnpc.cpp
+   teleporter.cpp
+   Setup.cpp
+   )
 
-include_directories( ${GLOBAL_INCLUDE_DIRS} ${ascemu_customscripts_SRCS} )
+set(headers
+   Setup.h
+   )
 
-add_library( ${PROJECT_NAME} SHARED ${ascemu_customscripts_SRCS} )
-
-#common include directories that script libraries might include.
-SET( include_dirs ${GLOBAL_INCLUDE_DIRS} )
-
-add_dependencies( ${PROJECT_NAME} shared world )
-add_definitions( -DSCRIPTLIB -DSKIP_ALLOCATOR_SHARING )
-target_link_libraries( ${PROJECT_NAME} world )
+foreach(src IN ITEMS ${sources})
+   set(SRCS ${SRCS} ${prefix}/${src})
+endforeach(src)
+foreach(src IN ITEMS ${headers})
+   set(HEADERS ${HEADERS} ${prefix}/${src})
+endforeach(src)
+   
+include_directories(${include_dirs} ${DEPENDENCY_ROOT}/zlib)
+add_library(${PROJECT_NAME} SHARED ${SRCS} ${HEADERS})
+add_dependencies(${PROJECT_NAME} ${script_dependencies})
+target_link_libraries(${PROJECT_NAME} ${script_linkages})
 
 include(PCHSupport)
-IF( CMAKE_GENERATOR MATCHES Visual*)
-	ADD_NATIVE_PRECOMPILED_HEADER(${PROJECT_NAME} Setup.h ${sources_localdir}/Setup.cpp)
-ENDIF()
+if(CMAKE_GENERATOR MATCHES Visual*)
+   ADD_NATIVE_PRECOMPILED_HEADER(${PROJECT_NAME} Setup.h ${prefix}/Setup.cpp)
+endif()
 
 install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION ${ASCEMU_SCRIPTLIB_PATH} LIBRARY DESTINATION ${ASCEMU_SCRIPTLIB_PATH})
