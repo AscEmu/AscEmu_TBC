@@ -3,7 +3,7 @@
 
 class SCRIPT_DECL TeleNPC : public GossipScript
 {
-    public:
+public:
 
     void Destroy()
     {
@@ -46,21 +46,22 @@ class SCRIPT_DECL TeleNPC : public GossipScript
         GossipMenu* Menu;
         switch (IntId)
         {
-        case 1000: //Alliance Town
-            objmgr.CreateGossipMenuForPlayer(&Menu, pObject->GetGUID(), 4273, Plr);
-            Menu->AddItem(10, "Darnassus", 1001);
-            Menu->AddItem(10, "Exodar", 1005);
-            Menu->AddItem(10, "Ironforge", 1010);
-            Menu->AddItem(10, "Stormwind", 1015);
-            Menu->AddItem(4, "<- Main Menu", 5005);
-            Menu->SendTo(Plr);
-            break;
-        case 2000: //Horde Town
+        case 1000: //Horde Town
             objmgr.CreateGossipMenuForPlayer(&Menu, pObject->GetGUID(), 4273, Plr);
             Menu->AddItem(10, "Orgrimmar", 2001);
             Menu->AddItem(10, "Silvermoon", 2005);
             Menu->AddItem(10, "Thunder Bluff", 2010);
             Menu->AddItem(10, "Undercity", 2015);
+            Menu->AddItem(4, "<- Main Menu", 5005);
+            Menu->SendTo(Plr);
+            break;
+        case 2000: //Alliance Town
+            objmgr.CreateGossipMenuForPlayer(&Menu, pObject->GetGUID(), 4273, Plr);
+
+            Menu->AddItem(10, "Darnassus", 1001);
+            Menu->AddItem(10, "Exodar", 1005);
+            Menu->AddItem(10, "Ironforge", 1010);
+            Menu->AddItem(10, "Stormwind", 1015);
             Menu->AddItem(4, "<- Main Menu", 5005);
             Menu->SendTo(Plr);
             break;
@@ -169,13 +170,13 @@ class SCRIPT_DECL TeleNPC : public GossipScript
             break;
         case 5025: //Outland
             objmgr.CreateGossipMenuForPlayer(&Menu, pObject->GetGUID(), 4273, Plr);
-            Menu->AddItem(10, "Auchindoun",  8001);
-            Menu->AddItem(10, "Black Temple",  8005);
-            Menu->AddItem(10, "Coilfang Reservoir",  8010);
-            Menu->AddItem(10, "Gruul's Lair",  8015);
-            Menu->AddItem(10, "Hellfire Citadel",  8020);
-            Menu->AddItem(10, "Tempest Keep",  8025);
-            Menu->AddItem(4, "<- Back",  5000);
+            Menu->AddItem(10, "Auchindoun", 8001);
+            Menu->AddItem(10, "Black Temple", 8005);
+            Menu->AddItem(10, "Coilfang Reservoir", 8010);
+            Menu->AddItem(10, "Gruul's Lair", 8015);
+            Menu->AddItem(10, "Hellfire Citadel", 8020);
+            Menu->AddItem(10, "Tempest Keep", 8025);
+            Menu->AddItem(4, "<- Back", 5000);
             Menu->SendTo(Plr);
             break;
             //////////////////////////////////////////////////ALLIANCE///////////////////////////////////////////////////////////////
