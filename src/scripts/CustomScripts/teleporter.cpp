@@ -1,13 +1,10 @@
 #include "StdAfx.h"
 #include "Setup.h"
 
-/*#ifdef WIN32
-    #pragma warning(disable:4305)// warning C4305: 'argument' : truncation from 'double' to 'float'
-    #endif*/
-
 class SCRIPT_DECL TeleNPC : public GossipScript
 {
 public:
+
     void Destroy()
     {
         delete this;
@@ -15,35 +12,30 @@ public:
 
     void GossipHello(Object* pObject, Player * Plr, bool AutoS)
     {
-        GossipMenu *Menu;
+        GossipMenu* Menu;
         objmgr.CreateGossipMenuForPlayer(&Menu, pObject->GetGUID(), 2593, Plr);
-
         if (Plr->CombatStatus.IsInCombat() == true)
         {
-            Plr->BroadcastMessage("Da du in einem Kampf verwickelt bist, darf ich dir nicht behilflich sein!");
+            Plr->BroadcastMessage("You are in combat!");
             return;
         }
 
-        if (Plr->GetItemInterface()->GetItemCount(98768, true) >= 1)  //VIP
-            Menu->AddItem(3, "VIP Mall!", 950, 0);
-
         if (Plr->GetTeam() == 1)
         {
-            Menu->AddItem(3, "Horde Cities", 1, 0);
+            Menu->AddItem(4, "Horde Cities", 1000);
+            Menu->AddItem(4, "Zum Playertreff", 20000);
         }
         else
         {
-            Menu->AddItem(3, "Alliance Cities", 2, 0);
+            Menu->AddItem(4, "Alliance Cities", 2000);
+            Menu->AddItem(4, "Zum Playertreff", 10000);
         }
 
-        Menu->AddItem(3, "Eastern Kingdom Locations", 3, 0);
-        Menu->AddItem(3, "Kalimdor Locations", 4, 0);
-        Menu->AddItem(3, "Outland Locations", 5, 0);
-        Menu->AddItem(3, "Azeroth Instances", 6, 0);
-        Menu->AddItem(3, "Outland Instances", 7, 0);
-        Menu->AddItem(1, "Shattrath(mall)", 420, 0);
-        Menu->AddItem(4, "Remove Resurrection Sickness", 998, 0);
-        Menu->AddItem(3, "Dueling Areas", 3, 0);
+        Menu->AddItem(9, "Neutral Cities", 3000);
+        Menu->AddItem(9, "Dungeons", 5000);
+        Menu->AddItem(9, "SWV Instance (Custom instance)", 30000);
+        Menu->AddItem(9, "Gurbashi Arena - PvP", 3500);
+        Menu->AddItem(10, "Remove Resurrection Sickness", 4020);
 
         if (AutoS)
             Menu->SendTo(Plr);
@@ -51,202 +43,218 @@ public:
 
     void GossipSelectOption(Object* pObject, Player* Plr, uint32 Id, uint32 IntId, const char * Code)
     {
-        GossipMenu * Menu;
+        GossipMenu* Menu;
         switch (IntId)
         {
-        case 1: //Horde Cities
+        case 1000: //Horde Town
             objmgr.CreateGossipMenuForPlayer(&Menu, pObject->GetGUID(), 4273, Plr);
-            Menu->AddItem(1, "Horde Mall", 419, 0);
-            Menu->AddItem(1, "Orgrimmar", 304, 0);
-            Menu->AddItem(1, "Thunder Bluff", 305, 0);
-            Menu->AddItem(1, "Undercity", 306, 0);
-            Menu->AddItem(1, "Silvermoon", 307, 0);
-            Menu->AddItem(0, "[Back]", 999, 0);
+            Menu->AddItem(10, "Orgrimmar", 2001);
+            Menu->AddItem(10, "Silvermoon", 2005);
+            Menu->AddItem(10, "Thunder Bluff", 2010);
+            Menu->AddItem(10, "Undercity", 2015);
+            Menu->AddItem(4, "<- Main Menu", 5005);
             Menu->SendTo(Plr);
             break;
-        case 2: // Alliance Cities
+        case 2000: //Alliance Town
             objmgr.CreateGossipMenuForPlayer(&Menu, pObject->GetGUID(), 4273, Plr);
-            Menu->AddItem(1, "Alliance Mall", 418, 0);
-            Menu->AddItem(1, "Stormwind", 300, 0);
-            Menu->AddItem(1, "Ironforge", 301, 0);
-            Menu->AddItem(1, "Darnassus", 302, 0);
-            Menu->AddItem(1, "Exodar", 303, 0);
-            Menu->AddItem(0, "[Back]", 999, 0);
+
+            Menu->AddItem(10, "Darnassus", 1001);
+            Menu->AddItem(10, "Exodar", 1005);
+            Menu->AddItem(10, "Ironforge", 1010);
+            Menu->AddItem(10, "Stormwind", 1015);
+            Menu->AddItem(4, "<- Main Menu", 5005);
             Menu->SendTo(Plr);
             break;
-        case 3:
+        case 3000: //Neutral Town
             objmgr.CreateGossipMenuForPlayer(&Menu, pObject->GetGUID(), 4273, Plr);
-            Menu->AddItem(1, "Alterac Mountains", 308, 0);
-            Menu->AddItem(1, "Arathi Highlands", 309, 0);
-            Menu->AddItem(1, "Badlands", 310, 0);
-            Menu->AddItem(1, "Burning Steppes", 311, 0);
-            Menu->AddItem(1, "Deadwind Pass", 312, 0);
-            Menu->AddItem(1, "Dun Morogh", 313, 0);
-            Menu->AddItem(1, "Duskwood", 314, 0);
-            Menu->AddItem(1, "Eastern Plaguelands", 315, 0);
-            Menu->AddItem(1, "Elwynn Forest", 316, 0);
-            Menu->AddItem(1, "Eversong Woods", 317, 0);
-            Menu->AddItem(1, "Ghostlands", 318, 0);
-            Menu->AddItem(1, "Hillsbrad Foothills", 319, 0);
-            Menu->AddItem(1, "Hinterlands", 320, 0);
-            Menu->AddItem(1, "Loch Modan", 321, 0);
-            Menu->AddItem(0, "--> Page 2 -->", 10, 0);
-            Menu->AddItem(0, "[Back]", 999, 0);
+            if (Plr->getClass() == 6)
+            {
+                Menu->AddItem(10, "Ebon Hold", 3001);
+                Menu->AddItem(10, "Booty Bay", 3005);
+                Menu->AddItem(10, "Dalaran", 3010);
+                Menu->AddItem(10, "Everlook", 3015);
+                Menu->AddItem(10, "Gadegetzan", 3020);
+                Menu->AddItem(10, "Mudsprocket", 3025);
+                Menu->AddItem(10, "Ratchet", 3030);
+                Menu->AddItem(10, "Shattrath City", 3035);
+                Menu->AddItem(10, "Isle Of Quel'Danas", 3040);
+                Menu->AddItem(4, "Dungeons ->", 5000);
+                Menu->AddItem(4, "<- Main Menu", 5005);
+            }
+            else
+            {
+                Menu->AddItem(10, "Booty Bay", 3005);
+                Menu->AddItem(10, "Dalaran", 3010);
+                Menu->AddItem(10, "Everlook", 3015);
+                Menu->AddItem(10, "Gadegetzan", 3020);
+                Menu->AddItem(10, "Mudsprocket", 3025);
+                Menu->AddItem(10, "Ratchet", 3030);
+                Menu->AddItem(10, "Shattrath City", 3035);
+                Menu->AddItem(10, "Isle Of Quel'Danas", 3040);
+                Menu->AddItem(4, "Dungeons ->", 5000);
+                Menu->AddItem(4, "<- Main Menu", 5005);
+            }
             Menu->SendTo(Plr);
             break;
-        case 4:
+        case 5000: //Dungeons
             objmgr.CreateGossipMenuForPlayer(&Menu, pObject->GetGUID(), 4273, Plr);
-            Menu->AddItem(1, "Ashenvale", 331, 0);
-            Menu->AddItem(1, "Azshara", 332, 0);
-            Menu->AddItem(1, "Azuremyst Isle", 333, 0);
-            Menu->AddItem(1, "Bloodmyst Isle", 334, 0);
-            Menu->AddItem(1, "Darkshore", 335, 0);
-            Menu->AddItem(1, "Durotar", 336, 0);
-            Menu->AddItem(1, "Desolace", 337, 0);
-            Menu->AddItem(1, "Dustwallow Marsh", 338, 0);
-            Menu->AddItem(1, "Felwood", 339, 0);
-            Menu->AddItem(1, "Feralas", 340, 0);
-            Menu->AddItem(1, "Moonglade", 341, 0);
-            Menu->AddItem(1, "Mulgore", 342, 0);
-            Menu->AddItem(1, "Silithus", 343, 0);
-            Menu->AddItem(1, "Stonetalon Mountains", 344, 0);
-            Menu->AddItem(0, "--> Page 2 -->", 11, 0);
-            Menu->AddItem(0, "[Back]", 999, 0);
+            Menu->AddItem(4, "Kalimdor ->", 5010);
+            Menu->AddItem(4, "Eastern Kingdoms ->", 5015);
+            Menu->AddItem(4, "Outland ->", 5025);
+            Menu->AddItem(4, "<- Main Menu", 5005);
             Menu->SendTo(Plr);
             break;
-        case 5:
+        case 5005:
             objmgr.CreateGossipMenuForPlayer(&Menu, pObject->GetGUID(), 4273, Plr);
-            Menu->AddItem(1, "Blade's Edge Mountains", 351, 0);
-            Menu->AddItem(1, "Hellfire Peninsula", 352, 0);
-            Menu->AddItem(1, "Nagrand", 353, 0);
-            Menu->AddItem(1, "Netherstorm", 354, 0);
-            Menu->AddItem(1, "Shadowmoon Valley", 355, 0);
-            Menu->AddItem(1, "Terokkar Forest", 356, 0);
-            Menu->AddItem(1, "Zangarmarsh", 357, 0);
-            Menu->AddItem(0, "[Back]", 999, 0);
+            if (Plr->GetTeam() == 1)
+            {
+                Menu->AddItem(4, "Horde Cities", 1000);
+                Menu->AddItem(4, "Zum Playertreff", 20000);
+            }
+            else
+            {
+                Menu->AddItem(4, "Alliance Cities", 2000);
+                Menu->AddItem(4, "Zum Playertreff", 30000);
+            }
+            Menu->AddItem(4, "Neutral Cities", 3000);
+            Menu->AddItem(4, "Dungeons", 5000);
+            Menu->AddItem(9, "SWV Instance (Custom instance)", 30000);
+            Menu->AddItem(9, "Gurbashi Arena - PvP", 3500);
+            Menu->AddItem(10, "Remove Resurrection Sickness", 4020);
             Menu->SendTo(Plr);
             break;
-        case 6:
+        case 5010: //Kalimdor
             objmgr.CreateGossipMenuForPlayer(&Menu, pObject->GetGUID(), 4273, Plr);
-            Menu->AddItem(1, "Ahn'Qiraj", 358, 0);
-            Menu->AddItem(1, "Blackfathom Depths", 359, 0);
-            Menu->AddItem(1, "Blackrock Depths", 360, 0);
-            Menu->AddItem(1, "Blackrock Spire", 361, 0);
-            Menu->AddItem(1, "Blackwing Lair", 362, 0);
-            Menu->AddItem(1, "Caverns of Time", 363, 0);
-            Menu->AddItem(1, "Deadmines", 364, 0);
-            Menu->AddItem(1, "Dire Maul", 365, 0);
-            Menu->AddItem(1, "Gnomeregan", 366, 0);
-            Menu->AddItem(1, "Maraudon", 367, 0);
-            Menu->AddItem(1, "Molten Core", 368, 0);
-            Menu->AddItem(1, "Onyxia's Lair", 369, 0);
-            Menu->AddItem(1, "Ragefire Chasm", 370, 0);
-            Menu->AddItem(0, "--> Page 2 -->", 12, 0);
-            Menu->AddItem(0, "[Back]", 999, 0);
+            Menu->AddItem(10, "Blackfathom Deeps", 6001);
+            Menu->AddItem(10, "Caverns of Time", 6005);
+            Menu->AddItem(10, "Dire Maul", 6010);
+            Menu->AddItem(10, "Maraudon", 6015);
+            Menu->AddItem(10, "Onyxia's Lair", 6020);
+            Menu->AddItem(10, "Ragefire Chasm", 6025);
+            Menu->AddItem(10, "Razorfen Downs", 6030);
+            Menu->AddItem(10, "Razorfen Kraul", 6035);
+            Menu->AddItem(10, "Ruins of Ahn'Qiraj", 6040);
+            Menu->AddItem(10, "Temple of Ahn'Qiraj", 6045);
+            Menu->AddItem(10, "Wailing Caverns", 6050);
+            Menu->AddItem(10, "Zul'Farrak", 6055);
+            Menu->AddItem(4, "<- Back", 5000);
+            Menu->SendTo(Plr);
+        case 5015: //Eastern Kingdoms 1
+            objmgr.CreateGossipMenuForPlayer(&Menu, pObject->GetGUID(), 4273, Plr);
+            Menu->AddItem(10, "Blackrock Depths", 7001);
+            Menu->AddItem(10, "Blackrock Spire", 7005);
+            Menu->AddItem(10, "Blackwing Lair", 7010);
+            Menu->AddItem(10, "Deadmines", 7015);
+            Menu->AddItem(10, "Gnomeregan", 7020);
+            Menu->AddItem(10, "Isle Of Quel'Danas", 7025);
+            Menu->AddItem(10, "Karazhan", 7030);
+            Menu->AddItem(10, "Molten Core", 7035);
+            Menu->AddItem(4, "More ->", 5020);
+            Menu->AddItem(4, "<- Back", 5000);
             Menu->SendTo(Plr);
             break;
-        case 7:
+        case 5020: //Eastern Kingdoms 2
             objmgr.CreateGossipMenuForPlayer(&Menu, pObject->GetGUID(), 4273, Plr);
-            Menu->AddItem(0, "Outland Raids", 13, 0);
-            Menu->AddItem(1, "Auchenai Crypts", 383, 0);
-            Menu->AddItem(1, "Coilfang Reservoir", 385, 0);
-            Menu->AddItem(1, "Hellfire Ramparts", 387, 0);
-            Menu->AddItem(1, "Mana Tombs", 388, 0);
-            Menu->AddItem(1, "Pheonix Hall", 389, 0);
-            Menu->AddItem(1, "Sethekk Halls", 390, 0);
-            Menu->AddItem(1, "Shadow Labyrinth", 391, 0);
-            Menu->AddItem(1, "The Blood Furnace", 423, 0);
-            Menu->AddItem(1, "The Botanica", 392, 0);
-            Menu->AddItem(1, "The Mechanar", 393, 0);
-            Menu->AddItem(1, "The Shattered Halls", 425, 0);
-            Menu->AddItem(1, "The Slave Pens", 426, 0);
-            Menu->AddItem(1, "The Steamvault", 427, 0);
-            Menu->AddItem(1, "The Underbog", 428, 0);
-            Menu->AddItem(0, "[Back]", 999, 0);
+            Menu->AddItem(10, "Scarlet Monastery", 7040);
+            Menu->AddItem(10, "Scholomance", 7045);
+            Menu->AddItem(10, "Shadowfang Keep", 7050);
+            Menu->AddItem(10, "Stratholme", 7055);
+            Menu->AddItem(10, "Sunken Temple", 7060);
+            Menu->AddItem(10, "The Stockade", 7065);
+            Menu->AddItem(10, "Uldaman", 7070);
+            Menu->AddItem(10, "Zul'Aman", 7075);
+            Menu->AddItem(10, "Zul'Gurub", 7080);
+            Menu->AddItem(4, "<- Back", 5015);
+            Menu->AddItem(4, "<- Main Menu", 5005);
             Menu->SendTo(Plr);
             break;
-        case 8:
+        case 5025: //Outland
             objmgr.CreateGossipMenuForPlayer(&Menu, pObject->GetGUID(), 4273, Plr);
-            Menu->AddItem(1, "WinterSpring", 403, 0);
+            Menu->AddItem(10, "Auchindoun", 8001);
+            Menu->AddItem(10, "Black Temple", 8005);
+            Menu->AddItem(10, "Coilfang Reservoir", 8010);
+            Menu->AddItem(10, "Gruul's Lair", 8015);
+            Menu->AddItem(10, "Hellfire Citadel", 8020);
+            Menu->AddItem(10, "Tempest Keep", 8025);
+            Menu->AddItem(4, "<- Back", 5000);
             Menu->SendTo(Plr);
             break;
-        case 9:
-            objmgr.CreateGossipMenuForPlayer(&Menu, pObject->GetGUID(), 4273, Plr);
-            Menu->AddItem(1, "Azjol'Nerub", 406, 0);
-            Menu->AddItem(1, "Drak'Tharon", 407, 0);
-            Menu->AddItem(1, "Gun'Drak", 408, 0);
-            Menu->AddItem(1, "Icecrown Citadel", 409, 0);
-            Menu->AddItem(1, "Naxxaramas", 410, 0);
-            Menu->AddItem(1, "Obsidian Sanctum", 411, 0);
-            Menu->AddItem(1, "The Nexus/Occulus/Eye of Eternity", 412, 0);
-            Menu->AddItem(1, "Halls of Stone/Halls of Lightning", 413, 0);
-            Menu->AddItem(1, "Utgarde Keep", 414, 0);
-            Menu->AddItem(1, "Utgarde Pinnacle", 415, 0);
-            Menu->AddItem(1, "Vault of Archevon", 416, 0);
-            Menu->AddItem(1, "Violet Hold", 417, 0);
-            Menu->AddItem(0, "[Back]", 999, 0);
-            Menu->SendTo(Plr);
-            break;
-        case 10:
-            objmgr.CreateGossipMenuForPlayer(&Menu, pObject->GetGUID(), 4273, Plr);
-            Menu->AddItem(1, "Searing Gorge", 322, 0);
-            Menu->AddItem(1, "Silverpine Forest", 323, 0);
-            Menu->AddItem(1, "Stranglethorn Vale", 324, 0);
-            Menu->AddItem(1, "Swamp of Sorrows", 325, 0);
-            Menu->AddItem(1, "The Blasted Lands", 326, 0);
-            Menu->AddItem(1, "Trisfal Glades", 327, 0);
-            Menu->AddItem(1, "Western Plaguelands", 328, 0);
-            Menu->AddItem(1, "Westfall", 329, 0);
-            Menu->AddItem(1, "Wetlands", 330, 0);
-            Menu->AddItem(0, "<-- Page 1 <--", 3, 0);
-            Menu->AddItem(0, "[Back]", 999, 0);
-            Menu->SendTo(Plr);
-            break;
-        case 11:
-            objmgr.CreateGossipMenuForPlayer(&Menu, pObject->GetGUID(), 4273, Plr);
-            Menu->AddItem(1, "Tanaris", 345, 0);
-            Menu->AddItem(1, "Teldrassil", 346, 0);
-            Menu->AddItem(1, "The Barrens", 347, 0);
-            Menu->AddItem(1, "Thousand Needles", 348, 0);
-            Menu->AddItem(1, "Un Goro Crater", 349, 0);
-            Menu->AddItem(1, "Winterspring", 350, 0);
-            Menu->AddItem(0, "<-- Page 1 <--", 4, 0);
-            Menu->AddItem(0, "[Back]", 999, 0);
-            Menu->SendTo(Plr);
-            break;
-        case 12:
-            objmgr.CreateGossipMenuForPlayer(&Menu, pObject->GetGUID(), 4273, Plr);
-            Menu->AddItem(1, "Razorfen Downs", 371, 0);
-            Menu->AddItem(1, "Razorfen Kraul", 372, 0);
-            Menu->AddItem(1, "Scarlet Monestary", 373, 0);
-            Menu->AddItem(1, "Scholomance", 374, 0);
-            Menu->AddItem(1, "Shadowfang Keep", 375, 0);
-            Menu->AddItem(1, "Stratholme", 376, 0);
-            Menu->AddItem(1, "Sunken Temple", 377, 0);
-            Menu->AddItem(1, "Uldaman", 378, 0);
-            Menu->AddItem(1, "Wailing Caverns", 379, 0);
-            Menu->AddItem(1, "Zul'Aman", 380, 0);
-            Menu->AddItem(1, "Zul'Farrak", 381, 0);
-            Menu->AddItem(1, "Zul'Gurub", 382, 0);
-            Menu->AddItem(0, "<-- Page 1 <--", 6, 0);
-            Menu->AddItem(0, "[Back]", 999, 0);
-            Menu->SendTo(Plr);
-            break;
-        case 13:
-            objmgr.CreateGossipMenuForPlayer(&Menu, pObject->GetGUID(), 4273, Plr);
-            Menu->AddItem(1, "Magtheridon's Lair", 421, 0);
-            Menu->AddItem(1, "Sepentshrine Cavern", 422, 0);
-            Menu->AddItem(1, "Gruul's Lair", 386, 0);
-            Menu->AddItem(1, "The Eye", 424, 0);
-            Menu->AddItem(1, "Black Temple", 384, 0);
-            Menu->AddItem(0, "[Back]", 999, 0);
-            Menu->SendTo(Plr);
-            break;
-        case 950:
-            Plr->EventTeleport(169, -247.572571f, 2916.743896f, 98.119423f);
+            //////////////////////////////////////////////////ALLIANCE///////////////////////////////////////////////////////////////
+        case 1001: // Darnassus
             Plr->Gossip_Complete();
+            Plr->EventTeleport(1, 9947.52f, 2482.73f, 1316.21f);
             break;
-        case 998:
+        case 1005: // Exodar
+            Plr->Gossip_Complete();
+            Plr->EventTeleport(530, -3954.20f, -11656.54f, -138.69f);
+            break;
+        case 1010: // Ironforge
+            Plr->Gossip_Complete();
+            Plr->EventTeleport(0, -4924.07f, -951.95f, 501.55f);
+            break;
+        case 1015: // Stormwind
+            Plr->Gossip_Complete();
+            Plr->EventTeleport(0, -8960.14f, 516.266f, 96.3568f);
+            break;
+            //////////////////////////////////////////////////HORDE///////////////////////////////////////////////////////////////
+        case 2001: // Orgrimmar
+            Plr->Gossip_Complete();
+            Plr->EventTeleport(1, 1552.5f, -4420.66f, 8.94802f);
+            break;
+        case 2005: // Silvermoon
+            Plr->Gossip_Complete();
+            Plr->EventTeleport(530, 9338.74f, -7277.27f, 13.7895f);
+            break;
+        case 2010: // Thunder Bluff
+            Plr->Gossip_Complete();
+            Plr->EventTeleport(1, -1290.0f, 147.033997f, 129.682007f);
+            break;
+        case 2015: // Undercity
+            Plr->Gossip_Complete();
+            Plr->EventTeleport(0, 1819.71f, 238.79f, 60.5321f);
+            break;
+            //////////////////////////////////////////////////NEUTRAL///////////////////////////////////////////////////////////////
+        case 3001:// Ebon Hold
+            Plr->Gossip_Complete();
+            Plr->EventTeleport(0, 2353.530029f, -5665.819824f, 426.028015f);
+            break;
+        case 3005:// Booty Bay
+            Plr->Gossip_Complete();
+            Plr->EventTeleport(0, -14438.2f, 472.22f, 15.32f);
+            break;
+        case 3010: //Dalaran
+            Plr->Gossip_Complete();
+            Plr->EventTeleport(571, 5819.08f, 643.99f, 647.80f);
+            break;
+        case 3015: //Everlook
+            Plr->Gossip_Complete();
+            Plr->EventTeleport(1, 6724.77f, -4610.68f, 720.78f);
+            break;
+        case 3020: //Gadgetzan
+            Plr->Gossip_Complete();
+            Plr->EventTeleport(1, -7173.26f, -3785.60f, 8.37f);
+            break;
+        case 3025: //Mudsprocket
+            Plr->Gossip_Complete();
+            Plr->EventTeleport(1, -4564.79f, -3172.38f, 33.93f);
+            break;
+        case 3030: //Ratchet
+            Plr->Gossip_Complete();
+            Plr->EventTeleport(1, -956.664f, -3754.71f, 5.33239f);
+            break;
+        case 3035:// Shattrath City
+            Plr->Gossip_Complete();
+            Plr->EventTeleport(530, -1850.209961f, 5435.821777f, -10.961435f);
+            break;
+        case 3040:// Isle Of Quel'Danas
+            Plr->Gossip_Complete();
+            Plr->EventTeleport(530, 12947.4f, -6893.31f, 5.68398f);
+            break;
+        case 3500: // Arena PvP Option
+            Plr->Gossip_Complete();
+            Plr->EventTeleport(0, -13277.4f, 127.372f, 26.1418f);
+            break;
+        case 4020:
             if (Plr->HasAura(15007) == true)
             {
                 Plr->RemoveAura(15007);
@@ -259,546 +267,160 @@ public:
                 Plr->Gossip_Complete();
             }
             break;
-        case 999:
-            objmgr.CreateGossipMenuForPlayer(&Menu, pObject->GetGUID(), 4273, Plr);
-
-            if (Plr->GetItemInterface()->GetItemCount(98768, true) >= 1)  //VIP 
-                Menu->AddItem(3, "VIP Mall!", 950, 0);
-
-            if (Plr->GetTeam() == 1)
-            {
-                Menu->AddItem(3, "Horde Cities", 1, 0);
-            }
-            else
-            {
-                Menu->AddItem(3, "Alliance Cities", 2, 0);
-            }
-
-            Menu->AddItem(3, "Eastern Kingdom Locations", 3, 0);
-            Menu->AddItem(3, "Kalimdor Locations", 4, 0);
-            Menu->AddItem(3, "Outland Locations", 5, 0);
-            Menu->AddItem(3, "Azeroth Instances", 6, 0);
-            Menu->AddItem(3, "Outland Instances", 7, 0);
-            Menu->AddItem(1, "Shattrath(mall)", 420, 0);
-            Menu->AddItem(4, "Remove Resurrection Sickness", 998, 0);
-            Menu->AddItem(3, "Dueling Areas", 3, 0);
-            Menu->SendTo(Plr);
-            break;
-        case 300:  // Stormwind
-            Plr->EventTeleport(0, -8928.0f, 540.0f, 95.0f);
-            Plr->Gossip_Complete();
-            break;
-        case 301:  // Ironforge
-            Plr->EventTeleport(0, -4981.0f, -881.0f, 502.0f);
-            Plr->Gossip_Complete();
-            break;
-        case 302:  // Darnassus
-            Plr->EventTeleport(1, 9978.0f, 2033.0f, 1328.5f);
-            Plr->Gossip_Complete();
-            break;
-        case 303:  // Exodar
-            Plr->EventTeleport(530, -4014.0f, -11895.0f, -1.5f);
-            Plr->Gossip_Complete();
-            break;
-        case 304:  // Orgrimmar
-            Plr->EventTeleport(1, 1502.0f, -4415.0f, 22.0f);
-            Plr->Gossip_Complete();
-            break;
-        case 305:  // Thunder Bluff
-            Plr->EventTeleport(1, -1283.0f, 158.0f, 130.0f);
-            Plr->Gossip_Complete();
-            break;
-        case 306:  // Undercity
-            Plr->EventTeleport(0, 1752.0f, 239.0f, 61.5f);
-            Plr->Gossip_Complete();
-            break;
-        case 307:  // Silvermoon
-            Plr->EventTeleport(530.0f, 9392.0f, -7277, 14.5f);
-            Plr->Gossip_Complete();
-            break;
-        case 308:  // Alterac Mountains
-            Plr->EventTeleport(0, 237.0f, -652.0f, 119.0f);
-            Plr->Gossip_Complete();
-            break;
-        case 309:  // Arathi Highlands
-            Plr->EventTeleport(0, -1550.0f, -2495.0f, 55.0f);
-            Plr->Gossip_Complete();
-            break;
-        case 310:  // Badlands
-            Plr->EventTeleport(0, -6775.0f, -3286.0f, 242.0f);
-            Plr->Gossip_Complete();
-            break;
-        case 311:  // Burning Steppes
-            Plr->EventTeleport(0, -7975.0f, -1786.0f, 133.5f);
-            Plr->Gossip_Complete();
-            break;
-        case 312:  // Deadwind Pass
-            Plr->EventTeleport(0, -10447.0f, -1872.0f, 105.0f);
-            Plr->Gossip_Complete();
-            break;
-        case 313:  // Dun Morogh
-            Plr->EventTeleport(0, -5709.0f, -1339.0f, 395.0f);
-            Plr->Gossip_Complete();
-            break;
-        case 314:  // Duskwood
-            Plr->EventTeleport(0, -10914.0f, -528.0f, 54.0f);
-            Plr->Gossip_Complete();
-            break;
-        case 315:  // Eastern Plaguelands
-            Plr->EventTeleport(0, 1739.0f, -3623.0f, 120.0f);
-            Plr->Gossip_Complete();
-            break;
-        case 316:  // Elwynn Forest
-            Plr->EventTeleport(0, -9591.0f, -463.0f, 58.0f);
-            Plr->Gossip_Complete();
-            break;
-        case 317:  // Eversong Woods
-            Plr->EventTeleport(530, 8250.0f, -7214.0f, 140.0f);
-            Plr->Gossip_Complete();
-            break;
-        case 318:  // Ghostlands
-            Plr->EventTeleport(530, 6396.0f, -6848.0f, 101.0f);
-            Plr->Gossip_Complete();
-            break;
-        case 319:  // Hillsbrad Foothills
-            Plr->EventTeleport(0, -440.0f, -582.0f, 54.0f);
-            Plr->Gossip_Complete();
-            break;
-        case 320:  // Hinterlands
-            Plr->EventTeleport(0, 235.0f, -3298.0f, 110.0f);
-            Plr->Gossip_Complete();
-            break;
-        case 321:  // Loch Modan
-            Plr->EventTeleport(0, -5853.0f, -3251.0f, 303.0f);
-            Plr->Gossip_Complete();
-            break;
-        case 322:  // Searing Gorge
-            Plr->EventTeleport(0, -6645.0f, -1918.0f, 245.0f);
-            Plr->Gossip_Complete();
-            break;
-        case 323:  // Silverpine Forest
-            Plr->EventTeleport(0, 628.0f, 1291.0f, 87.0f);
-            Plr->Gossip_Complete();
-            break;
-        case 324:  // Stranglethorn Vale
-            Plr->EventTeleport(0, -14246.0f, 301.0f, 28.0f);
-            Plr->Gossip_Complete();
-            break;
-        case 325:  // Swamp of Sorrows
-            Plr->EventTeleport(0, -10476.0f, -2408.0f, 74.0f);
-            Plr->Gossip_Complete();
-            break;
-        case 326:  // The Blasted Lands
-            Plr->EventTeleport(0, -11189.0f, -3023.0f, 8.0f);
-            Plr->Gossip_Complete();
-            break;
-        case 327:  // Tirisfal Glades
-            Plr->EventTeleport(0, 1599.0f, 569.0f, 38.0f);
-            Plr->Gossip_Complete();
-            break;
-        case 328:  // Western Plaguelands
-            Plr->EventTeleport(0, 1676.0f, -1366.0f, 70.0f);
-            Plr->Gossip_Complete();
-            break;
-        case 329:  // Westfall
-            Plr->EventTeleport(0, -10922.0f, 998.0f, 36.0f);
-            Plr->Gossip_Complete();
-            break;
-        case 330:  // Wetlands
-            Plr->EventTeleport(0, -3604.0f, -2711.0f, 20.0f);
-            Plr->Gossip_Complete();
-            break;
-        case 331:  // Ashenvale
-            Plr->EventTeleport(1, 2319.0f, -1672.0f, 124.0f);
-            Plr->Gossip_Complete();
-            break;
-        case 332:  // Azshara
-            Plr->EventTeleport(1, 3336.0f, -4599.0f, 93.0f);
-            Plr->Gossip_Complete();
-            break;
-        case 333:  // Azuremyst Isle
-            Plr->EventTeleport(530, -4540.0f, -11933.0f, 28.0f);
-            Plr->Gossip_Complete();
-            break;
-        case 334:  // Bloodmyst Isle
-            Plr->EventTeleport(530, -2721.0f, -12206.0f, 10.0f);
-            Plr->Gossip_Complete();
-            break;
-        case 335:  // Darkshore
-            Plr->EventTeleport(1, 5084.0f, 242.0f, 29.0f);
-            Plr->Gossip_Complete();
-            break;
-        case 336:  // Desolace
-            Plr->EventTeleport(1, 301.0f, -4184.0f, 28.0f);
-            Plr->Gossip_Complete();
-            break;
-        case 337:  // Durotar
-            Plr->EventTeleport(1, -548.0f, 1276.0f, 90.0f);
-            Plr->Gossip_Complete();
-            break;
-        case 338:  // Dustwallow Marsh
-            Plr->EventTeleport(1, -3345.0f, -3078.0f, 33.0f);
-            Plr->Gossip_Complete();
-            break;
-        case 339:  // Felwood
-            Plr->EventTeleport(1, 5537.0f, -585.0f, 359.0f);
-            Plr->Gossip_Complete();
-            break;
-        case 340:  // Feralas
-            Plr->EventTeleport(1, -4811.0f, 1037.0f, 105.0f);
-            Plr->Gossip_Complete();
-            break;
-        case 341:  // Moonglade
-            Plr->EventTeleport(1, 7931.0f, -2616.0f, 493.0f);
-            Plr->Gossip_Complete();
-            break;
-        case 342:  // Mulgore
-            Plr->EventTeleport(1, -2372.0f, -893.0f, -9.0f);
-            Plr->Gossip_Complete();
-            break;
-        case 343:  // Silithus
-            Plr->EventTeleport(1, -6839.0f, 763.0f, 43.0f);
-            Plr->Gossip_Complete();
-            break;
-        case 344:  // Stonetalon Mountains
-            Plr->EventTeleport(1, 588.0f, 330.0f, 48.0f);
-            Plr->Gossip_Complete();
-            break;
-        case 345:  // Tanaris
-            Plr->EventTeleport(1, -7149.0f, -3746.0f, 9.0f);
-            Plr->Gossip_Complete();
-            break;
-        case 346:  // Teldrassil
-            Plr->EventTeleport(1, 9947.0f, 649.0f, 1310.0f);
-            Plr->Gossip_Complete();
-            break;
-        case 347:  // The Barrens
-            Plr->EventTeleport(1, 567.0f, -2573.0f, 96.0f);
-            Plr->Gossip_Complete();
-            break;
-        case 348:  // Thousand Needles
-            Plr->EventTeleport(1, -4969.0f, -1723.0f, -61.0f);
-            Plr->Gossip_Complete();
-            break;
-        case 349:  // Un Goro Crater
-            Plr->EventTeleport(1, -7932.0f, -2139.0f, -230.0f);
-            Plr->Gossip_Complete();
-            break;
-        case 350:  // Winterspring
-            Plr->EventTeleport(1, 6719.0f, -4646.0f, 722.0f);
-            Plr->Gossip_Complete();
-            break;
-        case 351:  // Blade's Edge Mountains
-            Plr->EventTeleport(530, 2924.0f, 5982.0f, 1.0f);
-            Plr->Gossip_Complete();
-            break;
-        case 352:  // Hellfire Peninsula
-            Plr->EventTeleport(530, -312.657562f, 3030.401855f, -15.506211f);
-            Plr->Gossip_Complete();
-            break;
-        case 353:  // Nagrand
-            Plr->EventTeleport(530, -1525.0f, 6571.0f, 21.0f);
-            Plr->Gossip_Complete();
-            break;
-        case 354:  // Netherstorm
-            Plr->EventTeleport(530, 3052.0f, 3670.0f, 143.0f);
-            Plr->Gossip_Complete();
-            break;
-        case 355:  // Shadowmoon Valley
-            Plr->EventTeleport(530, -3693.0f, 2344.0f, 77.0f);
-            Plr->Gossip_Complete();
-            break;
-        case 356:  // Terokkar Forest
-            Plr->EventTeleport(530, -1975.0f, 4516.0f, 13.0f);
-            Plr->Gossip_Complete();
-            break;
-        case 357:  // Zangarmarsh
-            Plr->EventTeleport(530, -205.0f, 5545.0f, 24.0f);
-            Plr->Gossip_Complete();
-            break;
-        case 358:  // Ahn'Qiraj
-            Plr->EventTeleport(1, -8187.0f, 1539.0f, 5.0f);
-            Plr->Gossip_Complete();
-            break;
-        case 359:  // Blackfathom Depths
-            Plr->EventTeleport(1, 4225.5f, 736.2f, -26.1f);
-            Plr->Gossip_Complete();
-            break;
-        case 360:  // Blackrock Depths
-            Plr->EventTeleport(0, -7187.0f, -914.0f, 166.0f);
-            Plr->Gossip_Complete();
-            break;
-        case 361:  // Blackrock Spire
-            Plr->EventTeleport(0, -7532.0f, -1221.0f, 286.0f);
-            Plr->Gossip_Complete();
-            break;
-        case 362:  // Blackwing Lair
-            Plr->EventTeleport(229, 137.0f, -474.0f, 117.0f);
-            Plr->Gossip_Complete();
-            break;
-        case 363:  // Caverns of Time
-            Plr->EventTeleport(1, -8568.0f, -4260.0f, -213.0f);
-            Plr->Gossip_Complete();
-            break;
-        case 364:  // Deadmines
-            Plr->EventTeleport(0, -11207.7f, 1668.0f, 24.6f);
-            Plr->Gossip_Complete();
-            break;
-        case 365:  // Dire Maul
-            Plr->EventTeleport(1, -3524.0f, 1124.0f, 162.0f);
-            Plr->Gossip_Complete();
-            break;
-        case 366:  // Gnomeregan
-            Plr->EventTeleport(0, -5164.0f, 918.0f, 258.0f);
-            Plr->Gossip_Complete();
-            break;
-        case 367:  // Maraudon
-            Plr->EventTeleport(1, -1458.0f, 2606.0f, 76.0f);
-            Plr->Gossip_Complete();
-            break;
-        case 368:  // Molten Core
-            Plr->EventTeleport(230, 1123.0f, -455.0f, -101.0f);
-            Plr->Gossip_Complete();
-            break;
-        case 369:  // Onyxia's Lair
-            Plr->EventTeleport(1, -4709.0f, -3729.0f, 55.0f);
-            Plr->Gossip_Complete();
-            break;
-        case 370:  // Ragefire Chasm
-            Plr->EventTeleport(1, 1805.0f, -4404.0f, -18.0f);
-            Plr->Gossip_Complete();
-            break;
-        case 371:  // Razorfen Downs
-            Plr->EventTeleport(1, -4661.0f, -2511.0f, 81.0f);
-            Plr->Gossip_Complete();
-            break;
-        case 372:  // Razorfen Kraul
-            Plr->EventTeleport(1, -4473.0f, -1690.0f, 82.0f);
-            Plr->Gossip_Complete();
-            break;
-        case 373:  // Scarlet Monestary
-            Plr->EventTeleport(0, 2841.0f, -692.0f, 140.0f);
-            Plr->Gossip_Complete();
-            break;
-        case 374:  // Scholomance
-            Plr->EventTeleport(0, 1265.0f, -2560.0f, 95.0f);
-            Plr->Gossip_Complete();
-            break;
-        case 375:  // Shadowfang Keep
-            Plr->EventTeleport(0, -241.0f, 1545.0f, 77.0f);
-            Plr->Gossip_Complete();
-            break;
-        case 376:  // Stratholme
-            Plr->EventTeleport(0, 3345.0f, -3380.0f, 145.0f);
-            Plr->Gossip_Complete();
-            break;
-        case 377:  // Sunken Temple
-            Plr->EventTeleport(0, -10457.0f, -3828.0f, 19.0f);
-            Plr->Gossip_Complete();
-            break;
-        case 378:  // Uldaman
-            Plr->EventTeleport(0, -6076.05f, -2957.7f, 207.0f);
-            Plr->Gossip_Complete();
-            break;
-        case 379:  // Wailing Caverns
-            Plr->EventTeleport(1, -737.0f, -2219.0f, 17.0f);
-            Plr->Gossip_Complete();
-            break;
-        case 380:  // Zul'Aman
-            Plr->EventTeleport(530, 6850.0f, -7950.0f, 171.0f);
-            Plr->Gossip_Complete();
-            break;
-        case 381:  // Zul'Farrak
-            Plr->EventTeleport(1, -6821.0f, -2890.0f, 9.0f);
-            Plr->Gossip_Complete();
-            break;
-        case 382:  // Zul'Gurub
-            Plr->EventTeleport(0, -11916.0f, -1204.0f, 93.0f);
-            Plr->Gossip_Complete();
-            break;
-        case 383:  // Auchenai Crypts
-            Plr->EventTeleport(530, -3359.8f, 5221.0f, -101.0f);
-            Plr->Gossip_Complete();
-            break;
-        case 384:  // Black Temple
-            Plr->EventTeleport(530, -3614.0f, 310.0f, 40.0f);
-            Plr->Gossip_Complete();
-            break;
-        case 385:  // Coilfang Reservoir
-            Plr->EventTeleport(530, 740.1f, 6868.0f, -68.0f);
-            Plr->Gossip_Complete();
-            break;
-        case 386:  // Gruul's Lair
-            Plr->EventTeleport(530, 3529.0f, 5096.0f, 3.0f);
-            Plr->Gossip_Complete();
-            break;
-        case 387:  // Hellfire Ramparts
-            Plr->EventTeleport(530, -172.0f, 3020.0f, -3.2f);
-            Plr->Gossip_Complete();
-            break;
-        case 388:  // Mana Tombs
-            Plr->EventTeleport(530, -3081.4f, 4945.6f, -101.0f);
-            Plr->Gossip_Complete();
-            break;
-        case 389:  // Pheonix Hall
-            Plr->EventTeleport(530, 3084.0f, 1385.0f, 185.0f);
-            Plr->Gossip_Complete();
-            break;
-        case 390:  // Sethekk Halls
-            Plr->EventTeleport(530, -3364.0f, 4675.0f, 101.0f);
-            Plr->Gossip_Complete();
-            break;
-        case 391:  // Shadow Labyrinth
-            Plr->EventTeleport(530, -3640.0f, 4941.0f, -101.0f);
+            //////////////////////////////////////////////////KALIMDOR///////////////////////////////////////////////////////////////
+        case 6001:// Blackfathom Deeps
             Plr->Gossip_Complete();
+            Plr->EventTeleport(1, 4248.72f, 744.35f, -24.67f);
             break;
-        case 392:  // The Botanica
-            Plr->EventTeleport(530, 3404.0f, 1488.0f, 183.0f);
+        case 6005:// Caverns of Time
             Plr->Gossip_Complete();
+            Plr->EventTeleport(1, -8173.66f, -4746.36f, 33.84f);
             break;
-        case 393:  // The Mechanar
-            Plr->EventTeleport(530, 2870.0f, 1557.0f, 252.0f);
+        case 6010:// Dire Maul
             Plr->Gossip_Complete();
+            Plr->EventTeleport(1, -3960.95f, 1130.64f, 161.05f);
             break;
-        case 394:  // Borean Tundra
-            Plr->EventTeleport(571, 3008.0f, 5290.0f, 60.0f);
+        case 6015:// Maraudon
             Plr->Gossip_Complete();
+            Plr->EventTeleport(1, -1431.33f, 2962.34f, 98.23f);
             break;
-        case 395:  // Dragonblight
-            Plr->EventTeleport(571, 3118.0f, 107.0f, 72.0f);
+        case 6020:// Onyxia's Lair
             Plr->Gossip_Complete();
+            Plr->EventTeleport(1, -4707.44f, -3726.82f, 54.6723f);
             break;
-        case 396:  // Grizzly Hills
-            Plr->EventTeleport(571, 3681.0f, -3472.0f, 243.0f);
+        case 6025:// Ragefire Chasm
             Plr->Gossip_Complete();
+            Plr->EventTeleport(1, 1814.47f, -4419.46f, -18.78f);
             break;
-        case 397:  // Howling Fjord
-            Plr->EventTeleport(571, 1267.0f, -4062.0f, 143.0f);
+        case 6030:// Razorfen Downs
             Plr->Gossip_Complete();
+            Plr->EventTeleport(1, -4657.88f, -2525.59f, 81.4f);
             break;
-        case 398:  // Icecrown
-            Plr->EventTeleport(571, 7514.0f, 2091.0f, 623.0f);
+        case 6035:// Razorfen Kraul
             Plr->Gossip_Complete();
+            Plr->EventTeleport(1, -4463.6f, -1664.53f, 82.26f);
             break;
-        case 399:  // Sholazar Basin
-            Plr->EventTeleport(571, 5501.0f, 4879.0f, 198.0f);
+        case 6040:// Ruins of Ahn'Qiraj
             Plr->Gossip_Complete();
+            Plr->EventTeleport(1, -8413.33f, 1501.27f, 29.64f);
             break;
-        case 400:  // Storm Peaks
-            Plr->EventTeleport(571, 7514.0f, -1037.0f, 467.0f);
+        case 6045:// Temple of Ahn'Qiraj
             Plr->Gossip_Complete();
+            Plr->EventTeleport(1, -8245.837891f, 1983.736206f, 129.071686f);
             break;
-        case 401:  // Wintergrasp
-            Plr->EventTeleport(571, 4611.0f, 2848.0f, 3397.0f);
+        case 6050:// Wailing Caverns
             Plr->Gossip_Complete();
+            Plr->EventTeleport(1, -722.53f, -2226.30f, 16.94f);
             break;
-        case 402:  // Zul'Drak
-            Plr->EventTeleport(571, 5441.0f, -2304.0f, 298.0f);
+        case 6055:// Zul'Farrak
             Plr->Gossip_Complete();
+            Plr->EventTeleport(1, -6801.9f, -2890.22f, 8.88f);
             break;
-        case 403:  // Dalaran
-            Plr->EventTeleport(571, 5797.0f, 629.0f, 648.0f);
+            //////////////////////////////////////////////////EASTERN KINGDOMS///////////////////////////////////////////////////////////////
+        case 7001:// Blackrock Depths
             Plr->Gossip_Complete();
+            Plr->EventTeleport(0, -7180.57f, -920.04f, 165.49f);
             break;
-        case 404:  // Crystalsong Forest
-            Plr->EventTeleport(571, 5402.0f, 72.0f, 151.0f);
+        case 7005:// Blackrock Spire
             Plr->Gossip_Complete();
+            Plr->EventTeleport(0, -7526.77f, -1225.64f, 285.73f);
             break;
-        case 405:  // DK Start Zone
-            Plr->EventTeleport(609, 2353.0f, -5666.0f, 427.0f);
+        case 7010:// Blackwing Lair
             Plr->Gossip_Complete();
+            Plr->EventTeleport(469, -7672.61f, -1107.21f, 396.65f);
             break;
-        case 406:  // Azjol'Nerub
-            Plr->EventTeleport(571, 3721.0f, 2155.0f, 37.0f);
+        case 7015:// Deadmines
             Plr->Gossip_Complete();
+            Plr->EventTeleport(0, -11208.2f, 1675.92f, 24.57f);
             break;
-        case 407:  // Drak'Tharon
-            Plr->EventTeleport(571, 4897.0f, 2046.0f, 249.0f);
+        case 7020:// Gnomeregan
             Plr->Gossip_Complete();
+            Plr->EventTeleport(0, -5163.32f, 927.18f, 257.158f);
             break;
-        case 408:  // Gun'Drak
-            Plr->EventTeleport(571, 6925.0f, 4447.0f, 451.0f);
+        case 7025:// Isle Of Quel'Danas
             Plr->Gossip_Complete();
+            Plr->EventTeleport(530, 13010.00f, -6907.64f, 9.58f);
             break;
-        case 409:  // Icecrown Citadel
-            Plr->EventTeleport(571, 6151.0f, 2244.0f, 508.0f);
+        case 7030:// Karazhan
             Plr->Gossip_Complete();
+            Plr->EventTeleport(0, -11119.6f, -2011.42f, 47.09f);
             break;
-        case 410:  // Naxxaramas
-            Plr->EventTeleport(571, 3668.0f, -1049.0f, 131.0f);
+        case 7035:// Molten Core
             Plr->Gossip_Complete();
+            Plr->EventTeleport(230, 1114.85f, -457.76f, -102.81f);
             break;
-        case 411:  // Obsidian Sanctum
-            Plr->EventTeleport(571, 3561.0f, 275.0f, 115.0f);
+        case 7040:// Scarlet Monastery
             Plr->Gossip_Complete();
+            Plr->EventTeleport(0, 2843.89f, -693.74f, 139.32f);
             break;
-        case 412:  // The Nexus/Occulus/Eye of Eternity
-            Plr->EventTeleport(571, 3783.0f, 6942.0f, 105.0f);
+        case 7045:// Scholomance
             Plr->Gossip_Complete();
+            Plr->EventTeleport(0, 1273.06f, -2574.01f, 92.66f);
             break;
-        case 413:  // Halls of Stone/Halls of Lightning
-            Plr->EventTeleport(571, 8937.0f, 1266.0f, 1026.0f);
+        case 7050:// Shadowfang Keep
             Plr->Gossip_Complete();
+            Plr->EventTeleport(0, -239.54f, 1550.8f, 76.89f);
             break;
-        case 414:  // Utgarde Keep
-            Plr->EventTeleport(571, 1228.0f, -4943.0f, 36.0f);
+        case 7055:// Stratholme
             Plr->Gossip_Complete();
+            Plr->EventTeleport(0, 3370.76f, -3343.63f, 142.26f);
             break;
-        case 415:  // Utgarde Pinnacle
-            Plr->EventTeleport(571, 1274.0f, -4857.0f, 216.0f);
+        case 7060:// Sunken Temple
             Plr->Gossip_Complete();
+            Plr->EventTeleport(0, -10346.92f, -3851.90f, -43.41f);
             break;
-        case 416:  // Vault of Archevon
-            Plr->EventTeleport(571, 5440.0f, 2840.0f, 421.0f);
+        case 7065:// The Stockade
             Plr->Gossip_Complete();
+            Plr->EventTeleport(0, -8766.89f, 844.6f, 88.43f);
             break;
-        case 417:  // Violet Hold
-            Plr->EventTeleport(571, 5708.0f, 521.0f, 650.0f);
+        case 7070:// Uldaman
             Plr->Gossip_Complete();
+            Plr->EventTeleport(0, -6070.72f, -2955.33f, 209.78f);
             break;
-        case 418:  // Alliance Mall
-            Plr->EventTeleport(530, 53.706242f, -1503.903809f, 12.486f);
+        case 7075:// Zul'Aman
             Plr->Gossip_Complete();
+            Plr->EventTeleport(530, 6851.09f, -7979.71f, 183.54f);
             break;
-        case 419:  // Horde Mall
-            Plr->EventTeleport(530, 53.706242f, -1503.903809f, 12.486f);
+        case 7080:// Zul'Gurub
             Plr->Gossip_Complete();
+            Plr->EventTeleport(0, -11916.4f, -1216.23f, 92.28f);
             break;
-        case 420:  // shattrath
-            Plr->EventTeleport(530, -1887.510010f, 5359.379883f, -12.427300f);
+            //////////////////////////////////////////////////OUTLAND///////////////////////////////////////////////////////////////
+        case 8001:// Auchindoun
             Plr->Gossip_Complete();
+            Plr->EventTeleport(530, -3322.92f, 4931.02f, -100.56f);
             break;
-        case 421:  // Magtheridon's Lair
-            Plr->EventTeleport(530, -313.0f, 3088.0f, -116.0f);
+        case 8005:// Black Temple
             Plr->Gossip_Complete();
+            Plr->EventTeleport(530, -3649.1f, 317.33f, 35.19f);
             break;
-        case 422:  // Serpentshrine Cavern
-            Plr->EventTeleport(530, 830.0f, 6865.0f, -63.0f);
+        case 8010:// Coilfang Reservoir
             Plr->Gossip_Complete();
+            Plr->EventTeleport(530, 721.08f, 6846.77f, -68.75f);
             break;
-        case 423:  // The Blood Furnace
-            Plr->EventTeleport(530, -303.0f, 3164.0f, 32.0f);
+        case 8015:// Gruul's Lair
             Plr->Gossip_Complete();
+            Plr->EventTeleport(530, 3539.01f, 5082.36f, 1.69f);
             break;
-        case 424:  // The Eye
-            Plr->EventTeleport(530, 3087.0f, 1373.0f, 185.0f);
+        case 8020:// Hellfire Citadel
             Plr->Gossip_Complete();
+            Plr->EventTeleport(530, -292.71f, 3146.77f, 31.60f);
             break;
-        case 425:  // The Shattered Halls
-            Plr->EventTeleport(530, -311.0f, 3083.0f, -3.0f);
+        case 8025:// Tempest Keep
             Plr->Gossip_Complete();
+            Plr->EventTeleport(530, 3087.62f, 1376.27f, 184.8f);
             break;
-        case 426:  // The Slave Pens
-            Plr->EventTeleport(530, 719.0f, 6999.0f, -73.0f);
+        case 10000:// Allianz Playertreff
             Plr->Gossip_Complete();
+            Plr->EventTeleport(0, 2918.74f, -1437.36f, 150.782f);
             break;
-        case 427:  // The Steamvault
-            Plr->EventTeleport(530.0f, 816.0f, 6934.0f, -80.0f);
+        case 20000:// Horde Playertreff
             Plr->Gossip_Complete();
+            Plr->EventTeleport(1, 7447.3f, -1693.77f, 194.899f);
             break;
-        case 428:  // The Underbog
-            Plr->EventTeleport(530, 777.0f, 6763.0f, -72.0f);
+        case 30000:// SWV instanz
             Plr->Gossip_Complete();
+            Plr->EventTeleport(0, -8645.188477f, 595.820679f, 95.705704f);
             break;
         }
     }
