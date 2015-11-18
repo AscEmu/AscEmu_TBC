@@ -20,7 +20,6 @@
 #define _ITEM_BUFFER_POOL
 
 //hmm with 2000 players each have 50 items ...Decrease it if you need the space ;)
-//@Zack 2000 x 50 = 10000? :P
 #define INITI_POOL_WITH_SIZE 100000
 #define INITI_CONTAINER_POOL_WITH_SIZE 5000
 //too big values migh create lag spikes on buffer limit extension !

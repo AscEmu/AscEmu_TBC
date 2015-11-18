@@ -4298,7 +4298,7 @@ int luaGameObject_Teleport(lua_State * L, GameObject * ptr)
 	double posX = luaL_checknumber(L, 3);
 	double posY = luaL_checknumber(L, 4);
 	double posZ = luaL_checknumber(L, 5);
-	if(!mapId || !posX || !posY || !posZ)
+	if(!posX || !posY || !posZ)
 		return 0;
 	LocationVector vec((float)posX, (float)posY, (float)posZ);
 	((Player*)target)->SafeTeleport((uint32)mapId, 0, vec);
