@@ -46,7 +46,7 @@ void SkillNPC::GossipSelectOption(Object * pObject, Player* Plr, uint32 Id, uint
         break;
     case 5:
     {
-        Plr->Gossip_Complete();//Ends Conversation
+        Plr->Gossip_Complete();
     }
     break;
     case 1:
@@ -334,6 +334,7 @@ void MissingSkillNPC::GossipSelectOption(Object *pObject, Player *Plr, uint32 Id
         {
             Plr->BroadcastMessage("You must be level 10 to learn Taunt.");
         }
+        Plr->Gossip_Complete();
         break;
     case 11:     // Warrior-Defensive Stance
         if (Plr->getLevel() >= 10)
@@ -345,6 +346,7 @@ void MissingSkillNPC::GossipSelectOption(Object *pObject, Player *Plr, uint32 Id
         {
             Plr->BroadcastMessage("You must be level 10 to learn Defensive Stance.");
         }
+        Plr->Gossip_Complete();
         break;
     case 12:     // Warrior-Beserker Stance
         if (Plr->getLevel() >= 30)
@@ -356,6 +358,7 @@ void MissingSkillNPC::GossipSelectOption(Object *pObject, Player *Plr, uint32 Id
         {
             Plr->BroadcastMessage("You must be level 30 to learn Berseker Stance.");
         }
+        Plr->Gossip_Complete();
         break;
     case 13:     // Warrior-Intercept
         if (Plr->getLevel() >= 10)
@@ -367,6 +370,7 @@ void MissingSkillNPC::GossipSelectOption(Object *pObject, Player *Plr, uint32 Id
         {
             Plr->BroadcastMessage("You must be level 10 to learn Intercept.");
         }
+        Plr->Gossip_Complete();
         break;
     case 20:     // Paladin-Warhorse
         if (Plr->getLevel() >= 40)
@@ -378,6 +382,7 @@ void MissingSkillNPC::GossipSelectOption(Object *pObject, Player *Plr, uint32 Id
         {
             Plr->BroadcastMessage("You must be level 40 to learn Summon Warhorse.");
         }
+        Plr->Gossip_Complete();
         break;
     case 21:     // Paladin-Charger
         if (Plr->getLevel() >= 60)
@@ -389,6 +394,7 @@ void MissingSkillNPC::GossipSelectOption(Object *pObject, Player *Plr, uint32 Id
         {
             Plr->BroadcastMessage("You must be level 60 to learn Summon Charger.");
         }
+        Plr->Gossip_Complete();
         break;
     case 22:     // Paladin-Redemption
         if (Plr->getLevel() >= 10)
@@ -400,6 +406,7 @@ void MissingSkillNPC::GossipSelectOption(Object *pObject, Player *Plr, uint32 Id
         {
             Plr->BroadcastMessage("You must be level 10 to learn Redemption.");
         }
+        Plr->Gossip_Complete();
         break;
     case 30:     // Hunter-Pet Spells
         if (Plr->getLevel() >= 10)
@@ -410,13 +417,12 @@ void MissingSkillNPC::GossipSelectOption(Object *pObject, Player *Plr, uint32 Id
             Plr->addSpell(982);
             Plr->addSpell(6991);
             Plr->BroadcastMessage("You have learned your Hunter Pet Spells.");
-            Plr->Gossip_Complete();
         }
         else
         {
             Plr->BroadcastMessage("You are below level 10.");
-            Plr->Gossip_Complete();
         }
+        Plr->Gossip_Complete();
         break;
     case 40:     // Warlock-Pet Spells
         if (Plr->getLevel() >= 10)
@@ -426,115 +432,106 @@ void MissingSkillNPC::GossipSelectOption(Object *pObject, Player *Plr, uint32 Id
             Plr->addSpell(712);
             Plr->addSpell(691);
             Plr->BroadcastMessage("You have learned your Warlock Pet Spells.");
-            Plr->Gossip_Complete();
         }
         else
         {
             Plr->BroadcastMessage("You are below level 10.");
-            Plr->Gossip_Complete();
         }
+        Plr->Gossip_Complete();
         break;
     case 41:     // Warlock-Felsteed
         if (Plr->getLevel() >= 40)
         {
             Plr->addSpell(5784);
             Plr->BroadcastMessage("You have learned Summon Felsteed.");
-            Plr->Gossip_Complete();
         }
         else
         {
             Plr->BroadcastMessage("You must be level 40 to learn Summon Felsteed.");
-            Plr->Gossip_Complete();
         }
+        Plr->Gossip_Complete();
         break;
     case 42:     // Warlock-Dreadsteed
         if (Plr->getLevel() >= 60)
         {
             Plr->addSpell(23161);
             Plr->BroadcastMessage("You have learned Summon Dreadsteed.");
-            Plr->Gossip_Complete();
         }
         else
         {
             Plr->BroadcastMessage("You must be level 60 to learn Summon Dreadsteed.");
-            Plr->Gossip_Complete();
         }
+        Plr->Gossip_Complete();
         break;
     case 51:     // Druid-Dire Bear Form
         if (Plr->getLevel() >= 30)
         {
             Plr->addSpell(9634);
             Plr->BroadcastMessage("You have learned Dire Bear Form.");
-            Plr->Gossip_Complete();
         }
         else
         {
             Plr->BroadcastMessage("You must be level 30 to learn Dire Bear Form.");
-            Plr->Gossip_Complete();
         }
+        Plr->Gossip_Complete();
         break;
     case 52:     // Druid-Normal Flight Form
         if (Plr->getLevel() >= 68)
         {
             Plr->addSpell(33943);
             Plr->BroadcastMessage("You have learned Summon Normal Flight Form.");
-            Plr->Gossip_Complete();
         }
         else
         {
             Plr->BroadcastMessage("You must be level 68 to learn Normal Flight Form.");
-            Plr->Gossip_Complete();
         }
+        Plr->Gossip_Complete();
         break;
     case 53:     // Druid-Epic Flight Form
         if (Plr->getLevel() >= 70)
         {
             Plr->addSpell(40120);
             Plr->BroadcastMessage("You have learned Summon Epic Flight Form.");
-            Plr->Gossip_Complete();
         }
         else
         {
             Plr->BroadcastMessage("You must be level 60 to learn Epic Flight Form.");
-            Plr->Gossip_Complete();
         }
+        Plr->Gossip_Complete();
         break;
     case 54:     // Druid-Bear form
         if (Plr->getLevel() >= 10)
         {
             Plr->addSpell(6795);
             Plr->BroadcastMessage("You have learned Bear Form.");
-            Plr->Gossip_Complete();
         }
         else
         {
             Plr->BroadcastMessage("You must be level 10 to learn Bear Form.");
-            Plr->Gossip_Complete();
         }
+        Plr->Gossip_Complete();
         break;
     case 56:     // Druid-Aquatic Form
         if (Plr->getLevel() >= 20)
         {
             Plr->addSpell(6795);
             Plr->BroadcastMessage("You have learned Aquatic Form.");
-            Plr->Gossip_Complete();
         }
         else
         {
             Plr->BroadcastMessage("You must be level 20 to learn Aquatic Form.");
-            Plr->Gossip_Complete();
         }
+        Plr->Gossip_Complete();
         break;
     case 98:     // Reset Talents  
     {
         Plr->Reset_Talents();
         Plr->BroadcastMessage("You have reset your talent points.");
-        Plr->Gossip_Complete();
     }
+    Plr->Gossip_Complete();
     break;
     case 99:    //Main Menu
         objmgr.CreateGossipMenuForPlayer(&Menu, pObject->GetGUID(), 1, Plr);
-
         if (Plr->getClass() == 1)
         {
             Menu->AddItem(0, "What spells can warriors learn?", 1);
@@ -567,7 +564,6 @@ void MissingSkillNPC::GossipSelectOption(Object *pObject, Player *Plr, uint32 Id
         {
             Menu->AddItem(0, "What spells can shamans learn?", 8);
         }
-
         Menu->AddItem(0, "Reset Talent Points", 98);
         Menu->SendTo(Plr);
         break;
@@ -578,9 +574,7 @@ void SetupSkillNPC(ScriptMgr * mgr)
 {
     GossipScript * gs = (GossipScript*) new SkillNPC();
     mgr->register_gossip_script(98777, gs);
-
     GossipScript * bs = (GossipScript*) new BuffNPC();
     mgr->register_gossip_script(99998, bs);
-
     mgr->register_gossip_script(98715, (GossipScript*) new MissingSkillNPC());
 }
