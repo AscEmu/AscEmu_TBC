@@ -1,10 +1,7 @@
-# Copyright (C) 2014-2015 AscEmu Team <http://www.ascemu.org>
+# Copyright (C) 2014-2016 AscEmu Team <http://www.ascemu.org>
 
 # set up our project name
 project(vmaplib)
-
-set(prefix ${DEPENDENCY_ROOT}/${PROJECT_NAME})
-
 set(sources
     BIH.cpp
     MapTree.cpp
@@ -14,11 +11,14 @@ set(sources
     VMapManager2.cpp
     WorldModel.cpp)
 
-foreach(src IN ITEMS ${sources})
-   set(SRCS ${SRCS} ${prefix}/${src})
-endforeach(src)
-
-include_directories(${GLOBAL_INCLUDE_DIRS})
+include_directories(
+    ${PCRE_INCLUDE_DIR}
+    ${CMAKE_CURRENT_SOURCE_DIR}/include
+    ${CMAKE_SOURCE_DIR}/dep/g3dlite/include
+    ${CMAKE_SOURCE_DIR}/src/shared
+)
 link_directories(${DEPENDENCY_LIBS} ${EXTRA_LIBS_PATH})
-add_library(${PROJECT_NAME} STATIC ${SRCS})
-target_link_libraries(${PROJECT_NAME} g3dlite)
+
+add_library(${PROJECT_NAME} STATIC ${sources})
+target_link_libraries(${PROJECT_NAME} shared g3dlite)
+unset(sources)

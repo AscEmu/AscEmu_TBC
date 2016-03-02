@@ -44,6 +44,7 @@
 
 #include "../logonserver/Main.h"
 #include "../world/Opcodes.h"
+#include "LogonConf.h"
 #include "AccountCache.h"
 #include "PeriodicFunctionCall_Thread.h"
 #include "../logonserver/AutoPatcher.h"

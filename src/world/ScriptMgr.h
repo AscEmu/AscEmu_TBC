@@ -124,10 +124,10 @@ typedef uint32(*exp_get_script_type)();
 typedef const char*(*exp_get_version)();
 
 /* Hashmap typedefs */
-typedef HM_NAMESPACE::hash_map<uint32, exp_create_creature_ai> CreatureCreateMap;
-typedef HM_NAMESPACE::hash_map<uint32, exp_create_gameobject_ai> GameObjectCreateMap;
-typedef HM_NAMESPACE::hash_map<uint32, exp_handle_dummy_aura> HandleDummyAuraMap;
-typedef HM_NAMESPACE::hash_map<uint32, exp_handle_dummy_spell> HandleDummySpellMap;
+typedef std::unordered_map<uint32, exp_create_creature_ai> CreatureCreateMap;
+typedef std::unordered_map<uint32, exp_create_gameobject_ai> GameObjectCreateMap;
+typedef std::unordered_map<uint32, exp_handle_dummy_aura> HandleDummyAuraMap;
+typedef std::unordered_map<uint32, exp_handle_dummy_spell> HandleDummySpellMap;
 typedef std::set<GossipScript*> CustomGossipScripts;
 typedef std::set<QuestScript*> QuestScripts;
 typedef std::list<void*> ServerHookList;

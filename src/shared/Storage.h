@@ -254,7 +254,7 @@ public:
 	void InitPool(uint32 cnt) { _pool.Init( cnt ); }
 #endif
 
-	typename HM_NAMESPACE::hash_map<uint32, T*> _map;
+	typename std::unordered_map<uint32, T*> _map;
 
 	/** Returns an iterator currently referencing the start of the container
 	 */
@@ -264,7 +264,7 @@ public:
 	 */
 	~HashMapStorageContainer()
 	{
-		for(typename HM_NAMESPACE::hash_map<uint32, T*>::iterator itr = _map.begin(); itr != _map.end(); ++itr)
+		for(typename std::unordered_map<uint32, T*>::iterator itr = _map.begin(); itr != _map.end(); ++itr)
 			delete itr->second;
 	}
 
@@ -307,7 +307,7 @@ public:
 	 */
 	bool DeallocateEntry(uint32 Entry)
 	{
-		typename HM_NAMESPACE::hash_map<uint32, T*>::iterator itr = _map.find(Entry);
+		typename std::unordered_map<uint32, T*>::iterator itr = _map.find(Entry);
 		if(itr == _map.end())
 			return false;
 
@@ -422,7 +422,7 @@ template<class T>
 class SERVER_DECL HashMapStorageIterator : public StorageContainerIterator<T>
 {
 	HashMapStorageContainer<T> * Source;
-	typename HM_NAMESPACE::hash_map<uint32, T*>::iterator itr;
+	typename std::unordered_map<uint32, T*>::iterator itr;
 public:
 
 	/** Constructor

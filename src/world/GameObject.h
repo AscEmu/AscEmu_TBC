@@ -43,8 +43,8 @@ enum GAMEOBJECT_FLAG_BIT
     GAMEOBJECT_CLICKABLE = 0x20,
 };
 
-typedef HM_NAMESPACE::hash_map<Quest*, uint32 > GameObjectGOMap;
-typedef HM_NAMESPACE::hash_map<Quest*, std::map<uint32, uint32> > GameObjectItemMap;
+typedef std::unordered_map<Quest*, uint32 > GameObjectGOMap;
+typedef std::unordered_map<Quest*, std::map<uint32, uint32> > GameObjectItemMap;
 
 #pragma pack(push,1)
 struct GameObjectInfo

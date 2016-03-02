@@ -102,22 +102,22 @@ class LocalizationMgr
     LocalizedWorldMapInfo *	GetLocalizedWorldMapInfo(uint32 id, uint32 language);
 
     template<typename T>
-    void CopyHashMap(HM_NAMESPACE::hash_map<uint32, T> * src, HM_NAMESPACE::hash_map<uint32, T> * dest)
+    void CopyHashMap(std::unordered_map<uint32, T> * src, std::unordered_map<uint32, T> * dest)
     {
-        for (typename HM_NAMESPACE::hash_map<uint32, T>::iterator itr = src->begin(); itr != src->end(); ++itr)
+        for (typename std::unordered_map<uint32, T>::iterator itr = src->begin(); itr != src->end(); ++itr)
             dest->insert(std::make_pair(itr->first, itr->second));
     }
 
     private:
-    HM_NAMESPACE::hash_map<uint32, LocalizedQuest>				* m_Quests;
-    HM_NAMESPACE::hash_map<uint32, LocalizedItem>				* m_Items;
-    HM_NAMESPACE::hash_map<uint32, LocalizedNpcText>			* m_NpcTexts;
-    HM_NAMESPACE::hash_map<uint32, LocalizedCreatureName>		* m_CreatureNames;
-    HM_NAMESPACE::hash_map<uint32, LocalizedGameObjectName>		* m_GameObjectNames;
-    HM_NAMESPACE::hash_map<uint32, LocalizedItemPage>			* m_ItemPages;
-    HM_NAMESPACE::hash_map<uint32, LocalizedWorldStringTable>			* m_WorldStrings;
-    HM_NAMESPACE::hash_map<uint32, LocalizedWorldBroadCast>			* m_WorldBroadCast;
-    HM_NAMESPACE::hash_map<uint32, LocalizedWorldMapInfo>			* m_WorldMapInfo;
+        std::unordered_map<uint32, LocalizedQuest>				* m_Quests;
+        std::unordered_map<uint32, LocalizedItem>				* m_Items;
+        std::unordered_map<uint32, LocalizedNpcText>			* m_NpcTexts;
+        std::unordered_map<uint32, LocalizedCreatureName>		* m_CreatureNames;
+        std::unordered_map<uint32, LocalizedGameObjectName>		* m_GameObjectNames;
+        std::unordered_map<uint32, LocalizedItemPage>			* m_ItemPages;
+        std::unordered_map<uint32, LocalizedWorldStringTable>			* m_WorldStrings;
+        std::unordered_map<uint32, LocalizedWorldBroadCast>			* m_WorldBroadCast;
+        std::unordered_map<uint32, LocalizedWorldMapInfo>			* m_WorldMapInfo;
 
     std::vector<std::pair<uint32, uint32> >								  m_languages;
     bool														  m_disabled;

@@ -155,12 +155,12 @@ struct LuaGOGossipBinding { const char * Functions[GOSSIP_EVENT_COUNT]; };
 class LuaEngineMgr
 {
 private:
-	typedef HM_NAMESPACE::hash_map<uint32, LuaUnitBinding> UnitBindingMap;
-	typedef HM_NAMESPACE::hash_map<uint32, LuaQuestBinding> QuestBindingMap;
-	typedef HM_NAMESPACE::hash_map<uint32, LuaGameObjectBinding> GameObjectBindingMap;
-	typedef HM_NAMESPACE::hash_map<uint32, LuaUnitGossipBinding> GossipUnitScriptsBindingMap;
-	typedef HM_NAMESPACE::hash_map<uint32, LuaItemGossipBinding> GossipItemScriptsBindingMap;
-	typedef HM_NAMESPACE::hash_map<uint32, LuaGOGossipBinding> GossipGOScriptsBindingMap;
+	typedef std::unordered_map<uint32, LuaUnitBinding> UnitBindingMap;
+	typedef std::unordered_map<uint32, LuaQuestBinding> QuestBindingMap;
+	typedef std::unordered_map<uint32, LuaGameObjectBinding> GameObjectBindingMap;
+	typedef std::unordered_map<uint32, LuaUnitGossipBinding> GossipUnitScriptsBindingMap;
+	typedef std::unordered_map<uint32, LuaItemGossipBinding> GossipItemScriptsBindingMap;
+	typedef std::unordered_map<uint32, LuaGOGossipBinding> GossipGOScriptsBindingMap;
 
 	UnitBindingMap m_unitBinding;
 	QuestBindingMap m_questBinding;

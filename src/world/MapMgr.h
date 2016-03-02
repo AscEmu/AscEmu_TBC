@@ -67,12 +67,12 @@ typedef std::set<Object*> ObjectSet;
 typedef std::set<Object*> UpdateQueue;
 typedef std::set<Player*> PUpdateQueue;
 typedef std::set<Player*> PlayerSet;
-typedef HM_NAMESPACE::hash_map<uint32, Object*> StorageMap;
+typedef std::unordered_map<uint32, Object*> StorageMap;
 typedef std::set<uint64> CombatProgressMap;
 typedef std::set<Creature*> CreatureSet;
 typedef std::set<GameObject*> GameObjectSet;
-typedef HM_NAMESPACE::hash_map<uint32, Creature*> CreatureSqlIdMap;
-typedef HM_NAMESPACE::hash_map<uint32, GameObject*> GameObjectSqlIdMap;
+typedef std::unordered_map<uint32, Creature*> CreatureSqlIdMap;
+typedef std::unordered_map<uint32, GameObject*> GameObjectSqlIdMap;
 
 #define MAX_TRANSPORTERS_PER_MAP 25
 
@@ -134,7 +134,7 @@ class SERVER_DECL MapMgr : public CellHandler <MapCell>, public EventableObject,
     // Local (mapmgr) storage/generation of DynamicObjects
     ////////////////////////////////////////////
     uint32 m_DynamicObjectHighGuid;
-    typedef HM_NAMESPACE::hash_map<uint32, DynamicObject*> DynamicObjectStorageMap;
+    typedef std::unordered_map<uint32, DynamicObject*> DynamicObjectStorageMap;
     DynamicObjectStorageMap m_DynamicObjectStorage;
     DynamicObject * CreateDynamicObject();
 
@@ -147,7 +147,7 @@ class SERVER_DECL MapMgr : public CellHandler <MapCell>, public EventableObject,
     //////////////////////////////////////////////////////////
     // Local (mapmgr) storage of pets
     ///////////////////////////////////////////
-    typedef HM_NAMESPACE::hash_map<uint32, Pet*> PetStorageMap;
+    typedef std::unordered_map<uint32, Pet*> PetStorageMap;
     PetStorageMap m_PetStorage;
     Pet* GetPet(uint32 guid)
     {
@@ -160,7 +160,7 @@ class SERVER_DECL MapMgr : public CellHandler <MapCell>, public EventableObject,
     ////////////////////////////////
 
     // double typedef lolz// a compile breaker..
-    typedef HM_NAMESPACE::hash_map<uint32, Player*>                     PlayerStorageMap;
+    typedef std::unordered_map<uint32, Player*>                     PlayerStorageMap;
     PlayerStorageMap m_PlayerStorage;
     Player* GetPlayer(uint32 guid)
     {

@@ -1,6 +1,14 @@
-PROJECT(lualib C)
+# Copyright (C) 2014-2016 AscEmu Team <http://www.ascemu.org>
 
-SET(prefix ${DEPENDENCY_ROOT}/${PROJECT_NAME} )
+# set up project name
+project(lualib C)
+
+# disable warnings
+if(MSVC)
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /W0")
+else()
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -w")
+endif()
 
 set( sources
 lapi.c
@@ -66,20 +74,15 @@ lundump.h
 lvm.h
 lzio.h )
 
-foreach(src IN ITEMS ${sources} )
-  SET( SRCS ${SRCS} ${prefix}/${src} )
-endforeach(src)
-foreach(src IN ITEMS ${headers} )
-  SET( HEADERS ${HEADERS} ${prefix}/${src} )
-endforeach(src)
+if(NOT DEFINED CMAKE_BUILD_TYPE OR CMAKE_BUILD_TYPE MATCHES "[Dd][Ee][Bb][Uu][Gg]")
+	add_definitions( -DLUA_USE_APICHECK)
+endif()
 
-ADD_DEFINITIONS( -D_CRT_SECURE_NO_WARNINGS)
-IF( NOT DEFINED CMAKE_BUILD_TYPE OR CMAKE_BUILD_TYPE MATCHES "[Dd][Ee][Bb][Uu][Gg]" )
-	ADD_DEFINITIONS( -DLUA_USE_APICHECK )
-ENDIF()
-ADD_LIBRARY( ${PROJECT_NAME} STATIC ${SRCS} ${HEADERS} )
-REMOVE_DEFINITIONS( -std=c++0x )
-IF( IS_64BIT )
-	SET_PROPERTY( TARGET ${PROJECT_NAME} APPEND PROPERTY COMPILE_FLAGS "-fPIC")
-ENDIF()
-target_link_libraries(${PROJECT_NAME})
+add_library(${PROJECT_NAME} STATIC ${sources} ${headers})
+
+if(IS_64BIT AND NOT MSVC)
+   set_property(TARGET ${PROJECT_NAME} APPEND PROPERTY COMPILE_FLAGS "-fPIC")
+endif()
+
+unset(sources)
+unset(headers)

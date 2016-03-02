@@ -1,8 +1,8 @@
-# Copyright (C) 2014-2015 AscEmu Team <http://www.ascemu.org>
+# Copyright (C) 2014-2016 AscEmu Team <http://www.ascemu.org>
 
 # set up our project name
 project(shared)
-set(prefix ${ROOT_PATH}/src/shared)
+
 set(sources
    Auth/BigNumber.cpp
    Auth/MD5.cpp
@@ -121,21 +121,15 @@ else(WIN32)
    set(sources ${sources} Network/SocketMgrLinux.cpp Network/SocketLinux.cpp Network/SocketOpsLinux.cpp)
 endif(WIN32)
 
-foreach(src IN ITEMS ${sources})
-   set(SRCS ${SRCS} ${prefix}/${src})
-endforeach(src)
-foreach(src IN ITEMS ${headers})
-   set(HEADERS ${HEADERS} ${prefix}/${src})
-endforeach(src)
+include_directories(
+    ${OPENSSL_INCLUDE_DIR}
+    ${ZLIB_INCLUDE_DIRS}
+    ${MYSQL_INCLUDE_DIR}
+    ${CMAKE_CURRENT_SOURCE_DIR}
+)
 
-include_directories( ${GLOBAL_INCLUDE_DIRS} )
+add_library(${PROJECT_NAME} STATIC ${sources} ${headers})
+target_link_libraries(${PROJECT_NAME} ${ZLIB_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT} ${MYSQL_LIBRARIES} ${OPENSSL_LIBRARIES} ${EXTRA_LIBS})
 
-if(IS_64BIT)
-   link_directories(${DEPENDENCY_DLLS64})
-else()
-	link_directories(${DEPENDENCY_DLLS})
-endif()
-link_directories(${DEPENDENCY_LIBS})
-
-add_library(${PROJECT_NAME} STATIC ${SRCS} ${HEADERS})
-target_link_libraries( ${PROJECT_NAME} ${ZLIB_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT} ${MYSQL_LIBRARY} ${OPENSSL_LIBRARIES} ${EXTRA_LIBS} )
+unset(sources)
+unset(headers)

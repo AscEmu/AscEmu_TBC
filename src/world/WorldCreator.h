@@ -98,7 +98,7 @@ class Instance
     void DeleteFromDB();
 };
 
-typedef HM_NAMESPACE::hash_map<uint32, Instance*> InstanceMap;
+typedef std::unordered_map<uint32, Instance*> InstanceMap;
 
 class SERVER_DECL InstanceMgr
 {

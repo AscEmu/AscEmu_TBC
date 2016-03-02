@@ -21,16 +21,8 @@
 #ifndef __STDAFX_H
 #define __STDAFX_H
 
-#ifdef min
-#undef min
-#endif
+#include "WorldConf.h"
 
-#ifdef max
-#undef max
-#endif
-
-
-#define _GAME
 
 #define DEBUG_LOG(...) sLog.Debug("DEBUG_LOG", __VA_ARGS__)
 

@@ -355,7 +355,7 @@ class Charter
 };
 
 typedef std::map<uint32, std::list<SpellEntry*>* >                  OverrideIdMap;
-typedef HM_NAMESPACE::hash_map<uint32, Player*>                     PlayerStorageMap;
+typedef std::unordered_map<uint32, Player*>                     PlayerStorageMap;
 typedef std::list<GM_Ticket*>                                       GmTicketList;
 typedef std::map<uint32, InstanceBossInfo*>                         InstanceBossInfoMap;
 
@@ -387,7 +387,7 @@ typedef HM_NAMESPACE::hash_map<std::string, PlayerInfo*> PlayerNameStringIndexMa
 #else
 
 // vc++ has the type for a string hash already, so we don't need to do anything special
-typedef HM_NAMESPACE::hash_map<std::string, PlayerInfo*> PlayerNameStringIndexMap;
+typedef std::unordered_map<std::string, PlayerInfo*> PlayerNameStringIndexMap;
 
 #endif
 
@@ -404,21 +404,21 @@ class SERVER_DECL ObjectMgr : public Singleton < ObjectMgr >, public EventableOb
     // other objects
 
     // Set typedef's
-    typedef HM_NAMESPACE::hash_map<uint32, Group*>						GroupMap;
+    typedef std::unordered_map<uint32, Group*>						GroupMap;
 
     // HashMap typedef's
-    typedef HM_NAMESPACE::hash_map<uint64, Item*>                       ItemMap;
-    typedef HM_NAMESPACE::hash_map<uint32, CorpseData*>                 CorpseCollectorMap;
-    typedef HM_NAMESPACE::hash_map<uint32, PlayerInfo*>                 PlayerNameMap;
-    typedef HM_NAMESPACE::hash_map<uint32, PlayerCreateInfo*>           PlayerCreateInfoMap;
-    typedef HM_NAMESPACE::hash_map<uint32, Guild*>                      GuildMap;
-    typedef HM_NAMESPACE::hash_map<uint32, skilllinespell*>             SLMap;
-    typedef HM_NAMESPACE::hash_map<uint32, std::vector<CreatureItem>*>  VendorMap;
-    typedef HM_NAMESPACE::hash_map<uint32, Transporter*>                TransportMap;
-    typedef HM_NAMESPACE::hash_map<uint32, Trainer*>                    TrainerMap;
-    typedef HM_NAMESPACE::hash_map<uint32, std::vector<TrainerSpell*> > TrainerSpellMap;
-    typedef HM_NAMESPACE::hash_map<uint32, ReputationModifier*>         ReputationModMap;
-    typedef HM_NAMESPACE::hash_map<uint32, Corpse*>                     CorpseMap;
+    typedef std::unordered_map<uint64, Item*>                       ItemMap;
+    typedef std::unordered_map<uint32, CorpseData*>                 CorpseCollectorMap;
+    typedef std::unordered_map<uint32, PlayerInfo*>                 PlayerNameMap;
+    typedef std::unordered_map<uint32, PlayerCreateInfo*>           PlayerCreateInfoMap;
+    typedef std::unordered_map<uint32, Guild*>                      GuildMap;
+    typedef std::unordered_map<uint32, skilllinespell*>             SLMap;
+    typedef std::unordered_map<uint32, std::vector<CreatureItem>*>  VendorMap;
+    typedef std::unordered_map<uint32, Transporter*>                TransportMap;
+    typedef std::unordered_map<uint32, Trainer*>                    TrainerMap;
+    typedef std::unordered_map<uint32, std::vector<TrainerSpell*> > TrainerSpellMap;
+    typedef std::unordered_map<uint32, ReputationModifier*>         ReputationModMap;
+    typedef std::unordered_map<uint32, Corpse*>                     CorpseMap;
 
     // Map typedef's
     typedef std::map<uint32, LevelInfo*>                                LevelMap;
@@ -654,13 +654,13 @@ class SERVER_DECL ObjectMgr : public Singleton < ObjectMgr >, public EventableOb
     void UpdateArenaTeamWeekly();
     void ResetArenaTeamRatings();
     void LoadArenaTeams();
-    HM_NAMESPACE::hash_map<uint32, ArenaTeam*> m_arenaTeamMap[3];
-    HM_NAMESPACE::hash_map<uint32, ArenaTeam*> m_arenaTeams;
+    std::unordered_map<uint32, ArenaTeam*> m_arenaTeamMap[3];
+    std::unordered_map<uint32, ArenaTeam*> m_arenaTeams;
     void RemoveArenaTeam(ArenaTeam * team);
     void AddArenaTeam(ArenaTeam * team);
     Mutex m_arenaTeamLock;
 
-    typedef HM_NAMESPACE::hash_map<uint32, NpcMonsterSay*> MonsterSayMap;
+    typedef std::unordered_map<uint32, NpcMonsterSay*> MonsterSayMap;
     MonsterSayMap mMonsterSays[NUM_MONSTER_SAY_EVENTS];
 
     void HandleMonsterSayEvent(Creature * pCreature, MONSTER_SAY_EVENTS Event);
@@ -726,18 +726,18 @@ class SERVER_DECL ObjectMgr : public Singleton < ObjectMgr >, public EventableOb
 
     ReputationModMap m_reputation_faction;
     ReputationModMap m_reputation_creature;
-    HM_NAMESPACE::hash_map<uint32, InstanceReputationModifier*> m_reputation_instance;
+    std::unordered_map<uint32, InstanceReputationModifier*> m_reputation_instance;
 
-    HM_NAMESPACE::hash_map<uint32, Charter*> m_charters[NUM_CHARTER_TYPES];
+    std::unordered_map<uint32, Charter*> m_charters[NUM_CHARTER_TYPES];
 
     std::set<uint32> m_disabled_spells;
 
     uint64 TransportersCount;
-    HM_NAMESPACE::hash_map<uint32, PlayerInfo*> m_playersinfo;
+    std::unordered_map<uint32, PlayerInfo*> m_playersinfo;
     PlayerNameStringIndexMap m_playersInfoByName;
 
-    HM_NAMESPACE::hash_map<uint32, WayPointMap*> m_waypoints;//stored by spawnid
-    HM_NAMESPACE::hash_map<uint32, TimedEmoteList*> m_timedemotes;//stored by spawnid
+    std::unordered_map<uint32, WayPointMap*> m_waypoints;//stored by spawnid
+    std::unordered_map<uint32, TimedEmoteList*> m_timedemotes;//stored by spawnid
     uint32 m_hiCreatureSpawnId;
 
     Mutex m_CreatureSpawnIdMutex;

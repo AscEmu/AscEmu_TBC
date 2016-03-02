@@ -82,83 +82,46 @@ enum MsTimeVariables
 #  define MAX_PATH 1024
 #endif
 
-#ifdef min
-#undef min
-#endif
-
-#ifdef max
-#undef max
-#endif
-
 #ifdef CONFIG_USE_SELECT
 #undef FD_SETSIZE
 #define FD_SETSIZE 2048 
 #endif
 
-#if defined( __WIN32__ ) || defined( WIN32 ) || defined( _WIN32 )
-#include <winsock2.h>
-#include <ws2tcpip.h>
-#else
-#include <sys/time.h>
-#include <sys/types.h>
-#include <sys/ioctl.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
-#include <unistd.h>
-#include <signal.h>
-#include <netdb.h>
-#endif
-
-// current platform and compiler
-#define PLATFORM_WIN32 0
-#define PLATFORM_UNIX  1
-#define PLATFORM_APPLE 2
-
-#define UNIX_FLAVOUR_LINUX 1
-#define UNIX_FLAVOUR_BSD 2
-#define UNIX_FLAVOUR_OTHER 3
-#define UNIX_FLAVOUR_OSX 4
+#include "Network/NetworkIncludes.hpp"
 
 #if defined( __WIN32__ ) || defined( WIN32 ) || defined( _WIN32 )
 #  define PLATFORM PLATFORM_WIN32
-#elif defined( __APPLE_CC__ )
+#elif defined(__APPLE__)
 #  define PLATFORM PLATFORM_APPLE
 #else
 #  define PLATFORM PLATFORM_UNIX
 #endif
 
 #define COMPILER_MICROSOFT 0
-#define COMPILER_GNU	   1
+#define COMPILER_GNU       1
 #define COMPILER_BORLAND   2
+#define COMPILER_CLANG     3
 
 #ifdef _MSC_VER
 #  define COMPILER COMPILER_MICROSOFT
 #elif defined( __BORLANDC__ )
 #  define COMPILER COMPILER_BORLAND
-#elif defined( __GNUC__ )
+#elif defined(__GNUC__)
 #  define COMPILER COMPILER_GNU
+#elif defined(__clang__)
+#  define COMPILER COMPILER_CLANG
 #else
 #  pragma error "FATAL ERROR: Unknown compiler."
 #endif
 
-#if PLATFORM == PLATFORM_UNIX || PLATFORM == PLATFORM_APPLE
-#ifdef HAVE_DARWIN
-#define PLATFORM_TEXT "MacOSX"
-#define UNIX_FLAVOUR UNIX_FLAVOUR_OSX
-#else
-#ifdef USE_KQUEUE
-#define PLATFORM_TEXT "FreeBSD"
-#define UNIX_FLAVOUR UNIX_FLAVOUR_BSD
-#else
-#define PLATFORM_TEXT "Linux"
-#define UNIX_FLAVOUR UNIX_FLAVOUR_LINUX
-#endif
-#endif
-#endif
-
-#if PLATFORM == PLATFORM_WIN32
+#if _WIN32
 #define PLATFORM_TEXT "Win32"
+#elif __APPLE__
+#define PLATFORM_TEXT "OSX"
+#elif defined(BSD)
+#define PLATFORM_TEXT "BSD"
+#elif defined(__linux__)
+#define PLATFORM_TEXT "Linux"
 #endif
 
 #ifdef _DEBUG
@@ -167,45 +130,33 @@ enum MsTimeVariables
 #define CONFIG "Release"
 #endif
 
-#ifdef USING_BIG_ENDIAN
-#define ARCH "PPC"
-#else
 #ifdef X64
 #define ARCH "X64"
 #else
 #define ARCH "X86"
 #endif
-#endif
 
-#if PLATFORM == PLATFORM_WIN32
+#if _WIN32
 #define STRCASECMP stricmp
 #else
 #define STRCASECMP strcasecmp
 #endif
 
 #if PLATFORM == PLATFORM_WIN32
-	#define ASYNC_NET
+#define ASYNC_NET
 #endif
 
 #ifdef USE_EPOLL
-	#define CONFIG_USE_EPOLL
+#define CONFIG_USE_EPOLL
 #endif
 #ifdef USE_KQUEUE
-	#define CONFIG_USE_KQUEUE
+#define CONFIG_USE_KQUEUE
 #endif
 #ifdef USE_SELECT
-	#define CONFIG_USE_SELECT
+#define CONFIG_USE_SELECT
 #endif
 #ifdef USE_POLL
-	#define CONFIG_USE_POLL
-#endif
-
-#ifdef min
-#undef min
-#endif
-
-#ifdef max
-#undef max
+#define CONFIG_USE_POLL
 #endif
 
 #include <cstdlib>
@@ -220,6 +171,8 @@ enum MsTimeVariables
 #include <climits>
 #include <cstdlib>
 //#include <iostream>
+#include <unordered_map>
+#include <unordered_set>
 
 #include "CommonHelpers.hpp"
 
@@ -283,10 +236,6 @@ namespace __gnu_cxx
         }
     };
 };
-#else
-#define HM_NAMESPACE ::stdext
-#include <hash_map>
-#include <hash_set>
 #endif
 
 

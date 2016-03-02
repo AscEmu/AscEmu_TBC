@@ -101,10 +101,10 @@ class AuctionHouse
 
     private:
     RWLock itemLock;
-    HM_NAMESPACE::hash_map<uint64, Item*> auctionedItems;
+    std::unordered_map<uint64, Item*> auctionedItems;
 
     RWLock auctionLock;
-    HM_NAMESPACE::hash_map<uint32, Auction*> auctions;
+    std::unordered_map<uint32, Auction*> auctions;
 
     Mutex removalLock;
     std::list<Auction*> removalList;

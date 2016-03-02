@@ -8,24 +8,43 @@ endif(NOT BUILD_LUAENGINE)
 # set up our project name
 project(LuaEngine)
 
-set(prefix ${SCRIPTS_PATH}/${PROJECT_NAME})
 
 #SRCS - contains the source files that compose this project.
 set(SRCS
-   ${prefix}/LUAEngine.cpp 
+   LUAEngine.cpp 
    )
 
 set(HEADERS
-   ${prefix}/LUAEngine.h
-   ${prefix}/LUAFunctions.h
+   LUAEngine.h
+   LUAFunctions.h
    )
 
-include_directories(${include_dirs} ${prefix} ${DEPENDENCY_ROOT}/zlib)
-IF(IS_LINUX)
-	add_definitions(-Wno-deprecated)
-ENDIF()
-
+include_directories(
+   ${OPENSSL_INCLUDE_DIR}
+   ${PCRE_INCLUDE_DIR}
+   ${CMAKE_SOURCE_DIR}/dep/recastnavigation/Detour/Include
+   ${CMAKE_SOURCE_DIR}/dep/vmaplib/include
+   ${CMAKE_SOURCE_DIR}/dep/g3dlite/include
+   ${CMAKE_SOURCE_DIR}/src/shared
+   ${CMAKE_SOURCE_DIR}/src/world
+   ${CMAKE_SOURCE_DIR}/dep/lualib
+   ${CMAKE_CURRENT_SOURCE_DIR}
+   ${ZLIB_INCLUDE_DIRS}
+)
+   
 add_library(${PROJECT_NAME} SHARED ${SRCS} ${HEADERS})
-add_dependencies(${PROJECT_NAME} ${script_dependencies} lualib)
-target_link_libraries(${PROJECT_NAME} ${script_linkages} lualib)
+target_link_libraries(${PROJECT_NAME} lualib)
+
+# special case for project linking
+# on some operating systems linking is a bit strange
+# OS X can't link executable, MSVC can't link world library... weird
+if(WIN32)
+    add_dependencies(${PROJECT_NAME} worldserver)
+    target_link_libraries(${PROJECT_NAME} worldserver)
+elseif(APPLE)
+    add_dependencies(${PROJECT_NAME} world)
+    target_link_libraries(${PROJECT_NAME} world)
+endif()
 install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION ${ASCEMU_SCRIPTLIB_PATH} LIBRARY DESTINATION ${ASCEMU_SCRIPTLIB_PATH})
+unset(sources)
+unset(headers)

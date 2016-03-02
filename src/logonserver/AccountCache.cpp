@@ -68,13 +68,8 @@ void AccountMgr::ReloadAccounts(bool silent)
     }
 
     // check for any purged/deleted accounts
-#ifdef WIN32
-    HM_NAMESPACE::hash_map<std::string, Account*>::iterator itr = AccountDatabase.begin();
-    HM_NAMESPACE::hash_map<std::string, Account*>::iterator it2;
-#else
     std::map<std::string, Account*>::iterator itr = AccountDatabase.begin();
     std::map<std::string, Account*>::iterator it2;
-#endif
 
     for(; itr != AccountDatabase.end();)
     {
