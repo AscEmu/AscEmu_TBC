@@ -20,6 +20,7 @@
 #include "Common.h"
 #include "Config/ConfigEnv.h"
 #include "Log.h"
+#include <cstdarg>
 #include <stdarg.h>
 
 std::string FormatOutputString(const char * Prefix, const char * Description, bool useTimeStamp)
