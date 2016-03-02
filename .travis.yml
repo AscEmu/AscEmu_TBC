@@ -35,3 +35,7 @@ before_script:
   - ${CXX} --version
   - ${CC} --version
   - cmake --version
+
+script:
+  - make -j 10
+    
