@@ -22,7 +22,7 @@
 #include "LUAFunctions.h"
 #include <ScriptSetup.h>
 
-#if PLATFORM != PLATFORM_WIN32
+#ifndef _WIN32
 #include <dirent.h>
 #endif
 
