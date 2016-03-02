@@ -52,7 +52,7 @@ SERVER_DECL tm g_localTime;
 
 void oLog::SetColor(int color)
 {
-#if PLATFORM != PLATFORM_WIN32
+#ifndef _WIN32
     static const char* colorstrings[TBLUE+1] = {
         "",
         "\033[22;31m",
@@ -254,7 +254,7 @@ void oLog::outErrorSilent(const char* err, ...)
 
 void oLog::Init(int32 fileLogLevel, LogType logType)
 {
-#if PLATFORM == PLATFORM_WIN32
+#ifdef _WIN32
     stdout_handle = GetStdHandle(STD_OUTPUT_HANDLE);
 #endif
 
