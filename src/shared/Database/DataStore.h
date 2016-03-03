@@ -1,6 +1,6 @@
 /*
  * AscEmu Framework based on ArcEmu MMORPG Server
- * Copyright (C) 2014-2016 AscEmu Team <http://www.ascemu.org/>
+ * Copyright (C) 2014-2016 AscEmu Team <http://www.ascemu.org>
  * Copyright (C) 2008-2012 ArcEmu Team <http://www.ArcEmu.org/>
  *
  * This program is free software: you can redistribute it and/or modify
@@ -15,25 +15,12 @@
  *
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
- *
  */
 
-#ifndef _THREADING_STARTER_H
-#define _THREADING_STARTER_H
+#ifndef _DATA_STORE_H
+#define _DATA_STORE_H
 
-class SERVER_DECL ThreadBase
-{
-    public:
-        ThreadBase() {}
-        virtual ~ThreadBase() {}
-        virtual bool run() = 0;
-        virtual void OnShutdown() {}
-#ifdef WIN32
-        HANDLE THREAD_HANDLE;
-#else
-        pthread_t THREAD_HANDLE;
-#endif
-};
+#include "Common.h"
+#include "Singleton.h"
 
-#endif
-
+#endif      //_DATA_STORE_H

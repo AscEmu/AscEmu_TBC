@@ -65,7 +65,6 @@ set(headers
    Threading/AtomicCounter.h
    Threading/AtomicFloat.h
    Threading/AtomicULong.h
-   Threading/Condition.h
    Threading/ConditionVariable.h
    Threading/Guard.h
    Threading/LockedQueue.h

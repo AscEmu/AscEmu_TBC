@@ -1,7 +1,7 @@
 /*
  * AscEmu Framework based on ArcEmu MMORPG Server
- * Copyright (C) 2014-2015 AscEmu Team <http://www.ascemu.org/>
- * Copyright (C) 2008 <http://www.ArcEmu.org/>
+ * Copyright (C) 2014-2016 AscEmu Team <http://www.ascemu.org/>
+ * Copyright (C) 2008-2012 ArcEmu Team <http://www.ArcEmu.org/>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -15,14 +15,15 @@
  *
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ *
  */
 
-//////////////////////////////////////////////
-// Notes: .Execute is ASYNC! -
-// We should probably be using QueryBuffer for ASYNC and NONE-ASYNC queries to not lag the emu.
-// See: Player::_SavePetSpells for example of usage
-// updated: Tuesday, June 16th 2009 - Hasbro
-//////////////////////////////////////////////
+ //////////////////////////////////////////////
+ // Notes: .Execute is ASYNC! -
+ // We should probably be using QueryBuffer for ASYNC and NONE-ASYNC queries to not lag the emu.
+ // See: Player::_SavePetSpells for example of usage
+ // updated: Tuesday, June 16th 2009 - Hasbro
+ //////////////////////////////////////////////
 
 #include "DatabaseEnv.h"
 #include <string>
@@ -266,9 +267,8 @@ bool Database::run()
     ThreadRunning = true;
     char* query = queries_queue.pop();
     DatabaseConnection* con = GetFreeConnection();
-    while (1)
+    while (true)
     {
-
         if (query != NULL)
         {
             if (con == NULL)
@@ -353,14 +353,14 @@ AsyncQuery::~AsyncQuery()
 void Database::EndThreads()
 {
     //these 2 loops spin until theres nothing left
-    while (1)
+    while (true)
     {
         QueryBuffer* buf = query_buffer.pop();
         if (buf == NULL)
             break;
         query_buffer.push(buf);
     }
-    while (1)
+    while (true)
     {
         char* buf = queries_queue.pop();
         if (buf == NULL)
@@ -395,7 +395,7 @@ void Database::thread_proc_query()
     DatabaseConnection* con = GetFreeConnection();
 
     q = query_buffer.pop();
-    while (1)
+    while (true)
     {
         if (q != NULL)
         {
@@ -429,8 +429,8 @@ void Database::QueueAsyncQuery(AsyncQuery* query)
     query->db = this;
     /*if(qt == NULL)
     {
-    query->Perform();
-    return;
+        query->Perform();
+        return;
     }
 
     qqueries_queue.push(query);*/

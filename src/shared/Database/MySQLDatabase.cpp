@@ -14,22 +14,20 @@
  *
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ *
  */
 
 #include "DatabaseEnv.h"
-
-#if defined(ENABLE_DATABASE_MYSQL)
-
 #include "MySQLDatabase.h"
 
 MySQLDatabase::~MySQLDatabase()
 {
-    for (int32 i = 0; i < mConnectionCount; ++i)
+    for(int32 i = 0; i < mConnectionCount; ++i)
     {
         mysql_close(((MySQLDatabaseConnection*)Connections[i])->MySql);
         delete Connections[i];
     }
-    delete[] Connections;
+    delete [] Connections;
 }
 
 MySQLDatabase::MySQLDatabase() : Database()
@@ -65,20 +63,20 @@ bool MySQLDatabase::Initialize(const char* Hostname, unsigned int port, const ch
 
     conns = new MySQLDatabaseConnection*[ConnectionCount];
     Connections = ((DatabaseConnection**)conns);
-    for (i = 0; i < ConnectionCount; ++i)
+    for(i = 0; i < ConnectionCount; ++i)
     {
         temp = mysql_init(NULL);
-        if (temp == NULL)
+        if(temp == NULL)
             continue;
 
-        if (mysql_options(temp, MYSQL_SET_CHARSET_NAME, "utf8"))
+        if(mysql_options(temp, MYSQL_SET_CHARSET_NAME, "utf8"))
             Log.Error("MySQLDatabase", "Could not set utf8 character set.");
 
-        if (mysql_options(temp, MYSQL_OPT_RECONNECT, &my_true))
+        if(mysql_options(temp, MYSQL_OPT_RECONNECT, &my_true))
             Log.Error("MySQLDatabase", "MYSQL_OPT_RECONNECT could not be set, connection drops may occur but will be counteracted.");
 
         temp2 = mysql_real_connect(temp, Hostname, Username, Password, DatabaseName, port, NULL, 0);
-        if (temp2 == NULL)
+        if(temp2 == NULL)
         {
             Log.Error("MySQLDatabase", "Connection failed due to: `%s`", mysql_error(temp));
             mysql_close(temp);
@@ -99,7 +97,7 @@ std::string MySQLDatabase::EscapeString(std::string Escape)
 
     DatabaseConnection* con = GetFreeConnection();
     std::string ret;
-    if (mysql_real_escape_string(static_cast<MySQLDatabaseConnection*>(con)->MySql, a2, Escape.c_str(), (unsigned long)Escape.length()) == 0)
+    if(mysql_real_escape_string(static_cast<MySQLDatabaseConnection*>(con)->MySql, a2, Escape.c_str(), (unsigned long)Escape.length()) == 0)
         ret = Escape.c_str();
     else
         ret = a2;
@@ -115,7 +113,7 @@ void MySQLDatabase::EscapeLongString(const char* str, uint32 len, std::stringstr
 
     DatabaseConnection* con = GetFreeConnection();
     const char* ret;
-    if (mysql_real_escape_string(static_cast<MySQLDatabaseConnection*>(con)->MySql, a2, str, (unsigned long)len) == 0)
+    if(mysql_real_escape_string(static_cast<MySQLDatabaseConnection*>(con)->MySql, a2, str, (unsigned long)len) == 0)
         ret = str;
     else
         ret = a2;
@@ -128,7 +126,7 @@ std::string MySQLDatabase::EscapeString(const char* esc, DatabaseConnection* con
 {
     char a2[16384] = { 0 };
     const char* ret;
-    if (mysql_real_escape_string(static_cast<MySQLDatabaseConnection*>(con)->MySql, a2, (char*)esc, (unsigned long)strlen(esc)) == 0)
+    if(mysql_real_escape_string(static_cast<MySQLDatabaseConnection*>(con)->MySql, a2, (char*)esc, (unsigned long)strlen(esc)) == 0)
         ret = esc;
     else
         ret = a2;
@@ -145,9 +143,9 @@ bool MySQLDatabase::_SendQuery(DatabaseConnection* con, const char* Sql, bool Se
 {
     //dunno what it does ...leaving untouched
     int result = mysql_query(static_cast<MySQLDatabaseConnection*>(con)->MySql, Sql);
-    if (result > 0)
+    if(result > 0)
     {
-        if (Self == false && _HandleError(static_cast<MySQLDatabaseConnection*>(con), mysql_errno(static_cast<MySQLDatabaseConnection*>(con)->MySql)))
+        if(Self == false && _HandleError(static_cast<MySQLDatabaseConnection*>(con), mysql_errno(static_cast<MySQLDatabaseConnection*>(con)->MySql)))
         {
             // Re-send the query, the connection was successful.
             // The true on the end will prevent an endless loop here, as it will
@@ -164,17 +162,17 @@ bool MySQLDatabase::_SendQuery(DatabaseConnection* con, const char* Sql, bool Se
 bool MySQLDatabase::_HandleError(MySQLDatabaseConnection* con, uint32 ErrorNumber)
 {
     // Handle errors that should cause a reconnect to the Database.
-    switch (ErrorNumber)
+    switch(ErrorNumber)
     {
         case 2006:  // Mysql server has gone away
         case 2008:  // Client ran out of memory
         case 2013:  // Lost connection to sql server during query
         case 2055:  // Lost connection to sql server - system error
-        {
-            // Let's instruct a reconnect to the db when we encounter these errors.
-            return _Reconnect(con);
-        }
-        break;
+            {
+                // Let's instruct a reconnect to the db when we encounter these errors.
+                return _Reconnect(con);
+            }
+            break;
     }
 
     return false;
@@ -188,16 +186,16 @@ MySQLQueryResult::MySQLQueryResult(MYSQL_RES* res, uint32 FieldCount, uint32 Row
 MySQLQueryResult::~MySQLQueryResult()
 {
     mysql_free_result(mResult);
-    delete[] mCurrentRow;
+    delete [] mCurrentRow;
 }
 
 bool MySQLQueryResult::NextRow()
 {
     MYSQL_ROW row = mysql_fetch_row(mResult);
-    if (row == NULL)
+    if(row == NULL)
         return false;
 
-    for (uint32 i = 0; i < mFieldCount; ++i)
+    for(uint32 i = 0; i < mFieldCount; ++i)
         mCurrentRow[i].SetValue(row[i]);
 
     return true;
@@ -211,9 +209,9 @@ QueryResult* MySQLDatabase::_StoreQueryResult(DatabaseConnection* con)
     uint32 uRows = (uint32)mysql_affected_rows(db->MySql);
     uint32 uFields = (uint32)mysql_field_count(db->MySql);
 
-    if (uRows == 0 || uFields == 0 || pRes == 0)
+    if(uRows == 0 || uFields == 0 || pRes == 0)
     {
-        if (pRes != NULL)
+        if(pRes != NULL)
             mysql_free_result(pRes);
 
         return NULL;
@@ -230,19 +228,17 @@ bool MySQLDatabase::_Reconnect(MySQLDatabaseConnection* conn)
     MYSQL* temp, *temp2;
 
     temp = mysql_init(NULL);
-    temp2 = mysql_real_connect(temp, mHostname.c_str(), mUsername.c_str(), mPassword.c_str(), mDatabaseName.c_str(), mPort, NULL, 0);
-    if (temp2 == NULL)
+    temp2 = mysql_real_connect(temp, mHostname.c_str(), mUsername.c_str(), mPassword.c_str(), mDatabaseName.c_str(), mPort, NULL , 0);
+    if(temp2 == NULL)
     {
         Log.Error("MySQLDatabase", "Could not reconnect to database because of `%s`", mysql_error(temp));
         mysql_close(temp);
         return false;
     }
 
-    if (conn->MySql != NULL)
+    if(conn->MySql != NULL)
         mysql_close(conn->MySql);
 
     conn->MySql = temp;
     return true;
 }
-
-#endif

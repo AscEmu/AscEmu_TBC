@@ -1,7 +1,7 @@
 /*
  * AscEmu Framework based on ArcEmu MMORPG Server
- * Copyright (C) 2014-2015 AscEmu Team <http://www.ascemu.org>
- * Copyright (C) 2008 <http://www.ArcEmu.org/>
+ * Copyright (C) 2014-2016 AscEmu Team <http://www.ascemu.org>
+ * Copyright (C) 2008-2012 ArcEmu Team <http://www.ArcEmu.org/>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -28,128 +28,59 @@
 
 class SERVER_DECL Mutex
 {
-public:
-	friend class Condition;
+    public:
+        //friend class Condition;
 
-	/** Initializes a mutex class, with InitializeCriticalSection / pthread_mutex_init
-	 */
-	Mutex();
+        /// Initializes a mutex class, with InitializeCriticalSection / pthread_mutex_init
+        Mutex();
 
-	/** Deletes the associated critical section / mutex
-	 */
-	~Mutex();
+        /// Deletes the associated critical section / mutex
+        virtual ~Mutex();
 
-	/** Acquires this mutex. If it cannot be acquired immediately, it will block.
-	 */
-	inline void Acquire()
-	{
-#ifndef WIN32
-		pthread_mutex_lock(&mutex);
-#else
-		EnterCriticalSection(&cs);
-#endif
-	}
+        /// Attempts to acquire this mutex. If it cannot be acquired (held by another thread)
+        /// it will return false.
+        /// \return false if cannot be acquired, true if it was acquired.
+        bool AttemptAcquire();
 
-	/** Releases this mutex. No error checking performed
-	 */
-	inline void Release()
-	{
-#ifndef WIN32
-		pthread_mutex_unlock(&mutex);
-#else
-		LeaveCriticalSection(&cs);
-#endif
-	}
+        /// Acquires this mutex. If it cannot be acquired immediately, it will block.
+        void Acquire();
 
-	/** Attempts to acquire this mutex. If it cannot be acquired (held by another thread)
-	 * it will return false.
-	 * @return false if cannot be acquired, true if it was acquired.
-	 */
-	inline bool AttemptAcquire()
-	{
-#ifndef WIN32
-		return (pthread_mutex_trylock(&mutex) == 0);
-#else
-		return (TryEnterCriticalSection(&cs) == TRUE ? true : false);
-#endif
-	}
+        /// Releases this mutex. No error checking performed
+        void Release();
 
-protected:
+    protected:
 #ifdef WIN32
-	/** Critical section used for system calls
-	 */
-	CRITICAL_SECTION cs;
-
+        /// Critical section used for system calls
+        CRITICAL_SECTION cs;
 #else
-	/** Static mutex attribute
-	 */
-	static bool attr_initalized;
-	static pthread_mutexattr_t attr;
+        /// Static mutex attribute
+        static bool attr_initalized;
+        static pthread_mutexattr_t attr;
 
-	/** pthread struct used in system calls
-	 */
-	pthread_mutex_t mutex;
+        /// pthread struct used in system calls
+        pthread_mutex_t mutex;
 #endif
 };
 
 #ifdef WIN32
 
+
 class SERVER_DECL FastMutex
 {
 #pragma pack(push,8)
-	volatile long m_lock;
+    volatile long m_lock;
 #pragma pack(pop)
-	DWORD m_recursiveCount;
+    DWORD m_recursiveCount;
 
-public:
-	inline FastMutex() : m_lock(0),m_recursiveCount(0) {}
-	inline ~FastMutex() {}
+    public:
 
-	inline void Acquire()
-	{
-		DWORD thread_id = GetCurrentThreadId(), owner;
-		if(thread_id == (DWORD)m_lock)
-		{
-			++m_recursiveCount;
-			return;
-		}
+        FastMutex() : m_lock(0), m_recursiveCount(0) {}
 
-		for(;;)
-		{
-			owner = InterlockedCompareExchange(&m_lock, thread_id, 0);
-			if(owner == 0)
-				break;
+        ~FastMutex() {}
 
-			Sleep(0);
-		}
-
-		++m_recursiveCount;
-	}
-
-	inline bool AttemptAcquire()
-	{
-		DWORD thread_id = GetCurrentThreadId();
-		if(thread_id == (DWORD)m_lock)
-		{
-			++m_recursiveCount;
-			return true;
-		}
-
-		DWORD owner = InterlockedCompareExchange(&m_lock, thread_id, 0);
-		if(owner == 0)
-		{
-			++m_recursiveCount;
-			return true;
-		}
-
-		return false;
-	}
-
-	inline void Release()
-	{
-		if((--m_recursiveCount) == 0)
-			InterlockedExchange(&m_lock, 0);
-	}
+        bool AttemptAcquire();
+        void Acquire();
+        void Release();
 };
 
 #else
@@ -158,5 +89,4 @@ public:
 
 #endif
 
-#endif
-
+#endif      //_THREADING_MUTEX_H

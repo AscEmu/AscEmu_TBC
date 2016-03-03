@@ -1,6 +1,7 @@
 /*
- * ArcEmu MMORPG Server
- * Copyright (C) 2008 <http://www.ArcEmu.org/>
+ * AscEmu Framework based on ArcEmu MMORPG Server
+ * Copyright (C) 2014-2016 AscEmu Team <http://www.ascemu.org/>
+ * Copyright (C) 2008-2012 ArcEmu Team <http://www.ArcEmu.org/>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -9,68 +10,46 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
 
 #ifndef RWLOCK_H
 #define RWLOCK_H
 
-#include "Condition.h"
 #include "Mutex.h"
 
 class RWLock
 {
-public: 
-  
-	inline void AcquireReadLock()
-	{
-		//_lock.Acquire();
-		_cond.BeginSynchronized();
-		_readers++;
-		//_lock.Release();
-		_cond.EndSynchronized();
-	}
-	
-	inline void ReleaseReadLock()
-	{
-		//_lock.Acquire();
-		_cond.BeginSynchronized();
-		if(!(--_readers))
-			if(_writers)
-				_cond.Signal();
-		//_lock.Release();
-		_cond.EndSynchronized();
-	}
+    public:
 
-	inline void AcquireWriteLock()
-	{
-		//_lock.Acquire();
-		_cond.BeginSynchronized();
-		_writers++;
-		if(_readers)
-			_cond.Wait();
-	}
+        inline void AcquireReadLock()
+        {
+            _lock.Acquire();
+        }
 
-	inline void ReleaseWriteLock()
-	{
-		if(--_writers)
-			_cond.Signal();
-		//_lock.Release();
-		_cond.EndSynchronized();
-	}
-	inline RWLock() : _cond(&_lock) {_readers=0;_writers=0;}
-  
-	private:
-		Mutex _lock;
-		Condition _cond;
-		volatile unsigned int _readers;
-		volatile unsigned int _writers;
-   
-}; 
+        inline void ReleaseReadLock()
+        {
+            _lock.Release();
+        }
 
-#endif
+        inline void AcquireWriteLock()
+        {
+            _lock.Acquire();
+        }
+
+        inline void ReleaseWriteLock()
+        {
+            _lock.Release();
+        }
+
+    private:
+
+        Mutex _lock;
+};
+
+#endif  //RWLOCK_H

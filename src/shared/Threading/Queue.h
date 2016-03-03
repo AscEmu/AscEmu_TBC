@@ -1,6 +1,7 @@
 /*
- * ArcEmu MMORPG Server
- * Copyright (C) 2008 <http://www.ArcEmu.org/>
+ * AscEmu Framework based on ArcEmu MMORPG Server
+ * Copyright (C) 2014-2016 AscEmu Team <http://www.ascemu.org/>
+ * Copyright (C) 2008-2012 ArcEmu Team <http://www.ArcEmu.org/>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -9,142 +10,99 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
 
 #ifndef FQUEUE_H
 #define FQUEUE_H
 
-#include "Condition.h"
 #include "Mutex.h"
- 
-template<class T> 
-class FQueue 
+
+template<class T>
+class FQueue
 {
-public:
-	inline FQueue() : cond(&lock) {first=last=NULL;size=0;}
-	volatile unsigned int size;
+    public:
+        FQueue() { first = last = NULL; size = 0; }
+        volatile unsigned int size;
 
-	uint32 get_size()
-	{
-		uint32 ret;
-		cond.BeginSynchronized();
-		ret = size;
-		cond.EndSynchronized();
-		return ret;
-	}
+        uint32 get_size()
+        {
+            lock.Acquire();
+            ::uint32 retval = size;
+            lock.Release();
+            return retval;
+        }
 
-	void push(T &item)
-	{
-		h*p=new h;
-		p->value=item;
-		p->pNext=NULL;
-		
-		//lock.Acquire();
-		cond.BeginSynchronized();
-		if(last)//have some items
-		{
-			last->pNext=(h*)p;
-			last=p;
-			size++;
-		}
-		else//first item
-		{
-			last=first=p;
-			size=1;
-			cond.Signal();
-		}
-		//lock.Release();
-		cond.EndSynchronized();
-	}
+        void push(T & item)
+        {
+            h* p = new h;
+            p->value = item;
+            p->pNext = NULL;
 
-	T pop_nowait()
-	{
-		//lock.Acquire();
-		cond.BeginSynchronized();
-		if(size==0)
-		{
-			cond.EndSynchronized();
-			return NULL;
-		}
+            lock.Acquire();
+            if(last != NULL)//have some items
+            {
+                last->pNext = (h*)p;
+                last = p;
+                ++size;
+            }
+            else //first item
+            {
+                last = first = p;
+                size = 1;
+            }
+            lock.Release();
+        }
 
-		h*tmp=first;
-		if(tmp == NULL)
-		{
-			cond.EndSynchronized();
-			return NULL;
-		}
+        T pop_nowait() { return pop(); }
 
-		if(--size)//more than 1 item
-		{
-			first=(h*)first->pNext;
-		}
-		else//last item
-		{
-			first=last=NULL;
-		}
-		//lock.Release();
-		cond.EndSynchronized();
+        T pop()
+        {
+            lock.Acquire();
+            if(size == 0)
+            {
+                lock.Release();
+                return NULL;
+            }
 
-		T returnVal = tmp->value;
-		delete tmp;
+            h* tmp = first;
+            if(tmp == NULL)
+            {
+                lock.Release();
+                return NULL;
+            }
 
-		return returnVal;
-	}
+            if(--size) //more than 1 item
+                first = (h*)first->pNext;
+            else //last item
+            {
+                first = last = NULL;
+            }
 
-	T pop()
-	{
-		//lock.Acquire();
-		cond.BeginSynchronized();
-		if(size==0)
-		cond.Wait();
+            lock.Release();
 
-		h*tmp=first;
-		if(tmp == NULL)
-		{
-			cond.EndSynchronized();
-			return NULL;
-		}
+            T returnVal = tmp->value;
+            delete tmp;
+            return returnVal;
+        }
 
-		if(--size)//more than 1 item
-		{
-			first=(h*)first->pNext;
-		}
-		else//last item
-		{
-			first=last=NULL;
-		}
-		//lock.Release();
-		cond.EndSynchronized();
+    private:
 
-		T returnVal = tmp->value;
-		delete tmp;
-		
-		return returnVal;
-	}	
+        struct h
+        {
+            T value;
+            void* pNext;
+        };
 
-	inline Condition& GetCond() { return cond; }
-	
-private:
-	struct h
-	{
-		T value;
-		void *pNext;
-	};
+        h* first;
+        h* last;
 
-	h*first;
-	h*last;
-	
-	Mutex lock;
-	Condition cond;
-
+        Mutex lock;
 };
 
-#endif 
-
-
+#endif  //FQUEUE_H

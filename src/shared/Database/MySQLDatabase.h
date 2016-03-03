@@ -1,6 +1,7 @@
 /*
  * AscEmu Framework based on ArcEmu MMORPG Server
- * Copyright (C) 2014-2015 AscEmu Team <http://www.ascemu.org>
+ * Copyright (C) 2014-2016 AscEmu Team <http://www.ascemu.org>
+ * Copyright (C) 2008-2012 ArcEmu Team <http://www.ArcEmu.org/>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -16,69 +17,67 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __MYSQLDATABASE_H
-#define __MYSQLDATABASE_H
+#ifndef _MYSQLDATABASE_H
+#define _MYSQLDATABASE_H
 
 #include <string>
+#include <mysql.h>
 
-#if PLATFORM == PLATFORM_APPLE
-#include <mysql.h>
-#else
-#include <mysql.h>
-#endif
 
 struct MySQLDatabaseConnection : public DatabaseConnection
 {
-	MYSQL* MySql;
+    MYSQL* MySql;
 };
+
 
 class SERVER_DECL MySQLDatabase : public Database
 {
-	friend class QueryThread;
-	friend class AsyncQuery;
+    friend class QueryThread;
+    friend class AsyncQuery;
 
     public:
 
-	    MySQLDatabase();
-	    ~MySQLDatabase();
+        MySQLDatabase();
+        ~MySQLDatabase();
 
-	    bool Initialize(const char* Hostname, unsigned int port,
-		    const char* Username, const char* Password, const char* DatabaseName,
-		    uint32 ConnectionCount, uint32 BufferSize);
+        bool Initialize(const char* Hostname, unsigned int port,
+                        const char* Username, const char* Password, const char* DatabaseName,
+                        uint32 ConnectionCount, uint32 BufferSize);
 
-	    void Shutdown();
+        void Shutdown();
 
         std::string EscapeString(std::string Escape);
-        void EscapeLongString(const char* str, uint32 len, std::stringstream& out);
-        std::string EscapeString(const char * esc, DatabaseConnection* con);
+        void EscapeLongString(const char* str, uint32 len, std::stringstream & out);
+        std::string EscapeString(const char* esc, DatabaseConnection* con);
 
-	    bool SupportsReplaceInto() { return true; }
-	    bool SupportsTableLocking() { return true; }
-	
+        bool SupportsReplaceInto() { return true; }
+        bool SupportsTableLocking() { return true; }
+
     protected:
 
-	    bool _HandleError(MySQLDatabaseConnection*, uint32 ErrorNumber);
-	    bool _SendQuery(DatabaseConnection* con, const char* Sql, bool Self = false);
+        bool _HandleError(MySQLDatabaseConnection*, uint32 ErrorNumber);
+        bool _SendQuery(DatabaseConnection* con, const char* Sql, bool Self = false);
 
-	    void _BeginTransaction(DatabaseConnection* conn);
-	    void _EndTransaction(DatabaseConnection* conn);
-	    bool _Reconnect(MySQLDatabaseConnection* conn);
+        void _BeginTransaction(DatabaseConnection* conn);
+        void _EndTransaction(DatabaseConnection* conn);
+        bool _Reconnect(MySQLDatabaseConnection* conn);
 
-	    QueryResult* _StoreQueryResult(DatabaseConnection* con);
+        QueryResult* _StoreQueryResult(DatabaseConnection* con);
 };
+
 
 class SERVER_DECL MySQLQueryResult : public QueryResult
 {
     public:
 
-	    MySQLQueryResult(MYSQL_RES* res, uint32 FieldCount, uint32 RowCount);
-	    ~MySQLQueryResult();
+        MySQLQueryResult(MYSQL_RES* res, uint32 FieldCount, uint32 RowCount);
+        ~MySQLQueryResult();
 
-	    bool NextRow();
+        bool NextRow();
 
     protected:
 
-	    MYSQL_RES* mResult;
+        MYSQL_RES* mResult;
 };
 
-#endif		// __MYSQLDATABASE_H
+#endif        // _MYSQLDATABASE_H

@@ -1,6 +1,7 @@
 /*
  * AscEmu Framework based on ArcEmu MMORPG Server
- * Copyright (C) 2014-2015 AscEmu Team <http://www.ascemu.org/>
+ * Copyright (C) 2014-2016 AscEmu Team <http://www.ascemu.org/>
+ * Copyright (C) 2008-2012 ArcEmu Team <http://www.ArcEmu.org/>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -19,21 +20,16 @@
 
 #include "DatabaseEnv.h"
 #include "../Log.h"
-
-#if defined(ENABLE_DATABASE_MYSQL)
 #include "MySQLDatabase.h"
-#endif
+
 
 void Database::CleanupLibs()
 {
-#if defined(ENABLE_DATABASE_MYSQL)
     mysql_library_end();
-#endif
 }
+
 
 Database* Database::CreateDatabaseInterface()
 {
-#if defined(ENABLE_DATABASE_MYSQL)
     return new MySQLDatabase();
-#endif
 }
