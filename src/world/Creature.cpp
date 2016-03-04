@@ -1113,7 +1113,15 @@ bool Creature::Load(CreatureSpawn *spawn, uint32 mode, MapInfo *info)
     //SetUInt32Value(UNIT_FIELD_HEALTH, (mode ? long2int32(proto->Health * 1.5)  : proto->Health));
     //SetUInt32Value(UNIT_FIELD_BASE_HEALTH, (mode ? long2int32(proto->Health * 1.5)  : proto->Health));
     //SetUInt32Value(UNIT_FIELD_MAXHEALTH, (mode ? long2int32(proto->Health * 1.5)  : proto->Health));
-    uint32 health = proto->MinHealth + RandomUInt(proto->MaxHealth - proto->MinHealth);
+    uint32 health = 0;
+    if (proto->MaxHealth < proto->MinHealth)
+    {
+        Log.Error("Creature::Load", "Creature %u, minhealth higher than maxhealth! Health is set to minhealth.", proto->Id);
+        health = proto->MinHealth;
+    }
+    else
+        health = proto->MinHealth + RandomUInt(proto->MaxHealth - proto->MinHealth);
+
     if (mode)
         health = long2int32(double(health) * 1.5);
     SetUInt32Value(UNIT_FIELD_HEALTH, health);
@@ -1139,7 +1147,17 @@ bool Creature::Load(CreatureSpawn *spawn, uint32 mode, MapInfo *info)
     EventModelChange();
 
     //SetUInt32Value(UNIT_FIELD_LEVEL, (mode ? proto->Level + (info ? info->lvl_mod_a : 0) : proto->Level));
-    SetUInt32Value(UNIT_FIELD_LEVEL, proto->MinLevel + (RandomUInt(proto->MaxLevel - proto->MinLevel)));
+    uint32 level = 0;
+    if (proto->MaxLevel < proto->MinLevel)
+    {
+        Log.Error("Creature::Load", "Creature %u, minlevel higher than maxlevel! Level is set to minlevel.", proto->Id);
+        level = proto->MinLevel;
+    }
+    else
+        level = proto->MinLevel + RandomUInt(proto->MaxLevel - proto->MinLevel);
+
+    SetUInt32Value(UNIT_FIELD_LEVEL, level);
+
     if (mode && info)
         ModUnsigned32Value(UNIT_FIELD_LEVEL, std::min(73 - GetUInt32Value(UNIT_FIELD_LEVEL), info->lvl_mod_a));
 
@@ -1332,7 +1350,14 @@ void Creature::Load(CreatureProto * proto_, float x, float y, float z)
     //SetUInt32Value(UNIT_FIELD_HEALTH, (mode ? long2int32(proto->Health * 1.5)  : proto->Health));
     //SetUInt32Value(UNIT_FIELD_BASE_HEALTH, (mode ? long2int32(proto->Health * 1.5)  : proto->Health));
     //SetUInt32Value(UNIT_FIELD_MAXHEALTH, (mode ? long2int32(proto->Health * 1.5)  : proto->Health));
-    uint32 health = proto->MinHealth + RandomUInt(proto->MaxHealth - proto->MinHealth);
+    uint32 health = 0;
+    if (proto->MaxHealth < proto->MinHealth)
+    {
+        Log.Error("Creature::Load", "Creature %u, minhealth higher than maxhealth! Health is set to minhealth.", proto->Id);
+        health = proto->MinHealth;
+    }
+    else
+        health = proto->MinHealth + RandomUInt(proto->MaxHealth - proto->MinHealth);
 
     SetUInt32Value(UNIT_FIELD_HEALTH, health);
     SetUInt32Value(UNIT_FIELD_MAXHEALTH, health);
@@ -1352,7 +1377,16 @@ void Creature::Load(CreatureProto * proto_, float x, float y, float z)
     EventModelChange();
 
     //SetUInt32Value(UNIT_FIELD_LEVEL, (mode ? proto->Level + (info ? info->lvl_mod_a : 0) : proto->Level));
-    SetUInt32Value(UNIT_FIELD_LEVEL, proto->MinLevel + (RandomUInt(proto->MaxLevel - proto->MinLevel)));
+    uint32 level = 0;
+    if (proto->MaxLevel < proto->MinLevel)
+    {
+        Log.Error("Creature::Load", "Creature %u, minlevel higher than maxlevel! Level is set to minlevel.", proto->Id);
+        level = proto->MinLevel;
+    }
+    else
+        level = proto->MinLevel + RandomUInt(proto->MaxLevel - proto->MinLevel);
+
+    SetUInt32Value(UNIT_FIELD_LEVEL, level);
 
     for (uint32 i = 0; i < 7; ++i)
         SetUInt32Value(UNIT_FIELD_RESISTANCES + i, proto->Resistances[i]);
