@@ -493,7 +493,7 @@ class SERVER_DECL Object : public EventableObject
     std::set<Player*>::iterator GetInRangePlayerSetEnd() { return m_inRangePlayers.end(); }
     std::set<Player*> * GetInRangePlayerSet() { return &m_inRangePlayers; };
 
-    void __fastcall SendMessageToSet(WorldPacket *data, bool self, bool myteam_only = false);
+    void SendMessageToSet(WorldPacket *data, bool self, bool myteam_only = false);
     void SendMessageToSet(StackBufferBase * data, bool self) { OutPacketToSet(data->GetOpcode(), data->GetSize(), data->GetBufferPointer(), self); }
     void OutPacketToSet(uint16 Opcode, uint16 Len, const void * Data, bool self);
 
