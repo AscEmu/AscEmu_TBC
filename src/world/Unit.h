@@ -731,7 +731,7 @@ class SERVER_DECL Unit : public Object
         m_dualWield = enabled;
     }
 
-    bool __fastcall canReachWithAttack(Unit *pVictim);
+    bool canReachWithAttack(Unit *pVictim);
 
     //void StrikeWithAbility( Unit* pVictim, Spell* spell, uint32 addspelldmg, uint32 weapon_damage_type );
 

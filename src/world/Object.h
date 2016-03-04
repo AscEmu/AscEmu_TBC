@@ -166,11 +166,8 @@ class SERVER_DECL Object : public EventableObject
     virtual void RemoveFromWorld(bool free_guid);
 
     // guid always comes first
-#ifndef USING_BIG_ENDIAN
+
     const uint64& GetGUID() const { return *((uint64*)m_uint32Values); }
-#else
-    const uint64 GetGUID() const { return GetUInt64Value(0); }
-#endif
 
     const WoWGuid& GetNewGUID() const { return m_wowGuid; }
     uint32 GetEntry() { return m_uint32Values[3]; }
@@ -196,10 +193,10 @@ class SERVER_DECL Object : public EventableObject
     bool IsPet();
 
     //! This includes any nested objects we have, inventory for example.
-    virtual uint32 __fastcall BuildCreateUpdateBlockForPlayer(ByteBuffer *data, Player *target);
-    uint32 __fastcall BuildValuesUpdateBlockForPlayer(ByteBuffer *buf, Player *target);
-    uint32 __fastcall BuildValuesUpdateBlockForPlayer(ByteBuffer * buf, UpdateMask * mask);
-    uint32 __fastcall BuildOutOfRangeUpdateBlock(ByteBuffer *buf);
+    virtual uint32 BuildCreateUpdateBlockForPlayer(ByteBuffer *data, Player *target);
+    uint32 BuildValuesUpdateBlockForPlayer(ByteBuffer *buf, Player *target);
+    uint32 BuildValuesUpdateBlockForPlayer(ByteBuffer * buf, UpdateMask * mask);
+    uint32 BuildOutOfRangeUpdateBlock(ByteBuffer *buf);
 
     WorldPacket* BuildFieldUpdatePacket(uint32 index, uint32 value);
     void BuildFieldUpdatePacket(Player* Target, uint32 Index, uint32 Value);
@@ -269,19 +266,10 @@ class SERVER_DECL Object : public EventableObject
     }
 
     //! Get uint64 property
-#ifdef USING_BIG_ENDIAN
-    __inline const uint64 GetUInt64Value( uint32 index ) const
-#else
     const uint64& GetUInt64Value(uint32 index) const
-#endif
     {
         ASSERT(index + uint32(1) < m_valuesCount);
-#ifdef USING_BIG_ENDIAN
-        /* these have to be swapped here :< */
-        return uint64((uint64(m_uint32Values[index+1]) << 32) | m_uint32Values[index]);
-#else
         return *((uint64*)&(m_uint32Values[index]));
-#endif
     }
 
     //! Get float property
@@ -291,7 +279,7 @@ class SERVER_DECL Object : public EventableObject
         return m_floatValues[index];
     }
 
-    void __fastcall ModFloatValue(const uint32 index, const float value);
+    void ModFloatValue(const uint32 index, const float value);
     void ModFloatValueByPCT(const uint32 index, int32 byPct);
     void ModSignedInt32Value(uint32 index, int32 value);
     void ModUnsigned32Value(uint32 index, int32 mod);
@@ -304,11 +292,7 @@ class SERVER_DECL Object : public EventableObject
     {
         ASSERT(i < m_valuesCount);
         ASSERT(i1 < 4);
-#ifdef USING_BIG_ENDIAN
-        return ((uint8*)m_uint32Values)[i*4+(3-i1)];
-#else
         return ((uint8*)m_uint32Values)[i * 4 + i1];
-#endif
     }
 
     void SetNewGuid(uint32 Guid)
@@ -318,17 +302,17 @@ class SERVER_DECL Object : public EventableObject
     }
 
     void EventSetUInt32Value(uint32 index, uint32 value);
-    void __fastcall SetUInt32Value(const uint32 index, const uint32 value);
+    void SetUInt32Value(const uint32 index, const uint32 value);
 
     //! Set uint64 property
-    void __fastcall SetUInt64Value(const uint32 index, const uint64 value);
+    void SetUInt64Value(const uint32 index, const uint64 value);
 
     //! Set float property
-    void __fastcall SetFloatValue(const uint32 index, const float value);
+    void SetFloatValue(const uint32 index, const float value);
 
-    void __fastcall SetFlag(const uint32 index, uint32 newFlag);
+    void SetFlag(const uint32 index, uint32 newFlag);
 
-    void __fastcall RemoveFlag(const uint32 index, uint32 oldFlag);
+    void RemoveFlag(const uint32 index, uint32 oldFlag);
 
     bool HasFlag(const uint32 index, uint32 flag) const
     {
