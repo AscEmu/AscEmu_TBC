@@ -268,7 +268,7 @@ class SERVER_DECL WorldSession
             _socket->Disconnect();
     }
 
-    int __fastcall Update(uint32 InstanceID);
+    int Update(uint32 InstanceID);
 
     void SendItemPushResult(Item * pItem, bool Created, bool Received, bool SendToSet, bool NewItem, uint8 DestBagSlot, uint32 DestSlot, uint32 AddCount);
     void SendBuyFailed(uint64 guid, uint32 itemid, uint8 error);

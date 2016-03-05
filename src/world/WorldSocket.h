@@ -55,15 +55,15 @@ class SERVER_DECL WorldSocket : public Socket
     inline void SendPacket(WorldPacket* packet) { if (!packet) return; OutPacket(packet->GetOpcode(), packet->size(), (packet->size() ? (const void*)packet->contents() : NULL)); }
     inline void SendPacket(StackBufferBase * packet) { if (!packet) return; OutPacket(packet->GetOpcode(), packet->GetSize(), (packet->GetSize() ? (const void*)packet->GetBufferPointer() : NULL)); }
 
-    void __fastcall OutPacket(uint16 opcode, size_t len, const void* data);
-    OUTPACKET_RESULT __fastcall _OutPacket(uint16 opcode, size_t len, const void* data);
+    void OutPacket(uint16 opcode, size_t len, const void* data);
+    OUTPACKET_RESULT _OutPacket(uint16 opcode, size_t len, const void* data);
 
     inline uint32 GetLatency() { return _latency; }
 
     void Authenticate();
     void InformationRetreiveCallback(WorldPacket & recvData, uint32 requestid);
 
-    void __fastcall UpdateQueuePosition(uint32 Position);
+    void UpdateQueuePosition(uint32 Position);
 
     void OnRead();
     void OnConnect();

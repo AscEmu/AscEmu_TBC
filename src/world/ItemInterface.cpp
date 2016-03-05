@@ -323,13 +323,13 @@ AddItemResult ItemInterface::m_AddItem(Item *item, int8 ContainerSlot, int8 slot
 
     // Dword: update weapon visual if broken. Hackfix: in order for the client to register the item in the character stats window
     //  the player needs to have the item visual (that's why we unequip the item the first chance we get)
-    if (slot > 14 && slot < 18)
+    /*if (slot > 14 && slot < 18)
     {
         if (item->GetDurability() == 0)
         {
             sEventMgr.AddEvent<Player, uint8>(m_pOwner, &Player::RemoveItemVisual, slot, EVENT_PLAYER_UPDATE, 1, 1, 0);
         }
-    }
+    }*/
 
     return ADD_ITEM_RESULT_OK;
 }
@@ -2731,7 +2731,7 @@ void ItemInterface::SwapItemSlots(int8 srcslot, int8 dstslot)
 
     // Dword: update weapon visual if broken. Hackfix: in order for the client to register the item in the character stats window
     //  the player needs to have the item visual (that's why we unequip the item the first chance we get)
-    if (dstslot > 14 && dstslot < 18)
+    /*if (dstslot > 14 && dstslot < 18)
     {
         if (m_pItems[dstslot] != 0)
         {
@@ -2740,7 +2740,7 @@ void ItemInterface::SwapItemSlots(int8 srcslot, int8 dstslot)
                 sEventMgr.AddEvent<Player, uint8>(m_pOwner, &Player::RemoveItemVisual, dstslot, EVENT_PLAYER_UPDATE, 1, 1, 0);
             }
         }
-    }
+    }*/
 }
 
 //-------------------------------------------------------------------//
