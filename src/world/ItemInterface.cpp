@@ -3074,10 +3074,10 @@ void ItemInterface::ReduceItemDurability()
                     this->GetOwner()->ApplyItemMods(pItem, slot, false, true);
 
                     // Dword: remove weapon visuals
-                    if (slot > 14 && slot < 18)
+                    /*if (slot > 14 && slot < 18)
                     { // main, off/shield, ranged/relic
                         m_pOwner->RemoveItemVisual(slot);
-                    }
+                    }*/
                 }
             }
         }

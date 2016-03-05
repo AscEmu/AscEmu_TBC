@@ -3598,12 +3598,12 @@ void Player::OnPushToWorld()
     m_changingMaps = false;
 
     // Dword: broken weapons handling on enter world
-    for (uint8 i = 15; i < 18; i++)
+    /*for (uint8 i = 15; i < 18; i++)
     {
         Item* item = GetItemInterface()->GetInventoryItem(i);
         if (item != 0 && item->GetDurability() == 0)
             RemoveItemVisual(i);
-    }
+    }*/
 }
 
 void Player::RemoveFromWorld()
@@ -4550,10 +4550,10 @@ void Player::DeathDurabilityLoss(double percent)
                     ApplyItemMods(pItem, i, false, true);
 
                     // Dword: remove weapon visuals
-                    if (i > 14 && i < 18)
+                    /*if (i > 14 && i < 18)
                     { // main, off/shield, ranged/relic
                         RemoveItemVisual(i);
-                    }
+                    }*/
                 }
 
                 pItem->SetUInt32Value(ITEM_FIELD_DURABILITY, (uint32)pNewDurability);

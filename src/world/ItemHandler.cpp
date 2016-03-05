@@ -484,7 +484,7 @@ void WorldSession::HandleSwapInvItemOpcode(WorldPacket & recv_data)
 
     // Dword: broken item hackfix. in order to remove the item from the character stats window, the player must have the item's visual
     //  restore visual (very short time) -> remove item
-    if (srcslot > 14 && srcslot < 18)
+    /*if (srcslot > 14 && srcslot < 18)
     {
         Item* SrcItem = _player->GetItemInterface()->GetInventoryItem(srcslot);
         if (SrcItem != 0)
@@ -494,7 +494,7 @@ void WorldSession::HandleSwapInvItemOpcode(WorldPacket & recv_data)
                 (_player, &Player::EventSwapItems, srcslot, dstslot, EVENT_PLAYER_UPDATE, 1, 1, 0);
         }
     }
-    else
+    else*/
         _player->GetItemInterface()->SwapItemSlots(srcslot, dstslot);
 }
 
@@ -1687,7 +1687,7 @@ inline bool RepairItem(Player * pPlayer, Item * pItem)
     pItem->m_isDirty = true;
 
     // Dword: restore visibility to weapon
-    uint8 i = 0;
+    /*uint8 i = 0;
     for (; i < EQUIPMENT_SLOT_END; i++)
     {
         Item* curItem = pPlayer->GetItemInterface()->GetInventoryItem(INVENTORY_SLOT_NOT_SET, i);
@@ -1698,7 +1698,7 @@ inline bool RepairItem(Player * pPlayer, Item * pItem)
     if (i > 14 && i < 18)
     { // main, off/shield, ranged/relic
         pPlayer->RestoreItemVisual(i, pItem);
-    }
+    }*/
 
     return TRUE;
 }
