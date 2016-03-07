@@ -207,7 +207,7 @@ class SERVER_DECL Pet : public Creature
     inline PetSpellMap* GetSpells() { return &mSpells; }
     inline bool IsSummon() { return Summon; }
 
-    void __fastcall SetAutoCastSpell(AI_Spell * sp);
+    void SetAutoCastSpell(AI_Spell * sp);
     void Rename(std::string NewName);
     inline std::string& GetName() { return m_name; }
     void AddPetSpellToOwner(uint32 spellId);
