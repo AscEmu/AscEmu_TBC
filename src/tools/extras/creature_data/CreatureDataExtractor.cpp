@@ -4,16 +4,17 @@
 #include <vector>
 #include <map>
 
-#include "dbcfile.h"
-#include "mpq_libmpq04.h"
+#include "../../../../dep/dbcfile/dbcfile.h"
+#include "../../../../dep/libmpq/libmpq/mpq_libmpq04.h"
+#include "../../../../dep/loadlib/loadlib.h"
 
 #include "CreatureDataStructures.h"
 
 void InitMPQs()
 {
     //COPIED FROM MAP EXTRACTOR
-    FILE * tf;
-    const char* localeNames[] = { "enUS", "enGB", "deDE", "frFR", "koKR", "zhCN", "zhTW", "esES", "ruRU", 0 };
+    FILE* tf;
+    const char* localeNames[] = {"enUS", "enGB", "deDE", "frFR", "koKR", "zhCN", "zhTW", "esES", "ruRU", 0};
     int maxPatches = 3;
     int locale = -1;
     char tmp[100];
@@ -98,7 +99,7 @@ void InitMPQs()
     }
 }
 
-void replace(std::string &str, const char* find, const char* rep, uint32 limit)
+void replace(std::string& str, const char* find, const char* rep, uint32 limit)
 {
     uint32 i = 0;
     std::string::size_type pos = 0;
@@ -146,7 +147,7 @@ int main()
         unsigned int modelentry = itr->getInt(1);
         float modelscale = itr->getFloat(4);
 
-        std::map<uint32, DBCFile::Record>::iterator  modelitr = modelInfoEntries.find(modelentry);
+        std::map<uint32, DBCFile::Record>::iterator modelitr = modelInfoEntries.find(modelentry);
 
         if (modelitr == modelInfoEntries.end())
         {
@@ -172,7 +173,6 @@ int main()
 
         if (cacheitr == modelCache.end())
         {
-
             MPQFile modelf(strmodelname.c_str());
 
             if (modelf.isEof())
@@ -229,7 +229,7 @@ int main()
                 printf("Attachment %u requests bone %u (too large, bone table is only %u entries)\n", i, boneindex, header->nBones);
                 continue;
             }
-            M2Bone & bone = bones[boneindex];
+            M2Bone& bone = bones[boneindex];
             //printf("Attachment %u (bone pivot %f %f %f offset %f %f %f)\n", attachments[i].id, bone.pivotpoint[0], bone.pivotpoint[1], bone.pivotpoint[2], attachments[i].pos[0],  attachments[i].pos[1],  attachments[i].pos[2]);
 
             float realpos[3];
@@ -259,3 +259,4 @@ int main()
 
     return 0;
 }
+
