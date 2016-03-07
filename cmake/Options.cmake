@@ -1,10 +1,9 @@
-# Copyright (C) 2014-2015 AscEmu Team <http://www.ascemu.org>
+# Copyright (C) 2014-2016 AscEmu Team <http://www.ascemu.org>
 
 # general
 set(ASCEMU_SCRIPTLIB_PATH "modules" CACHE PATH "The directory for AscEmu modules." )
 option(BUILD_ASCEMUSCRIPTS "Build AscEmu modules." ON)
 option(BUILD_TOOLS "Build AscEmu tools." OFF)
-option(BUILD_EXTRAS "Build AscEmu extra." OFF)
 option(BUILD_EVENTSCRIPTS "Build ascEventScripts." ON)
 option(BUILD_INSTANCESCRIPTS "Build ascInstanceScripts." ON)
 option(BUILD_EXTRASCRIPTS "Build ascExtraScripts." ON)
