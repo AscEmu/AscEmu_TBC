@@ -4,7 +4,8 @@
 #ifndef MPQ_H
 #define MPQ_H
 
-#include "loadlib.h"
+#include "../../../dep/loadlib/loadlib.h"
+
 #include "mpq.h"
 #include <string.h>
 #include <ctype.h>
