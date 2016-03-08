@@ -15,8 +15,3 @@ add_subdirectory(worldserver)
 if(BUILD_TOOLS)
    add_subdirectory(tools)
 endif()
-
-# if build extras is set, add the subdirectory
-if(BUILD_EXTRAS)
-   add_subdirectory(tools/extras)
-endif()

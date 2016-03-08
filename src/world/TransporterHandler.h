@@ -131,7 +131,7 @@ class Transporter : public GameObject
     WaypointIterator mNextWaypoint;
 
     void OnPushToWorld();
-    uint32 __fastcall BuildCreateUpdateBlockForPlayer(ByteBuffer *data, Player *target);
+    uint32 BuildCreateUpdateBlockForPlayer(ByteBuffer *data, Player *target);
     void DestroyTransportNPCs(Player * target);
     void AddNPC(uint32 Entry, float offsetX, float offsetY, float offsetZ, float offsetO);
     Creature * GetCreature(uint32 Guid);
