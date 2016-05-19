@@ -2,6 +2,7 @@
 ﻿
 `master (2.4.3)`[![master Build Status](https://travis-ci.org/AscEmu/AscEmu_TBC.svg?branch=master)](https://travis-ci.org/AscEmu/AscEmu_TBC)
 
+## This repository is currently unsupported! Feel free to contact us if you like to work on on TBC!
 
 ## Introduction
 AscEmu is derived from ArcEmu to keep up the Antrix-Ascent-Arcemu way of Framework.
