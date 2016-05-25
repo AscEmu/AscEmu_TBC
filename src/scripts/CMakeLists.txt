@@ -18,7 +18,6 @@ set(script_linkages world)
 
 #All script libraries have SCRIPTLIB defined.
 add_definitions(-DSCRIPTLIB -DSKIP_ALLOCATOR_SHARING)
-set(BUILD_CUSTOMSCRIPTS TRUE CACHE BOOL "Build ascCustomScripts.")
 set(BUILD_EVENTSCRIPTS TRUE CACHE BOOL "Build ascEventScripts.")
 set(BUILD_INSTANCESCRIPTS TRUE CACHE BOOL "Build ascInstanceScripts.")
 set(BUILD_EXTRASCRIPTS TRUE CACHE BOOL "Build ascExtraScripts.")
@@ -27,7 +26,6 @@ set(BUILD_QUESTSCRIPTS TRUE CACHE BOOL "Build ascQuestScripts.")
 set(BUILD_MISCSCRIPTS TRUE CACHE BOOL "Build ascMiscScripts." )
 set(BUILD_LUAENGINE TRUE CACHE BOOL "Build LuaEngine." )
 
-add_subdirectory(CustomScripts)
 add_subdirectory(EventScripts)
 add_subdirectory(InstanceScripts)
 add_subdirectory(ExtraScripts)
