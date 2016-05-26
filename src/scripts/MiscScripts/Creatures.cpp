@@ -20,6 +20,29 @@
 #include "StdAfx.h"
 #include "Setup.h"
 
+//Nestlewood Owlkin
+class NestlewoodOwlkin : public CreatureAIScript
+{
+public:
+    ADD_CREATURE_FACTORY_FUNCTION(NestlewoodOwlkin);
+    NestlewoodOwlkin(Creature* pCreature) : CreatureAIScript(pCreature) {}
+
+    void OnCombatStart(Unit* mTarget)
+    {
+        if (_unit->HasAura(29528))
+            RegisterAIUpdateEvent(3000);
+            _unit->GetAIInterface()->disable_targeting = true;
+            _unit->Root();
+            _unit->Despawn(3100, 60000);
+    }
+
+    void AIUpdate()
+    {
+        _unit->GetMapMgr()->GetInterface()->SpawnCreature(16534, _unit->GetPositionX(), _unit->GetPositionY(), _unit->GetPositionZ(), _unit->GetOrientation(), true, false, 0, 0)->Despawn(RandomUInt(14000, 20000), 0);
+        RemoveAIUpdateEvent();
+    }
+};
+
 //Crimson Hammersmith
 class CrimsonHammersmith : public CreatureAIScript
 {
@@ -93,6 +116,7 @@ public:
 
 void SetupMiscCreatures(ScriptMgr *mgr)
 {
+    mgr->register_creature_script(16518, &NestlewoodOwlkin::Create);
 	mgr->register_creature_script(11120, &CrimsonHammersmith::Create);
 	mgr->register_creature_script(5894, &Corrupt_Minor_Manifestation_Water_Dead::Create);
 	mgr->register_creature_script(3425, &SavannahProwler::Create);
