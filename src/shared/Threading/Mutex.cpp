@@ -121,7 +121,7 @@ void FastMutex::Acquire()
         owner = InterlockedCompareExchange(&m_lock, thread_id, 0);
         if(owner == 0)
             break;
-        ::Sleep(0);
+        Arcemu::Sleep(0);
     }
     ++m_recursiveCount;
 

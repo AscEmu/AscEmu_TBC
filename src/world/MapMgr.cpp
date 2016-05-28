@@ -1606,7 +1606,7 @@ bool MapMgr::Do()
 #ifdef WIN32
             WaitForSingleObject(hThread, MAP_MGR_UPDATE_PERIOD - exec_time);
 #else
-            Sleep(MAP_MGR_UPDATE_PERIOD-exec_time);
+            Arcemu::Sleep(MAP_MGR_UPDATE_PERIOD-exec_time);
 #endif
         }
 

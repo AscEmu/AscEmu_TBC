@@ -51,7 +51,7 @@ void ConsoleThread::terminate()
     printf("Waiting for console thread to terminate....\n");
     while (m_isRunning)
     {
-        Sleep(100);
+        Arcemu::Sleep(100);
     }
     printf("Console shut down.\n");
 }

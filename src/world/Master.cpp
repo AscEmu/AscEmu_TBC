@@ -501,7 +501,7 @@ bool Master::Run(int argc, char ** argv)
 #ifdef WIN32
             WaitForSingleObject(hThread, 50 - etime);
 #else
-            Sleep(50 - etime);
+            Arcemu::Sleep(50 - etime);
 #endif
         }
     }
@@ -520,7 +520,7 @@ bool Master::Run(int argc, char ** argv)
     {
         Log.Notice("Shutdown", "Waiting for loot to finish loading...");
         while (lootmgr.is_loading)
-            Sleep(100);
+            Arcemu::Sleep(100);
     }
 
     // send a query to wake it up if its inactive

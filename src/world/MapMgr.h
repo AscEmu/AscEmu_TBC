@@ -282,7 +282,7 @@ class SERVER_DECL MapMgr : public CellHandler <MapCell>, public EventableObject,
         SetThreadState(THREADSTATE_TERMINATE);
         while (thread_running)
         {
-            Sleep(100);
+            Arcemu::Sleep(100);
         }
     }
 
