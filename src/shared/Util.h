@@ -47,6 +47,28 @@ extern SERVER_DECL bool _IsStringUTF8(const char *str);
 
 #endif
 
+    namespace Arcemu
+    {
+        SERVER_DECL float round(float f);
+        SERVER_DECL double round(double d);
+        SERVER_DECL long double round(long double ld);
+
+        /////////////////////////////////////////////////////////////////////////
+        //void Sleep( unsigned long timems );
+        //  Puts the calling thread to sleep for the specified miliseconds
+        //
+        //Parameter(s)
+        //  unsigned long timemes  -  time interval to put the thread to sleep for
+        //
+        //Return Value
+        //  None
+        //
+        //
+        /////////////////////////////////////////////////////////////////////////
+        void Sleep(unsigned long timems);
+    }
+
+
 inline uint32 getMSTime()
     {
         uint32 MSTime = 0;
