@@ -40,7 +40,7 @@ addons:
     - g++-4.8
   coverity_scan:
     project:
-      name: "AscEmu/AscEmuTBC"
+      name: "AscEmu/AscEmu_TBC"
       description: "2.4.3 World of Warcraft game server"
     notification_email: info@ascemu.org
     build_command_prepend: "cmake ../ -DCMAKE_BUILD_TYPE=Release && make clean"
