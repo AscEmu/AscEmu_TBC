@@ -118,7 +118,7 @@ Creature::~Creature()
 
     if (m_custom_waypoint_map != 0)
     {
-        for (WayPointMap::iterator itr = m_custom_waypoint_map->begin(); itr != m_custom_waypoint_map->end(); ++itr)
+        for (Movement::WayPointMap::iterator itr = m_custom_waypoint_map->begin(); itr != m_custom_waypoint_map->end(); ++itr)
             delete (*itr);
         delete m_custom_waypoint_map;
     }
@@ -1084,9 +1084,9 @@ void Creature::LoadAIAgents()
     delete result;*/
 }
 
-WayPoint * Creature::CreateWaypointStruct()
+Movement::WayPoint * Creature::CreateWaypointStruct()
 {
-    return new WayPoint();
+    return new Movement::WayPoint();
 }
 //#define SAFE_FACTIONS
 
@@ -1769,7 +1769,7 @@ void Creature::DestroyCustomWaypointMap()
 {
     if (m_custom_waypoint_map)
     {
-        for (WayPointMap::iterator itr = m_custom_waypoint_map->begin(); itr != m_custom_waypoint_map->end(); ++itr)
+        for (Movement::WayPointMap::iterator itr = m_custom_waypoint_map->begin(); itr != m_custom_waypoint_map->end(); ++itr)
         {
             delete (*itr);
         }
@@ -1804,7 +1804,7 @@ void Creature::SetGuardWaypoints()
         while (ran < 1)
             ran = (rand() % (100)) / 10.0f;
 
-        WayPoint * wp = new WayPoint;
+        Movement::WayPoint * wp = new Movement::WayPoint;
         wp->id = i;
         wp->flags = 0;
         wp->waittime = 800;  /* these guards are antsy :P */

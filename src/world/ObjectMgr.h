@@ -381,7 +381,7 @@ struct __gnu_cxx::hash<std::string>
     }
 }
 
-typedef HM_NAMESPACE::hash_map<std::string, PlayerInfo*> PlayerNameStringIndexMap;
+typedef std::unordered_map<std::string, PlayerInfo*> PlayerNameStringIndexMap;
 
 #endif
 #else
@@ -615,7 +615,7 @@ class SERVER_DECL ObjectMgr : public Singleton < ObjectMgr >, public EventableOb
     std::set<SpellEntry*>* GetDefaultPetSpells(uint32 Entry);
     uint32 GetPetSpellCooldown(uint32 SpellId);
     void LoadPetSpellCooldowns();
-    WayPointMap * GetWayPointMap(uint32 spawnid);
+    Movement::WayPointMap * GetWayPointMap(uint32 spawnid);
     void LoadSpellOverride();
 
     void ResetDailies();
@@ -736,7 +736,7 @@ class SERVER_DECL ObjectMgr : public Singleton < ObjectMgr >, public EventableOb
     std::unordered_map<uint32, PlayerInfo*> m_playersinfo;
     PlayerNameStringIndexMap m_playersInfoByName;
 
-    std::unordered_map<uint32, WayPointMap*> m_waypoints;//stored by spawnid
+    std::unordered_map<uint32, Movement::WayPointMap*> m_waypoints;//stored by spawnid
     std::unordered_map<uint32, TimedEmoteList*> m_timedemotes;//stored by spawnid
     uint32 m_hiCreatureSpawnId;
 

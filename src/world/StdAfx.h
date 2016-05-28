@@ -80,6 +80,9 @@ extern SERVER_DECL SessionLogWriter* Player_Log;
 
 #include "../shared/ascemu_getopt.h"
 
+#include "Movement/MovementCommon.hpp"
+#include "WUtil.h"
+
 #include "UpdateFields.h"
 #include "UpdateMask.h"
 #include "Opcodes.h"

@@ -2572,10 +2572,10 @@ bool AIInterface::setInFront(Unit* target) // not the best way to do it, though
     return m_Unit->isInFront(target);
 }
 
-bool AIInterface::addWayPoint(WayPoint* wp)
+bool AIInterface::addWayPoint(Movement::WayPoint* wp)
 {
     if (!m_waypoints)
-        m_waypoints = new WayPointMap;
+        m_waypoints = new Movement::WayPointMap;
     if (!wp)
         return false;
     if (wp->id <= 0)
@@ -2606,10 +2606,10 @@ void AIInterface::changeWayPointID(uint32 oldwpid, uint32 newwpid)
         return; //same spot
 
     //already wp with that id ?
-    WayPoint* originalwp = getWayPoint(newwpid);
+    Movement::WayPoint* originalwp = getWayPoint(newwpid);
     if (!originalwp)
         return;
-    WayPoint* oldwp = getWayPoint(oldwpid);
+    Movement::WayPoint* oldwp = getWayPoint(oldwpid);
     if (!oldwp)
         return;
 
@@ -2630,9 +2630,9 @@ void AIInterface::deleteWayPoint(uint32 wpid)
     if (wpid > m_waypoints->size())
         return; //not valid id
 
-    WayPointMap new_waypoints;
+    Movement::WayPointMap new_waypoints;
     uint32 newpid = 1;
-    for (WayPointMap::iterator itr = m_waypoints->begin(); itr != m_waypoints->end(); ++itr)
+    for (Movement::WayPointMap::iterator itr = m_waypoints->begin(); itr != m_waypoints->end(); ++itr)
     {
         if ((*itr) == NULL || (*itr)->id == wpid)
         {
@@ -2647,7 +2647,7 @@ void AIInterface::deleteWayPoint(uint32 wpid)
 
     m_waypoints->clear();
     m_waypoints->push_back(NULL);		// waypoint 0
-    for (WayPointMap::iterator itr = new_waypoints.begin(); itr != new_waypoints.end(); ++itr)
+    for (Movement::WayPointMap::iterator itr = new_waypoints.begin(); itr != new_waypoints.end(); ++itr)
     {
         (*itr)->id = newpid++;
         m_waypoints->push_back(*itr);
@@ -2662,13 +2662,13 @@ bool AIInterface::showWayPoints(Player* pPlayer, bool Backwards)
         return false;
 
     //wpid of 0 == all
-    WayPointMap::const_iterator itr;
+    Movement::WayPointMap::const_iterator itr;
     if (m_WayPointsShowing == true)
         return false;
 
     m_WayPointsShowing = true;
 
-    WayPoint* wp = NULL;
+    Movement::WayPoint* wp = NULL;
     for (itr = m_waypoints->begin(); itr != m_waypoints->end(); itr++)
     {
         if ((*itr) != NULL)
@@ -2726,7 +2726,7 @@ bool AIInterface::hideWayPoints(Player* pPlayer)
     //wpid of 0 == all
     if (m_WayPointsShowing != true) return false;
     m_WayPointsShowing = false;
-    WayPointMap::const_iterator itr;
+    Movement::WayPointMap::const_iterator itr;
 
     // slightly better way to do this
     uint64 guid;
@@ -2752,8 +2752,8 @@ bool AIInterface::saveWayPoints()
     if (GetUnit()->GetTypeId() != TYPEID_UNIT) return false;
 
     WorldDatabase.Execute("DELETE FROM creature_waypoints WHERE spawnid = %u", ((Creature*)GetUnit())->GetSQL_id());
-    WayPointMap::const_iterator itr;
-    WayPoint* wp = NULL;
+    Movement::WayPointMap::const_iterator itr;
+    Movement::WayPoint* wp = NULL;
     std::stringstream ss;
 
     for (itr = m_waypoints->begin(); itr != m_waypoints->end(); itr++)
@@ -2790,7 +2790,7 @@ void AIInterface::deleteWaypoints()
     if (!m_waypoints)
         return;
 
-    for (WayPointMap::iterator itr = m_waypoints->begin(); itr != m_waypoints->end(); ++itr)
+    for (Movement::WayPointMap::iterator itr = m_waypoints->begin(); itr != m_waypoints->end(); ++itr)
     {
         if ((*itr) != NULL)
             delete (*itr);
@@ -2798,7 +2798,7 @@ void AIInterface::deleteWaypoints()
     m_waypoints->clear();
 }
 
-WayPoint* AIInterface::getWayPoint(uint32 wpid)
+Movement::WayPoint* AIInterface::getWayPoint(uint32 wpid)
 {
     if (!m_waypoints)return NULL;
     if (wpid >= m_waypoints->size())
@@ -2859,7 +2859,7 @@ void AIInterface::_UpdateMovement(uint32 p_time)
 
                 if ((GetWayPointsCount() != 0) && (m_AIState == STATE_IDLE || m_AIState == STATE_SCRIPTMOVE)) //if we attacking don't use wps
                 {
-                    WayPoint* wp = getWayPoint(getCurrentWaypoint());
+                    Movement::WayPoint* wp = getWayPoint(getCurrentWaypoint());
                     if (wp)
                     {
                         CALL_SCRIPT_EVENT(m_Unit, OnReachWP)(wp->id, !m_moveBackward);
@@ -3053,7 +3053,7 @@ void AIInterface::_UpdateMovement(uint32 p_time)
 
                 if (destpoint != -1)
                 {
-                    WayPoint* wp = getWayPoint(destpoint);
+                    Movement::WayPoint* wp = getWayPoint(destpoint);
                     if (wp)
                     {
                         if (!m_moveBackward)

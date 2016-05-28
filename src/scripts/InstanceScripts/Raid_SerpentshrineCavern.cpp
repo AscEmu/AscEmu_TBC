@@ -1929,7 +1929,7 @@ public:
 		info_multishot = dbcSpell.LookupEntry(MULTI_SHOT);
 		info_shot = dbcSpell.LookupEntry(SHOOT);
 
-		WayPoint * wp = _unit->CreateWaypointStruct();
+        Movement::WayPoint * wp = _unit->CreateWaypointStruct();
 		wp->id = 1;
 		wp->x = 29.798161f;
 		wp->y = -923.358276f;
@@ -2133,7 +2133,7 @@ public:
 			elemental = _unit->GetMapMgr()->GetInterface()->SpawnCreature(CN_ENCHANTED_ELEMENTAL, ElementalSpawnPoints[pos].x, ElementalSpawnPoints[pos].y, ElementalSpawnPoints[pos].z, ElementalSpawnPoints[pos].o, false, false, 0, 0);
 			if(elemental)
 			{
-				WayPoint * wp = _unit->CreateWaypointStruct();
+                Movement::WayPoint * wp = _unit->CreateWaypointStruct();
 				wp->id = 1;
 				wp->x = ElementalSpawnPoints2[pos].x;
 				wp->y = ElementalSpawnPoints2[pos].y;
@@ -2871,9 +2871,9 @@ public:
 		}
 	}
 		
-	inline WayPoint* CreateWaypoint(int id, uint32 waittime, uint32 flags)
+	inline Movement::WayPoint* CreateWaypoint(int id, uint32 waittime, uint32 flags)
 	{
-		WayPoint * wp = _unit->CreateWaypointStruct();
+        Movement::WayPoint * wp = _unit->CreateWaypointStruct();
 		wp->id = id;
 		wp->x = fly[id].x;
 		wp->y = fly[id].y;

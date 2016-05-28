@@ -1,8 +1,7 @@
 ﻿# ![logo](http://ascemu.org/style/img/logo.png)
 ﻿
-`master (2.4.3)`[![master Build Status](https://travis-ci.org/AscEmu/AscEmu_TBC.svg?branch=master)](https://travis-ci.org/AscEmu/AscEmu_TBC)
-
-## This repository is currently unsupported! Feel free to contact us if you like to work on on TBC!
+[![Travis Status](https://travis-ci.org/AscEmu/AscEmu_TBC.svg?branch=master)](https://travis-ci.org/AscEmu/AscEmu_TBC)
+[![Coverity Snac](https://scan.coverity.com/projects/9005/badge.svg)](https://scan.coverity.com/projects/9005)
 
 ## Introduction
 AscEmu is derived from ArcEmu to keep up the Antrix-Ascent-Arcemu way of Framework.

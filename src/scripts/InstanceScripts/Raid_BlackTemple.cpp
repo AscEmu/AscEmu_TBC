@@ -1279,9 +1279,9 @@ public:
 		}
     }
 
-    inline WayPoint* CreateWaypoint(int id, uint32 waittime, uint32 flags)
+    inline Movement::WayPoint* CreateWaypoint(int id, uint32 waittime, uint32 flags)
     {
-        WayPoint * wp = _unit->CreateWaypointStruct();
+        Movement::WayPoint * wp = _unit->CreateWaypointStruct();
         wp->id = id;
         wp->x = ToIllidan[id].x;
         wp->y = ToIllidan[id].y;
@@ -2888,9 +2888,9 @@ public:
 		}
     }
 
-    inline WayPoint* CreateWaypoint(int id, uint32 waittime, uint32 flags)
+    inline Movement::WayPoint* CreateWaypoint(int id, uint32 waittime, uint32 flags)
     {
-        WayPoint * wp = _unit->CreateWaypointStruct();
+        Movement::WayPoint * wp = _unit->CreateWaypointStruct();
         wp->id = id;
         wp->x = ForIllidan[id].x;
         wp->y = ForIllidan[id].y;

@@ -1,24 +1,24 @@
 /*
- * ArcEmu MMORPG Server
- * Copyright (C) 2008 <http://www.ArcEmu.org/>
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
- */
+* AscEmu Framework based on ArcEmu MMORPG Server
+* Copyright (C) 2014-2016 AscEmu Team <http://www.ascemu.org>
+* Copyright (C) 2008-2012 ArcEmu Team <http://www.ArcEmu.org/>
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU Affero General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU Affero General Public License for more details.
+*
+* You should have received a copy of the GNU Affero General Public License
+* along with this program. If not, see <http://www.gnu.org/licenses/>.
+*/
 
-#ifndef WOWSERVER_COMMON_H
-#define WOWSERVER_COMMON_H
+#ifndef _COMMON_H
+#define _COMMON_H
 
 /* Define these if you are creating a repack */
 /*
@@ -30,25 +30,26 @@
 #pragma warning(disable:4996)
 #define _CRT_SECURE_NO_DEPRECATE 1
 #define _CRT_SECURE_COPP_OVERLOAD_STANDARD_NAMES 1
-#pragma warning(disable:4251)		// dll-interface bullshit
+#pragma warning(disable:4251)        // dll-interface bullshit
 #endif
 
 enum TimeVariables
 {
-	TIME_SECOND = 1,
-	TIME_MINUTE = TIME_SECOND * 60,
-	TIME_HOUR   = TIME_MINUTE * 60,
-	TIME_DAY	= TIME_HOUR * 24,
-	TIME_MONTH	= TIME_DAY * 30,
-	TIME_YEAR	= TIME_MONTH * 12,
+    TIME_SECOND = 1,
+    TIME_MINUTE = TIME_SECOND * 60,
+    TIME_HOUR = TIME_MINUTE * 60,
+    TIME_DAY = TIME_HOUR * 24,
+    TIME_MONTH = TIME_DAY * 30,
+    TIME_YEAR = TIME_MONTH * 12
 };
 
 enum MsTimeVariables
 {
-	MSTIME_SECOND = 1000,
-	MSTIME_MINUTE = MSTIME_SECOND * 60,
-	MSTIME_HOUR   = MSTIME_MINUTE * 60,
-	MSTIME_DAY	= MSTIME_HOUR * 24,
+    MSTIME_SECOND = 1000,
+    MSTIME_6SECONDS = MSTIME_SECOND * 6,
+    MSTIME_MINUTE = MSTIME_SECOND * 60,
+    MSTIME_HOUR = MSTIME_MINUTE * 60,
+    MSTIME_DAY = MSTIME_HOUR * 24
 };
 
 #ifdef WIN32
@@ -58,10 +59,10 @@ enum MsTimeVariables
 #endif
 
 #ifdef HAVE_CONFIG_H
-# include <config.h>
+#include <config.h>
 #endif
 
-#include "ascemuConfig.h"
+#include "AscemuServerDefines.hpp"
 
 #include <cstdlib>
 #include <cstdio>
@@ -78,16 +79,25 @@ enum MsTimeVariables
 #  include <windows.h>
 #  undef NOMINMAX
 #else
-#  include <cstring>
 #  define MAX_PATH 1024
 #endif
 
 #ifdef CONFIG_USE_SELECT
 #undef FD_SETSIZE
-#define FD_SETSIZE 2048 
+#define FD_SETSIZE 2048
 #endif
 
 #include "Network/NetworkIncludes.hpp"
+
+// current platform and compiler
+#define PLATFORM_WIN32 0
+#define PLATFORM_UNIX  1
+#define PLATFORM_APPLE 2
+
+#define UNIX_FLAVOUR_LINUX 1
+#define UNIX_FLAVOUR_BSD 2
+#define UNIX_FLAVOUR_OTHER 3
+#define UNIX_FLAVOUR_OSX 4
 
 #if defined( __WIN32__ ) || defined( WIN32 ) || defined( _WIN32 )
 #  define PLATFORM PLATFORM_WIN32
@@ -130,16 +140,10 @@ enum MsTimeVariables
 #define CONFIG "Release"
 #endif
 
-#ifdef X64
+#if defined(__x86_64__) || defined(__x86_64) || defined(__amd64__) || defined(_WIN64)
 #define ARCH "X64"
 #else
 #define ARCH "X86"
-#endif
-
-#if _WIN32
-#define STRCASECMP stricmp
-#else
-#define STRCASECMP strcasecmp
 #endif
 
 #if PLATFORM == PLATFORM_WIN32
@@ -169,21 +173,12 @@ enum MsTimeVariables
 #include <algorithm>
 #include <cstring>
 #include <climits>
-#include <cstdlib>
+
 //#include <iostream>
 #include <unordered_map>
 #include <unordered_set>
 
 #include "CommonHelpers.hpp"
-
-#include <unordered_map>
-#include <unordered_set>
-#define HM_NAMESPACE ::std
-#define hash_map unordered_map
-#define hash_multimap unordered_multimap
-#define hash_set unordered_set
-#define hash_multiset tr1::unordered_multiset
-
 #include "CommonTypes.hpp"
 
 // Include all threading files
@@ -195,6 +190,8 @@ enum MsTimeVariables
 #include "Threading/AtomicCounter.h"
 #include "Threading/AtomicBoolean.h"
 #include "Threading/ConditionVariable.h"
+
+//#include "CRefcounter.h"
 
 #include "MersenneTwister.h"
 
@@ -216,73 +213,67 @@ enum MsTimeVariables
 
 #endif
 
-#ifndef WIN32
-#define GUID_HIPART(x) ( ( x >> 32 ) )
-#define GUID_LOPART(x) ( ( x & 0x00000000ffffffff ) )
-#else
-#define GUID_HIPART(x) (*(((uint32*)&(x))+1))
-#define GUID_LOPART(x) (*((uint32*)&(x)))
-#endif
-
 #define atol(a) strtoul( a, NULL, 10)
 
 #define STRINGIZE(a) #a
 
 // fix buggy MSVC's for variable scoping to be reliable =S
-#define for if(true) for
+#define for if (true) for
 
-#if COMPILER == COMPILER_MICROSOFT && _MSC_VER >= 1400
+#if COMPILER == COMPILER_MICROSOFT
 #pragma float_control(push)
 #pragma float_control(precise, on)
 #endif
 
 // fast int abs
-static inline int int32abs( const int value )
+static inline int int32abs(const int value)
 {
-	return (value ^ (value >> 31)) - (value >> 31);
+    return (value ^ (value >> 31)) - (value >> 31);
 }
 
 // fast int abs and recast to unsigned
-static inline uint32 int32abs2uint32( const int value )
+static inline uint32 int32abs2uint32(const int value)
 {
-	return (uint32)(value ^ (value >> 31)) - (value >> 31);
+    return (uint32)(value ^ (value >> 31)) - (value >> 31);
 }
 
 /// Fastest Method of float2int32
 static inline int float2int32(const float value)
 {
-#if !defined(X64) && COMPILER == COMPILER_MICROSOFT && !defined(USING_BIG_ENDIAN)
-	int i;
-	__asm {
-		fld value
-		frndint
-		fistp i
-	}
-	return i;
+#if !defined(_WIN64) && COMPILER == COMPILER_MICROSOFT && !defined(USING_BIG_ENDIAN)
+    int i;
+    __asm
+    {
+        fld value
+        frndint
+        fistp i
+    }
+    return i;
 #else
-	union { int asInt[2]; double asDouble; } n;
-	n.asDouble = value + 6755399441055744.0;
+    union { int asInt[2]; double asDouble; } n;
+    n.asDouble = value + 6755399441055744.0;
 
-	return n.asInt [0];
+    return n.asInt[0];
 #endif
 }
 
 /// Fastest Method of long2int32
 static inline int long2int32(const double value)
 {
-#if !defined(X64) && COMPILER == COMPILER_MICROSOFT && !defined(USING_BIG_ENDIAN)
-	int i;
-	__asm {
-		fld value
-		frndint
-		fistp i
-	}
-	return i;
+#if !defined(_WIN64) && COMPILER == COMPILER_MICROSOFT && !defined(USING_BIG_ENDIAN)
+    int i;
+    __asm
+    {
+        fld value
+        frndint
+        fistp i
+    }
+    return i;
 #else
-  union { int asInt[2]; double asDouble; } n;
-  n.asDouble = value + 6755399441055744.0;
+    union { int asInt[2]; double asDouble; } n;
+    n.asDouble = value + 6755399441055744.0;
 
-  return n.asInt [0];
+    return n.asInt[0];
 #endif
 }
 
@@ -295,166 +286,123 @@ static inline int long2int32(const double value)
 #endif
 
 inline uint32 now()
-{	
-#ifdef WIN32
-	return GetTickCount();
+{
+#ifdef _WIN32
+    return GetTickCount();
 #else
-	struct timeval tv;
-	gettimeofday(&tv, NULL);
-	return (tv.tv_sec * 1000) + (tv.tv_usec / 1000);
+    struct timeval tv;
+    gettimeofday(&tv, NULL);
+    return (tv.tv_sec * 1000) + (tv.tv_usec / 1000);
 #endif
 }
 
 #ifndef WIN32
 #define FALSE   0
-#define TRUE	1
+#define TRUE    1
 #endif
-
-#ifndef WIN32
-#define Sleep(ms) usleep(1000*ms)
-#endif
-
-/*#ifdef WIN32
-#ifndef __SHOW_STUPID_WARNINGS__
-#pragma warning(disable:4018)
-#pragma warning(disable:4244)
-#pragma warning(disable:4305) 
-#pragma warning(disable:4748)
-#pragma warning(disable:4800) 
-#pragma warning(disable:4996)
-#pragma warning(disable:4251)
-#endif	  
-#endif
-
-#undef INTEL_COMPILER
-#ifdef INTEL_COMPILER
-#pragma warning(disable:279)
-#pragma warning(disable:1744)
-#pragma warning(disable:1740)
-#endif*/
 
 #include "Util.h"
-struct WayPoint
-{
-	WayPoint()
-	{
-		o = 0.0f;
-	}
-	uint32 id;
-	float x;
-	float y;
-	float z;
-	float o;
-	uint32 waittime; //ms
-	uint32 flags;
-	bool forwardemoteoneshot;
-	uint32 forwardemoteid;
-	bool backwardemoteoneshot;
-	uint32 backwardemoteid;
-	uint32 forwardskinid;
-	uint32 backwardskinid;
-
-};
 
 struct spawn_timed_emotes
 {
-	uint8		type; //1 standstate, 2 emotestate, 3 emoteoneshot
-	uint32		value; //get yar list elsewhere
-	char		*msg; //maybe we wish to say smething while changing emote state
-	uint8		msg_type; //yell ? say ?
-	uint8		msg_lang; //yell ? say ?
-	uint32		expire_after; //going to nex faze in
+    uint8 type;             //1 standstate, 2 emotestate, 3 emoteoneshot
+    uint32 value;           //get yar list elsewhere
+    char* msg;              //maybe we wish to say smething while changing emote state
+    uint8 msg_type;         //yell ? say ?
+    uint8 msg_lang;         //yell ? say ?
+    uint32 expire_after;    //going to nex faze in
 };
 typedef std::list<spawn_timed_emotes*> TimedEmoteList;
 
-inline void reverse_array(uint8 * pointer, size_t count)
+inline void reverse_array(uint8* pointer, size_t count)
 {
-	size_t x;
-	uint8 * temp = (uint8*)malloc(count);
-	memcpy(temp, pointer, count);
-	for(x = 0; x < count; ++x)
-		pointer[x] = temp[count-x-1];
-	free(temp);
+    size_t x;
+    uint8* temp = (uint8*)malloc(count);
+    memcpy(temp, pointer, count);
+    for (x = 0; x < count; ++x)
+        pointer[x] = temp[count - x - 1];
+    free(temp);
 }
 
-typedef std::vector<WayPoint*> WayPointMap;
-
-int32 GetTimePeriodFromString(const char * str);
+int32 GetTimePeriodFromString(const char* str);
 std::string ConvertTimeStampToString(uint32 timestamp);
 std::string ConvertTimeStampToDataTime(uint32 timestamp);
 
-inline void arcemu_TOLOWER(std::string& str)
-{
-	for(size_t i = 0; i < str.length(); ++i)
-		str[i] = (char)tolower(str[i]);
-};
+uint32 DecimalToMask(uint32 dec);
 
-inline void arcemu_TOUPPER(std::string& str)
+inline void arcemu_TOLOWER(std::string & str)
 {
-	for(size_t i = 0; i < str.length(); ++i)
-		str[i] = (char)toupper(str[i]);
-};
+    for (size_t i = 0; i < str.length(); ++i)
+        str[i] = (char)tolower(str[i]);
+}
+
+inline void arcemu_TOUPPER(std::string & str)
+{
+    for (size_t i = 0; i < str.length(); ++i)
+        str[i] = (char)toupper(str[i]);
+}
 
 // returns true if the ip hits the mask, otherwise false
 inline static bool ParseCIDRBan(unsigned int IP, unsigned int Mask, unsigned int MaskBits)
 {
-	// CIDR bans are a compacted form of IP / Submask
-	// So 192.168.1.0/255.255.255.0 would be 192.168.1.0/24
-	// IP's in the 192.168l.1.x range would be hit, others not.
-	unsigned char * source_ip = (unsigned char*)&IP;
-	unsigned char * mask = (unsigned char*)&Mask;
-	int full_bytes = MaskBits / 8;
-	int leftover_bits = MaskBits % 8;
-	//int byte;
+    // CIDR bans are a compacted form of IP / Submask
+    // So 192.168.1.0/255.255.255.0 would be 192.168.1.0/24
+    // IP's in the 192.168l.1.x range would be hit, others not.
+    unsigned char* source_ip = (unsigned char*)&IP;
+    unsigned char* mask = (unsigned char*)&Mask;
+    int full_bytes = MaskBits / 8;
+    int leftover_bits = MaskBits % 8;
+    //int byte;
 
-	// sanity checks for the data first
-	if( MaskBits > 32 )
-		return false;
+    // sanity checks for the data first
+    if (MaskBits > 32)
+        return false;
 
-	// this is the table for comparing leftover bits
-	static const unsigned char leftover_bits_compare[9] = {
-		0x00,			// 00000000
-		0x80,			// 10000000
-		0xC0,			// 11000000
-		0xE0,			// 11100000
-		0xF0,			// 11110000
-		0xF8,			// 11111000
-		0xFC,			// 11111100
-		0xFE,			// 11111110
-		0xFF,			// 11111111 - This one isn't used
-	};
+    // this is the table for comparing leftover bits
+    static const unsigned char leftover_bits_compare[9] =
+    {
+        0x00,            // 00000000
+        0x80,            // 10000000
+        0xC0,            // 11000000
+        0xE0,            // 11100000
+        0xF0,            // 11110000
+        0xF8,            // 11111000
+        0xFC,            // 11111100
+        0xFE,            // 11111110
+        0xFF,            // 11111111 - This one isn't used
+    };
 
-	// if we have any full bytes, compare them with memcpy
-	if( full_bytes > 0 )
-	{
-		if( memcmp( source_ip, mask, full_bytes ) != 0 )
-			return false;
-	}
+    // if we have any full bytes, compare them with memcpy
+    if (full_bytes > 0)
+    {
+        if (memcmp(source_ip, mask, full_bytes) != 0)
+            return false;
+    }
 
-	// compare the left over bits
-	if( leftover_bits > 0 )
-	{
-		if( ( source_ip[full_bytes] & leftover_bits_compare[leftover_bits] ) !=
-			( mask[full_bytes] & leftover_bits_compare[leftover_bits] ) )
-		{
-			// one of the bits does not match
-			return false;
-		}
-	}
+    // compare the left over bits
+    if (leftover_bits > 0)
+    {
+        if ((source_ip[full_bytes] & leftover_bits_compare[leftover_bits]) !=
+            (mask[full_bytes] & leftover_bits_compare[leftover_bits]))
+        {
+            // one of the bits does not match
+            return false;
+        }
+    }
 
-	// all of the bits match that were testable
-	return true;
+    // all of the bits match that were testable
+    return true;
 }
 
-inline static unsigned int MakeIP(const char * str)
+inline static unsigned int MakeIP(const char* str)
 {
-	unsigned int bytes[4];
-	unsigned int res;
-	if( sscanf(str, "%u.%u.%u.%u", &bytes[0], &bytes[1], &bytes[2], &bytes[3]) != 4 )
-		return 0;
+    unsigned int bytes[4];
+    unsigned int res;
+    if (sscanf(str, "%u.%u.%u.%u", &bytes[0], &bytes[1], &bytes[2], &bytes[3]) != 4)
+        return 0;
 
-	res = bytes[0] | (bytes[1] << 8) | (bytes[2] << 16) | (bytes[3] << 24);
-	return res;
+    res = bytes[0] | (bytes[1] << 8) | (bytes[2] << 16) | (bytes[3] << 24);
+    return res;
 }
 
 #include "DynLib.hpp"
@@ -462,13 +410,4 @@ inline static unsigned int MakeIP(const char * str)
 #include "SysInfo.hpp"
 #include "PerformanceCounter.hpp"
 
-// warning, by enabling this define you are aware that you are only delaying the inevitable
-// some crashes are not recorable and those will stack up in time and lead to a full crash
-// enabling this define will make windows servers shut down only the map instance in where the crash ocured
-// during this forced shutdown players are not saved to avoid saving corrupted data
-// there might be a lot of cases where each saved crash will lead to memory leaks or unhandled cases
-// crashreports are still created and do use them to report the actaul problem that casued the crash
-// fixing the problem that causes the crash is the proper way to fix things
-//#define FORCED_SERVER_KEEPALIVE
-
-#endif      //WOWSERVER_COMMON_H
+#endif      //_COMMON_H

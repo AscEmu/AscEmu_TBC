@@ -7,6 +7,7 @@ file(GLOB_RECURSE sources_BufferPools BufferPools/*.cpp BufferPools/*.h)
 file(GLOB_RECURSE sources_Commands Commands/*.cpp)
 file(GLOB_RECURSE sources_DBC DBC/*.cpp DBC/*.h DBC/*.hpp)
 file(GLOB_RECURSE sources_MapManagement MapManagement/*.cpp MapManagement/*.hpp)
+file(GLOB_RECURSE sources_Movement Movement/*.cpp Movement/*.hpp)
 file(GLOB_RECURSE sources_MapMgAreaMananagement MapManagement/AreaMananagement/*.cpp MapManagement/AreaMananagement/*.hpp)
 file(GLOB sources_localdir *.cpp *.h *.hpp)
 
@@ -16,6 +17,7 @@ set(ascemu_world_SRCS
   ${sources_Commands}
   ${sources_DBC}
   ${sources_MapManagement}
+  ${sources_Movement}
   ${sources_MapMgAreaMananagement}
   ${sources_localdir}
 )

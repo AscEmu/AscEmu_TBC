@@ -1694,7 +1694,7 @@ Unit* MapMgr::GetUnit(const uint64 & guid)
             break;
 
         case HIGHGUID_TYPE_PLAYER:
-            return GetPlayer(GUID_LOPART(guid));
+            return GetPlayer(Arcemu::Util::GUID_LOPART(guid));
             break;
 
         case HIGHGUID_TYPE_PET:
@@ -1722,7 +1722,7 @@ Object* MapMgr::_GetObject(const uint64 & guid)
             return GetDynamicObject((uint32)guid);
             break;
         case	HIGHGUID_TYPE_TRANSPORTER:
-            return objmgr.GetTransporter(GUID_LOPART(guid));
+            return objmgr.GetTransporter(Arcemu::Util::GUID_LOPART(guid));
             break;
         default:
             return GetUnit(guid);

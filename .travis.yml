@@ -1,35 +1,51 @@
-sudo: required
-dist: trusty
+sudo: false
 language: cpp
 
 os:
   - linux
-#  - osx
 
 compiler:
   - gcc
-#  - clang
-
 
 git:
   depth: 1
 
+env:
+  global:
+    - secure: "YoJB7nSg2nX+VDLFTzpkhdTRMG8ukEsmDbNr+ofmetsdtHPYYj3Pj7HqvRJL6CxkSWw67UxuRfv8uzPVmJD9wBIr2hkDIslJsxT7TPfv8SSu+eukWn2O2k09Q/1rzwtEMJTEoYuDiWzdy4+vVmt6WYxr6vyLuIk0G3Vjs4Y+Lu9XTM9CO64U/G5VAXa0I/KJucmMDIImMWItDVZNB971YYg+NjrfLup9r+CsSfWyYmMLMpvvUszk70Qen8DP5xMq1w46ThS+KmJC1yz9F1e3xzh7ULG3lqdMdHYljylZZfB6YF1eq6OuF33Lv3BpnHBfBH6ByrGzRdnrU63s4T1sdUALRPVSkw+tJBcNLtTk/kFGLgZKqjPNfB/Wx5LUxNymGHKvrMGhmWLkOl2r7XOMrHDeEkARYNRgXvFQDoHyMr4espNImB3Fte/bnftCLDj6okb4rsKGfmF9q3qtbxGwjLaec+SYHiCEd1Y2mtoPgGR8z8XpRY3kkq0kP1NhRYDGUN3aiVfSBFx9GC7ujZRVm+QgaR7bwPGraOLPd8AfiEmR78GJKYtzWwNmgfTKeNBQCHji1oG/OPaNGyfTP0sWDOdZp0IJEPKFVvwcQ1hMf6HOTa+MX6LNQXKjz8uozYWeyM5M0uZEeHjjOKaBhCpdkm6DKVljcMA3x+iz4oqGUjU="
+
 before_install:
   - if [[ $TRAVIS_OS_NAME == "linux" ]]; then
-    sudo apt-get -qq update;
-    sudo apt-get -qq install zlib1g-dev libssl-dev libpcre3-dev libbz2-dev libmysqlclient-dev libmysql++-dev;
-    fi
-# don not use gcc, gcc will redirected to llvm anyway
-  - if [[ $TRAVIS_OS_NAME == "osx" ]]; then
-    brew update;
-    brew install mysql openssl pcre lbzip2;
+    export CC=gcc-4.8 CXX=g++-4.8;
     fi
 
 install:
   - mkdir ascemu_build
   - cd ascemu_build
-  - cmake ../ -DCMAKE_BUILD_TYPE=Release -DBUILD_TOOLS=1
+  - cmake ../ -DCMAKE_BUILD_TYPE=Release
 
+addons:
+  apt:
+    sources:
+    - ubuntu-toolchain-r-test
+    packages:
+    - cmake
+    - zlib1g-dev
+    - libssl-dev
+    - libpcre3-dev
+    - libbz2-dev
+    - libmysqlclient-dev
+    - libmysql++-dev
+    - gcc-4.8
+    - g++-4.8
+  coverity_scan:
+    project:
+      name: "AscEmu/AscEmu_TBC"
+      description: "2.4.3 World of Warcraft game server"
+    notification_email: info@ascemu.org
+    build_command_prepend: "cmake ../ -DCMAKE_BUILD_TYPE=Release && make clean"
+    build_command:   "make -j 2" # use limited workers to avoid running out of memory
+    branch_pattern: coverity_scan
 
 before_script:
   - ${CXX} --version
@@ -37,5 +53,7 @@ before_script:
   - cmake --version
 
 script:
-  - make -j 10
-    
+  - if [ "${COVERITY_SCAN_BRANCH}" != 1 ]; then 
+    make -j 2;
+    fi
+

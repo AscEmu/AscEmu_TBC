@@ -74,6 +74,7 @@ set(headers
    Threading/Threading.h
    Threading/ThreadPool.h
    Threading/ThreadStarter.h
+   AscemuServerDefines.hpp
    ascemu_getopt.h
    ascemuConfig.h
    AuthCodes.h

@@ -553,7 +553,7 @@ void WorldSession::HandleMovementOpcodes(WorldPacket & recv_data)
                 if (_player->IsMounted())
                     _player->RemoveAura(_player->m_MountSpellId);
 
-                _player->m_CurrentTransporter = objmgr.GetTransporter(GUID_LOPART(movement_info.transGuid));
+                _player->m_CurrentTransporter = objmgr.GetTransporter(Arcemu::Util::GUID_LOPART(movement_info.transGuid));
                 if (_player->m_CurrentTransporter)
                     _player->m_CurrentTransporter->AddPlayer(_player);
 

@@ -5101,7 +5101,7 @@ void Unit::MoveToWaypoint(uint32 wp_id)
     if (this->m_useAI && this->GetAIInterface() != NULL)
     {
         AIInterface *ai = GetAIInterface();
-        WayPoint *wp = ai->getWayPoint(wp_id);
+        Movement::WayPoint *wp = ai->getWayPoint(wp_id);
         if (!wp)
         {
             sLog.outString("WARNING: Invalid WP specified in MoveToWaypoint.");

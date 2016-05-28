@@ -59,8 +59,7 @@ public:
 
     void OnCombatStart(Unit* mTarget)
     {
-        _unit->SendChatMessage(CHAT_MSG_MONSTER_YELL, LANG_UNIVERSAL, "Van Cleef pay big for your heads!");
-        _unit->PlaySoundToSet(5774);
+        _unit->SendScriptTextChatMessage(5495);
 		timer = 10000 + RandomUInt(4000);
 		RegisterAIUpdateEvent(timer);
     }
@@ -314,20 +313,12 @@ public:
 
     void OnCombatStart(Unit* mTarget)
     {
-        _unit->SendChatMessage(CHAT_MSG_MONSTER_SAY, LANG_UNIVERSAL, "None may challenge the brotherhood.");
-        _unit->PlaySoundToSet(5780);    // EdwinVanCleefAggro01.wav
+        _unit->SendScriptTextChatMessage(7722);
     }
 
     void OnTargetDied(Unit* mTarget)
     {
-        char msg[200];
-        if(mTarget->GetTypeId() == TYPEID_PLAYER)
-            sprintf(msg, "And stay down, %s.", static_cast<Player*>(mTarget)->GetName());
-        else if (mTarget->GetTypeFromGUID() == HIGHGUID_TYPE_PET)
-            sprintf(msg, "And stay down, %s.", static_cast<Pet*>(mTarget)->GetName().c_str());
-
-        _unit->SendChatMessage(CHAT_MSG_MONSTER_SAY, LANG_UNIVERSAL, msg);
-        _unit->PlaySoundToSet(5781);    // EdwinVanCleefSlay01.wav
+        _unit->SendScriptTextChatMessage(7726);
     }
 
     void OnDamageTaken(Unit* mAttacker, float fAmount)
@@ -356,8 +347,7 @@ public:
         mPhase = 1;
         
         // Play the sound, and send text.
-        _unit->SendChatMessage(CHAT_MSG_MONSTER_SAY, LANG_UNIVERSAL, "Lap dogs, all of you.");
-        _unit->PlaySoundToSet(5782);    // EdwinVanCleefHealth01.wav
+        _unit->SendScriptTextChatMessage(7723);
     }
 
     void ChangeToPhase2()
@@ -366,8 +356,7 @@ public:
         mPhase = 2;
 
         // Play sound, and send text.
-        _unit->SendChatMessage(CHAT_MSG_MONSTER_SAY, LANG_UNIVERSAL, "Fools! Our cause is righteous.");
-        _unit->PlaySoundToSet(5783);    // EdwinVanCleefHealth02.wav
+        _unit->SendScriptTextChatMessage(7725);
     }
 
     void ChangeToPhase3()
@@ -376,8 +365,7 @@ public:
         mPhase = 3;
 
         // Play sound, and send text.
-        _unit->SendChatMessage(CHAT_MSG_MONSTER_SAY, LANG_UNIVERSAL, "The brotherhood shall remain.");
-        _unit->PlaySoundToSet(5784);    // EdwinVanCleefHealth03.wav
+        _unit->SendScriptTextChatMessage(7727);
     }
 
     void Destroy()

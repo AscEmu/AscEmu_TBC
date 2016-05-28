@@ -321,7 +321,7 @@ public:
 
 	T * LookupEntry(uint32 Entry)
 	{
-		typename HM_NAMESPACE::hash_map<uint32, T*>::iterator itr = _map.find(Entry);
+		typename std::unordered_map<uint32, T*>::iterator itr = _map.find(Entry);
 		if(itr == _map.end())
 			return reinterpret_cast<T*>(0);
 		return itr->second;
@@ -332,7 +332,7 @@ public:
 	 */
 	bool SetEntry(uint32 Entry, T * Pointer)
 	{
-		typename HM_NAMESPACE::hash_map<uint32, T*>::iterator itr = _map.find(Entry);
+		typename std::unordered_map<uint32, T*>::iterator itr = _map.find(Entry);
 		if(itr == _map.end())
 		{
 			_map.insert( make_pair( Entry, Pointer ) );
@@ -360,7 +360,7 @@ public:
 	 */
 	void Clear()
 	{
-		typename HM_NAMESPACE::hash_map<uint32, T*>::iterator itr = _map.begin();
+		typename std::unordered_map<uint32, T*>::iterator itr = _map.begin();
 		for(; itr != _map.end(); ++itr)
 			delete itr->second;
 		_map.clear();
