@@ -247,8 +247,8 @@ void LootMgr::LoadLootTables(const char * szTableName, LootStore * LootTable)
       dbc->open("DBC/ItemRandomProperties.dbc");
       _propCount = dbc->getRecordCount();
       delete dbc;*/
-    //HM_NAMESPACE::hash_map<uint32, std::vector<loot_tb> > loot_db;
-    //HM_NAMESPACE::hash_map<uint32, std::vector<loot_tb> >::iterator itr;
+    //std::unordered_map<uint32, std::vector<loot_tb> > loot_db;
+    //std::unordered_map<uint32, std::vector<loot_tb> >::iterator itr;
     std::vector< std::pair< uint32, std::vector< tempy > > > db_cache;
     std::vector< std::pair< uint32, std::vector< tempy > > >::iterator itr;
     db_cache.reserve(10000);

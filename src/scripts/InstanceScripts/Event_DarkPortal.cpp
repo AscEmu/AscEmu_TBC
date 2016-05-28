@@ -1628,9 +1628,9 @@ public:
 		}
 	}
 
-	inline WayPoint* CreateWaypoint(int id, uint32 waittime, uint32 flags)
+	inline Movement::WayPoint* CreateWaypoint(int id, uint32 waittime, uint32 flags)
     {
-        WayPoint * wp = _unit->CreateWaypointStruct();
+        Movement::WayPoint * wp = _unit->CreateWaypointStruct();
         wp->id = id;
 
 		if (id == 11)
@@ -1805,9 +1805,9 @@ public:
 		}
 	}
 
-	inline WayPoint* CreateWaypoint(int id, uint32 waittime, uint32 flags)
+	inline Movement::WayPoint* CreateWaypoint(int id, uint32 waittime, uint32 flags)
     {
-        WayPoint * wp = _unit->CreateWaypointStruct();
+        Movement::WayPoint * wp = _unit->CreateWaypointStruct();
         wp->id = id;
 		if (id == 11)
 		{
@@ -2051,9 +2051,9 @@ public:
 		}
 	}
 
-	inline WayPoint* CreateWaypoint(int id, uint32 waittime, uint32 flags)
+	inline Movement::WayPoint* CreateWaypoint(int id, uint32 waittime, uint32 flags)
     {
-        WayPoint * wp = _unit->CreateWaypointStruct();
+        Movement::WayPoint * wp = _unit->CreateWaypointStruct();
         wp->id = id;
 		if (id == 11)
 		{
@@ -2236,9 +2236,9 @@ public:
 		}
 	}
 
-	inline WayPoint* CreateWaypoint(int id, uint32 waittime, uint32 flags)
+	inline Movement::WayPoint* CreateWaypoint(int id, uint32 waittime, uint32 flags)
     {
-        WayPoint * wp = _unit->CreateWaypointStruct();
+        Movement::WayPoint * wp = _unit->CreateWaypointStruct();
         wp->id = id;
 		if (id == 11)
 		{
@@ -2438,9 +2438,9 @@ public:
 		}
 	}
 
-	inline WayPoint* CreateWaypoint(int id, uint32 waittime, uint32 flags)
+	inline Movement::WayPoint* CreateWaypoint(int id, uint32 waittime, uint32 flags)
     {
-        WayPoint * wp = _unit->CreateWaypointStruct();
+        Movement::WayPoint * wp = _unit->CreateWaypointStruct();
         wp->id = id;
 		if (id == 11)
 		{
@@ -2699,9 +2699,9 @@ public:
 		}
 	}
 
-	inline WayPoint* CreateWaypoint(int id, uint32 waittime, uint32 flags)
+	inline Movement::WayPoint* CreateWaypoint(int id, uint32 waittime, uint32 flags)
     {
-        WayPoint * wp = _unit->CreateWaypointStruct();
+        Movement::WayPoint * wp = _unit->CreateWaypointStruct();
         wp->id = id;
 
 		if (id == 10)
@@ -2879,9 +2879,9 @@ public:
 		}
 	}
 
-	inline WayPoint* CreateWaypoint(int id, uint32 waittime, uint32 flags)
+	inline Movement::WayPoint* CreateWaypoint(int id, uint32 waittime, uint32 flags)
     {
-        WayPoint * wp = _unit->CreateWaypointStruct();
+        Movement::WayPoint * wp = _unit->CreateWaypointStruct();
         wp->id = id;
 
 		if (id == 10)
@@ -3119,9 +3119,9 @@ public:
 		}
 	}
 
-	inline WayPoint* CreateWaypoint(int id, uint32 waittime, uint32 flags)
+	inline Movement::WayPoint* CreateWaypoint(int id, uint32 waittime, uint32 flags)
     {
-        WayPoint * wp = _unit->CreateWaypointStruct();
+        Movement::WayPoint * wp = _unit->CreateWaypointStruct();
         wp->id = id;
 		if (id == 10)
 		{
@@ -3303,9 +3303,9 @@ public:
 		}
 	}
 
-	inline WayPoint* CreateWaypoint(int id, uint32 waittime, uint32 flags)
+	inline Movement::WayPoint* CreateWaypoint(int id, uint32 waittime, uint32 flags)
     {
-        WayPoint * wp = _unit->CreateWaypointStruct();
+        Movement::WayPoint * wp = _unit->CreateWaypointStruct();
         wp->id = id;
 
 		if (id == 10)
@@ -3506,9 +3506,9 @@ public:
 		}
 	}
 
-	inline WayPoint* CreateWaypoint(int id, uint32 waittime, uint32 flags)
+	inline Movement::WayPoint* CreateWaypoint(int id, uint32 waittime, uint32 flags)
     {
-        WayPoint * wp = _unit->CreateWaypointStruct();
+        Movement::WayPoint * wp = _unit->CreateWaypointStruct();
         wp->id = id;
 		if (id == 10)
 		{
@@ -3828,11 +3828,11 @@ public:
 			_unit->Despawn(0,0);
 	}
 	
-	inline WayPoint* CreateWaypoint(int id, uint32 waittime, uint32 flags)
+	inline Movement::WayPoint* CreateWaypoint(int id, uint32 waittime, uint32 flags)
     {
 		WPStarter++;
 
-        WayPoint * wp = _unit->CreateWaypointStruct();
+        Movement::WayPoint * wp = _unit->CreateWaypointStruct();
         wp->id = id;
 		wp->x = PitDemonPaths[WPStarter].x;
 		wp->y = PitDemonPaths[WPStarter].y;
@@ -3931,11 +3931,11 @@ public:
 			_unit->Despawn(0,0);
 	}
 	
-	inline WayPoint* CreateWaypoint(int id, uint32 waittime, uint32 flags)
+	inline Movement::WayPoint* CreateWaypoint(int id, uint32 waittime, uint32 flags)
     {
 		WPStarter++;
 
-        WayPoint * wp = _unit->CreateWaypointStruct();
+        Movement::WayPoint * wp = _unit->CreateWaypointStruct();
         wp->id = id;
 		wp->x = PitDemonPaths[WPStarter].x;
 		wp->y = PitDemonPaths[WPStarter].y;

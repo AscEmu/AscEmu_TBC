@@ -571,7 +571,7 @@ void WorldSession::HandleLootReleaseOpcode(WorldPacket & recv_data)
             plr->RemoveFlag(UNIT_DYNAMIC_FLAGS, U_DYN_FLAG_LOOTABLE);
         }
     }
-    else if (GUID_HIPART(guid))
+    else if (Arcemu::Util::GUID_HIPART(guid))
     {
         // suicide!
         _player->GetItemInterface()->SafeFullRemoveItemByGuid(guid);

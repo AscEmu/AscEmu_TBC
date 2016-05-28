@@ -287,11 +287,11 @@ class SERVER_DECL AIInterface
     bool StopMovement(uint32 time);
     uint32 getCurrentWaypoint() { return m_currentWaypoint; }
     void changeWayPointID(uint32 oldwpid, uint32 newwpid);
-    bool addWayPoint(WayPoint* wp);
+    bool addWayPoint(Movement::WayPoint* wp);
     bool saveWayPoints();
     bool showWayPoints(Player* pPlayer, bool Backwards);
     bool hideWayPoints(Player* pPlayer);
-    WayPoint* getWayPoint(uint32 wpid);
+    Movement::WayPoint* getWayPoint(uint32 wpid);
     void deleteWayPoint(uint32 wpid);
     void deleteWaypoints();
     inline bool hasWaypoints() { return m_waypoints != NULL; }
@@ -367,7 +367,7 @@ class SERVER_DECL AIInterface
     uint32 m_formationLinkSqlId;
 
     void WipeReferences();
-    WayPointMap			*m_waypoints;
+    Movement::WayPointMap			*m_waypoints;
     TimedEmoteList		*timed_emotes;
     inline void SetPetOwner(Unit * owner) { m_PetOwner = owner; }
 
@@ -392,7 +392,7 @@ class SERVER_DECL AIInterface
 
     void ResetProcCounts();
 
-    inline void SetWaypointMap(WayPointMap * m) { m_waypoints = m; }
+    inline void SetWaypointMap(Movement::WayPointMap * m) { m_waypoints = m; }
     bool m_isGuard;
     bool m_isNeutralGuard;
     //	bool m_fastMove;

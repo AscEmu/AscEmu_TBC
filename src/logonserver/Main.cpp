@@ -397,18 +397,12 @@ void LogonServer::Run(int argc, char** argv)
     // Load conf settings..
     uint32 cport = Config.MainConfig.GetIntDefault("Listen", "RealmListPort", 3724);
     uint32 sport = Config.MainConfig.GetIntDefault("Listen", "ServerPort", 8093);
-    //uint32 threadcount = Config.MainConfig.GetIntDefault("Network", "ThreadCount", 5);
-    //uint32 threaddelay = Config.MainConfig.GetIntDefault("Network", "ThreadDelay", 20);
+
     std::string host = Config.MainConfig.GetStringDefault("Listen", "Host", "0.0.0.0");
     std::string shost = Config.MainConfig.GetStringDefault("Listen", "ISHost", host.c_str());
 
-    /* Due to many people's inability to cope with us being out-of-sync with retail sometimes we were forced to hardcode this
-    min_build = Config.MainConfig.GetIntDefault("Client", "MinBuild", 6180);
-    max_build = Config.MainConfig.GetIntDefault("Client", "MaxBuild", 6999);
-    */
-
-    min_build = LOGON_MINBUILD;
-    max_build = LOGON_MAXBUILD;
+    min_build = 8606;
+    max_build = 8606;
 
     std::string logon_pass = Config.MainConfig.GetStringDefault("LogonServer", "RemotePassword", "r3m0t3b4d");
     Sha1Hash hash;

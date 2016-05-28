@@ -80,7 +80,7 @@ bool ChatHandler::HandleWPAddCommand(const char* args, WorldSession *m_session)
     char* pBackwardEmoteOneShot = strtok(NULL, " ");
     uint32 BackwardEmoteOneShot = (pBackwardEmoteOneShot) ? atoi(pBackwardEmoteOneShot) : 1;
 
-    WayPoint* wp = new WayPoint;
+    Movement::WayPoint* wp = new Movement::WayPoint;
     bool showing = ai->m_WayPointsShowing;
     wp->id = (uint32)ai->GetWayPointsCount() + 1;
     wp->x = p->GetPositionX();
@@ -141,7 +141,7 @@ bool ChatHandler::HandleWPMoveTypeCommand(const char* args, WorldSession *m_sess
     }
 
     char sql[512];
-    snprintf(sql, 512, "UPDATE creature_spawns SET movetype = '%u' WHERE id = '%u'", (unsigned int)option, (unsigned int)GUID_LOPART(guid));
+    snprintf(sql, 512, "UPDATE creature_spawns SET movetype = '%u' WHERE id = '%u'", (unsigned int)option, (unsigned int)Arcemu::Util::GUID_LOPART(guid));
     WorldDatabase.Execute(sql);
 
     pCreature->GetAIInterface()->setMoveType(option);
@@ -229,7 +229,7 @@ bool ChatHandler::HandleWPDeleteCommand(const char* args, WorldSession *m_sessio
     }
     std::stringstream ss;
 
-    uint32 wpid = GUID_LOPART(guid);
+    uint32 wpid = Arcemu::Util::GUID_LOPART(guid);
     if (wpid)
     {
         //Refresh client
@@ -281,7 +281,7 @@ bool ChatHandler::HandleWPChangeNoCommand(const char* args, WorldSession *m_sess
     char* pNewID = strtok((char*)args, " ");
     uint32 NewID = (pNewID) ? atoi(pNewID) : 0;
 
-    uint32 wpid = GUID_LOPART(guid);
+    uint32 wpid = Arcemu::Util::GUID_LOPART(guid);
     if (NewID == wpid) return false;
     if (wpid)
     {
@@ -334,10 +334,10 @@ bool ChatHandler::HandleWPFlagsCommand(const char* args, WorldSession *m_session
     }
     std::stringstream ss;
 
-    uint32 wpid = GUID_LOPART(guid);
+    uint32 wpid = Arcemu::Util::GUID_LOPART(guid);
     if (wpid)
     {
-        WayPoint* wp = ai->getWayPoint(wpid);
+        Movement::WayPoint* wp = ai->getWayPoint(wpid);
         uint32 flags = wp->flags;
 
         char* pNewFlags = strtok((char*)args, " ");
@@ -383,10 +383,10 @@ bool ChatHandler::HandleWPMoveHereCommand(const char* args, WorldSession *m_sess
     }
     std::stringstream ss;
 
-    uint32 wpid = GUID_LOPART(guid);
+    uint32 wpid = Arcemu::Util::GUID_LOPART(guid);
     if (wpid)
     {
-        WayPoint* wp = ai->getWayPoint(wpid);
+        Movement::WayPoint* wp = ai->getWayPoint(wpid);
         if (wp)
         {
             wp->x = pPlayer->GetPositionX();
@@ -440,10 +440,10 @@ bool ChatHandler::HandleWPWaitCommand(const char* args, WorldSession *m_session)
     uint32 Wait = 10000;
     std::stringstream ss;
 
-    uint32 wpid = GUID_LOPART(guid);
+    uint32 wpid = Arcemu::Util::GUID_LOPART(guid);
     if (wpid)
     {
-        WayPoint* wp = ai->getWayPoint(wpid);
+        Movement::WayPoint* wp = ai->getWayPoint(wpid);
         if (wp)
         {
             char* pWait = strtok((char*)args, " ");
@@ -496,10 +496,10 @@ bool ChatHandler::HandleWPEmoteCommand(const char* args, WorldSession *m_session
     bool OneShot = true;
     std::stringstream ss;
 
-    uint32 wpid = GUID_LOPART(guid);
+    uint32 wpid = Arcemu::Util::GUID_LOPART(guid);
     if (wpid)
     {
-        WayPoint* wp = ai->getWayPoint(wpid);
+        Movement::WayPoint* wp = ai->getWayPoint(wpid);
         if (wp)
         {
             char* pBackwards = strtok((char*)args, " ");
@@ -559,10 +559,10 @@ bool ChatHandler::HandleWPSkinCommand(const char* args, WorldSession *m_session)
     uint32 SkinId = 0;
     std::stringstream ss;
 
-    uint32 wpid = GUID_LOPART(guid);
+    uint32 wpid = Arcemu::Util::GUID_LOPART(guid);
     if (wpid)
     {
-        WayPoint* wp = ai->getWayPoint(wpid);
+        Movement::WayPoint* wp = ai->getWayPoint(wpid);
         if (wp)
         {
             char* pBackwards = strtok((char*)args, " ");
@@ -617,10 +617,10 @@ bool ChatHandler::HandleWPInfoCommand(const char* args, WorldSession *m_session)
     }
     std::stringstream ss;
 
-    uint32 wpid = GUID_LOPART(guid);
+    uint32 wpid = Arcemu::Util::GUID_LOPART(guid);
     if ((wpid > 0) && (wpid <= ai->GetWayPointsCount()))
     {
-        WayPoint* wp = ai->getWayPoint(wpid);
+        Movement::WayPoint* wp = ai->getWayPoint(wpid);
         if (wp)
         {
             ss << "Waypoint Number " << wp->id << ":\n";
@@ -741,7 +741,7 @@ bool ChatHandler::HandleGenerateWaypoints(const char* args, WorldSession * m_ses
         float y = cr->GetPositionY() + ran*cos(ang);
         float z = cr->GetMapMgr()->GetLandHeight(x, y, cr->GetPositionZ() + 3);
 
-        WayPoint* wp = new WayPoint;
+        Movement::WayPoint* wp = new Movement::WayPoint;
         wp->id = (uint32)cr->GetAIInterface()->GetWayPointsCount() + 1;
         wp->x = x;
         wp->y = y;
@@ -865,7 +865,7 @@ bool ChatHandler::HandleWaypointAddFlyCommand(const char * args, WorldSession * 
     char* pBackwardEmoteOneShot = strtok(NULL, " ");
     uint32 BackwardEmoteOneShot = (pBackwardEmoteOneShot) ? atoi(pBackwardEmoteOneShot) : 1;
 
-    WayPoint* wp = new WayPoint;
+    Movement::WayPoint* wp = new Movement::WayPoint;
     bool showing = ai->m_WayPointsShowing;
     wp->id = (uint32)ai->GetWayPointsCount() + 1;
     wp->x = p->GetPositionX();

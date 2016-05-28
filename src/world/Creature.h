@@ -538,7 +538,7 @@ class SERVER_DECL Creature : public Unit
     void ChannelLinkUpGO(uint32 SqlId);
     void ChannelLinkUpCreature(uint32 SqlId);
     bool haslinkupevent;
-    WayPoint * CreateWaypointStruct();
+    Movement::WayPoint* CreateWaypointStruct();
     uint32 spawnid;
     uint32 original_emotestate;
 
@@ -561,7 +561,7 @@ class SERVER_DECL Creature : public Unit
     // scriptdev2
     uint32 GetNpcTextId();
 
-    WayPointMap * m_custom_waypoint_map;
+    Movement::WayPointMap* m_custom_waypoint_map;
     Player * m_escorter;
     void DestroyCustomWaypointMap();
     bool IsInLimboState() { return m_limbostate; }

@@ -2143,12 +2143,12 @@ int luaUnit_CreateCustomWaypointMap(lua_State * L, Unit * ptr)
 	Creature * pCreature = (Creature*)ptr;
 	if(pCreature->m_custom_waypoint_map)
 	{
-		for(WayPointMap::iterator itr = pCreature->m_custom_waypoint_map->begin(); itr != pCreature->m_custom_waypoint_map->end(); ++itr)
+		for(Movement::WayPointMap::iterator itr = pCreature->m_custom_waypoint_map->begin(); itr != pCreature->m_custom_waypoint_map->end(); ++itr)
 			delete (*itr);
 		delete pCreature->m_custom_waypoint_map;
 	}
 
-	pCreature->m_custom_waypoint_map = new WayPointMap;
+	pCreature->m_custom_waypoint_map = new Movement::WayPointMap;
 	pCreature->GetAIInterface()->SetWaypointMap(pCreature->m_custom_waypoint_map);
 	return 0;
 }
@@ -2167,14 +2167,14 @@ int luaUnit_CreateWaypoint(lua_State * L, Unit * ptr)
 	Creature * pCreature = ((Creature*)ptr);
 	if(!pCreature->m_custom_waypoint_map)
 	{
-		pCreature->m_custom_waypoint_map = new WayPointMap;
+		pCreature->m_custom_waypoint_map = new Movement::WayPointMap;
 		pCreature->GetAIInterface()->SetWaypointMap(pCreature->m_custom_waypoint_map);
 	}
 
 	if(!modelid)
 		modelid = pCreature->GetUInt32Value(UNIT_FIELD_DISPLAYID);
 
-	WayPoint * wp = new WayPoint;
+    Movement::WayPoint * wp = new Movement::WayPoint;
 	wp->id = (uint32)pCreature->m_custom_waypoint_map->size() + 1;
 	wp->x = x;
 	wp->y = y;

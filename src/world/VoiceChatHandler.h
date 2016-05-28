@@ -54,7 +54,7 @@ class VoiceChatHandler : public Singleton<VoiceChatHandler>
 	time_t next_connect;
 	bool enabled;
 	string ip_s;
-	HM_NAMESPACE::hash_map<uint32, VoiceChannel*> m_voiceChannels;
+	std::unordered_map<uint32, VoiceChannel*> m_voiceChannels;
 public:
 	VoiceChatHandler();
 	void Startup();

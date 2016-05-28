@@ -484,7 +484,7 @@ void InformationCore::SendRealms(AuthSocket* Socket)
 
     // loop realms :/
     std::map<uint32, Realm*>::iterator itr = m_realms.begin();
-    HM_NAMESPACE::hash_map<uint32, uint8>::iterator it;
+    std::unordered_map<uint32, uint8>::iterator it;
     for(; itr != m_realms.end(); ++itr)
     {
         if (itr->second->GameBuild == Socket->GetChallenge()->build)

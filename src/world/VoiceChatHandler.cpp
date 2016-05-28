@@ -198,7 +198,7 @@ void VoiceChatHandler::SocketDisconnected()
     sWorld.SendWorldText("Channel/Party voice services are now offline.");
 
     // notify channels
-    for(HM_NAMESPACE::hash_map<uint32, VoiceChannel*>::iterator itr = m_voiceChannels.begin(); itr != m_voiceChannels.end(); ++itr)
+    for(std::unordered_map<uint32, VoiceChannel*>::iterator itr = m_voiceChannels.begin(); itr != m_voiceChannels.end(); ++itr)
     {
         if( itr->second->type == 3 )		// party
             ((Group*)itr->second->miscPointer)->VoiceSessionDropped();
@@ -269,7 +269,7 @@ void VoiceChatHandler::DestroyGroupChannel(Group * pGroup)
         return;
 
     m_lock.Acquire();
-    HM_NAMESPACE::hash_map<uint32, VoiceChannel*>::iterator itr = m_voiceChannels.find(pGroup->m_voiceChannelId);
+    std::unordered_map<uint32, VoiceChannel*>::iterator itr = m_voiceChannels.find(pGroup->m_voiceChannelId);
     if( itr != m_voiceChannels.end() )
     {
         // cleanup channel structure

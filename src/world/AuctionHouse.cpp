@@ -49,7 +49,7 @@ AuctionHouse::AuctionHouse(uint32 ID)
 
 AuctionHouse::~AuctionHouse()
 {
-    HM_NAMESPACE::hash_map<uint32, Auction*>::iterator itr = auctions.begin();
+    std::unordered_map<uint32, Auction*>::iterator itr = auctions.begin();
     for (; itr != auctions.end(); ++itr)
         delete itr->second;
 }
@@ -89,7 +89,7 @@ void AuctionHouse::UpdateAuctions()
     removalLock.Acquire();
 
     uint32 t = (uint32)UNIXTIME;
-    HM_NAMESPACE::hash_map<uint32, Auction*>::iterator itr = auctions.begin();
+    std::unordered_map<uint32, Auction*>::iterator itr = auctions.begin();
     Auction * auct;
     for (; itr != auctions.end();)
     {
@@ -121,12 +121,12 @@ void AuctionHouse::AddAuction(Auction * auct)
 {
     // add to the map
     auctionLock.AcquireWriteLock();
-    auctions.insert(HM_NAMESPACE::hash_map<uint32, Auction*>::value_type(auct->Id, auct));
+    auctions.insert(std::unordered_map<uint32, Auction*>::value_type(auct->Id, auct));
     auctionLock.ReleaseWriteLock();
 
     // add the item
     itemLock.AcquireWriteLock();
-    auctionedItems.insert(HM_NAMESPACE::hash_map<uint64, Item*>::value_type(auct->pItem->GetGUID(), auct->pItem));
+    auctionedItems.insert(std::unordered_map<uint64, Item*>::value_type(auct->pItem->GetGUID(), auct->pItem));
     itemLock.ReleaseWriteLock();
 
     Log.Debug("AuctionHouse", "%u: Add auction %u, expire@ %u.", dbc->id, auct->Id, auct->ExpiryTime);
@@ -135,7 +135,7 @@ void AuctionHouse::AddAuction(Auction * auct)
 Auction * AuctionHouse::GetAuction(uint32 Id)
 {
     Auction * ret;
-    HM_NAMESPACE::hash_map<uint32, Auction*>::iterator itr;
+    std::unordered_map<uint32, Auction*>::iterator itr;
     auctionLock.AcquireReadLock();
     itr = auctions.find(Id);
     ret = (itr == auctions.end()) ? 0 : itr->second;
@@ -298,7 +298,7 @@ void AuctionHouse::SendBidListPacket(Player * plr, WorldPacket * packet)
 
     Auction * auct;
     auctionLock.AcquireReadLock();
-    HM_NAMESPACE::hash_map<uint32, Auction*>::iterator itr = auctions.begin();
+    std::unordered_map<uint32, Auction*>::iterator itr = auctions.begin();
     for (; itr != auctions.end(); ++itr)
     {
         auct = itr->second;
@@ -322,7 +322,7 @@ void AuctionHouse::SendBidListPacket(Player * plr, WorldPacket * packet)
 void AuctionHouse::UpdateOwner(uint32 oldGuid, uint32 newGuid)
 {
     auctionLock.AcquireWriteLock();
-    HM_NAMESPACE::hash_map<uint32, Auction*>::iterator itr = auctions.begin();
+    std::unordered_map<uint32, Auction*>::iterator itr = auctions.begin();
     Auction * auction;
     for (; itr != auctions.end(); ++itr)
     {
@@ -347,7 +347,7 @@ void AuctionHouse::SendOwnerListPacket(Player * plr, WorldPacket * packet)
 
     Auction * auct;
     auctionLock.AcquireReadLock();
-    HM_NAMESPACE::hash_map<uint32, Auction*>::iterator itr = auctions.begin();
+    std::unordered_map<uint32, Auction*>::iterator itr = auctions.begin();
     for (; itr != auctions.end(); ++itr)
     {
         auct = itr->second;
@@ -691,7 +691,7 @@ void AuctionHouse::SendAuctionList(Player * plr, WorldPacket * packet)
     data << uint32(0);
 
     auctionLock.AcquireReadLock();
-    HM_NAMESPACE::hash_map<uint32, Auction*>::iterator itr = auctions.begin();
+    std::unordered_map<uint32, Auction*>::iterator itr = auctions.begin();
     ItemPrototype * proto;
     for (; itr != auctions.end(); ++itr)
     {
@@ -816,7 +816,7 @@ void AuctionHouse::LoadAuctions()
         auct->DeletedReason = 0;
         auct->Deleted = false;
 
-        auctions.insert(HM_NAMESPACE::hash_map<uint32, Auction*>::value_type(auct->Id, auct));
+        auctions.insert(std::unordered_map<uint32, Auction*>::value_type(auct->Id, auct));
     }
     while (result->NextRow());
     delete result;

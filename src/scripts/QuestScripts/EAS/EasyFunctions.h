@@ -68,14 +68,14 @@ public:
 
     if(!pCreature->m_custom_waypoint_map)
     {
-      pCreature->m_custom_waypoint_map = new WayPointMap;
+      pCreature->m_custom_waypoint_map = new Movement::WayPointMap;
       pCreature->GetAIInterface()->SetWaypointMap(pCreature->m_custom_waypoint_map);
     }
 
     if(!modelid)
       modelid = pCreature->GetUInt32Value(UNIT_FIELD_DISPLAYID);
 
-    WayPoint * wp = new WayPoint;
+    Movement::WayPoint * wp = new Movement::WayPoint;
     wp->id = pCreature->m_custom_waypoint_map->size() + 1;
     wp->x = x;
     wp->y = y;
@@ -100,7 +100,7 @@ public:
     if(creat->m_custom_waypoint_map == NULL)
       return;
 
-    WayPointMap::iterator i = creat->m_custom_waypoint_map->begin();
+    Movement::WayPointMap::iterator i = creat->m_custom_waypoint_map->begin();
     
     for(; i != creat->m_custom_waypoint_map->end(); ++i)
     {
@@ -229,13 +229,13 @@ public:
 
     if(creat->m_custom_waypoint_map)
     {
-      for(WayPointMap::iterator itr = creat->m_custom_waypoint_map->begin(); itr != creat->m_custom_waypoint_map->end(); ++itr)
+      for(Movement::WayPointMap::iterator itr = creat->m_custom_waypoint_map->begin(); itr != creat->m_custom_waypoint_map->end(); ++itr)
         delete (*itr);
 
       delete creat->m_custom_waypoint_map;
     } 
     
-    creat->m_custom_waypoint_map = new WayPointMap;
+    creat->m_custom_waypoint_map = new Movement::WayPointMap;
     creat->GetAIInterface()->SetWaypointMap(creat->m_custom_waypoint_map);
   }
   
