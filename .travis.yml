@@ -1,28 +1,22 @@
-sudo: required
-dist: trusty
+sudo: false
 language: cpp
 
 os:
   - linux
-#  - osx
 
 compiler:
   - gcc
-#  - clang
-
 
 git:
   depth: 1
 
+env:
+  global:
+    - secure: "Zk3bAxnp4OHPMMZYOSoM2chuMZXomp7BFcT54/Ag6C8RCqtpqQ+E6yHRp861xdWSVo9uZ/uGmD1pwPiIUK8Vs80+OwhFVvtor2MGXyQKX1oFYBg0mo5Z3Xzy+OPa3e0YBbe6SSqdUzDE1hIa7OrU8GWciIMobWQS7XIBbWg3TFU="
+
 before_install:
   - if [[ $TRAVIS_OS_NAME == "linux" ]]; then
-    sudo apt-get -qq update;
-    sudo apt-get -qq install zlib1g-dev libssl-dev libpcre3-dev libbz2-dev libmysqlclient-dev libmysql++-dev;
-    fi
-# don not use gcc, gcc will redirected to llvm anyway
-  - if [[ $TRAVIS_OS_NAME == "osx" ]]; then
-    brew update;
-    brew install mysql openssl pcre lbzip2;
+    export CC=gcc-4.8 CXX=g++-4.8;
     fi
 
 install:
@@ -30,6 +24,28 @@ install:
   - cd ascemu_build
   - cmake ../ -DCMAKE_BUILD_TYPE=Release -DBUILD_TOOLS=1
 
+addons:
+  apt:
+    sources:
+    - ubuntu-toolchain-r-test
+    packages:
+    - cmake
+    - zlib1g-dev
+    - libssl-dev
+    - libpcre3-dev
+    - libbz2-dev
+    - libmysqlclient-dev
+    - libmysql++-dev
+    - gcc-4.8
+    - g++-4.8
+  coverity_scan:
+    project:
+      name: "AscEmu/AscEmuTBC"
+      description: "2.4.3 World of Warcraft game server"
+    notification_email: info@ascemu.org
+    build_command_prepend: "cmake ../ -DCMAKE_BUILD_TYPE=Release -DBUILD_TOOLS=0 && make clean"
+    build_command:   "make -j 2" # use limited workers to avoid running out of memory
+    branch_pattern: coverity_scan
 
 before_script:
   - ${CXX} --version
@@ -37,5 +53,7 @@ before_script:
   - cmake --version
 
 script:
-  - make -j 10
-    
+  - if [ "${COVERITY_SCAN_BRANCH}" != 1 ]; then 
+    make -j 2;
+    fi
+
