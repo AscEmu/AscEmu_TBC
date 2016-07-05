@@ -14,6 +14,7 @@ set(sources
    ShamanSpells.cpp
    WarlockSpells.cpp
    WarriorSpells.cpp
+   MiscSpells.cpp
    )
 
 add_library(${PROJECT_NAME} SHARED ${sources} ${headers})
