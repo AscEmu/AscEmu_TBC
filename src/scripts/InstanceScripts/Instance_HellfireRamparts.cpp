@@ -41,16 +41,44 @@ class WatchkeeperGargolmarAI : public ArcScriptBossAI
     ARCSCRIPT_FACTORY_FUNCTION(WatchkeeperGargolmarAI, ArcScriptBossAI);
     WatchkeeperGargolmarAI(Creature* pCreature) : ArcScriptBossAI(pCreature)
     {
-        AddEmote(Event_OnCombatStart, "This may hurt a little...", Text_Yell, 10332);
-        AddEmote(Event_OnCombatStart, "What have we here?", Text_Yell, 10331);
-        AddEmote(Event_OnCombatStart, "I'm going to enjoy this...", Text_Yell, 10333);
-        AddEmote(Event_OnTargetDied, "Say farewell!", Text_Yell, 10334);
-        AddEmote(Event_OnTargetDied, "Much too easy...", Text_Yell, 10335);
-
         AddSpell(SPELL_MORTAL_WOUND, Target_Current, 95, 0, RandomUInt(5, 13));
         AddSpell(SPELL_SURGE, Target_RandomPlayerNotCurrent, 95, 0, RandomUInt(5, 13), 0, 0, false, "Back off, pup!", Text_Yell, 10330);
         AddSpell(SPELL_RETATLIATION, Target_Self, 95, 0, 30);
     };
+
+    void OnCombatStart(Unit* pTarget)
+    {
+        switch (RandomUInt(2))
+        {
+        case 0:
+            _unit->SendScriptTextChatMessage(4873);     // What have we here?
+            break;
+        case 1:
+            _unit->SendScriptTextChatMessage(4874);     // This may hurt a little....
+            break;
+        case 2:
+            _unit->SendScriptTextChatMessage(4875);     // I'm going to enjoy this...
+            break;
+        }
+    }
+
+    void OnTargetDied(Unit* pTarget)
+    {
+        switch (RandomUInt(1))
+        {
+        case 0:
+            _unit->SendScriptTextChatMessage(4876);     // Say farewell!
+            break;
+        case 1:
+            _unit->SendScriptTextChatMessage(4877);     // Much too easy.
+            break;
+        }
+    }
+
+    void OnDied(Unit* mKiller)
+    {
+        _unit->SendScriptTextChatMessage(4878);      // Hahah.. <cough> ..argh!
+    }
 
     void OnLoad()
     {
