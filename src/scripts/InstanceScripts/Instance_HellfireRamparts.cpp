@@ -96,8 +96,9 @@ class WatchkeeperGargolmarAI : public ArcScriptBossAI
         if (_unit->GetHealthPct() <= 40 && GetPhase() == 1)
         {
             Emote("Heal me, quickly!", Text_Yell, 10329);
-            HellfireWatcher->CastSpell(_unit, 12039, false);
             SetPhase(2);
+            if (HellfireWatcher && HellfireWatcher->isAlive())
+                HellfireWatcher->CastSpell(_unit, 12039, false);
         }
     }
 protected:
