@@ -514,6 +514,24 @@ public:
 
 /*--------------------------------------------------------------------------------------------------------*/
 
+/*--------------------------------------------------------------------------------------------------------*/
+
+class ShrineofDathremar : public GameObjectAIScript
+{
+public:
+    ShrineofDathremar(GameObject* goinstance) : GameObjectAIScript(goinstance) {}
+    static GameObjectAIScript *Create(GameObject * GO) { return new ShrineofDathremar(GO); }
+
+    void OnActivate(Player * pPlayer)
+    {
+        QuestLogEntry * ShrineQuest = pPlayer->GetQuestLogForEntry(8345);
+        if (ShrineQuest) //Quest: The Shrine of Dath'remar
+        {
+            ShrineQuest->Finish();
+        }
+    }
+};
+
 void SetupGoHandlers(ScriptMgr * mgr)
 {
 	mgr->register_gameobject_script(179879, &OrbOfCommand::Create);
@@ -539,4 +557,5 @@ void SetupGoHandlers(ScriptMgr * mgr)
 	mgr->register_gameobject_script(104593, &UlagTheCleaver::Create);
 	mgr->register_gameobject_script(1571, &DustySpellbooks::Create);
 	mgr->register_gameobject_script(179552, &LearnFieldRepairBot::Create);
+    mgr->register_gameobject_script(180516, &ShrineofDathremar::Create);
 }
