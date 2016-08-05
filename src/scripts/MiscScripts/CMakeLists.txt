@@ -12,7 +12,6 @@ project(MiscScripts)
 set(sources
    Creatures.cpp
    GameObjects.cpp
-   QuelDanasPortal.cpp
    RandomScripts.cpp
    Setup.cpp
    )
