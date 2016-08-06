@@ -550,7 +550,9 @@ public:
         QuestLogEntry * ShrineQuest = pPlayer->GetQuestLogForEntry(8345);
         if (ShrineQuest) //Quest: The Shrine of Dath'remar
         {
-            ShrineQuest->Finish();
+			ShrineQuest->SetMobCount(0, 1);
+			ShrineQuest->SendUpdateAddKill(0);
+			ShrineQuest->UpdatePlayerFields();
         }
     }
 };

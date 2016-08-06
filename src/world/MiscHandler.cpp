@@ -1269,6 +1269,10 @@ void WorldSession::HandleGameObjectUse(WorldPacket & recv_data)
     uint32 type = obj->GetUInt32Value(GAMEOBJECT_TYPE_ID);
     switch (type)
     {
+		case GAMEOBJECT_TYPE_TEXT:
+		{
+			sQuestMgr.OnGameObjectActivate(plyr, obj);
+		} break;
         case GAMEOBJECT_TYPE_CHAIR:
         {
 
