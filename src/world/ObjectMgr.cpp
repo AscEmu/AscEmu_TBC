@@ -3292,6 +3292,7 @@ void ObjectMgr::LoadCreatureDifficulty()
             if (cp == nullptr || ci == nullptr)
             {
                 Log.Error("ObjectMgr", "Your creature_difficulty table includes data for %u but this entry is not in your creature_* tables!", entry);
+                delete creature_difficulty;
                 continue;
             }
 
@@ -3302,6 +3303,7 @@ void ObjectMgr::LoadCreatureDifficulty()
             if (cp1 == nullptr || ci1 == nullptr)
             {
                 Log.Error("ObjectMgr", "Your creature_difficulty table includes difficulty entry %u for creature %u but the difficulty entry is not in your creature_* tables!", row[1].GetUInt32(), entry);
+                delete creature_difficulty;
                 continue;
             }
 
@@ -3352,4 +3354,5 @@ uint32 ObjectMgr::GetCreatureDifficulty(uint32 creature_entry, uint8 difficulty_
                 return 0;
         }
     }
+    return 0;
 }

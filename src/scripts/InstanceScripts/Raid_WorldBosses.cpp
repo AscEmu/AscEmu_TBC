@@ -1865,7 +1865,7 @@ public:
         spells[4].perctrigger = 0.0f;
         spells[4].attackstoptimer = 1000;
 
-        enrage = false;
+        enraged = false;
 
     }
 

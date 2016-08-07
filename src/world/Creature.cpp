@@ -286,7 +286,7 @@ void Creature::generateLoot()
     if (!loot.items.empty()) return;
     lootmgr.FillCreatureLoot(&loot, GetEntry(), m_mapMgr ? (m_mapMgr->iInstanceMode > 0 ? true : false) : false);
 
-    loot.gold = proto ? proto->money : 0;
+    loot.gold = proto->money;
 
     if (GetAIInterface()->GetDifficultyType() != 0)
     {
