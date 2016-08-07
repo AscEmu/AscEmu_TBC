@@ -1354,15 +1354,9 @@ uint32 QuestMgr::GenerateQuestXP(Player *plr, Quest *qst)
 
 uint32 QuestMgr::GenerateRewardMoney(Player * plr, Quest * qst)
 {
-    //	if ( plr == NULL || !plr->IsInWorld() || plr->getLevel() >= plr->GetUInt32Value(PLAYER_FIELD_MAX_LEVEL) || ( !plr->GetSession()->HasFlag( ACCOUNT_FLAG_XPACK_01 ) && plr->getLevel() != 60 ) || plr->getLevel() != 70 || qst->is_repeatable != 0 )
-    {
-        return qst->reward_money;
-    }
-    //	else
-    {
-        //		return qst->reward_money + float2int32( GenerateQuestXP( plr, qst ) * sWorld.getRate( RATE_QUESTXP ) ) * 6;
-    }
+    return qst->reward_money;
 }
+
 /*
 #define XP_INC 50
 #define XP_DEC 10
