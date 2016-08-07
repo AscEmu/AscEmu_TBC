@@ -3386,9 +3386,6 @@ AI_Spell *AIInterface::getSpell()
                 }
                 else
                 {
-                    if (def_spell != 0)
-                        continue;
-
                     // cast the spell at requested percent.
                     if (sp->procChance >= 100 || Rand(sp->procChance))
                     {

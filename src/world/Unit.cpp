@@ -746,11 +746,14 @@ void Unit::GiveGroupXP(Unit *pVictim, Player *PlayerInGroup)
 {
     if (!PlayerInGroup)
         return;
+
     if (!pVictim)
         return;
+
     if (!PlayerInGroup->InGroup())
         return;
-    Group *pGroup = PlayerInGroup->GetGroup();
+
+    Group* pGroup = PlayerInGroup->GetGroup();
     uint32 xp;
     if (!pGroup)
         return;
@@ -763,25 +766,6 @@ void Unit::GiveGroupXP(Unit *pVictim, Player *PlayerInGroup)
     int total_level = 0;
     float xp_mod = 1.0f;
 
-    /*	if(pGroup->GetGroupType() == GROUP_TYPE_RAID)
-        {   //needs to change
-        //Calc XP
-        xp = CalculateXpToGive(pVictim, PlayerInGroup);
-        xp /= pGroup->MemberCount();
-
-        GroupMembersSet::iterator itr;
-        for(uint32 i = 0; i < pGroup->GetSubGroupCount(); i++)
-        {
-        for(itr = pGroup->GetSubGroup(i)->GetGroupMembersBegin(); itr != pGroup->GetSubGroup(i)->GetGroupMembersEnd(); ++itr)
-        {
-        if((*itr)->getLevel() < sWorld.LevelCap)
-        (*itr)->GiveXP(xp, pVictim->GetGUID(), true);
-        }
-        }
-        }
-        else if(pGroup->GetGroupType() == GROUP_TYPE_PARTY) */
-    //change on 2007 04 22 by Zack
-    //we only take into count players that are near us, on same map
     GroupMembersSet::iterator itr;
     pGroup->Lock();
     for (uint32 i = 0; i < pGroup->GetSubGroupCount(); i++)
@@ -792,8 +776,7 @@ void Unit::GiveGroupXP(Unit *pVictim, Player *PlayerInGroup)
             if (pGroupGuy &&
                 pGroupGuy->isAlive() &&
                 //				PlayerInGroup->GetInstanceID()==pGroupGuy->GetInstanceID() &&
-                pVictim->GetMapMgr() == pGroupGuy->GetMapMgr() &&
-                pGroupGuy->GetDistanceSq(pVictim) < 100 * 100
+                pVictim->GetMapMgr() == pGroupGuy->GetMapMgr() && pGroupGuy->GetDistanceSq(pVictim) < 100 * 100
                 )
             {
                 active_player_list[active_player_count] = pGroupGuy;
@@ -812,14 +795,14 @@ void Unit::GiveGroupXP(Unit *pVictim, Player *PlayerInGroup)
     pGroup->Unlock();
     if (active_player_count < 1) //killer is always close to the victim. This should never execute
     {
-        if (PlayerInGroup == 0)
+        /*if (PlayerInGroup == 0) This cannot be true Zyres: CID 114989
         {
             PlayerInfo * pleaderinfo = pGroup->GetLeader();
             if (!pleaderinfo->m_loggedInPlayer)
                 return;
 
             PlayerInGroup = pleaderinfo->m_loggedInPlayer;
-        }
+        }*/
 
         xp = CalculateXpToGive(pVictim, PlayerInGroup);
         PlayerInGroup->GiveXP(xp, pVictim->GetGUID(), true);

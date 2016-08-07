@@ -344,17 +344,15 @@ void Spell::SpellTargetSingleTargetEnemy(uint32 i, uint32 j)
 {
     if (!m_caster->IsInWorld())
         return;
-    Unit * pTarget = m_caster->GetMapMgr()->GetUnit(m_targets.m_unitTarget);
+
+    Unit* pTarget = m_caster->GetMapMgr()->GetUnit(m_targets.m_unitTarget);
     if (!pTarget)
         return;
 
-    TargetsList *tmpMap = &m_targetUnits[i];
+    TargetsList* tmpMap = &m_targetUnits[i];
     if (m_spellInfo->TargetCreatureType && pTarget->GetTypeId() == TYPEID_UNIT)
     {
         Creature* cr = static_cast<Creature*>(pTarget);
-
-        if (cr == NULL)
-            return;
 
         if (cr->GetCreatureInfo())
             if (!(1 << (cr->GetCreatureInfo()->Type - 1) & m_spellInfo->TargetCreatureType))

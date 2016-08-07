@@ -122,7 +122,9 @@ void WorldSession::SendTaxiList(Creature* pCreature)
 
 void WorldSession::HandleActivateTaxiOpcode(WorldPacket & recv_data)
 {
-    if (!_player->IsInWorld()) return;
+    if (!_player->IsInWorld())
+        return;
+
     sLog.outDebug("WORLD: Received CMSG_ACTIVATETAXI");
 
     uint64 guid;
@@ -131,9 +133,10 @@ void WorldSession::HandleActivateTaxiOpcode(WorldPacket & recv_data)
     uint32 curloc;
     uint8 field;
     uint32 submask;
-    WorldPacket data(SMSG_ACTIVATETAXIREPLY, 4);
 
-    recv_data >> guid >> sourcenode >> destinationnode;
+    recv_data >> guid;
+    recv_data >> sourcenode;
+    recv_data >> destinationnode;
 
     if (GetPlayer()->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_LOCK_PLAYER))
         return;
@@ -148,6 +151,8 @@ void WorldSession::HandleActivateTaxiOpcode(WorldPacket & recv_data)
     field = (uint8)((curloc - 1) / 32);
     submask = 1 << ((curloc - 1) % 32);
 
+    WorldPacket data(SMSG_ACTIVATETAXIREPLY, 4);
+
     // Check for known nodes
     if ((GetPlayer()->GetTaximask(field) & submask) != submask)
     {
@@ -157,14 +162,7 @@ void WorldSession::HandleActivateTaxiOpcode(WorldPacket & recv_data)
     }
 
     // Check for valid node
-    if (!taxinode)
-    {
-        data << uint32(1);
-        SendPacket(&data);
-        return;
-    }
-
-    if (!taxipath || !taxipath->GetNodeCount())
+    if (!taxipath->GetNodeCount())
     {
         data << uint32(2);
         SendPacket(&data);

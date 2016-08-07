@@ -1902,15 +1902,6 @@ void WorldSession::HandleLootMasterGiveOpcode(WorldPacket& recv_data)
     else
         pObj = pGameObject;
 
-    if (!pObj)
-        return;
-
-    // telling him or not.
-    /*float targetDist = player->CalcDistance(pObj);
-  if(targetDist > 130.0f) {
-  _player->GetSession()->SendNotification("so far!"));
-  return;
-  }*/
 
     if (slotid >= pLoot->items.size())
     {
