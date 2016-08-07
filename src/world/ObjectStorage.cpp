@@ -22,7 +22,7 @@
 
 /** Table formats converted to strings
  */
-const char * gItemPrototypeFormat = "uuuussssuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuffuffuffuffuffuuuuuuuuuufuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuusuuuuuuuuuuuuuuuuuuuuuuuuuu";
+const char * gItemPrototypeFormat = "uuuussssuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuffuffuffuffuffuuuuuuuuuufuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuusuuuuuuuuuuuuuuuuuuuuuuuuuuu";
 const char * gCreatureNameFormat = "usssuuuuuuuuuuffcc";
 const char * gGameObjectNameFormat = "uuusuuuuuuuuuuuuuuuuuuuuuuuu";
 const char * gCreatureProtoFormat = "uuuuuuufuuuffuffuuuuuuuuuuuuuuuuuuffsuuuufffuuuuuuu";
@@ -304,19 +304,6 @@ void ObjectMgr::LoadExtraCreatureProtoStuff()
 
 void ObjectMgr::LoadExtraItemStuff()
 {
-    std::map<uint32, uint32> foodItems;
-    QueryResult * result = WorldDatabase.Query("SELECT * FROM itempetfood ORDER BY entry");
-    if (result)
-    {
-        Field *f = result->Fetch();
-        do
-        {
-            foodItems.insert(std::make_pair(f[0].GetUInt32(), f[1].GetUInt32()));
-        }
-        while (result->NextRow());
-    }
-    delete result;
-
     StorageContainerIterator<ItemPrototype> * itr = ItemPrototypeStorage.MakeIterator();
     ItemPrototype * pItemPrototype;
     while (!itr->AtEnd())
@@ -344,12 +331,6 @@ void ObjectMgr::LoadExtraItemStuff()
         for (uint32 j = 0; j < pItemPrototype->lowercase_name.length(); ++j)
             pItemPrototype->lowercase_name[j] = tolower(pItemPrototype->lowercase_name[j]);
 
-        //load item_pet_food_type from extra table
-        uint32 ft = 0;
-        std::map<uint32, uint32>::iterator iter = foodItems.find(pItemPrototype->ItemId);
-        if (iter != foodItems.end())
-            ft = iter->second;
-        pItemPrototype->FoodType = ft;
 
         pItemPrototype->gossip_script = NULL;
 
@@ -479,7 +460,6 @@ void ObjectMgr::LoadExtraItemStuff()
     }
 
     itr->Destruct();
-    foodItems.clear();
 }
 
 #define make_task(storage, itype, storagetype, tablename, format) tl.AddTask( new Task( \

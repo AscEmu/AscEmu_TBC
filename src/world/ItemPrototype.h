@@ -585,9 +585,9 @@ struct ItemPrototype
     uint32 GemProperties;
     int32 DisenchantReqSkill;
     uint32 ArmorDamageModifier;
+    uint32 FoodType;
 
     std::string lowercase_name;	// used in auctions
-    uint32 FoodType;		//pet food type
     GossipScript* gossip_script;
     int32 ForcedPetId;
 };
