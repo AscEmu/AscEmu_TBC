@@ -3067,6 +3067,9 @@ public:
 			spells[1].perctrigger = 15.0f;
 			spells[1].attackstoptimer = 1500;
 		}
+
+        SpeechTimer = 0;
+        VoidTimer = 0;
 	}
     void OnCombatStart(Unit* mTarget)
     {

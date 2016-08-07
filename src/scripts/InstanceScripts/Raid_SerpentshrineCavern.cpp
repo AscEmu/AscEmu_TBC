@@ -633,6 +633,17 @@ public:
 		//check if greyheart spellbinders are alive after map initialization
 		TimedEvent * te = TimedEvent::Allocate(this, new CallbackP0<LeotherasAI>(this, &LeotherasAI::FirstCheck), 1, 500, 1);
 		sWorld.event_AddEvent(te);
+
+        nrspells = 1;
+        SwitchTimer = 1200;
+        WhirlwindTimer = 1200;
+        EnrageTimer = 1200;
+        Enraged = false;
+        mInWhirlwind = false;
+        IsMorphing = false;
+        Phase = 0;
+        FinalPhaseSubphase = 0;
+        FinalPhaseTimer = 1200;
 	}
 
 	void FirstCheck()

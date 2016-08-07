@@ -1751,6 +1751,10 @@ public:
 		spells[1].cooldown = 20;
 		spells[1].perctrigger = 0.0f;
 		spells[1].attackstoptimer = 1000;
+        EnrageTimer = 1200;
+        ArcaneOrbTimer = 1200;
+        Enraged = false;
+
 	} 
 
     void OnCombatStart(Unit* mTarget)
@@ -2281,6 +2285,11 @@ public:
 		_unit->GetAIInterface()->setWaypointToMove(1);
 		Flying=true;
 		CastTime();
+
+        QuillsCount = 0;
+        NextWP = 0;
+        m_entry = 0;
+        FlyWay = 0;
     }
 
 	void OnDamageTaken(Unit* mAttacker, float fAmount) 
@@ -3098,10 +3107,6 @@ public:
 			spells[0].casttime = t + spells[0].cooldown;
 		}
 	}
-
-protected:	
-
-	int nrspells;
 };
 
 // Grand Astromancer Capernian AI (3rd advisor)

@@ -385,13 +385,11 @@ public:
 		spells[3].perctrigger = 1.0f;
 		spells[3].attackstoptimer = 1000;
 
-
+        timesummon = 0;
     }
     
     void OnCombatStart(Unit* mTarget)
     {
-		nrspells = 4;
-		timesummon = 0;
 		_unit->SendChatMessage(CHAT_MSG_MONSTER_YELL, LANG_UNIVERSAL, "I be da predator! You da prey!");
 		_unit->PlaySoundToSet(12013);
 		RegisterAIUpdateEvent(1000);
@@ -549,7 +547,12 @@ public:
 		spells[2].perctrigger = 2.0f;
 		spells[2].attackstoptimer = 1000;
 
-
+        nrspells = 0;
+        spmin = 0;
+        phase = 0;
+        timetotem = 0;
+        timer = 0;
+        enrage = false;
     }
     
     void OnCombatStart(Unit* mTarget)
@@ -920,6 +923,10 @@ public:
 		spells[1].perctrigger = 3.0f;
 		spells[1].attackstoptimer = 1000;
 
+        timer = 0;
+        summon = 0;
+        mobs = false;
+
     }
     
     void OnCombatStart(Unit* mTarget)
@@ -1177,8 +1184,11 @@ public:
 		spells[9].targettype = TARGET_ATTACKING; 
 		spells[9].instant = true;
 		spells[9].perctrigger = 2.0f;
-		spells[9].attackstoptimer = 1000;			
+		spells[9].attackstoptimer = 1000;
 
+        nrspells = 0;
+        spmin = 0;
+        phase = 0;
     }
     
     void OnCombatStart(Unit* mTarget)

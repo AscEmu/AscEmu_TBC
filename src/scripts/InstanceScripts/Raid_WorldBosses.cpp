@@ -925,13 +925,17 @@ public:
         spells[5].cooldown = -1;
         spells[5].perctrigger = 0.0f;
         spells[5].attackstoptimer = 1000;
+
+        Shade1 = false;
+        Shade2 = false;
+        Shade3 = false;
     }
 
     void OnCombatStart(Unit* mTarget)
     {
-        bool Shade1 = false;
-        bool Shade2 = false;
-        bool Shade3 = false;
+        Shade1 = false;
+        Shade2 = false;
+        Shade3 = false;
         CastTime();
         _unit->SendChatMessage(CHAT_MSG_MONSTER_YELL, LANG_UNIVERSAL, "I can sense the SHADOW on your hearts. There can be no rest for the wicked!");
         RegisterAIUpdateEvent(1000); //Attack time is to slow on this boss
@@ -947,9 +951,9 @@ public:
 
     void OnCombatStop(Unit *mTarget)
     {
-        bool Shade1 = false;
-        bool Shade2 = false;
-        bool Shade3 = false;
+        Shade1 = false;
+        Shade2 = false;
+        Shade3 = false;
         CastTime();
         _unit->GetAIInterface()->setCurrentAgent(AGENT_NULL);
         _unit->GetAIInterface()->SetAIState(STATE_IDLE);
@@ -964,9 +968,9 @@ public:
 
     void OnDied(Unit * mKiller)
     {
-        bool Shade1 = false;
-        bool Shade2 = false;
-        bool Shade3 = false;
+        Shade1 = false;
+        Shade2 = false;
+        Shade3 = false;
         CastTime();
         RemoveAIUpdateEvent();
     }
@@ -1469,6 +1473,8 @@ public:
         _unit->SendChatMessage(CHAT_MSG_MONSTER_YELL, LANG_UNIVERSAL, "I remember well the sting of defeat at the conclusion of the Third War. I have waited far too long for my revenge. Now the shadow of the Legion falls over this world. It is only a matter of time until all of your failed creation... is undone.");
         _unit->PlaySoundToSet(11332);
 
+        enrage = 0;
+
     }
 
     void OnCombatStart(Unit* mTarget)
@@ -1687,6 +1693,7 @@ public:
         spells[4].perctrigger = 0.0f;
         spells[4].attackstoptimer = 1000;
 
+        masstele = 250;
     }
 
     void OnCombatStart(Unit* mTarget)
@@ -1857,6 +1864,8 @@ public:
         spells[4].instant = true;
         spells[4].perctrigger = 0.0f;
         spells[4].attackstoptimer = 1000;
+
+        enrage = false;
 
     }
 
