@@ -181,6 +181,9 @@ class SERVER_DECL Object : public EventableObject
         return uint32((*(uint64*)m_uint32Values >> 24) & 0xFFFFFFFF);
     }
 
+    float GetScale() { return m_floatValues[OBJECT_FIELD_SCALE_X]; }
+    void SetScale(float scale) { SetFloatValue(OBJECT_FIELD_SCALE_X, scale); };
+
     const uint32 GetTypeFromGUID() const { return (m_uint32Values[1] & HIGHGUID_TYPE_MASK); }
     const uint32 GetUIdFromGUID() const { return (m_uint32Values[0] & LOWGUID_ENTRY_MASK); }
     const uint32 GetLowGUID() const { return (m_uint32Values[0]); }

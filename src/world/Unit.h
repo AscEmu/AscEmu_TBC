@@ -742,6 +742,8 @@ class SERVER_DECL Unit : public Object
 
     /// Stats
     inline uint32 getLevel() { return m_uint32Values[UNIT_FIELD_LEVEL]; };
+    void setLevel(uint32 level);
+    void modLevel(int32 mod) { ModUnsigned32Value(UNIT_FIELD_LEVEL, mod); };
     inline uint8 getRace() { return GetByte(UNIT_FIELD_BYTES_0, 0); }
     inline uint8 getClass() { return GetByte(UNIT_FIELD_BYTES_0, 1); }
     inline void setRace(uint8 race) { SetByte(UNIT_FIELD_BYTES_0, 0, race); }
@@ -817,6 +819,77 @@ class SERVER_DECL Unit : public Object
     bool HasVisialPosAurasOfNameHashWithCaster(uint32 namehash, Unit * caster);
 
     void GiveGroupXP(Unit *pVictim, Player *PlayerInGroup);
+
+    void SetHealth(uint32 val) { SetUInt32Value(UNIT_FIELD_HEALTH, val); }
+    void SetMaxHealth(uint32 val) { SetUInt32Value(UNIT_FIELD_MAXHEALTH, val); }
+
+    uint32 GetHealth()    const { return GetUInt32Value(UNIT_FIELD_HEALTH); }
+    uint32 GetMaxHealth() const { return GetUInt32Value(UNIT_FIELD_MAXHEALTH); }
+
+    void ModHealth(int32 val) { ModUnsigned32Value(UNIT_FIELD_HEALTH, val); }
+    void ModMaxHealth(int32 val) { ModUnsigned32Value(UNIT_FIELD_MAXHEALTH, val); }
+
+    void SetBaseHealth(uint32 amt) { SetUInt32Value(UNIT_FIELD_BASE_HEALTH, amt); }
+    uint32 GetBaseHealth() { return GetUInt32Value(UNIT_FIELD_BASE_HEALTH); }
+
+    void SetPower(uint32 type, int32 value);
+
+    void ModPower(uint32 index, int32 value)
+    {
+        int32 power = static_cast< int32 >(m_uint32Values[UNIT_FIELD_POWER1 + index]);
+        int32 maxpower = static_cast< int32 >(m_uint32Values[UNIT_FIELD_MAXPOWER1 + index]);
+
+        if (value <= power)
+            SetUInt32Value(UNIT_FIELD_POWER1 + index, 0);
+        else
+            SetUInt32Value(UNIT_FIELD_POWER1 + index, power + value);
+
+        if ((value + power) > maxpower)
+            SetUInt32Value(UNIT_FIELD_POWER1 + index, maxpower);
+        else
+            SetUInt32Value(UNIT_FIELD_POWER1 + index, power + value);
+    }
+
+    uint32 GetPower(uint32 index) { return GetUInt32Value(UNIT_FIELD_POWER1 + index); }
+    void SetMaxPower(uint32 index, uint32 value) { SetUInt32Value(UNIT_FIELD_MAXPOWER1 + index, value); }
+    void ModMaxPower(uint32 index, int32 value) { ModUnsigned32Value(UNIT_FIELD_MAXPOWER1 + index, value); }
+    uint32 GetMaxPower(uint32 index) { return GetUInt32Value(UNIT_FIELD_MAXPOWER1 + index); }
+
+    void SetBaseMana(uint32 amt) { SetUInt32Value(UNIT_FIELD_BASE_MANA, amt); }
+    uint32 GetBaseMana() { return GetUInt32Value(UNIT_FIELD_BASE_MANA); }
+
+    void SetResistance(uint32 type, uint32 amt) { SetUInt32Value(UNIT_FIELD_RESISTANCES + type, amt); }
+    uint32 GetResistance(uint32 type) { return GetUInt32Value(UNIT_FIELD_RESISTANCES + type); }
+
+    void SetBaseAttackTime(uint8 slot, uint32 time) { SetUInt32Value(UNIT_FIELD_BASEATTACKTIME + slot, time); }
+    uint32 GetBaseAttackTime(uint8 slot) { return GetUInt32Value(UNIT_FIELD_BASEATTACKTIME + slot); }
+    void ModBaseAttackTime(uint8 slot, int32 mod) { ModUnsigned32Value(UNIT_FIELD_BASEATTACKTIME + slot, mod); }
+
+    void SetBoundingRadius(float rad) { SetFloatValue(UNIT_FIELD_BOUNDINGRADIUS, rad); }
+    float GetBoundingRadius() { return GetFloatValue(UNIT_FIELD_BOUNDINGRADIUS); }
+
+    void SetCombatReach(float len) { SetFloatValue(UNIT_FIELD_COMBATREACH, len); }
+    float GetCombatReach() { return GetFloatValue(UNIT_FIELD_COMBATREACH); }
+
+    void SetMinDamage(float amt) { SetFloatValue(UNIT_FIELD_MINDAMAGE, amt); }
+    float GetMinDamage() { return GetFloatValue(UNIT_FIELD_MINDAMAGE); }
+
+    void SetMaxDamage(float amt) { SetFloatValue(UNIT_FIELD_MAXDAMAGE, amt); }
+    float GetMaxDamage() { return GetFloatValue(UNIT_FIELD_MAXDAMAGE); }
+
+    void SetMinRangedDamage(float amt) { SetFloatValue(UNIT_FIELD_MINRANGEDDAMAGE, amt); }
+    float GetMinRangedDamage() { return GetFloatValue(UNIT_FIELD_MINRANGEDDAMAGE); }
+
+    void SetMaxRangedDamage(float amt) { SetFloatValue(UNIT_FIELD_MAXRANGEDDAMAGE, amt); }
+    float GetMaxRangedDamage() { return GetFloatValue(UNIT_FIELD_MAXRANGEDDAMAGE); }
+
+    uint32 GetFaction() { return GetUInt32Value(UNIT_FIELD_FACTIONTEMPLATE); }
+
+    void SetFaction(uint32 factionId)
+    {
+        SetUInt32Value(UNIT_FIELD_FACTIONTEMPLATE, factionId);
+        _setFaction();
+    }
 
     /// Combat / Death Status
     inline bool isAlive() { return m_deathState == ALIVE; };
@@ -1087,8 +1160,6 @@ class SERVER_DECL Unit : public Object
 
         return (int)(GetUInt32Value(UNIT_FIELD_POWER1) * 100 / GetUInt32Value(UNIT_FIELD_MAXPOWER1));
     };
-
-    uint32 GetResistance(uint32 type);
 
     //Pet
     inline void SetIsPet(bool chck) { m_isPet = chck; }

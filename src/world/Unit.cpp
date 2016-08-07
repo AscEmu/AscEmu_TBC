@@ -5073,12 +5073,6 @@ void Unit::EmoteExpire()
     sEventMgr.RemoveEvents(this, EVENT_UNIT_EMOTE);
 }
 
-
-uint32 Unit::GetResistance(uint32 type)
-{
-    return GetUInt32Value(UNIT_FIELD_RESISTANCES + type);
-}
-
 void Unit::MoveToWaypoint(uint32 wp_id)
 {
     if (this->m_useAI && this->GetAIInterface() != NULL)
@@ -7368,4 +7362,23 @@ Group *Unit::GetGroup()
     else if (IsCreature())
         return static_cast<Creature *>(this)->GetGroup();
     return NULL;
+}
+
+void Unit::SetPower(uint32 type, int32 value)
+{
+    uint32 maxpower = GetUInt32Value(UNIT_FIELD_MAXPOWER1 + type);
+
+    if (value < 0)
+        value = 0;
+    else if (value >(int32)maxpower)
+        value = maxpower;
+
+    SetUInt32Value(UNIT_FIELD_POWER1 + type, value);
+}
+
+void Unit::setLevel(uint32 level)
+{
+    SetUInt32Value(UNIT_FIELD_LEVEL, level);
+    /*if (IsPlayer())
+        static_cast< Player* >(this)->SetNextLevelXp(sMySQLStore.GetPlayerXPForLevel(level));*/
 }
