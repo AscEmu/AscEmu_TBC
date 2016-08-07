@@ -448,10 +448,10 @@ Player* Group::FindFirstPlayer()
     return NULL;
 }
 
-void Group::RemovePlayer(PlayerInfo * info)
+void Group::RemovePlayer(PlayerInfo* info)
 {
     WorldPacket data(50);
-    Player * pPlayer = info->m_loggedInPlayer;
+    Player* pPlayer = info->m_loggedInPlayer;
 
     m_groupLock.Acquire();
     if (m_isqueued)
@@ -460,8 +460,8 @@ void Group::RemovePlayer(PlayerInfo * info)
         BattlegroundManager.RemoveGroupFromQueues(this);
     }
 
-    SubGroup *sg = NULL;
-    if (info->subGroup >= 0 && info->subGroup <= 8)
+    SubGroup* sg = NULL;
+    if (info->subGroup >= 0 && info->subGroup < 8)
         sg = m_SubGroups[info->subGroup];
 
     if (sg == NULL || sg->m_GroupMembers.find(info) == sg->m_GroupMembers.end())

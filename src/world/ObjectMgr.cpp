@@ -2788,7 +2788,7 @@ void ObjectMgr::RemoveCharter(Charter * c)
 {
     if (c == NULL)
         return;
-    if (c->CharterType > NUM_CHARTER_TYPES)
+    if (c->CharterType >= NUM_CHARTER_TYPES)
     {
         Log.Notice("ObjectMgr", "Charter %u cannot be destroyed as type %u is not a sane type value.", c->CharterId, c->CharterType);
         return;

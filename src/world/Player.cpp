@@ -237,14 +237,13 @@ Player::Player(uint32 guid) : m_mailBox(guid), ascending(false), waterHeight(0.0
         m_casted_amount[i] = 0;
     }
 
-    for (i = 0; i < 6; i++)
+    for (i = 0; i < 5; i++)
+    {
         for (j = 0; j < 7; j++)
         {
             SpellHealDoneByAttribute[i][j] = 0;
         }
 
-    for (i = 0; i < 5; i++)
-    {
         FlatStatModPos[i] = 0;
         FlatStatModNeg[i] = 0;
         StatModPctPos[i] = 0;
@@ -252,7 +251,6 @@ Player::Player(uint32 guid) : m_mailBox(guid), ascending(false), waterHeight(0.0
         TotalStatModPctPos[i] = 0;
         TotalStatModPctNeg[i] = 0;
     }
-
 
     for (i = 0; i < 12; i++)
     {

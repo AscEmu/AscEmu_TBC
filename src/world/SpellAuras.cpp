@@ -2806,7 +2806,7 @@ void Aura::EventPeriodicHeal(uint32 amount)
         bonus += c->HealDoneMod[GetSpellProto()->School] + m_target->HealTakenMod[m_spellProto->School];
         if (c->IsPlayer())
         {
-            for (uint32 a = 0; a < 6; a++)
+            for (uint32 a = 0; a < 5; a++)
                 bonus += float2int32(static_cast<Player*>(c)->SpellHealDoneByAttribute[a][m_spellProto->School] * static_cast<Player*>(c)->GetUInt32Value(UNIT_FIELD_STAT0 + a));
         }
         //Spell Coefficient
