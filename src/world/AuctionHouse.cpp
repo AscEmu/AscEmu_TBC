@@ -456,7 +456,7 @@ void WorldSession::SendAuctionPlaceBidResultPacket(uint32 itemId, uint32 error)
 
 void WorldSession::HandleAuctionPlaceBid(WorldPacket & recv_data)
 {
-    if (!_player->IsInWorld())
+    if (_player == nullptr || !_player->IsInWorld())
         return;
 
     uint64 guid;

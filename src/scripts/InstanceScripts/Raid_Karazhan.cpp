@@ -592,23 +592,23 @@ RegisterAIUpdateEvent(1000);
 
 void OnCombatStop(Unit *mTarget)
 {
-GameObject* DoorLeft = _unit->GetMapMgr()->GetInterface()->GetGameObjectNearestCoords(-10917.1445f, -1774.05f, 90.478f, 184279);
-GameObject* DoorRight = _unit->GetMapMgr()->GetInterface()->GetGameObjectNearestCoords(-10872.195f, -1779.42f, 90.45f, 184278);
-GameObject* Curtain = _unit->GetMapMgr()->GetInterface()->GetGameObjectNearestCoords(-10894.17f, -1774.218f, 90.477f, 183932);
+    GameObject* DoorLeft = _unit->GetMapMgr()->GetInterface()->GetGameObjectNearestCoords(-10917.1445f, -1774.05f, 90.478f, 184279);
+    GameObject* DoorRight = _unit->GetMapMgr()->GetInterface()->GetGameObjectNearestCoords(-10872.195f, -1779.42f, 90.45f, 184278);
+    GameObject* Curtain = _unit->GetMapMgr()->GetInterface()->GetGameObjectNearestCoords(-10894.17f, -1774.218f, 90.477f, 183932);
 
-if(DoorLeft)
-DoorLeft->SetUInt32Value(GAMEOBJECT_STATE, 1);
+    if(DoorLeft)
+        DoorLeft->SetUInt32Value(GAMEOBJECT_STATE, 1);
 
-if(DoorRight)
-DoorRight->SetUInt32Value(GAMEOBJECT_STATE, 0);
+    if(DoorRight)
+        DoorRight->SetUInt32Value(GAMEOBJECT_STATE, 0);
 
-if(Curtain)
-Curtain->SetUInt32Value(GAMEOBJECT_STATE, 1);
+    if(Curtain)
+        Curtain->SetUInt32Value(GAMEOBJECT_STATE, 1);
 
-CastTime();
-_unit->GetAIInterface()->setCurrentAgent(AGENT_NULL);
-_unit->GetAIInterface()->SetAIState(STATE_IDLE);
-RemoveAIUpdateEvent();
+    CastTime();
+    _unit->GetAIInterface()->setCurrentAgent(AGENT_NULL);
+    _unit->GetAIInterface()->SetAIState(STATE_IDLE);
+    RemoveAIUpdateEvent();
 }
 
 void OnDied(Unit * mKiller)
@@ -5157,8 +5157,7 @@ public:
 		_unit->GetAIInterface()->setCurrentAgent(AGENT_NULL);
 		_unit->GetAIInterface()->SetAIState(STATE_IDLE);
 		RemoveAIUpdateEvent();
-		if(_unit)
-			_unit->SafeDelete();
+        _unit->Despawn(1, 0);
 	}
 
 	void OnDied(Unit * mKiller)
@@ -5347,8 +5346,7 @@ public:
 		_unit->GetAIInterface()->setCurrentAgent(AGENT_NULL);
 		_unit->GetAIInterface()->SetAIState(STATE_IDLE);
 		RemoveAIUpdateEvent();
-		if(_unit)
-			_unit->SafeDelete();
+        _unit->Despawn(1, 0);
 	}
 
 	void OnDied(Unit * mKiller)

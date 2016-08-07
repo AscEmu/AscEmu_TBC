@@ -31,13 +31,23 @@ void Player::SendWorldStateUpdate(uint32 WorldState, uint32 Value)
 
 void Player::Gossip_SendPOI(float X, float Y, uint32 Icon, uint32 Flags, uint32 Data, const char* Name)
 {
-    size_t namelen = strlen(Name);
-    WorldPacket data(SMSG_GOSSIP_POI, 11 + namelen);
-    data << Flags << X << Y << Icon << Data;
-    if (Name == NULL || namelen == 0)
+    size_t namelen = 0;
+
+    if (Name != NULL)
+        namelen = strlen(Name);
+
+    WorldPacket data(SMSG_GOSSIP_POI, 21 + namelen);
+
+    data << uint32(Flags);
+    data << float(X);
+    data << float(Y);
+    data << uint32(Icon);
+    data << uint32(Data);
+
+    if (namelen == 0)
         data << uint8(0);
     else
-        data.append((const uint8*)Name, namelen + 1);		// already null-terminated in memory so this is fine, saves the extra strlen()
+        data.append((const uint8*)Name, namelen + 1);
 
     GetSession()->SendPacket(&data);
 }

@@ -721,26 +721,25 @@ bool ChatHandler::HandleModifyGoldCommand(const char* args, WorldSession *m_sess
 
 bool ChatHandler::HandleTriggerCommand(const char* args, WorldSession* m_session)
 {
-    int32 instance_id;
     uint32 trigger_id;
-    int valcount = sscanf(args, "%u %d", (unsigned int*)&trigger_id, (int*)&instance_id);
-    if (!valcount)
-        return false;
-    if (valcount == 1)
-        instance_id = 0;
+    int32 instance_id = 0;
 
-    AreaTriggerEntry *entry = dbcAreaTrigger.LookupEntry(trigger_id);
-    if (trigger_id == 0 || entry == NULL)
+    if (sscanf(args, "%u %d", (unsigned int*)&trigger_id, (int*)&instance_id) < 1)
     {
-        RedSystemMessage(m_session, "Could not find trigger %s", (args == NULL ? "NULL" : args));
+        RedSystemMessage(m_session, "Command must be at least in format: .gotrig <trigger_id>.");
+        RedSystemMessage(m_session, "You can use: .gotrig <trigger_id> <instance_id>");
         return true;
     }
 
-    m_session->GetPlayer()->SafeTeleport(entry->mapid, instance_id, LocationVector(entry->x, entry->y,
-        entry->z, entry->o));
+    auto area_trigger_entry = dbcAreaTrigger.LookupEntry(trigger_id);
+    if (area_trigger_entry == nullptr)
+    {
+        RedSystemMessage(m_session, "Could not find trigger %s", args);
+        return true;
+    }
 
-    BlueSystemMessage(m_session, "Teleported to trigger %u on [%u][%.2f][%.2f][%.2f]", entry->id,
-                      entry->mapid, entry->x, entry->y, entry->z);
+    m_session->GetPlayer()->SafeTeleport(area_trigger_entry->mapid, instance_id, LocationVector(area_trigger_entry->x, area_trigger_entry->y, area_trigger_entry->z, area_trigger_entry->o));
+    BlueSystemMessage(m_session, "Teleported to trigger %u on [%u][%.2f][%.2f][%.2f]", area_trigger_entry->id, area_trigger_entry->mapid, area_trigger_entry->x, area_trigger_entry->y, area_trigger_entry->z);
     return true;
 }
 
