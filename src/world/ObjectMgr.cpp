@@ -3283,11 +3283,26 @@ void ObjectMgr::LoadCreatureDifficulty()
             Field* row = result->Fetch();
             CreatureDifficulty* creature_difficulty = new CreatureDifficulty;
             uint32 entry = row[0].GetUInt32();
-            creature_difficulty->Id = entry;
-            creature_difficulty->difficulty_entry_1 = row[1].GetUInt32();
-            creature_difficulty->difficulty_entry_2 = row[2].GetUInt32();
-            creature_difficulty->difficulty_entry_3 = row[3].GetUInt32();
 
+            CreatureProto* cp = CreatureProtoStorage.LookupEntry(entry);
+            CreatureInfo* ci = CreatureNameStorage.LookupEntry(entry);
+            if (cp == nullptr || ci == nullptr)
+            {
+                Log.Error("ObjectMgr", "Your creature_difficulty table includes data for %u but this entry is not in your creature_* tables!", entry);
+                continue;
+            }
+
+            creature_difficulty->Id = entry;
+
+            CreatureProto* cp1 = CreatureProtoStorage.LookupEntry(row[1].GetUInt32());
+            CreatureInfo* ci1 = CreatureNameStorage.LookupEntry(row[1].GetUInt32());
+            if (cp1 == nullptr || ci1 == nullptr)
+            {
+                Log.Error("ObjectMgr", "Your creature_difficulty table includes difficulty entry %u for creature %u but the difficulty entry is not in your creature_* tables!", row[1].GetUInt32(), entry);
+                continue;
+            }
+
+            creature_difficulty->difficulty_entry_1 = row[1].GetUInt32();
 
             Log.Debug("ObjectMgr", "loaded creature difficulty for creature %u", entry);
 
