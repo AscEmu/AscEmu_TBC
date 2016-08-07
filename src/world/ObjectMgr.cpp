@@ -1893,6 +1893,9 @@ void ObjectMgr::LoadTrainers()
         if (result2->GetFieldCount() != 10)
         {
             Log.LargeErrorMessage("Trainers table format is invalid. Please update your database.");
+            delete tr;
+            delete result;
+            delete result2;
             return;
         }
         else
