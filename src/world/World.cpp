@@ -404,6 +404,8 @@ bool World::SetInitialWorldSettings()
     MAKE_TASK(ObjectMgr, LoadProfessionDiscoveries);
     MAKE_TASK(ObjectMgr, StoreBroadCastGroupKey);
 
+    MAKE_TASK(ObjectMgr, LoadCreatureDifficulty);
+
 #undef MAKE_TASK
 
     // wait for all loading to complete.

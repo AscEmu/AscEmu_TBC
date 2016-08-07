@@ -492,5 +492,8 @@ class SERVER_DECL AIInterface
     void WipeCurrentTarget();
     bool CheckCurrentTarget();
     bool TargetUpdateCheck(Unit * ptr);
+
+    void SetCreatureProtoDifficulty(uint32 entry);
+    uint8 GetDifficultyType();
 };
 #endif

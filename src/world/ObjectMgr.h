@@ -429,6 +429,7 @@ class SERVER_DECL ObjectMgr : public Singleton < ObjectMgr >, public EventableOb
     typedef std::map<uint32, uint32>                                    PetSpellCooldownMap;
     typedef std::map<uint32, SpellEntry*>                               TotemSpellMap;
     typedef std::multimap <uint32, uint32>                               BCEntryStorage;
+    typedef std::map<uint32, CreatureDifficulty*>               CreatureDifficultyMap;
 
     // object holders
     GmTicketList         GM_TicketList;
@@ -707,6 +708,8 @@ class SERVER_DECL ObjectMgr : public Singleton < ObjectMgr >, public EventableOb
         return Entries[n];
     }
 
+    void LoadCreatureDifficulty();
+    uint32 GetCreatureDifficulty(uint32 creature_entry, uint8 difficulty_type);
 
     protected:
     BCEntryStorage m_BCEntryStorage; // broadcast system.
@@ -777,6 +780,8 @@ class SERVER_DECL ObjectMgr : public Singleton < ObjectMgr >, public EventableOb
     LevelInfoMap mLevelInfo;
     PetDefaultSpellMap mDefaultPetSpells;
     PetSpellCooldownMap mPetSpellCooldowns;
+
+    CreatureDifficultyMap m_creatureDifficulty;
 };
 
 

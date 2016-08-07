@@ -288,6 +288,17 @@ void Creature::generateLoot()
 
     loot.gold = proto ? proto->money : 0;
 
+    if (GetAIInterface()->GetDifficultyType() != 0)
+    {
+        uint32 creature_difficulty_entry = objmgr.GetCreatureDifficulty(GetEntry(), GetAIInterface()->GetDifficultyType());
+        auto proto_difficulty = CreatureProtoStorage.LookupEntry(creature_difficulty_entry);
+        if (proto_difficulty != nullptr)
+        {
+            if (proto_difficulty->money != proto->money)
+                loot.gold = proto_difficulty->money;
+        }
+    }
+
     // Master Looting Ninja Checker
     if (sWorld.antiMasterLootNinja && this->m_lootMethod == PARTY_LOOT_MASTER)
     {
@@ -1587,6 +1598,8 @@ void Creature::OnPushToWorld()
         }
 
     }
+
+    GetAIInterface()->SetCreatureProtoDifficulty(proto->Id);
 }
 
 void Creature::AISpellUpdate()

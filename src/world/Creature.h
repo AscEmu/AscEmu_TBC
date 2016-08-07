@@ -235,6 +235,14 @@ struct PetSpellCooldown
     int32 cooldown;
 };
 
+struct CreatureDifficulty
+{
+    uint32 Id;
+    uint32 difficulty_entry_1;
+    uint32 difficulty_entry_2;
+    uint32 difficulty_entry_3;
+};
+
 class CreatureAIScript;
 class GossipScript;
 class AuctionHouse;
