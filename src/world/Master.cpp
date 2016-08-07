@@ -706,16 +706,17 @@ bool Master::_StartDB()
     int port = 0;
 
     // Configure Main Database
-    bool result = Config.MainConfig.GetString("WorldDatabase", "Username", &username);
-    Config.MainConfig.GetString("WorldDatabase", "Password", &password);
-    result = !result ? result : Config.MainConfig.GetString("WorldDatabase", "Hostname", &hostname);
-    result = !result ? result : Config.MainConfig.GetString("WorldDatabase", "Name", &database);
-    result = !result ? result : Config.MainConfig.GetInt("WorldDatabase", "Port", &port);
+    bool wdb_result = Config.MainConfig.GetString("WorldDatabase", "Username", &username);
+    wdb_result = !wdb_result ? wdb_result : Config.MainConfig.GetString("WorldDatabase", "Password", &password);
+    wdb_result = !wdb_result ? wdb_result : Config.MainConfig.GetString("WorldDatabase", "Hostname", &hostname);
+    wdb_result = !wdb_result ? wdb_result : Config.MainConfig.GetString("WorldDatabase", "Name", &database);
+    wdb_result = !wdb_result ? wdb_result : Config.MainConfig.GetInt("WorldDatabase", "Port", &port);
+
     Database_World = Database::CreateDatabaseInterface();
 
-    if (result == false)
+    if (wdb_result == false)
     {
-        Log.Error("sql", "One or more parameters were missing from WorldDatabase directive.");
+        Log.Error("Configs", "One or more parameters were missing for WorldDatabase connection.");
         return false;
     }
 
@@ -727,16 +728,17 @@ bool Master::_StartDB()
         return false;
     }
 
-    result = Config.MainConfig.GetString("CharacterDatabase", "Username", &username);
-    Config.MainConfig.GetString("CharacterDatabase", "Password", &password);
-    result = !result ? result : Config.MainConfig.GetString("CharacterDatabase", "Hostname", &hostname);
-    result = !result ? result : Config.MainConfig.GetString("CharacterDatabase", "Name", &database);
-    result = !result ? result : Config.MainConfig.GetInt("CharacterDatabase", "Port", &port);
+    bool cdb_result = Config.MainConfig.GetString("CharacterDatabase", "Username", &username);
+    cdb_result = !cdb_result ? cdb_result : Config.MainConfig.GetString("CharacterDatabase", "Password", &password);
+    cdb_result = !cdb_result ? cdb_result : Config.MainConfig.GetString("CharacterDatabase", "Hostname", &hostname);
+    cdb_result = !cdb_result ? cdb_result : Config.MainConfig.GetString("CharacterDatabase", "Name", &database);
+    cdb_result = !cdb_result ? cdb_result : Config.MainConfig.GetInt("CharacterDatabase", "Port", &port);
+
     Database_Character = Database::CreateDatabaseInterface();
 
-    if (result == false)
+    if (cdb_result == false)
     {
-        Log.Error("sql", "One or more parameters were missing from Database directive.");
+        Log.Error("Configs", "Connection to CharacterDatabase failed. Check your database configurations!");
         return false;
     }
 
