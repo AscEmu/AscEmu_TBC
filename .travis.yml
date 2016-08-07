@@ -16,7 +16,7 @@ env:
 
 before_install:
   - if [[ $TRAVIS_OS_NAME == "linux" ]]; then
-    export CC=gcc-4.8 CXX=g++-4.8;
+    export CC=gcc-5 CXX=g++-5;
     fi
 
 install:
@@ -36,15 +36,15 @@ addons:
     - libbz2-dev
     - libmysqlclient-dev
     - libmysql++-dev
-    - gcc-4.8
-    - g++-4.8
+    - gcc-5
+    - g++-5
   coverity_scan:
     project:
-      name: "AscEmu/AscEmu_TBC"
-      description: "2.4.3 World of Warcraft game server"
+      name: AscEmu/AscEmu_TBC
+      description: MMORPG Framework for TBC
     notification_email: info@ascemu.org
-    build_command_prepend: "cmake ../ -DCMAKE_BUILD_TYPE=Release && make clean"
-    build_command:   "make -j 2" # use limited workers to avoid running out of memory
+    build_command_prepend: cmake ../ -DCMAKE_BUILD_TYPE=Release && cov-configure --comptype gcc --compiler /usr/bin/gcc-5 && make clean
+    build_command: make -j 2
     branch_pattern: coverity_scan
 
 before_script:
@@ -57,3 +57,7 @@ script:
     make -j 2;
     fi
 
+#after_script:
+#  - cat /home/travis/build/AscEmu/AscEmu/ascemu_build/cov-int/build-log.txt
+#  - echo "===================================================================================================="
+#  - cat /home/travis/build/AscEmu/AscEmu/ascemu_build/cov-int/scm_log.txt
