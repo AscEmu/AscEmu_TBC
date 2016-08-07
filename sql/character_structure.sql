@@ -1,3 +1,10 @@
+/*
+********************************************************************
+AscEmu char structure
+Last update: 11/10/2015
+*********************************************************************
+*/
+
 SET FOREIGN_KEY_CHECKS=0;
 -- ----------------------------
 -- Table structure for account_data
@@ -175,6 +182,20 @@ CREATE TABLE `characters` (
   KEY `c` (`online`),
   KEY `d` (`forced_rename_pending`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+--
+-- Structure for table character_db_version
+--
+CREATE TABLE IF NOT EXISTS `character_db_version` (
+  `LastUpdate` varchar(255) NOT NULL DEFAULT '',
+  PRIMARY KEY (`LastUpdate`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Data for table character_db_version
+--
+INSERT INTO `character_db_version` (`LastUpdate`) VALUES
+	('2015-11-10_01_character_db_version');
 
 -- ----------------------------
 -- Table structure for characters_insert_queue
