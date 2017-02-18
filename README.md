@@ -3,6 +3,8 @@
 [![Travis Status](https://travis-ci.org/AscEmu/AscEmu_TBC.svg?branch=master)](https://travis-ci.org/AscEmu/AscEmu_TBC)
 [![Coverity Snac](https://scan.coverity.com/projects/9005/badge.svg)](https://scan.coverity.com/projects/9005)
 
+## This repository is marked as obsolete and will be removed until it is merged into AscEmu/AscEmu.
+
 ## Introduction
 AscEmu is derived from ArcEmu to keep up the Antrix-Ascent-Arcemu way of Framework.
 We focus on optimizing the codebase and improving the ingame functionality.
