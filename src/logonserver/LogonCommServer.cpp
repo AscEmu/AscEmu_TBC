@@ -18,17 +18,8 @@
  *
  */
 
-#include "Opcodes/LogonRealmOpcodes.hpp"
 #include "LogonStdAfx.h"
-#pragma pack(push, 1)
-typedef struct
-{
-    uint16 opcode;
-    uint32 size;
-} logonpacket;
-#pragma pack(pop)
-
-static void swap32(uint32* p) { *p = ((*p >> 24) & 0xff) | ((*p >> 8) & 0xff00) | ((*p << 8) & 0xff0000) | (*p << 24); }
+#include "LogonCommDefines.h"
 
 LogonCommServerSocket::LogonCommServerSocket(SOCKET fd) : Socket(fd, 65536, 524288)
 {
@@ -99,7 +90,7 @@ void LogonCommServerSocket::OnRead()
             }
 
             /* reverse byte order */
-            swap32(&remaining);
+            byteSwapUInt32(&remaining);
         }
 
         // do we have a full packet?
@@ -274,11 +265,11 @@ void LogonCommServerSocket::SendPacket(WorldPacket* data)
     bool rv;
     BurstBegin();
 
-    logonpacket header;
+    LogonWorldPacket header;
     header.opcode = data->GetOpcode();
     //header.size   = ntohl((u_long)data->size());
     header.size = (uint32)data->size();
-    swap32(&header.size);
+    byteSwapUInt32(&header.size);
 
     if (use_crypto)
         sendCrypto.Process((unsigned char*)&header, (unsigned char*)&header, 6);
@@ -322,21 +313,21 @@ void LogonCommServerSocket::HandleAuthChallenge(WorldPacket & recvData)
     recvCrypto.Setup(key, 20);
     sendCrypto.Setup(key, 20);
 
-    /* packets are encrypted from now on */
+    // packets are encrypted from now on
     use_crypto = true;
 
-    /* send the response packet */
+    // send the response packet
     WorldPacket data(LRSMSG_AUTH_RESPONSE, 1);
     data << result;
     SendPacket(&data);
 
-    /* set our general var */
+    // set our general var
     authenticated = result;
 }
 
 void LogonCommServerSocket::HandleMappingReply(WorldPacket & recvData)
 {
-    /* this packet is gzipped, whee! :D */
+    // this packet is gzipped, whee! :D
     uint32 real_size;
     recvData >> real_size;
     uLongf rsize = real_size;

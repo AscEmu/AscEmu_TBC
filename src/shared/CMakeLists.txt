@@ -96,6 +96,7 @@ set(headers
    git_version.h
    LocationVector.h
    Log.h
+   LogonCommDefines.h
    MemoryLeaks.h
    MersenneTwister.h
    New-Bytebuffer.h

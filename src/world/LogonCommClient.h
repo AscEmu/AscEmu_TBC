@@ -24,10 +24,10 @@
 #include "CommonTypes.hpp"
 #include "ByteBuffer.h"
 #include "Network/Socket.h"
-#include "../logonserver/Opcodes/LogonRealmOpcodes.hpp"
+#include "LogonCommDefines.h"
 #include "../shared/Log.h"
 #include <RC4Engine.h>
-#include "../../dep/zlib/zlib.h" // Wer das mit eingebunden hat hat da wohl ganz kräftig etwas vergessen ! Vorher : #include"zlib.h"
+#include "zlib.h"
 
 extern SERVER_DECL SessionLogWriter* GMCommand_Log;
 #define sGMLog (*GMCommand_Log)

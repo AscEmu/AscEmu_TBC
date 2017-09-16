@@ -25,7 +25,6 @@ set(headers
 	Main.h
    LogonServer.hpp
 	PeriodicFunctionCall_Thread.h
-   Opcodes/LogonRealmOpcodes.hpp
    )
 
 include_directories(
