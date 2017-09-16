@@ -455,7 +455,7 @@ void LogonCommServerSocket::HandleDatabaseModify(WorldPacket & recvData)
             pAccount->Banned = duration;
 
             // update it in the sql (duh)
-            sLogonSQL->Execute("UPDATE accounts SET banned = %u, banreason = '%s' WHERE login = \"%s\"", duration, sLogonSQL->EscapeString(banreason).c_str(), sLogonSQL->EscapeString(account).c_str());
+            sLogonSQL->Execute("UPDATE accounts SET banned = %u, banreason = '%s' WHERE acc_name = \"%s\"", duration, sLogonSQL->EscapeString(banreason).c_str(), sLogonSQL->EscapeString(account).c_str());
 
         }
         break;
@@ -476,7 +476,7 @@ void LogonCommServerSocket::HandleDatabaseModify(WorldPacket & recvData)
             pAccount->SetGMFlags(account.c_str());
 
             // update it in the sql (duh)
-            sLogonSQL->Execute("UPDATE accounts SET gm = \"%s\" WHERE login = \"%s\"", sLogonSQL->EscapeString(gm).c_str(), sLogonSQL->EscapeString(account).c_str());
+            sLogonSQL->Execute("UPDATE accounts SET gm = \"%s\" WHERE acc_name = \"%s\"", sLogonSQL->EscapeString(gm).c_str(), sLogonSQL->EscapeString(account).c_str());
 
         }
         break;
@@ -497,7 +497,7 @@ void LogonCommServerSocket::HandleDatabaseModify(WorldPacket & recvData)
             pAccount->Muted = duration;
 
             // update it in the sql (duh)
-            sLogonSQL->Execute("UPDATE accounts SET muted = %u WHERE login = \"%s\"", duration, sLogonSQL->EscapeString(account).c_str());
+            sLogonSQL->Execute("UPDATE accounts SET muted = %u WHERE acc_name = \"%s\"", duration, sLogonSQL->EscapeString(account).c_str());
         }
         break;
 
@@ -543,7 +543,7 @@ void LogonCommServerSocket::HandleDatabaseModify(WorldPacket & recvData)
             pass.assign(account_name);
             pass.push_back(':');
             pass.append(old_password);
-            auto check_oldpass_query = sLogonSQL->Query("SELECT login, encrypted_password FROM accounts WHERE encrypted_password=SHA(UPPER('%s')) AND login='%s'", pass.c_str(), account_name.c_str());
+            auto check_oldpass_query = sLogonSQL->Query("SELECT acc_name, encrypted_password FROM accounts WHERE encrypted_password = SHA(UPPER('%s')) AND acc_name = '%s'", pass.c_str(), account_name.c_str());
 
             if (!check_oldpass_query)
             {
@@ -562,7 +562,7 @@ void LogonCommServerSocket::HandleDatabaseModify(WorldPacket & recvData)
                 new_pass.push_back(':');
                 new_pass.append(new_password);
 
-                auto new_pass_query = sLogonSQL->Query("UPDATE accounts SET encrypted_password=SHA(UPPER('%s')) WHERE login='%s'", new_pass.c_str(), account_name.c_str());
+                auto new_pass_query = sLogonSQL->Query("UPDATE accounts SET encrypted_password = SHA(UPPER('%s')) WHERE acc_name = '%s'", new_pass.c_str(), account_name.c_str());
 
                 /*The query is already done, don't know why we are here. \todo check sLogonSQL query handling.
                 if (!new_pass_query)
@@ -629,8 +629,8 @@ void LogonCommServerSocket::HandleDatabaseModify(WorldPacket & recvData)
                 pass.push_back(':');
                 pass.append(password);
 
-                auto create_account = sLogonSQL->Query("INSERT INTO `accounts`(`login`,`encrypted_password`,`gm`,`banned`,`email`,`flags`,`banreason`) VALUES ('%s', SHA(UPPER('%s')),'0','0','','24','')", name_save.c_str(), pass.c_str());
-
+                auto create_account = sLogonSQL->Query("INSERT INTO `accounts`(`acc_name`,`encrypted_password`,`banned`,`email`,`flags`,`banreason`) VALUES ('%s', SHA(UPPER('%s')),'0','0','','8','')", name_save.c_str(), pass.c_str());
+                
                 result = Result_Account_Finished;
 
                 data << uint32(method);     // method_id
