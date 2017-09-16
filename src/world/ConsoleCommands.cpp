@@ -283,6 +283,20 @@ bool handleCreateAccountCommand(BaseConsole* baseConsole, int argumentCount, con
     return true;
 }
 
+bool handleAccountPermission(BaseConsole* baseConsole, int argumentCount, const char * argv[])
+{
+    if (argumentCount < 2)
+        return false;
+
+    std::string none("none");
+
+    sLogonCommHandler.Account_CheckExist(argv[1], none.c_str(), argv[2]);
+
+    baseConsole->Write("Permission '%s' has been set for Account: '%s'. The change will be effective immediately.\r\n", argv[2], argv[1]);
+
+    return true;
+}
+
 bool HandleUnbanAccountCommand(BaseConsole * pConsole, int argc, const char * argv[])
 {
     if (argc < 2)

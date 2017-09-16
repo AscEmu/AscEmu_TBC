@@ -358,6 +358,7 @@ void HandleConsoleInput(BaseConsole * pConsole, const char * szInput)
         { &HandleAnnounceCommand, "announce", "<announce string>", "Shows the message in all client chat boxes." },
         { &HandleBanAccountCommand, "ban", "<account> <timeperiod> [reason]", "Bans account x for time y." },
         { &handleCreateAccountCommand, "createaccount", "<accountname> <password>", "Creates an account X with password y." },
+        { &handleAccountPermission, "setaccpermission", "<account> <permission>", "Adds permission y for account name x" },
         { &HandleBanAccountCommand, "banaccount", "<account> <timeperiod> [reason]", "Bans account x for time y." },
         { &HandleCancelCommand, "cancel", "none", "Cancels a pending shutdown." },
         { &HandleCreateAccountCommand, "createaccount", "<name> <pass> <email> <flags>", "Creates an account." },

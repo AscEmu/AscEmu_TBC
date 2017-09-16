@@ -29,7 +29,7 @@ void AccountMgr::ReloadAccounts(bool silent)
     if(!silent) sLog.outString("[AccountMgr] Reloading Accounts...");
 
     // Load *all* accounts.
-    QueryResult* result = sLogonSQL->Query("SELECT id, acc_name, encrypted_password, gm, flags, banned, forceLanguage, muted FROM accounts");
+    QueryResult* result = sLogonSQL->Query("SELECT id, acc_name, encrypted_password, flags, banned, forceLanguage, muted FROM accounts");
     Field* field;
     std::string AccountName;
     std::set<std::string> account_list;
@@ -115,7 +115,7 @@ void AccountMgr::AddAccount(Field* field)
     if(strcmp(field[5].GetString(), "enUS"))
     {
         // non-standard language forced
-        memcpy(acct->Locale, field[6].GetString(), 4);
+        memcpy(acct->Locale, field[5].GetString(), 4);
         acct->forcedLocale = true;
     }
     else
@@ -193,13 +193,13 @@ void AccountMgr::UpdateAccount(Account* acct, Field* field)
     if(strcmp(field[5].GetString(), "enUS"))
     {
         // non-standard language forced
-        memcpy(acct->Locale, field[7].GetString(), 4);
+        memcpy(acct->Locale, field[5].GetString(), 4);
         acct->forcedLocale = true;
     }
     else
         acct->forcedLocale = false;
 
-    acct->Muted = field[7].GetUInt32();
+    acct->Muted = field[6].GetUInt32();
     if((uint32)UNIXTIME > acct->Muted && acct->Muted != 0 && acct->Muted != 1)  //1 = perm ban?
     {
         //Accounts should be unbanned once the date is past their set expiry date.
