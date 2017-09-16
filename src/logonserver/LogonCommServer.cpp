@@ -460,23 +460,23 @@ void LogonCommServerSocket::HandleDatabaseModify(WorldPacket & recvData)
         }
         break;
 
-        case Method_Account_Set_GM:
+        case Method_Account_Set_GM: //unused!
         {
-            std::string account;
-            std::string gm;
-            recvData >> account >> gm;
+            //std::string account;
+            //std::string gm;
+            //recvData >> account >> gm;
 
             // remember we expect this in uppercase
-            arcemu_TOUPPER(account);
+            //arcemu_TOUPPER(account);
 
-            Account* pAccount = sAccountMgr.GetAccount(account);
-            if (pAccount == NULL)
-                return;
+            //Account* pAccount = sAccountMgr.GetAccount(account);
+            //if (pAccount == NULL)
+            //    return;
 
-            pAccount->SetGMFlags(account.c_str());
+            //pAccount->SetGMFlags(account.c_str());
 
             // update it in the sql (duh)
-            sLogonSQL->Execute("UPDATE accounts SET gm = \"%s\" WHERE acc_name = \"%s\"", sLogonSQL->EscapeString(gm).c_str(), sLogonSQL->EscapeString(account).c_str());
+            //sLogonSQL->Execute("UPDATE accounts SET gm = \"%s\" WHERE acc_name = \"%s\"", sLogonSQL->EscapeString(gm).c_str(), sLogonSQL->EscapeString(account).c_str());
 
         }
         break;
@@ -629,8 +629,8 @@ void LogonCommServerSocket::HandleDatabaseModify(WorldPacket & recvData)
                 pass.push_back(':');
                 pass.append(password);
 
-                auto create_account = sLogonSQL->Query("INSERT INTO `accounts`(`acc_name`,`encrypted_password`,`banned`,`email`,`flags`,`banreason`) VALUES ('%s', SHA(UPPER('%s')),'0','0','','8','')", name_save.c_str(), pass.c_str());
-                
+                auto create_account = sLogonSQL->Query("INSERT INTO `accounts`(`acc_name`,`encrypted_password`,`banned`,`email`,`flags`,`banreason`) VALUES ('%s', SHA(UPPER('%s')),'0','','8','')", name_save.c_str(), pass.c_str());
+
                 result = Result_Account_Finished;
 
                 data << uint32(method);     // method_id

@@ -23,6 +23,7 @@
 
 bool HandleAnnounceCommand(BaseConsole * pConsole, int argc, const char * argv[]);
 bool HandleBanAccountCommand(BaseConsole * pConsole, int argc, const char * argv[]);
+bool handleCreateAccountCommand(BaseConsole* baseConsole, int argumentCount, const char * argv[]);
 bool HandleCancelCommand(BaseConsole * pConsole, int argc, const char * argv[]);
 bool HandleCreateAccountCommand(BaseConsole * pConsole, int argc, const char * argv[]);
 bool HandleInfoCommand(BaseConsole * pConsole, int argc, const char * argv[]);

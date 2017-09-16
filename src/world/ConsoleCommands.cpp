@@ -269,6 +269,20 @@ bool HandleBanAccountCommand(BaseConsole * pConsole, int argc, const char * argv
     return true;
 }
 
+bool handleCreateAccountCommand(BaseConsole* baseConsole, int argumentCount, const char * argv[])
+{
+    if (argumentCount < 2)
+        return false;
+
+    std::string none("none");
+
+    sLogonCommHandler.AccountCreate(argv[1], argv[2], none.c_str());
+
+    baseConsole->Write("Account '%s' has been created with password: '%s'. The change will be effective immediately.\r\n", argv[1], argv[2]);
+
+    return true;
+}
+
 bool HandleUnbanAccountCommand(BaseConsole * pConsole, int argc, const char * argv[])
 {
     if (argc < 2)
