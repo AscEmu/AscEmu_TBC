@@ -111,7 +111,7 @@ set(headers
    StackWalker.h
    Storage.h
    SysInfo.hpp
-   Util.h
+   Util.hpp
    WorldPacket.h
    WoWGuid.h
 	)

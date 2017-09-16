@@ -23,6 +23,7 @@
 //
 
 #include "StdAfx.h"
+
 #define MAP_MGR_UPDATE_PERIOD 100
 #define MAPMGR_INACTIVE_MOVE_TIME 30
 
@@ -56,8 +57,8 @@ MapMgr::MapMgr(Map *map, uint32 mapId, uint32 instanceid) : CellHandler<MapCell>
     memset(m_GOStorage, 0, sizeof(GameObject*)*m_GOArraySize);
     m_GOHighGuid = m_CreatureHighGuid = 0;
     m_DynamicObjectHighGuid = 0;
-    lastUnitUpdate = getMSTime();
-    lastGameobjectUpdate = getMSTime();
+    lastUnitUpdate = Util::getMSTime();
+    lastGameobjectUpdate = Util::getMSTime();
     m_battleground = 0;
 
     m_holder = &eventHolder;
@@ -1539,7 +1540,7 @@ bool MapMgr::Do()
     ThreadState = THREADSTATE_BUSY;
     SetThreadName("Map mgr - M%u|I%u", this->_mapId, this->m_instanceID);
     ObjectSet::iterator i;
-    uint32 last_exec = getMSTime();
+    uint32 last_exec = Util::getMSTime();
 
     /* create static objects */
     for (GOSpawnList::iterator itr = _map->staticSpawns.GOSpawns.begin(); itr != _map->staticSpawns.GOSpawns.end(); ++itr)
@@ -1572,7 +1573,7 @@ bool MapMgr::Do()
 #endif
     while ((ThreadState != THREADSTATE_TERMINATE) && !_shutdown)
     {
-        exec_start = getMSTime();
+        exec_start = Util::getMSTime();
         //first push to world new objects
         m_objectinsertlock.Acquire();//<<<<<<<<<<<<<<<<
         if (m_objectinsertpool.size())
@@ -1590,7 +1591,7 @@ bool MapMgr::Do()
         //Now update sessions of this map + objects
         _PerformObjectDuties();
 
-        last_exec = getMSTime();
+        last_exec = Util::getMSTime();
         exec_time = last_exec - exec_start;
         if (exec_time < MAP_MGR_UPDATE_PERIOD)
         {
@@ -1733,7 +1734,7 @@ Object* MapMgr::_GetObject(const uint64 & guid)
 void MapMgr::_PerformObjectDuties()
 {
     ++mLoopCounter;
-    uint32 mstime = getMSTime();
+    uint32 mstime = Util::getMSTime();
     uint32 difftime = mstime - lastUnitUpdate;
     if (difftime > 500)
         difftime = 500;

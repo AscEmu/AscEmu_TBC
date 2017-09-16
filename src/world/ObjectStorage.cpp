@@ -97,7 +97,7 @@ void ObjectMgr::LoadExtraCreatureProtoStuff()
             if (itr->Get()->aura_string)
             {
                 std::string auras = std::string(itr->Get()->aura_string);
-                std::vector<std::string> aurs = StrSplit(auras, " ");
+                std::vector<std::string> aurs = Util::SplitStringBySeperator(auras, " ");
                 for (std::vector<std::string>::iterator it = aurs.begin(); it != aurs.end(); ++it)
                 {
                     uint32 id = atol((*it).c_str());
@@ -202,7 +202,7 @@ void ObjectMgr::LoadExtraCreatureProtoStuff()
                 sp->cooldown = fields[8].GetInt32();
                 sp->floatMisc1 = fields[9].GetFloat();
                 sp->autocast_type = (uint32)-1;
-                sp->cooldowntime = getMSTime();
+                sp->cooldowntime = Util::getMSTime();
                 sp->procCounter = 0;
                 sp->Misc2 = fields[10].GetUInt32();
                 if (sp->agent == AGENT_SPELL)
@@ -643,7 +643,7 @@ void Storage_LoadAdditionalTables()
     if (strData.empty())
         return;
 
-    std::vector<std::string> strs = StrSplit(strData, ",");
+    std::vector<std::string> strs = Util::SplitStringBySeperator(strData, ",");
     if (strs.empty())
         return;
 

@@ -39,7 +39,7 @@ void LocalizationMgr::Shutdown()
 
     maxid++;
     Log.Notice("LocalizationMgr", "Beginning pointer cleanup...");
-    uint32 t = getMSTime();
+    uint32 t = Util::getMSTime();
 
     for (i = 0; i < maxid; ++i)
     {
@@ -118,7 +118,7 @@ void LocalizationMgr::Shutdown()
     delete[] m_WorldBroadCast;
     delete[] m_WorldMapInfo;
     m_languages.clear();
-    Log.Notice("LocalizationMgr", "Pointer cleanup completed in %.4f seconds.", float(float(getMSTime() - t) / 1000.0f));
+    Log.Notice("LocalizationMgr", "Pointer cleanup completed in %.4f seconds.", float(float(Util::getMSTime() - t) / 1000.0f));
 #undef SAFE_FREE_PTR
 }
 
@@ -181,7 +181,7 @@ void LocalizationMgr::Reload(bool first)
     /* Read Language Bindings From Config                                   */
     /************************************************************************/
     std::string ls = Config.MainConfig.GetStringDefault("Localization", "LocaleBindings", "");
-    std::vector<std::string> tbindings = StrSplit(ls, " ");
+    std::vector<std::string> tbindings = Util::SplitStringBySeperator(ls, " ");
     for (std::vector<std::string>::iterator ztr = tbindings.begin(); ztr != tbindings.end(); ++ztr)
     {
         char lb[200];

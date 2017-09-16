@@ -328,7 +328,7 @@ bool World::SetInitialWorldSettings()
 
     // Start
 
-    uint32 start_time = getMSTime();
+    uint32 start_time = Util::getMSTime();
 
     Log.Notice("World", "Loading DBC files...");
     if (!LoadDBCs())
@@ -423,7 +423,7 @@ bool World::SetInitialWorldSettings()
     Log.Notice("WordFilter", "Done.");
 
     sLog.outString("");
-    Log.Notice("World", "Database loaded in %ums.", getMSTime() - start_time);
+    Log.Notice("World", "Database loaded in %ums.", Util::getMSTime() - start_time);
     sLog.outString("");
 
     if (Collision)
@@ -918,9 +918,9 @@ void World::SaveAllPlayers()
     {
         if (itr->second->GetSession())
         {
-            mt = getMSTime();
+            mt = Util::getMSTime();
             itr->second->SaveToDB(false);
-            sLog.outString("Saved player `%s` (level %u) in %ums.", itr->second->GetName(), itr->second->GetUInt32Value(UNIT_FIELD_LEVEL), getMSTime() - mt);
+            sLog.outString("Saved player `%s` (level %u) in %ums.", itr->second->GetName(), itr->second->GetUInt32Value(UNIT_FIELD_LEVEL), Util::getMSTime() - mt);
             ++count;
         }
     }

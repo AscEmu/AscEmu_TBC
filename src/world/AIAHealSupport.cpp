@@ -238,7 +238,7 @@ bool AiAgentHealSupport::CheckCanCast(SpellEntry *sp, Unit *target)
     if( m_Unit->GetUInt32Value(UNIT_FIELD_POWER1) < sp->manaCost*3 )
         return false; //we do not have enough juice
 
-    if( spell_cooldown_map[ sp->Id ] >= getMSTime() )
+    if( spell_cooldown_map[ sp->Id ] >= Util::getMSTime() )
         return false;
 
     return true;
@@ -286,7 +286,7 @@ void AiAgentHealSupport::Update(uint32 p_time)
     if( CombatDifficultyLevel > 1 )
         CombatDifficultyLevel = 1;
 
-    uint32 Time_Now = getMSTime();
+    uint32 Time_Now = Util::getMSTime();
 
     std::list<healagentspell*>::iterator itr;
     SpellCastTargets targets( m_PetOwner->GetGUID() );
@@ -457,7 +457,7 @@ void AiAgentHealSupport::SetSpellDuration(healagentspell *sp)
     if ( !sp )
         return ;
 
-    spell_cooldown_map[ sp->sp->Id ] = getMSTime() + sp->cooldown;
+    spell_cooldown_map[ sp->sp->Id ] = Util::getMSTime() + sp->cooldown;
 }
 
 bool AiAgentHealSupport::Protect_self()

@@ -212,8 +212,8 @@ bool Rehash()
     std::string ips = Config.MainConfig.GetStringDefault("LogonServer", "AllowedIPs", "");
     std::string ipsmod = Config.MainConfig.GetStringDefault("LogonServer", "AllowedModIPs", "");
 
-    std::vector<std::string> vips = StrSplit(ips, " ");
-    std::vector<std::string> vipsmod = StrSplit(ips, " ");
+    std::vector<std::string> vips = Util::SplitStringBySeperator(ips, " ");
+    std::vector<std::string> vipsmod = Util::SplitStringBySeperator(ips, " ");
 
     m_allowedIpLock.Acquire();
     m_allowedIps.clear();

@@ -1,38 +1,40 @@
 /*
- * AscEmu Framework based on ArcEmu MMORPG Server
- * Copyright (C) 2014-2015 AscEmu Team <http://www.ascemu.org/>
- * Copyright (C) 2008 <http://www.ArcEmu.org/>
- * Copyright (C) 2005-2007 Ascent Team
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program.If not, see <http://www.gnu.org/licenses/>.
- */
+* AscEmu Framework based on ArcEmu MMORPG Server
+* Copyright (c) 2014-2017 AscEmu Team <http://www.ascemu.org/>
+* Copyright (C) 2008-2012 ArcEmu Team <http://www.ArcEmu.org/>
+* Copyright (C) 2005-2007 Ascent Team
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU Affero General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU Affero General Public License for more details.
+*
+* You should have received a copy of the GNU Affero General Public License
+* along with this program. If not, see <http://www.gnu.org/licenses/>.
+*
+*/
 
 #include "MersenneTwister.h"
-#include "Util.h"
+#include "Util.hpp"
+#include <stdexcept>
 
 #define NUMBER_OF_GENERATORS 5
 Mutex* m_locks[NUMBER_OF_GENERATORS];
 CRandomMersenne* m_generators[NUMBER_OF_GENERATORS];
-uint32 counter = 0;
+Arcemu::Threading::AtomicCounter counter;
 
 uint32 generate_seed()
 {
-    uint32 mstime = getMSTime();
+    uint32 mstime = Util::getMSTime();
     uint32 stime = (uint32)time(NULL);
     uint32 rnd[2];
-    rnd[0] = rand()*rand()*rand();
-    rnd[1] = rand()*rand()*rand();
+    rnd[0] = rand() * rand() * rand();
+    rnd[1] = rand() * rand() * rand();
 
     uint32 val = mstime ^ rnd[0];
     val += stime ^ rnd[1];
@@ -41,7 +43,7 @@ uint32 generate_seed()
 
 void InitRandomNumberGenerators()
 {
-    srand(getMSTime());
+    srand(Util::getMSTime());
     for (uint32 i = 0; i < NUMBER_OF_GENERATORS; ++i)
     {
         m_generators[i] = new CRandomMersenne(generate_seed());
@@ -51,7 +53,7 @@ void InitRandomNumberGenerators()
 
 void CleanupRandomNumberGenerators()
 {
-    srand(getMSTime());
+    srand(Util::getMSTime());
     for (uint32 i = 0; i < NUMBER_OF_GENERATORS; ++i)
     {
         delete m_generators[i];
@@ -63,11 +65,9 @@ double RandomDouble()
 {
     double ret;
     uint32 c;
-    counter = 0; // added  cebernic: 10/06/2008 why not init ?
-    // might be overflow couple days?
     for (;;)
     {
-        c = counter%NUMBER_OF_GENERATORS;
+        c = counter.GetVal() % NUMBER_OF_GENERATORS;
         if (m_locks[c]->AttemptAcquire())
         {
             ret = m_generators[c]->Random();
@@ -83,10 +83,9 @@ uint32 RandomUInt(uint32 n)
 {
     uint32 ret;
     uint32 c;
-    counter = 0;
     for (;;)
     {
-        c = counter % NUMBER_OF_GENERATORS;
+        c = counter.GetVal() % NUMBER_OF_GENERATORS;
         if (m_locks[c]->AttemptAcquire())
         {
             ret = m_generators[c]->IRandom(0, n);
@@ -104,7 +103,7 @@ uint32 RandomUInt(uint32 n1, uint32 n2)
     uint32 c;
     for (;;)
     {
-        c = counter % NUMBER_OF_GENERATORS;
+        c = counter.GetVal() % NUMBER_OF_GENERATORS;
         if (m_locks[c]->AttemptAcquire())
         {
             ret = m_generators[c]->IRandom(n1, n2);
@@ -135,10 +134,9 @@ uint32 RandomUInt()
 {
     uint32 ret;
     uint32 c;
-    counter = 0;
     for (;;)
     {
-        c = counter%NUMBER_OF_GENERATORS;
+        c = counter.GetVal() % NUMBER_OF_GENERATORS;
         if (m_locks[c]->AttemptAcquire())
         {
             ret = m_generators[c]->IRandom(0, RAND_MAX);
@@ -151,6 +149,7 @@ uint32 RandomUInt()
 }
 
 //////////////////////////////////////////////////////////////////////////
+
 
 void CRandomMersenne::Init0(uint32 seed)
 {
@@ -190,12 +189,14 @@ void CRandomMersenne::RandomInitByArray(uint32 seeds[], int length)
     if (length <= 0) return;
 
     // Randomize mt[] using whole seeds[] array
-    i = 1;  j = 0;
+    i = 1;
+    j = 0;
     k = (MERS_N > length ? MERS_N : length);
     for (; k; k--)
     {
         mt[i] = (mt[i] ^ ((mt[i - 1] ^ (mt[i - 1] >> 30)) * 1664525UL)) + seeds[j] + j;
-        i++; j++;
+        i++;
+        j++;
         if (i >= MERS_N) { mt[0] = mt[MERS_N - 1]; i = 1; }
         if (j >= length) j = 0;
     }
@@ -206,7 +207,7 @@ void CRandomMersenne::RandomInitByArray(uint32 seeds[], int length)
     }
     mt[0] = 0x80000000UL;  // MSB is 1; assuring non-zero initial array
 
-    // Randomize some more
+                           // Randomize some more
     mti = 0;
     for (int i = 0; i <= MERS_N; i++) BRandom();
 }
@@ -261,32 +262,28 @@ double CRandomMersenne::Random()
     // Output random float number in the interval 0 <= x < 1
     union { double f; uint32 i[2]; } convert;
     uint32 r = BRandom();               // Get 32 random bits
-    // The fastest way to convert random bits to floating point is as follows:
-    // Set the binary exponent of a floating point number to 1+bias and set
-    // the mantissa to random bits. This will give a random number in the 
-    // interval [1,2). Then subtract 1.0 to get a random number in the interval
-    // [0,1). This procedure requires that we know how floating point numbers
-    // are stored. The storing method is tested in function RandomInit and saved 
-    // in the variable Architecture.
+                                        // The fastest way to convert random bits to floating point is as follows:
+                                        // Set the binary exponent of a floating point number to 1+bias and set
+                                        // the mantissa to random bits. This will give a random number in the
+                                        // interval [1,2). Then subtract 1.0 to get a random number in the interval
+                                        // [0,1). This procedure requires that we know how floating point numbers
+                                        // are stored. The storing method is tested in function RandomInit and saved
+                                        // in the variable Architecture.
 
-    // This shortcut allows the compiler to optimize away the following switch
-    // statement for the most common architectures:
+                                        // This shortcut allows the compiler to optimize away the following switch
+                                        // statement for the most common architectures:
 #if defined(_M_IX86) || defined(_M_X64) || defined(__LITTLE_ENDIAN__)
     Architecture = LITTLE_ENDIAN1;
 #elif defined(__BIG_ENDIAN__)
     Architecture = BIG_ENDIAN1;
 #endif
 
-#ifdef USING_BIG_ENDIAN
-    convert.i[1] =  r << 20;
-    convert.i[0] = (r >> 12) | 0x3FF00000;
-    return convert.f - 1.0;
-#else
+
     convert.i[0] = r << 20;
     convert.i[1] = (r >> 12) | 0x3FF00000;
     return convert.f - 1.0;
-#endif
-    // This somewhat slower method works for all architectures, including 
+
+    // This somewhat slower method works for all architectures, including
     // non-IEEE floating point representation:
     //return (double)r * (1./((double)(uint32)(-1L)+1.));
 }
@@ -301,9 +298,11 @@ int CRandomMersenne::IRandom(int min, int max)
     if (max == min)
         return max;
 
+    // Zyres: CID 104914 Uncought exception
     // max < min, so throw an exception instead of assuming intention
-    if (max < min)
-        throw std::domain_error("max < min when calling CRandomMersenne::IRandom");
+    //if (max < min)
+    //throw std::domain_error("max < min when calling CRandomMersenne::IRandom");
+    ASSERT(max > min);
 
     // Multiply interval with random and truncate
     int r = int((max - min + 1) * Random()) + min;
@@ -320,7 +319,8 @@ int CRandomMersenne::IRandomX(int min, int max)
     // of possible bit values is divisible by the interval length
     if (max <= min)
     {
-        if (max == min) return min; else return 0x80000000;
+        if (max == min) return min;
+        else return 0x80000000;
     }
 
     // 64 bit integers available. Use multiply and shift method
@@ -338,13 +338,14 @@ int CRandomMersenne::IRandomX(int min, int max)
         RLimit = uint32(((uint64)1 << 32) / interval) * interval - 1;
         LastInterval = interval;
     }
-    do
-    { // Rejection loop
+    do   // Rejection loop
+    {
         longran = (uint64)BRandom() * interval;
         iran = (uint32)(longran >> 32);
         remainder = (uint32)longran;
-    }
-    while (remainder > RLimit);
+    } while (remainder > RLimit);
     // Convert back to signed and return result
     return (int32)iran + min;
 }
+
+

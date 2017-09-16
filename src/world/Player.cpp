@@ -93,7 +93,7 @@ Player::Player(uint32 guid) : m_mailBox(guid), ascending(false), waterHeight(0.0
 
     m_talentresettimes = 0;
 
-    m_nextSave = getMSTime() + sWorld.getIntRate(INTRATE_SAVE);
+    m_nextSave = Util::getMSTime() + sWorld.getIntRate(INTRATE_SAVE);
 
     m_currentSpell = NULL;
     m_resurrectHealth = m_resurrectMana = 0;
@@ -200,7 +200,7 @@ Player::Player(uint32 guid) : m_mailBox(guid), ascending(false), waterHeight(0.0
     m_UnderwaterState = 0;
     m_UnderwaterTime = 60000;
     m_UnderwaterMaxTime = 60000;
-    m_UnderwaterLastDmg = getMSTime();
+    m_UnderwaterLastDmg = Util::getMSTime();
     m_SwimmingTime = 0;
     m_BreathDamageTimer = 0;
 
@@ -310,7 +310,7 @@ Player::Player(uint32 guid) : m_mailBox(guid), ascending(false), waterHeight(0.0
     myCorpse = 0;
     bCorpseCreateable = true;
     blinked = false;
-    m_explorationTimer = getMSTime();
+    m_explorationTimer = Util::getMSTime();
     linkTarget = 0;
     AuraStackCheat = false;
     TriggerpassCheat = false;
@@ -840,7 +840,7 @@ void Player::Update(uint32 p_time)
         return;
 
     Unit::Update(p_time);
-    uint32 mstime = getMSTime();
+    uint32 mstime = Util::getMSTime();
 
     if (m_attacking)
     {
@@ -920,7 +920,7 @@ void Player::Update(uint32 p_time)
     // Dword: swimming bug fix
     if (ascending == true && m_session->movement_info.flags & MOVEFLAG_SWIMMING)
     { // we are ascending in water
-        uint32 tDiff = getMSTime() - ascendStartTime + m_session->GetLatency();
+        uint32 tDiff = Util::getMSTime() - ascendStartTime + m_session->GetLatency();
 
         float curSpeed = m_flySpeed;
         if (activeMoveFlags & ACTIVE_MOVEMENT_MOVE_FORWARD
@@ -1642,7 +1642,7 @@ void Player::smsg_InitialSpells()
 
     uint16 spellCount = (uint16)mSpells.size();
     size_t itemCount = m_cooldownMap[0].size() + m_cooldownMap[1].size();
-    uint32 mstime = getMSTime();
+    uint32 mstime = Util::getMSTime();
     size_t pos;
 
     WorldPacket data(SMSG_INITIAL_SPELLS, 5 + (spellCount * 4) + (itemCount * 4));
@@ -2439,7 +2439,7 @@ void Player::SaveToDB(bool bNewCharacter /* =false */)
         _SavePet(buf);
         _SavePetSpells(buf);
     }
-    m_nextSave = getMSTime() + sWorld.getIntRate(INTRATE_SAVE);
+    m_nextSave = Util::getMSTime() + sWorld.getIntRate(INTRATE_SAVE);
 
     if (buf)
         CharacterDatabase.AddQueryBuffer(buf);
@@ -4098,7 +4098,7 @@ void Player::SetPlayerSpeed(uint8 SpeedType, float value)
     data << GetNewGUID();
     data << uint32(0);
     data << uint8(0);
-    data << uint32(getMSTime());
+    data << uint32(Util::getMSTime());
     data << GetPosition();
     data << m_position.o;
     data << uint32(0);
@@ -4118,7 +4118,7 @@ void Player::SetPlayerSpeed(uint8 SpeedType, float value)
         data << GetNewGUID();
         data << uint32(0);
         data << uint8(0);
-        data << uint32(getMSTime());
+        data << uint32(Util::getMSTime());
         data << GetPosition();
         data << m_position.o;
         data << uint32(0);
@@ -5544,7 +5544,7 @@ void Player::AddInRangeObject(Object* pObj)
     //Send taxi move if we're on a taxi
     if (m_CurrentTaxiPath && (pObj->GetTypeId() == TYPEID_PLAYER))
     {
-        uint32 ntime = getMSTime();
+        uint32 ntime = Util::getMSTime();
 
         if (ntime > m_taxi_ride_time)
             m_CurrentTaxiPath->SendMoveForTime(this, static_cast<Player*>(pObj), ntime - m_taxi_ride_time);
@@ -5672,7 +5672,7 @@ void Player::EventReduceDrunk(bool full)
 
 void Player::LoadTaxiMask(const char* data)
 {
-    std::vector<std::string> tokens = StrSplit(data, " ");
+    std::vector<std::string> tokens = Util::SplitStringBySeperator(data, " ");
 
     int index;
     std::vector<std::string>::iterator iter;
@@ -6741,7 +6741,7 @@ void Player::EventTaxiInterpolate()
     if (!m_CurrentTaxiPath || m_mapMgr == NULL) return;
 
     float x, y, z = 0.0f;
-    uint32 ntime = getMSTime();
+    uint32 ntime = Util::getMSTime();
 
     if (ntime > m_taxi_ride_time)
         m_CurrentTaxiPath->SetPosForTime(x, y, z, ntime - m_taxi_ride_time, &lastNode, m_mapId);
@@ -6778,7 +6778,7 @@ void Player::TaxiStart(TaxiPath *path, uint32 modelid, uint32 start_node)
     SetTaxiPath(path);
     SetTaxiPos();
     SetTaxiState(true);
-    m_taxi_ride_time = getMSTime();
+    m_taxi_ride_time = Util::getMSTime();
 
     //uint32 traveltime = uint32(path->getLength() * TAXI_TRAVEL_SPEED); // 36.7407
     float traveldist = 0;
@@ -9000,7 +9000,7 @@ void Player::OnWorldPortAck()
                 /*welcome_msg += "This instance is scheduled to reset on ";
                 welcome_msg += asctime(localtime(&m_mapMgr->pInstance->m_expiration));*/
                 welcome_msg += std::string(GetSession()->LocalizedWorldSrv(66)) + " ";
-                welcome_msg += ConvertTimeStampToDataTime((uint32)m_mapMgr->pInstance->m_expiration);
+                welcome_msg += Util::GetDateTimeStringFromTimeStamp((uint32)m_mapMgr->pInstance->m_expiration);
             }
             sChatHandler.SystemMessage(m_session, welcome_msg.c_str());
         }
@@ -10851,13 +10851,13 @@ void Player::_Cooldown_Add(uint32 Type, uint32 Misc, uint32 Time, uint32 SpellId
     }
 
 #ifdef _DEBUG
-    Log.Debug("Cooldown", "added cooldown for type %u misc %u time %u item %u spell %u", Type, Misc, Time - getMSTime(), ItemId, SpellId);
+    Log.Debug("Cooldown", "added cooldown for type %u misc %u time %u item %u spell %u", Type, Misc, Time - Util::getMSTime(), ItemId, SpellId);
 #endif
 }
 
 void Player::Cooldown_Add(SpellEntry * pSpell, Item * pItemCaster)
 {
-    uint32 mstime = getMSTime();
+    uint32 mstime = Util::getMSTime();
     int32 cool_time;
 
     if (pSpell->CategoryRecoveryTime > 0 && pSpell->Category)
@@ -10890,7 +10890,7 @@ void Player::Cooldown_AddStart(SpellEntry * pSpell)
     if (pSpell->StartRecoveryTime == 0)
         return;
 
-    uint32 mstime = getMSTime();
+    uint32 mstime = Util::getMSTime();
     int32 atime = float2int32(float(pSpell->StartRecoveryTime) / SpellHasteRatingBonus);
 
 
@@ -10914,7 +10914,7 @@ void Player::Cooldown_AddStart(SpellEntry * pSpell)
 bool Player::Cooldown_CanCast(SpellEntry * pSpell)
 {
     PlayerCooldownMap::iterator itr;
-    uint32 mstime = getMSTime();
+    uint32 mstime = Util::getMSTime();
 
     if (pSpell->Category)
     {
@@ -10954,7 +10954,7 @@ void Player::Cooldown_AddItem(ItemPrototype * pProto, uint32 x)
         return;
 
     ItemSpell * isp = &pProto->Spells[x];
-    uint32 mstime = getMSTime();
+    uint32 mstime = Util::getMSTime();
 
     if (isp->CategoryCooldown > 0)
         _Cooldown_Add(COOLDOWN_TYPE_CATEGORY, isp->Category, isp->CategoryCooldown + mstime, isp->Id, pProto->ItemId);
@@ -10967,7 +10967,7 @@ bool Player::Cooldown_CanCast(ItemPrototype * pProto, uint32 x)
 {
     PlayerCooldownMap::iterator itr;
     ItemSpell * isp = &pProto->Spells[x];
-    uint32 mstime = getMSTime();
+    uint32 mstime = Util::getMSTime();
 
     if (isp->Category)
     {
@@ -11001,7 +11001,7 @@ void Player::_SavePlayerCooldowns(QueryBuffer * buf)
     PlayerCooldownMap::iterator itr2;
     uint32 i;
     uint32 seconds;
-    uint32 mstime = getMSTime();
+    uint32 mstime = Util::getMSTime();
 
     // clear them (this should be replaced with an update queue later)
     if (buf != NULL)
@@ -11054,9 +11054,9 @@ void Player::_LoadPlayerCooldowns(QueryResult * result)
     if (result == NULL)
         return;
 
-    // we should only really call getMSTime() once to avoid user->system transitions, plus
+    // we should only really call Util::getMSTime() once to avoid user->system transitions, plus
     // the cost of calling a function for every cooldown the player has
-    uint32 mstime = getMSTime();
+    uint32 mstime = Util::getMSTime();
     uint32 type;
     uint32 misc;
     uint32 rtime;
@@ -11548,11 +11548,11 @@ void Player::VampiricSpell(uint32 dmg, Unit* pTarget)
 
 void Player::SpeedCheatDelay(uint32 ms_delay)
 {
-    //	SDetector->SkipSamplingUntil( getMSTime() + ms_delay ); 
+    //	SDetector->SkipSamplingUntil( Util::getMSTime() + ms_delay ); 
     //add tripple latency to avoid client handleing the spell effect with delay and we detect as cheat
-    //	SDetector->SkipSamplingUntil( getMSTime() + ms_delay + GetSession()->GetLatency() * 3 ); 
+    //	SDetector->SkipSamplingUntil( Util::getMSTime() + ms_delay + GetSession()->GetLatency() * 3 ); 
     //add constant value to make sure the effect packet was sent to client from network pool
-    SDetector->SkipSamplingUntil(getMSTime() + ms_delay + GetSession()->GetLatency() * 2 + 2000); //2 second should be enough to send our packets to client
+    SDetector->SkipSamplingUntil(Util::getMSTime() + ms_delay + GetSession()->GetLatency() * 2 + 2000); //2 second should be enough to send our packets to client
 }
 
 void Player::SpeedCheatReset()

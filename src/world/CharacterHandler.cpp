@@ -71,7 +71,7 @@ LoginErrorCode VerifyName(const char * name, size_t nlen)
 bool ChatHandler::HandleRenameAllCharacter(const char * args, WorldSession * m_session)
 {
     uint32 uCount = 0;
-    uint32 ts = getMSTime();
+    uint32 ts = Util::getMSTime();
     QueryResult * result = CharacterDatabase.Query("SELECT guid, name FROM characters");
     if (result)
     {
@@ -100,7 +100,7 @@ bool ChatHandler::HandleRenameAllCharacter(const char * args, WorldSession * m_s
         delete result;
     }
 
-    SystemMessage(m_session, "Procedure completed in %u ms. %u character(s) forced to rename.", getMSTime() - ts, uCount);
+    SystemMessage(m_session, "Procedure completed in %u ms. %u character(s) forced to rename.", Util::getMSTime() - ts, uCount);
     return true;
 }
 
@@ -271,7 +271,7 @@ void WorldSession::CharacterEnumProc(QueryResult * result)
 
     data.put<uint8>(0, num);
 
-    //Log.Debug("Character Enum", "Built in %u ms.", getMSTime() - start_time);
+    //Log.Debug("Character Enum", "Built in %u ms.", Util::getMSTime() - start_time);
     SendPacket(&data);
 }
 

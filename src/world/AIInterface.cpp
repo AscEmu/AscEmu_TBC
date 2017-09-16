@@ -157,7 +157,7 @@ void AIInterface::Init(Unit *un, AIType at, MovementType mt)
     m_sourceX = un->GetPositionX();
     m_sourceY = un->GetPositionY();
     m_sourceZ = un->GetPositionZ();
-    m_guardTimer = getMSTime();
+    m_guardTimer = Util::getMSTime();
 }
 
 AIInterface::~AIInterface()
@@ -1354,7 +1354,7 @@ void AIInterface::_UpdateCombat(uint32 p_time)
                     }
                     // CastSpell(m_Unit, spellInfo, targets);
                     if (m_nextSpell&&m_nextSpell->cooldown)
-                        m_nextSpell->cooldowntime = getMSTime() + m_nextSpell->cooldown;
+                        m_nextSpell->cooldowntime = Util::getMSTime() + m_nextSpell->cooldown;
 
                     next_spell_time = (uint32)UNIXTIME + MOB_SPELLCAST_GLOBAL_COOLDOWN;
 
@@ -1760,9 +1760,9 @@ Unit* AIInterface::FindTarget()
     }
 
     //a lot less times are check inter faction mob wars :)
-    if (m_updateTargetsTimer2 < getMSTime())
+    if (m_updateTargetsTimer2 < Util::getMSTime())
     {
-        m_updateTargetsTimer2 = getMSTime() + TARGET_UPDATE_INTERVAL;
+        m_updateTargetsTimer2 = Util::getMSTime() + TARGET_UPDATE_INTERVAL;
         m_Unit->AquireInrangeLock(); //make sure to release lock before exit function !
         for (itr2 = m_Unit->GetInRangeSetBegin(); itr2 != m_Unit->GetInRangeSetEnd();)
         {
@@ -1955,9 +1955,9 @@ bool AIInterface::FindFriends(float dist)
     // check if we're a civillan, in which case summon guards on a despawn timer
     uint8 civilian = (((Creature*)m_Unit)->GetCreatureInfo()) ? (((Creature*)m_Unit)->GetCreatureInfo()->Civilian) : 0;
     uint32 family = (((Creature*)m_Unit)->GetCreatureInfo()) ? (((Creature*)m_Unit)->GetCreatureInfo()->Type) : 0;
-    if (family == HUMANOID && civilian && getMSTime() > m_guardTimer && !IS_INSTANCE(m_Unit->GetMapId()))
+    if (family == HUMANOID && civilian && Util::getMSTime() > m_guardTimer && !IS_INSTANCE(m_Unit->GetMapId()))
     {
-        m_guardTimer = getMSTime() + 15000;
+        m_guardTimer = Util::getMSTime() + 15000;
         auto at = m_Unit->GetArea();
         if (!at)
             return result;
@@ -2255,7 +2255,7 @@ void AIInterface::SendMoveToPacket(float toX, float toY, float toZ, float toO, u
 #endif
     data << m_Unit->GetNewGUID();
     data << m_Unit->GetPositionX() << m_Unit->GetPositionY() << m_Unit->GetPositionZ();
-    data << getMSTime();
+    data << Util::getMSTime();
 
     // Check if we have an orientation
     if (toO != 0.0f)
@@ -2309,7 +2309,7 @@ travelTime += i->time;
 data.Initialize( SMSG_MONSTER_MOVE );
 data << m_Unit->GetNewGUID();
 data << m_Unit->GetPositionX() << m_Unit->GetPositionY() << m_Unit->GetPositionZ();
-data << getMSTime();
+data << Util::getMSTime();
 data << uint8(DontMove);
 data << uint32(run ? 0x00000100 : 0x00000000);
 data << travelTime;
@@ -2338,7 +2338,7 @@ bool AIInterface::StopMovement(uint32 time)
     data.SetOpcode(SMSG_MONSTER_MOVE);
     data << m_Unit->GetNewGUID();
     data << m_Unit->GetPositionX() << m_Unit->GetPositionY() << m_Unit->GetPositionZ();
-    data << getMSTime();
+    data << Util::getMSTime();
     data << uint8(1);   // "DontMove = 1"
 
     m_Unit->SendMessageToSet(&data, false);
@@ -2542,7 +2542,7 @@ void AIInterface::SendCurrentMove(Player* plyr/*uint64 guid*/)
     data.SetOpcode( SMSG_MONSTER_MOVE );
     data << m_Unit->GetNewGUID();
     data << m_Unit->GetPositionX() << m_Unit->GetPositionY() << m_Unit->GetPositionZ();
-    data << getMSTime();
+    data << Util::getMSTime();
     data << uint8(0);
     data << getMoveFlags();
 
@@ -3084,7 +3084,7 @@ void AIInterface::_UpdateMovement(uint32 p_time)
     //Fear Code
     if (m_AIState == STATE_FEAR && UnitToFear != NULL && m_creatureState == STOPPED)
     {
-        if (getMSTime() > m_FearTimer)   // Wait at point for x ms ;)
+        if (Util::getMSTime() > m_FearTimer)   // Wait at point for x ms ;)
         {
             float Fx;
             float Fy;
@@ -3142,12 +3142,12 @@ void AIInterface::_UpdateMovement(uint32 p_time)
                 if (fabs(m_Unit->GetPositionZ() - Fz) > 10.0f ||
                     (wl != 0.0f && Fz < wl))		// in water
                 {
-                    m_FearTimer = getMSTime() + 500;
+                    m_FearTimer = Util::getMSTime() + 500;
                 }
                 else if (CollideInterface.CheckLOS(m_Unit->GetMapId(), m_Unit->GetPositionX(), m_Unit->GetPositionY(), m_Unit->GetPositionZ() + 2.0f, Fx, Fy, Fz))
                 {
                     MoveTo(Fx, Fy, Fz, Fo);
-                    m_FearTimer = m_totalMoveTime + getMSTime() + 400;
+                    m_FearTimer = m_totalMoveTime + Util::getMSTime() + 400;
                 }
                 else
                 {
@@ -3158,11 +3158,11 @@ void AIInterface::_UpdateMovement(uint32 p_time)
             {
                 Fz = m_Unit->GetMapMgr()->GetADTLandHeight(Fx, Fy);
                 if (fabs(m_Unit->GetPositionZ() - Fz) > 4 || (Fz != 0.0f && Fz < (wl - 2.0f)))
-                    m_FearTimer = getMSTime() + 100;
+                    m_FearTimer = Util::getMSTime() + 100;
                 else
                 {
                     MoveTo(Fx, Fy, Fz, Fo);
-                    m_FearTimer = m_totalMoveTime + getMSTime() + 200;
+                    m_FearTimer = m_totalMoveTime + Util::getMSTime() + 200;
                 }
             }
         }
@@ -3171,7 +3171,7 @@ void AIInterface::_UpdateMovement(uint32 p_time)
     // Wander AI movement code
     if (m_AIState == STATE_WANDER && m_creatureState == STOPPED)
     {
-        if (getMSTime() < m_WanderTimer) // is it time to move again?
+        if (Util::getMSTime() < m_WanderTimer) // is it time to move again?
             return;
 
         // calculate a random distance and angle to move
@@ -3183,7 +3183,7 @@ void AIInterface::_UpdateMovement(uint32 p_time)
 
         CollideInterface.GetFirstPoint(m_Unit->GetMapId(), m_Unit->GetPositionX(), m_Unit->GetPositionY(), m_Unit->GetPositionZ() + 2, wanderX, wanderY, wanderZ, wanderX, wanderY, wanderZ, -1);
         MoveTo(wanderX, wanderY, wanderZ, wanderO);
-        m_WanderTimer = getMSTime() + m_totalMoveTime + 300; // time till next move (+ pause)
+        m_WanderTimer = Util::getMSTime() + m_totalMoveTime + 300; // time till next move (+ pause)
     }
 
     //Unit Follow Code
@@ -3342,7 +3342,7 @@ AI_Spell *AIInterface::getSpell()
     AI_Spell *  def_spell = NULL;
     uint32 cool_time = 0;
     uint32 cool_time2;
-    uint32 nowtime = getMSTime();
+    uint32 nowtime = Util::getMSTime();
 
     if (m_Unit->IsPet())
     {

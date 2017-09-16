@@ -1095,7 +1095,7 @@ uint32 Unit::HandleProc(uint32 flag, Unit* victim, SpellEntry* CastingSpell, uin
         //check if we can trigger due to time limitation
         if (ospinfo->proc_interval)
         {
-            uint32 now_in_ms = getMSTime();
+            uint32 now_in_ms = Util::getMSTime();
             if (itr2->LastTrigger + ospinfo->proc_interval > now_in_ms)
                 continue; //we can't trigger it yet.
             itr2->LastTrigger = now_in_ms; // consider it triggered
@@ -3737,7 +3737,7 @@ void Unit::Strike(Unit* pVictim, uint32 weapon_damage_type, SpellEntry* ability,
                 if (itr->second.first)
                 {
                     // We have a *periodic* delayed spell.
-                    uint32 t = getMSTime();
+                    uint32 t = Util::getMSTime();
                     if (t > itr->second.second)  // Time expired
                     {
                         // Set new time
@@ -4086,7 +4086,7 @@ void Unit::smsg_AttackStop(Unit* pVictim)
     {
         if (!IsPlayer() || getClass() == ROGUE)
         {
-            m_cTimer = getMSTime() + 5000;
+            m_cTimer = Util::getMSTime() + 5000;
             sEventMgr.RemoveEvents(this, EVENT_COMBAT_TIMER);
             sEventMgr.AddEvent(this, &Unit::EventUpdateFlag, EVENT_COMBAT_TIMER, 5000, 1, 0);
             if (pVictim->IsUnit()) // there could be damage coming from objects/enviromental
@@ -6255,7 +6255,7 @@ void Unit::SetFacing(float newo)
 
     /*WorldPacket data(SMSG_MONSTER_MOVE, 60);
     data << GetNewGUID();
-    data << m_position << getMSTime();
+    data << m_position << Util::getMSTime();
     data << uint8(4) << newo;
     data << uint32(0x00000000);		// flags
     data << uint32(0);				// time
@@ -7129,17 +7129,17 @@ void Unit::setAttackTimer(int32 time, bool offhand)
         time = offhand ? m_uint32Values[UNIT_FIELD_BASEATTACKTIME_01] : m_uint32Values[UNIT_FIELD_BASEATTACKTIME];
 
     if (offhand)
-        m_attackTimer_1 = getMSTime() + time;
+        m_attackTimer_1 = Util::getMSTime() + time;
     else
-        m_attackTimer = getMSTime() + time;
+        m_attackTimer = Util::getMSTime() + time;
 }
 
 bool Unit::isAttackReady(bool offhand)
 {
     if (offhand)
-        return (getMSTime() >= m_attackTimer_1) ? true : false;
+        return (Util::getMSTime() >= m_attackTimer_1) ? true : false;
     else
-        return (getMSTime() >= m_attackTimer) ? true : false;
+        return (Util::getMSTime() >= m_attackTimer) ? true : false;
 }
 
 void Unit::ReplaceAIInterface(AIInterface *new_interface)

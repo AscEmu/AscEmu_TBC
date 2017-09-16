@@ -374,7 +374,7 @@ bool ChatHandler::HandleBanCharacterCommand(const char* args, WorldSession *m_se
     *pReason = 0;
     ++pReason;
 
-    int32 BanTime = GetTimePeriodFromString(pBanDuration);
+    int32 BanTime = Util::GetTimePeriodFromString(pBanDuration);
     if (BanTime < 1)
         return false;
 
@@ -403,16 +403,16 @@ bool ChatHandler::HandleBanCharacterCommand(const char* args, WorldSession *m_se
         pInfo = pPlayer->m_playerInfo;
     }
 
-    SystemMessage(m_session, "This ban is due to expire %s%s.", BanTime ? "on " : "", BanTime ? ConvertTimeStampToDataTime(BanTime + (uint32)UNIXTIME).c_str() : "Never");
+    SystemMessage(m_session, "This ban is due to expire %s%s.", BanTime ? "on " : "", BanTime ? Util::GetDateTimeStringFromTimeStamp(BanTime + (uint32)UNIXTIME).c_str() : "Never");
     if (pPlayer)
     {
         SystemMessage(m_session, "Kicking %s.", pPlayer->GetName());
         pPlayer->Kick();
     }
 
-    sGMLog.writefromsession(m_session, "banned %s, reason %s, for %s", pCharacter, pReason, BanTime ? ConvertTimeStampToString(BanTime).c_str() : "ever");
+    sGMLog.writefromsession(m_session, "banned %s, reason %s, for %s", pCharacter, pReason, BanTime ? Util::GetDateTimeStringFromTimeStamp(BanTime).c_str() : "ever");
     char msg[200];
-    snprintf(msg, 200, "%sGM: %s has been banned by %s for %s. Reason: %s", MSG_COLOR_RED, pCharacter, m_session->GetPlayer()->GetName(), BanTime ? ConvertTimeStampToString(BanTime).c_str() : "ever", pReason);
+    snprintf(msg, 200, "%sGM: %s has been banned by %s for %s. Reason: %s", MSG_COLOR_RED, pCharacter, m_session->GetPlayer()->GetName(), BanTime ? Util::GetDateTimeStringFromTimeStamp(BanTime).c_str() : "ever", pReason);
     sWorld.SendWorldText(msg, NULL);
     if (sWorld.m_banTable && pInfo)
     {
@@ -812,7 +812,7 @@ bool ChatHandler::HandleAddItemSetCommand(const char* args, WorldSession* m_sess
     }
     //const char* setname = sItemSetStore.LookupString(entry->name);
     BlueSystemMessage(m_session, "Searching item set %u...", setid);
-    uint32 start = getMSTime();
+    uint32 start = Util::getMSTime();
     sGMLog.writefromsession(m_session, "used add item set command, set %u, target %s", setid, chr->GetName());
     for (std::list<ItemPrototype*>::iterator itr = l->begin(); itr != l->end(); ++itr)
     {
@@ -834,7 +834,7 @@ bool ChatHandler::HandleAddItemSetCommand(const char* args, WorldSession* m_sess
             chr->GetSession()->SendItemPushResult(itm, false, true, false, true, le->ContainerSlot, le->Slot, 1);
         }
     }
-    GreenSystemMessage(m_session, "Added set to inventory complete. Time: %u ms", getMSTime() - start);
+    GreenSystemMessage(m_session, "Added set to inventory complete. Time: %u ms", Util::getMSTime() - start);
     return true;
 }
 
@@ -1046,7 +1046,7 @@ bool ChatHandler::HandleDBReloadCommand(const char* args, WorldSession* m_sessio
     if (!*args || strlen(args) < 3)
         return false;
 
-    uint32 mstime = getMSTime();
+    uint32 mstime = Util::getMSTime();
     snprintf(str, 200, "%s%s initiated server-side reload of table `%s`. The server may experience some lag while this occurs.",
              MSG_COLOR_LIGHTRED, m_session->GetPlayer()->GetName(), args);
     sWorld.SendWorldText(str, 0);
@@ -1076,7 +1076,7 @@ bool ChatHandler::HandleDBReloadCommand(const char* args, WorldSession* m_sessio
     if (ret == 0)
         snprintf(str, 256, "%sDatabase reload failed.", MSG_COLOR_LIGHTRED);
     else
-        snprintf(str, 256, "%sDatabase reload completed in %u ms.", MSG_COLOR_LIGHTBLUE, (unsigned int)(getMSTime() - mstime));
+        snprintf(str, 256, "%sDatabase reload completed in %u ms.", MSG_COLOR_LIGHTBLUE, (unsigned int)(Util::getMSTime() - mstime));
     sWorld.SendWorldText(str, 0);
     sGMLog.writefromsession(m_session, "reloaded table %s", args);
     return true;
@@ -1941,7 +1941,7 @@ bool ChatHandler::HandleIPBanCommand(const char * args, WorldSession * m_session
     *pDuration = 0;
     ++pDuration;
 
-    int32 timeperiod = GetTimePeriodFromString(pDuration);
+    int32 timeperiod = Util::GetTimePeriodFromString(pDuration);
     if (timeperiod < 1)
         return false;
 
@@ -2242,7 +2242,7 @@ bool ChatHandler::HandleLookupItemCommand(const char * args, WorldSession * m_se
     if (!*args) return false;
 
     std::string x = std::string(args);
-    arcemu_TOLOWER(x);
+    Util::StringToLowerCase(x);
     if (x.length() < 4)
     {
         RedSystemMessage(m_session, "Your search string must be at least 5 characters long.");
@@ -2250,7 +2250,7 @@ bool ChatHandler::HandleLookupItemCommand(const char * args, WorldSession * m_se
     }
 
     BlueSystemMessage(m_session, "Starting search of item `%s`...", x.c_str());
-    uint32 t = getMSTime();
+    uint32 t = Util::getMSTime();
     ItemPrototype * it;
     uint32 count = 0;
 
@@ -2263,7 +2263,7 @@ bool ChatHandler::HandleLookupItemCommand(const char * args, WorldSession * m_se
 
         std::string litName = std::string(lit ? lit->Name : "");
 
-        arcemu_TOLOWER(litName);
+        Util::StringToLowerCase(litName);
 
         bool localizedFound = false;
         if (FindXinYString(x, litName))
@@ -2287,7 +2287,7 @@ bool ChatHandler::HandleLookupItemCommand(const char * args, WorldSession * m_se
     }
     itr->Destruct();
 
-    BlueSystemMessage(m_session, "Search completed in %u ms.", getMSTime() - t);
+    BlueSystemMessage(m_session, "Search completed in %u ms.", Util::getMSTime() - t);
     return true;
 }
 
@@ -2296,12 +2296,12 @@ bool ChatHandler::HandleLookupObjectCommand(const char * args, WorldSession * m_
     if (!*args) return false;
 
     std::string x = std::string(args);
-    arcemu_TOLOWER(x);
+    Util::StringToLowerCase(x);
 
     StorageContainerIterator<GameObjectInfo> * itr = GameObjectNameStorage.MakeIterator();
 
     GreenSystemMessage(m_session, "Starting search of object `%s`...", x.c_str());
-    uint32 t = getMSTime();
+    uint32 t = Util::getMSTime();
     GameObjectInfo * i;
     uint32 count = 0;
     std::string y;
@@ -2310,7 +2310,7 @@ bool ChatHandler::HandleLookupObjectCommand(const char * args, WorldSession * m_
     {
         i = itr->Get();
         y = std::string(i->Name);
-        arcemu_TOLOWER(y);
+        Util::StringToLowerCase(y);
         if (FindXinYString(x, y))
         {
             //string objectID=MyConvertIntToString(i->ID);
@@ -2340,7 +2340,7 @@ bool ChatHandler::HandleLookupObjectCommand(const char * args, WorldSession * m_
         recout = "|cff00ccffNo matches found.";
         SendMultilineMessage(m_session, recout.c_str());
     }
-    BlueSystemMessage(m_session, "Search completed in %u ms.", getMSTime() - t);
+    BlueSystemMessage(m_session, "Search completed in %u ms.", Util::getMSTime() - t);
     return true;
 }
 bool ChatHandler::HandleLookupCreatureCommand(const char * args, WorldSession * m_session)
@@ -2348,7 +2348,7 @@ bool ChatHandler::HandleLookupCreatureCommand(const char * args, WorldSession * 
     if (!*args) return false;
 
     std::string x = std::string(args);
-    arcemu_TOLOWER(x);
+    Util::StringToLowerCase(x);
     if (x.length() < 4)
     {
         RedSystemMessage(m_session, "Your search string must be at least 5 characters long.");
@@ -2358,7 +2358,7 @@ bool ChatHandler::HandleLookupCreatureCommand(const char * args, WorldSession * 
     StorageContainerIterator<CreatureInfo> * itr = CreatureNameStorage.MakeIterator();
 
     GreenSystemMessage(m_session, "Starting search of creature `%s`...", x.c_str());
-    uint32 t = getMSTime();
+    uint32 t = Util::getMSTime();
     CreatureInfo * i;
     uint32 count = 0;
     while (!itr->AtEnd())
@@ -2368,7 +2368,7 @@ bool ChatHandler::HandleLookupCreatureCommand(const char * args, WorldSession * 
 
         std::string liName = std::string(li ? li->Name : "");
 
-        arcemu_TOLOWER(liName);
+        Util::StringToLowerCase(liName);
 
         bool localizedFound = false;
 
@@ -2391,7 +2391,7 @@ bool ChatHandler::HandleLookupCreatureCommand(const char * args, WorldSession * 
     }
     itr->Destruct();
 
-    GreenSystemMessage(m_session, "Search completed in %u ms.", getMSTime() - t);
+    GreenSystemMessage(m_session, "Search completed in %u ms.", Util::getMSTime() - t);
     return true;
 }
 
@@ -2400,7 +2400,7 @@ bool ChatHandler::HandleLookupSpellCommand(const char * args, WorldSession * m_s
     if (!*args) return false;
 
     std::string x = std::string(args);
-    arcemu_TOLOWER(x);
+    Util::StringToLowerCase(x);
     if (x.length() < 4)
     {
         RedSystemMessage(m_session, "Your search string must be at least 5 characters long.");
@@ -2408,13 +2408,13 @@ bool ChatHandler::HandleLookupSpellCommand(const char * args, WorldSession * m_s
     }
 
     GreenSystemMessage(m_session, "Starting search of spell `%s`...", x.c_str());
-    uint32 t = getMSTime();
+    uint32 t = Util::getMSTime();
     uint32 count = 0;
     for (uint32 index = 0; index < dbcSpell.GetNumRows(); ++index)
     {
         SpellEntry* spell = dbcSpell.LookupRow(index);
         std::string y = std::string(spell->Name);
-        arcemu_TOLOWER(y);
+        Util::StringToLowerCase(y);
         if (FindXinYString(x, y))
         {
             // Print out the name in a cool highlighted fashion
@@ -2428,7 +2428,7 @@ bool ChatHandler::HandleLookupSpellCommand(const char * args, WorldSession * m_s
         }
     }
 
-    GreenSystemMessage(m_session, "Search completed in %u ms.", getMSTime() - t);
+    GreenSystemMessage(m_session, "Search completed in %u ms.", Util::getMSTime() - t);
     return true;
 }
 
@@ -2437,7 +2437,7 @@ bool ChatHandler::HandleLookupSkillCommand(const char * args, WorldSession * m_s
     if (!*args) return false;
 
     std::string x = std::string(args);
-    arcemu_TOLOWER(x);
+    Util::StringToLowerCase(x);
     if (x.length() < 4)
     {
         RedSystemMessage(m_session, "Your search string must be at least 5 characters long.");
@@ -2445,13 +2445,13 @@ bool ChatHandler::HandleLookupSkillCommand(const char * args, WorldSession * m_s
     }
 
     GreenSystemMessage(m_session, "Starting search of skill `%s`...", x.c_str());
-    uint32 t = getMSTime();
+    uint32 t = Util::getMSTime();
     uint32 count = 0;
     for (uint32 index = 0; index < dbcSkillLine.GetNumRows(); ++index)
     {
         skilllineentry* skill = dbcSkillLine.LookupRow(index);
         std::string y = std::string(skill->Name);
-        arcemu_TOLOWER(y);
+        Util::StringToLowerCase(y);
         if (FindXinYString(x, y))
         {
             // Print out the name in a cool highlighted fashion
@@ -2465,7 +2465,7 @@ bool ChatHandler::HandleLookupSkillCommand(const char * args, WorldSession * m_s
         }
     }
 
-    GreenSystemMessage(m_session, "Search completed in %u ms.", getMSTime() - t);
+    GreenSystemMessage(m_session, "Search completed in %u ms.", Util::getMSTime() - t);
     return true;
 }
 
@@ -2474,7 +2474,7 @@ bool ChatHandler::HandleLookupFactionCommand(const char * args, WorldSession * m
     if (!*args) return false;
 
     std::string x = std::string(args);
-    arcemu_TOLOWER(x);
+    Util::StringToLowerCase(x);
     if (x.length() < 4)
     {
         RedSystemMessage(m_session, "Your search string must be at least 5 characters long.");
@@ -2482,13 +2482,13 @@ bool ChatHandler::HandleLookupFactionCommand(const char * args, WorldSession * m
     }
 
     GreenSystemMessage(m_session, "Starting search of faction `%s`...", x.c_str());
-    uint32 t = getMSTime();
+    uint32 t = Util::getMSTime();
     uint32 count = 0;
     for (uint32 index = 0; index < dbcFaction.GetNumRows(); ++index)
     {
         FactionDBC* faction = dbcFaction.LookupRow(index);
         std::string y = std::string(faction->Name);
-        arcemu_TOLOWER(y);
+        Util::StringToLowerCase(y);
         if (FindXinYString(x, y))
         {
             // Print out the name in a cool highlighted fashion
@@ -2502,7 +2502,7 @@ bool ChatHandler::HandleLookupFactionCommand(const char * args, WorldSession * m
         }
     }
 
-    GreenSystemMessage(m_session, "Search completed in %u ms.", getMSTime() - t);
+    GreenSystemMessage(m_session, "Search completed in %u ms.", Util::getMSTime() - t);
     return true;
 }
 

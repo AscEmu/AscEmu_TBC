@@ -77,6 +77,7 @@ extern SERVER_DECL SessionLogWriter* Player_Log;
 #include "../shared/FastQueue.h"
 #include "../shared/CircularQueue.h"
 #include "../shared/Threading/RWLock.h"
+#include "../shared/Util.hpp"
 
 #include "../shared/ascemu_getopt.h"
 

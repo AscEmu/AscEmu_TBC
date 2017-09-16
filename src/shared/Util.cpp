@@ -1,428 +1,257 @@
 /*
- * ArcEmu MMORPG Server
- * Copyright (C) 2008 <http://www.ArcEmu.org/>
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
- */
+Copyright (c) 2014-2017 AscEmu Team <http://www.ascemu.org/>
+This file is released under the MIT license. See README-MIT for more information.
+*/
 
-#include "Common.h"
+#include "Util.hpp"
+#include <iostream>
+#include <vector>
+#include <string>
+#include <sstream>
 
-std::vector<std::string> StrSplit(const std::string &src, const std::string &sep)
+namespace Util
 {
-    std::vector<std::string> r;
-    std::string s;
-    for (std::string::const_iterator i = src.begin(); i != src.end(); i++)
+
+    //////////////////////////////////////////////////////////////////////////////////////////
+    // String functions
+
+    void StringToLowerCase(std::string& str)
     {
-        if (sep.find(*i) != std::string::npos)
+        std::transform(str.begin(), str.end(), str.begin(), ::tolower);
+    }
+
+    void StringToUpperCase(std::string& str)
+    {
+        std::transform(str.begin(), str.end(), str.begin(), ::toupper);
+    }
+
+    void CapitalizeString(std::string& str)
+    {
+        if (!str.empty())
         {
-			if (s.length()) r.push_back(s);
-			s = "";
-		} else {
-			s += *i;
-		}
-	}
-	if (s.length()) r.push_back(s);
-	return r;
-}
+            str[0] = ::toupper(str[0]);
 
-void SetThreadName(const char* format, ...)
-{
-	// This isn't supported on nix?
-	va_list ap;
-	va_start(ap, format);
-
-#ifdef WIN32
-
-	char thread_name[200];
-	vsnprintf(thread_name, 200, format, ap);
-
-	THREADNAME_INFO info;
-	info.dwType = 0x1000;
-	info.dwThreadID = GetCurrentThreadId();
-	info.dwFlags = 0;
-	info.szName = thread_name;
-
-	__try
-	{
-#ifdef _WIN64
-		RaiseException(0x406D1388, 0, sizeof(info)/sizeof(DWORD), (ULONG_PTR*)&info);
-#else
-		RaiseException(0x406D1388, 0, sizeof(info)/sizeof(DWORD), (DWORD*)&info);
-#endif
-	}
-	__except(EXCEPTION_CONTINUE_EXECUTION)
-	{
-
-	}
-
-#endif
-
-	va_end(ap);
-}
-
-time_t convTimePeriod ( uint32 dLength, char dType )
-{
-	time_t rawtime = 0;
-	if (dLength == 0)
-		return rawtime;
-	struct tm * ti = localtime( &rawtime );
-	switch(dType)
-	{
-		case 'h':		// hours
-			ti->tm_hour += dLength;
-			break;
-		case 'd':		// days
-			ti->tm_mday += dLength;
-			break;
-		case 'w':		// weeks
-			ti->tm_mday += 7 * dLength;
-			break;
-		case 'm':		// months
-			ti->tm_mon += dLength;
-			break;
-		case 'y':		// years
-			// are leap years considered ? do we care ?
-			ti->tm_year += dLength;
-			break;
-		default:		// minutes
-			ti->tm_min += dLength;
-			break;
-	}
-	return mktime(ti);
-}
-int32 GetTimePeriodFromString(const char * str)
-{
-	uint32 time_to_ban = 0;
-	char * p = (char*)str;
-	uint32 multiplier;
-    std::string number_temp;
-	uint32 multipliee;
-	number_temp.reserve(10);
-
-	while(*p != 0)
-	{
-		// always starts with a number.
-		if(!isdigit(*p))
-			break;
-
-		number_temp.clear();
-		while(isdigit(*p) && *p != 0)
-		{
-			number_temp += *p;
-			++p;
-		}
-
-		// try and find a letter
-		if(*p == 0)
-			break;
-
-		// check the type
-		switch(tolower(*p))
-		{
-		case 'y':
-			multiplier = TIME_YEAR;		// eek!
-			break;
-
-		case 'm':
-			multiplier = TIME_MONTH;
-			break;
-
-		case 'd':
-			multiplier = TIME_DAY;
-			break;
-
-		case 'h':
-			multiplier = TIME_HOUR;
-			break;
-
-		default:
-			return -1;
-			break;
-		}
-
-		++p;
-		multipliee = atoi(number_temp.c_str());
-		time_to_ban += (multiplier * multipliee);
-	}
-
-	return time_to_ban;
-}
-
-const char * szDayNames[7] = {
-	"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"
-};
-
-const char * szMonthNames[12] = {
-	"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"
-};
-
-void MakeIntString(char * buf, int num)
-{
-	if(num<10)
-	{
-		buf[0] = '0';
-		//itoa(num, &buf[1], 10);
-		sprintf(&buf[1], "%u", num);
-	}
-	else
-	{
-		//itoa(num,buf,10);
-		sprintf(buf,"%u",num);
-	}
-}
-
-void MakeIntStringNoZero(char * buf, int num)
-{
-	//itoa(num,buf,10);
-	sprintf(buf,"%u",num);
-}
-
-std::string ConvertTimeStampToString(uint32 timestamp)
-{
-	int seconds = (int)timestamp;
-	int mins=0;
-	int hours=0;
-	int days=0;
-	int months=0;
-	int years=0;
-	if(seconds >= 60)
-	{
-		mins = seconds / 60;
-		if(mins)
-		{
-			seconds -= mins*60;
-			if(mins >= 60)
-			{
-				hours = mins / 60;
-				if(hours)
-				{
-					mins -= hours*60;
-					if(hours >= 24)
-					{
-						days = hours/24;
-						if(days)
-						{
-							hours -= days*24;
-							if(days >= 30)
-							{
-								months = days / 30;
-								if(months)
-								{
-									days -= months*30;
-									if(months >= 12)
-									{
-										years = months / 12;
-										if(years)
-										{
-											months -= years*12;
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-	}
-
-	char szTempBuf[100];
-    std::string szResult;
-
-	if(years) {
-		MakeIntStringNoZero(szTempBuf, years);
-		szResult += szTempBuf;
-		szResult += " years, ";
-	}
-
-	if(months) {
-		MakeIntStringNoZero(szTempBuf, months);
-		szResult += szTempBuf;
-		szResult += " months, ";
-	}
-
-	if(days) {
-		MakeIntStringNoZero(szTempBuf, days);
-		szResult += szTempBuf;
-		szResult += " days, ";
-	}
-
-	if(hours) {
-		MakeIntStringNoZero(szTempBuf, hours);
-		szResult += szTempBuf;
-		szResult += " hours, ";
-	}
-
-	if(mins) {
-		MakeIntStringNoZero(szTempBuf, mins);
-		szResult += szTempBuf;
-		szResult += " minutes, ";
-	}
-
-	if(seconds) {
-		MakeIntStringNoZero(szTempBuf, seconds);
-		szResult += szTempBuf;
-		szResult += " seconds";
-	}
-
-	return szResult;
-}
-
-std::string ConvertTimeStampToDataTime(uint32 timestamp)
-{
-	char szTempBuf[100];
-	time_t t = (time_t)timestamp;
-	tm * pTM = localtime(&t);
-
-    std::string szResult;
-	szResult += szDayNames[pTM->tm_wday];
-	szResult += ", ";
-
-	MakeIntString(szTempBuf, pTM->tm_mday);
-	szResult += szTempBuf;
-	szResult += " ";
-
-	szResult += szMonthNames[pTM->tm_mon];
-	szResult += " ";
-
-	MakeIntString(szTempBuf, pTM->tm_year+1900);
-	szResult += szTempBuf;
-	szResult += ", ";
-	MakeIntString(szTempBuf, pTM->tm_hour);
-	szResult += szTempBuf;
-	szResult += ":";
-	MakeIntString(szTempBuf, pTM->tm_min);
-	szResult += szTempBuf;
-	szResult += ":";
-	MakeIntString(szTempBuf, pTM->tm_sec);
-	szResult += szTempBuf;
-
-	return szResult;
-}
-
-#ifdef WIN32
-static char _StringConversionStorage[2048];
-#endif
-
-// win32 only
-// cebernic added it
-// for multilanguage supports
-// --------------------------------------------------------------------------------------------------
-SERVER_DECL const char* _StringToUTF8(const char*   pASCIIBuf)
-{ 
-#ifdef WIN32
-	DWORD     UniCodeLen=MultiByteToWideChar(CP_ACP,   0,   pASCIIBuf,   -1,   0,   0); 
-  std::vector <wchar_t>   vWCH(UniCodeLen); 
-  MultiByteToWideChar(CP_ACP,   0,   pASCIIBuf,   -1,   &vWCH[0],   UniCodeLen); 
-  DWORD   dwUtf8Len=WideCharToMultiByte(CP_UTF8,   0,   &vWCH[0],   UniCodeLen   ,   NULL,   NULL,   NULL,   NULL   ); 
-	ASSERT( dwUtf8Len+1 < 2048 );
-	memset(_StringConversionStorage,0,(sizeof(char)*dwUtf8Len)+1);
-  WideCharToMultiByte(CP_UTF8,   0,   &vWCH[0],   UniCodeLen   ,   _StringConversionStorage,   dwUtf8Len,   NULL,   NULL   ); 
-	return &_StringConversionStorage[0];
-#else
-	return &pASCIIBuf[0];
-#endif
-} 
-SERVER_DECL const char* _StringToANSI(const char*   pUtf8Buf)
-{ 
-#ifdef WIN32
-	DWORD   UniCodeLen=MultiByteToWideChar(CP_UTF8,   0,   pUtf8Buf,   -1,   NULL,0   ); 
-  std::vector <wchar_t>   vWCH(UniCodeLen); 
-  MultiByteToWideChar(CP_UTF8,   0,   pUtf8Buf,   -1,   &vWCH[0]   ,   UniCodeLen   ); 
-  DWORD   dwASCIILen=WideCharToMultiByte(CP_ACP,   0,   &vWCH[0],   UniCodeLen   ,   NULL   ,NULL   ,   NULL,   NULL   ); 
-	ASSERT( dwASCIILen+1 < 2048 );
-	memset(_StringConversionStorage,0,(sizeof(char)*dwASCIILen)+1);
-  WideCharToMultiByte(CP_ACP,   0,   &vWCH[0],   UniCodeLen   ,   _StringConversionStorage,   dwASCIILen,   NULL,   NULL   ); 
-	return &_StringConversionStorage[0];
-#else
-	return &pUtf8Buf[0];
-#endif
-} 
-
-SERVER_DECL bool _IsStringUTF8(const char *str)
-{
-    int   i;
-    unsigned char cOctets;  // octets to go in this UTF-8 encoded character
-    unsigned char chr;
-    bool  bAllAscii= TRUE;
-    long iLen = (long)strlen(str);
- 
-    cOctets= 0;
-    for( i=0; i <iLen; i++ ) {
- 
-     chr = (unsigned char)str[i];
- 
-     if( (chr & 0x80) != 0 ) bAllAscii= FALSE;
- 
-     if( cOctets == 0 ) {
-        if( chr>= 0x80 )  {
-            do  {
-                chr <<= 1;
-                cOctets++;
-            }
-            while( (chr & 0x80) != 0 );
-            
-            cOctets--;                        
-            if( cOctets == 0 ) return FALSE;  
+            for (std::size_t i = 1; i < str.length(); ++i)
+                str[i] = ::tolower(str[i]);
         }
-     }
-     else  {
-        if( (chr & 0xC0) != 0x80 ) 
-            return FALSE;
- 
-        cOctets--;                       
-     }
-    }
-    if( cOctets> 0 ) 
-     return FALSE;
-    if( bAllAscii ) 
-     return FALSE;
-    return TRUE;
-
- } 
-
-namespace Arcemu
-{
-    float round(float f)
-    {
-        return std::floor(f + 0.5f);
     }
 
-    double round(double d)
+    std::vector<std::string> SplitStringBySeperator(const std::string& str_src, const std::string& str_sep)
     {
-        return std::floor(d + 0.5);
+        std::vector<std::string> string_vector;
+        std::stringstream string_stream(str_src);
+        std::string isolated_string;
+
+        std::vector<char> seperator(str_sep.c_str(), str_sep.c_str() + str_sep.size() + 1);
+
+        while (std::getline(string_stream, isolated_string, seperator[0]))
+            string_vector.push_back(isolated_string);
+
+        return string_vector;
     }
 
-    long double round(long double ld)
+    bool findXinYString(std::string& x, std::string& y)
     {
-        return std::floor(ld + 0.5);
+        return y.find(x) != std::string::npos;
     }
 
-    void Sleep(unsigned long timems)
+    uint32_t getLanguagesIdFromString(std::string langstr)
     {
-#ifdef WIN32
-        ::Sleep(timems);
+        if (langstr.compare("enGB") == 0 || langstr.compare("enUS") == 0)
+            return 0;
+
+        if (langstr.compare("koKR") == 0)
+            return 1;
+
+        if (langstr.compare("frFR") == 0)
+            return 2;
+
+        if (langstr.compare("deDE") == 0)
+            return 3;
+
+        if (langstr.compare("esES") == 0)
+            return 4;
+
+        if (langstr.compare("ruRU") == 0)
+            return 5;
+
+        return 0;
+    }
+
+
+    //////////////////////////////////////////////////////////////////////////////////////////
+    // Time calculation
+    // \note typedef high_resolution_clock system_clock
+    // for further information check out https://msdn.microsoft.com/en-us/library/hh874757.aspx
+
+    std::chrono::high_resolution_clock::time_point TimeNow()
+    {
+        return std::chrono::high_resolution_clock::now();
+    }
+
+    long long GetTimeDifferenceToNow(std::chrono::high_resolution_clock::time_point start_time)
+    {
+        std::chrono::duration<float> float_diff = TimeNow() - start_time;
+        std::chrono::milliseconds time_difference = std::chrono::duration_cast<std::chrono::milliseconds>(float_diff);
+        return time_difference.count();
+    }
+
+    long long GetTimeDifference(std::chrono::high_resolution_clock::time_point start_time, std::chrono::high_resolution_clock::time_point end_time)
+    {
+        std::chrono::duration<float> float_diff = end_time - start_time;
+        std::chrono::milliseconds time_difference = std::chrono::duration_cast<std::chrono::milliseconds>(float_diff);
+        return time_difference.count();
+    }
+
+    std::string GetCurrentDateTimeString()
+    {
+        auto now = std::chrono::system_clock::now();
+        auto in_time_t = std::chrono::system_clock::to_time_t(now);
+
+#ifndef _WIN32
+        char buff[20];
+        char string = strftime(buff, 20, "%Y-%m-%d %H:%M:%S", localtime(&in_time_t));
+        std::string str(buff);
+        return str;
 #else
-        timespec tv;
-
-        tv.tv_sec = timems / 1000;
-        tv.tv_nsec = (timems % 1000) * 1000 * 1000;
-
-        nanosleep(&tv, NULL);
+        std::stringstream ss;
+        ss << std::put_time(std::localtime(&in_time_t), "%Y-%m-%d %X");
+        return ss.str();
 #endif
-
     }
-}
 
+    std::string GetCurrentTimeString()
+    {
+        auto now = std::chrono::system_clock::now();
+        auto in_time_t = std::chrono::system_clock::to_time_t(now);
+
+#ifndef _WIN32
+        char buff[20];
+        char string = strftime(buff, 20, "%H:%M:%S", localtime(&in_time_t));
+        std::string str(buff);
+        return str;
+#else
+        std::stringstream ss;
+        ss << std::put_time(std::localtime(&in_time_t), "%X");
+        return ss.str();
+#endif
+    }
+
+    std::string GetDateTimeStringFromTimeStamp(uint32_t timestamp)
+    {
+        std::time_t raw_time = (std::time_t)timestamp;
+
+#ifndef _WIN32
+        char buff[20];
+        char string = strftime(buff, 20, "%Y-%m-%d %H:%M:%S", localtime(&raw_time));
+        std::string str(buff);
+        return str;
+#else
+        std::stringstream ss;
+        ss << std::put_time(std::localtime(&raw_time), "%Y-%m-%d %X");
+        return ss.str();
+#endif
+    }
+
+    uint32_t getMSTime()
+    {
+        using namespace std::chrono;
+
+        static const system_clock::time_point ApplicationStartTime = system_clock::now();
+
+        return uint32_t(duration_cast<milliseconds>(system_clock::now() - ApplicationStartTime).count());
+    }
+
+    std::string GetDateStringFromSeconds(uint32_t seconds)
+    {
+        uint32_t in_seconds = seconds;
+        uint32_t in_minutes = 0;
+        uint32_t in_hours = 0;
+        uint32_t in_days = 0;
+        uint32_t in_months = 0;
+        uint32_t in_years = 0;
+
+        in_years = (in_seconds / 60 / 60 / 24 / 30 / 12);
+        in_months = (in_seconds / 60 / 60 / 24 / 30) % 12;
+        in_days = (in_seconds / 60 / 60 / 24) % 30;
+        in_hours = (in_seconds / 60 / 60) % 24;
+        in_minutes = (in_seconds / 60) % 60;
+        in_seconds = in_seconds % 60;
+
+        std::stringstream date_time_stream;
+        if (in_years)
+            date_time_stream << in_years << " years, ";
+
+        if (in_months)
+            date_time_stream << in_months << " months, ";
+
+        if (in_days)
+            date_time_stream << in_days << " days, ";
+
+        if (in_hours)
+            date_time_stream << in_hours << " hours, ";
+
+        if (in_minutes)
+            date_time_stream << in_minutes << " minutes, ";
+
+        if (in_seconds)
+            date_time_stream << in_seconds << " seconds, ";
+
+        return date_time_stream.str();
+    }
+
+    uint32_t GetTimePeriodFromString(const char* str)
+    {
+        uint32_t multiplier;
+
+        std::string time_str = str;
+
+        std::istringstream read_time_var(time_str);
+        uint32_t time_period = 0;
+        std::string time_var;
+        read_time_var >> time_period;
+        read_time_var >> time_var;
+
+        Util::StringToLowerCase(time_var);
+
+        if (time_var.compare("y") == 0)
+            multiplier = TIME_YEAR;
+        else if (time_var.compare("m") == 0)
+            multiplier = TIME_MONTH;
+        else if (time_var.compare("d") == 0)
+            multiplier = TIME_DAY;
+        else if (time_var.compare("h") == 0)
+            multiplier = TIME_HOUR;
+        else
+            multiplier = TIME_MINUTE;
+
+        time_period = (multiplier * time_period);
+
+        return time_period;
+    }
+
+    std::string ByteArrayToHexString(uint8_t const* bytes, uint32_t arrayLength, bool reverseArray)
+    {
+        int32_t initPos = 0;
+        int32_t endPos = arrayLength;
+        int8_t op = 1;
+
+        if (reverseArray)
+        {
+            initPos = arrayLength - 1;
+            endPos = -1;
+            op = -1;
+        }
+
+        std::ostringstream ss;
+        for (int32_t i = initPos; i != endPos; i += op)
+        {
+            char buffer[4];
+            sprintf(buffer, "%02X", bytes[i]);
+            ss << buffer;
+        }
+
+        return ss.str();
+    }
+
+}

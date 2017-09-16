@@ -18,8 +18,10 @@
  */
 
 #include "StdAfx.h"
+#include "Util.hpp"
 #include "LUAEngine.h"
 #include "LUAFunctions.h"
+#include <stdint.h>
 #include <ScriptSetup.h>
 
 #ifndef _WIN32
@@ -2764,16 +2766,16 @@ int luaUnit_MarkQuestObjectiveAsComplete(lua_State * L, Unit * ptr)
 
 int luaUnit_KnockBack(lua_State * L, Unit * ptr)
 {
-	if(!ptr) return 0;
+	/*if(!ptr) return 0;
 	double dx = luaL_checknumber(L,1);
 	double dy = luaL_checknumber(L,2);
 	double affect1 = luaL_checknumber(L,3);
 	double affect2 = luaL_checknumber(L,4);
 	WorldPacket data(SMSG_MOVE_KNOCK_BACK, 30);
 	data << ptr->GetNewGUID();
-	data << getMSTime();
+	data << Util::getMSTime();
 	data << dx << dy << affect1 << affect2;
-	ptr->SendMessageToSet(&data, true);
+	ptr->SendMessageToSet(&data, true);*/
 
 	return 0;
 }

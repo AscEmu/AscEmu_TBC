@@ -106,7 +106,7 @@ void ClusterInterface::ConnectToRealmServer()
     Log.Success("ClusterInterface", "Connected to %s:%u", hostname.c_str(), port);
 
     _clientSocket = s;
-    m_latency = getMSTime();
+    m_latency = Util::getMSTime();
     m_connected = true;
 }
 
@@ -122,7 +122,7 @@ void ClusterInterface::HandleAuthRequest(WorldPacket & pck)
     data << GenerateVersionString();
     SendPacket(&data);
 
-    m_latency = getMSTime() - m_latency;
+    m_latency = Util::getMSTime() - m_latency;
     Log.Notice("ClusterInterface", "Latency between realm server is %u ms", m_latency);
 }
 

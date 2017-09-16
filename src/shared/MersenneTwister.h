@@ -1,7 +1,7 @@
 /*
  * AscEmu Framework based on ArcEmu MMORPG Server
- * Copyright (C) 2014-2015 AscEmu Team <http://www.ascemu.org>
- * Copyright (C) 2008 <http://www.ArcEmu.org/>
+ * Copyright (C) 2014-2017 AscEmu Team <http://www.ascemu.org>
+ * Copyright (C) 2008-2012 ArcEmu Team <http://www.ArcEmu.org/>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -36,7 +36,7 @@ SERVER_DECL uint32 RandomUInt(uint32 n1, uint32 n2);
 
 /*************************** RANDOMC.H ***************** 2007-09-22 Agner Fog *
 *
-* This file contains class declarations and other definitions for the C++ 
+* This file contains class declarations and other definitions for the C++
 * library of uniform random number generators.
 *
 * Overview of classes:
@@ -77,17 +77,17 @@ SERVER_DECL uint32 RandomUInt(uint32 n1, uint32 n2);
 * int IRandom(int min, int max);
 * Gives an integer random number in the interval min <= x <= max.
 * (max-min < MAXINT).
-* The precision is 2^-32 (defined as the difference in frequency between 
+* The precision is 2^-32 (defined as the difference in frequency between
 * possible output values). The frequencies are exact if max-min+1 is a
 * power of 2.
 *
 * int IRandomX(int min, int max);
 * Same as IRandom, but exact. In CRandomMersenne only.
-* The frequencies of all output values are exactly the same for an 
+* The frequencies of all output values are exactly the same for an
 * infinitely long sequence. (Only relevant for extremely long sequences).
 *
 * uint32 BRandom();
-* Gives 32 random bits. 
+* Gives 32 random bits.
 *
 *
 * Example:
@@ -118,7 +118,7 @@ SERVER_DECL uint32 RandomUInt(uint32 n1, uint32 n2);
 * Copyright:
 ============
 * � 1997 - 2007 Agner Fog. All software in this library is published under the
-* GNU General Public License with the further restriction that it cannot be 
+* GNU General Public License with the further restriction that it cannot be
 * used for gambling applications. See licence.htm
 *******************************************************************************/
 
@@ -127,10 +127,10 @@ SERVER_DECL uint32 RandomUInt(uint32 n1, uint32 n2);
 Define random number generator classes
 ***********************************************************************/
 
-class CRandomMersenne           // Encapsulate random number generator
+class CRandomMersenne                  // Encapsulate random number generator
 {
 #if 0
-	// Define constants for type MT11213A:
+        // Define constants for type MT11213A:
 #define MERS_N   351
 #define MERS_M   175
 #define MERS_R   19
@@ -141,8 +141,8 @@ class CRandomMersenne           // Encapsulate random number generator
 #define MERS_A   0xE4BD75F5
 #define MERS_B   0x655E5280
 #define MERS_C   0xFFD58000
-#else    
-	// or constants for type MT19937:
+#else
+        // or constants for type MT19937:
 #define MERS_N   624
 #define MERS_M   397
 #define MERS_R   31
@@ -156,36 +156,36 @@ class CRandomMersenne           // Encapsulate random number generator
 #endif
     public:
 
-	    CRandomMersenne(uint32 seed)    // Constructor
+        CRandomMersenne(uint32 seed)        // Constructor
         {
             RandomInit(seed);
             LastInterval = 0;
             RLimit = 0;
         }
 
-	    void RandomInit(uint32 seed);       // Re-seed
-	    void RandomInitByArray(uint32 seeds[], int length); // Seed by more than 32 bits
+        void RandomInit(uint32 seed);       // Re-seed
+        void RandomInitByArray(uint32 seeds[], int length); // Seed by more than 32 bits
 
-	    int IRandom (int min, int max);     // Output random integer
-	    int IRandomX(int min, int max);     // Output random integer, exact
+        int IRandom(int min, int max);      // Output random integer
+        int IRandomX(int min, int max);     // Output random integer, exact
 
-	    double Random();                    // Output random float
-	    uint32 BRandom();                   // Output random bits
+        double Random();                    // Output random float
+        uint32 BRandom();                   // Output random bits
 
     private:
 
-	    void Init0(uint32 seed);            // Basic initialization procedure
+        void Init0(uint32 seed);            // Basic initialization procedure
 
-	    uint32 mt[MERS_N];                  // State vector
+        uint32 mt[MERS_N];                  // State vector
 
-	    int mti;                            // Index into mt
+        int mti;                            // Index into mt
 
-	    uint32 LastInterval;                // Last interval length for IRandomX
-	    uint32 RLimit;                      // Rejection limit used by IRandomX
+        uint32 LastInterval;                // Last interval length for IRandomX
+        uint32 RLimit;                      // Rejection limit used by IRandomX
 
-	    enum TArch {LITTLE_ENDIAN1, BIG_ENDIAN1, NONIEEE}; // Definition of architecture
+        enum TArch {LITTLE_ENDIAN1, BIG_ENDIAN1, NONIEEE}; // Definition of architecture
 
-	    TArch Architecture;                 // Conversion to float depends on architecture
-    };    
+        TArch Architecture;                 // Conversion to float depends on architecture
+};
 
-#endif //_RANDOMGEN_H
+#endif      //_RANDOMGEN_H

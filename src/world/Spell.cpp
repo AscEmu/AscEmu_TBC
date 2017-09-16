@@ -2263,7 +2263,7 @@ void Spell::SendSpellGo()
 
     data << GetProto()->Id;
     data << flags;
-    data << getMSTime();
+    data << Util::getMSTime();
     data << (uint8)(UniqueTargets.size()); //number of hits
 
     writeSpellGoTargets(&data);
@@ -4025,7 +4025,7 @@ uint8 Spell::CanCast(bool tolerate)
     {
         if (u_caster->SchoolCastPrevent[GetProto()->School])
         {
-            uint32 now_ = getMSTime();
+            uint32 now_ = Util::getMSTime();
             if (now_ > u_caster->SchoolCastPrevent[GetProto()->School])//this limit has expired,remove
                 u_caster->SchoolCastPrevent[GetProto()->School] = 0;
             else

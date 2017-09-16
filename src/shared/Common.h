@@ -301,7 +301,7 @@ inline uint32 now()
 #define TRUE    1
 #endif
 
-#include "Util.h"
+#include "Util.hpp"
 
 struct spawn_timed_emotes
 {
@@ -322,24 +322,6 @@ inline void reverse_array(uint8* pointer, size_t count)
     for (x = 0; x < count; ++x)
         pointer[x] = temp[count - x - 1];
     free(temp);
-}
-
-int32 GetTimePeriodFromString(const char* str);
-std::string ConvertTimeStampToString(uint32 timestamp);
-std::string ConvertTimeStampToDataTime(uint32 timestamp);
-
-uint32 DecimalToMask(uint32 dec);
-
-inline void arcemu_TOLOWER(std::string & str)
-{
-    for (size_t i = 0; i < str.length(); ++i)
-        str[i] = (char)tolower(str[i]);
-}
-
-inline void arcemu_TOUPPER(std::string & str)
-{
-    for (size_t i = 0; i < str.length(); ++i)
-        str[i] = (char)toupper(str[i]);
 }
 
 // returns true if the ip hits the mask, otherwise false

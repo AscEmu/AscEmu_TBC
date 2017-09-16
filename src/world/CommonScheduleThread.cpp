@@ -72,7 +72,7 @@ bool CommonScheduleThread::run()
     pthread_cond_init(&abortcond,NULL);
 #endif
 
-    BCTimerCount = getMSTime() + ((uint32)sWorld.BCInterval * 1000);
+    BCTimerCount = Util::getMSTime() + ((uint32)sWorld.BCInterval * 1000);
 
     while (ThreadState != THREADSTATE_TERMINATE)
     {
@@ -116,11 +116,11 @@ void CommonScheduleThread::BroadCastExec()
 
     if ((uint32)sWorld.BCInterval > THREAD_LOOP_INTERVAL)
     {
-        if (getMSTime() <= BCTimerCount)
+        if (Util::getMSTime() <= BCTimerCount)
         {
             return;
         }
-        else	BCTimerCount = getMSTime() + ((uint32)sWorld.BCInterval * 1000);
+        else	BCTimerCount = Util::getMSTime() + ((uint32)sWorld.BCInterval * 1000);
     }
 
     switch (sWorld.BCOrderMode)

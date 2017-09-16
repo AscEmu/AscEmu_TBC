@@ -196,7 +196,7 @@ bool ChatHandler::HandleStartCommand(const char* args, WorldSession *m_session)
     else if (m_plyr && args && strlen(args) > 2)
     {
         race = args;
-        arcemu_TOLOWER(race);
+        Util::StringToLowerCase(race);
 
         // Teleport to specific race
         if (race == "human")

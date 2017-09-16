@@ -1665,7 +1665,7 @@ void Aura::SpellAuraDummy(bool apply)
                 school = m_target->GetCurrentSpell()->GetProto()->School;
             }
             m_target->InterruptSpell();
-            m_target->SchoolCastPrevent[school] = 3000 + getMSTime();
+            m_target->SchoolCastPrevent[school] = 3000 + Util::getMSTime();
         }break;
         //improved sprint effect
         case 30918:

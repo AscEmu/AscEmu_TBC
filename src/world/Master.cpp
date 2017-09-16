@@ -213,7 +213,7 @@ bool Master::Run(int argc, char ** argv)
     Log.Success("Rnd", "Initialized Random Number Generators.");
 
     ThreadPool.Startup();
-    uint32 LoadingTime = getMSTime();
+    uint32 LoadingTime = Util::getMSTime();
 
     Log.Success("Config", "Loading Config Files...");
     if (Config.MainConfig.SetSource(config_file))
@@ -331,14 +331,14 @@ bool Master::Run(int argc, char ** argv)
     ThreadPool.ExecuteTask(console);
 
     uint32 realCurrTime, realPrevTime;
-    realCurrTime = realPrevTime = getMSTime();
+    realCurrTime = realPrevTime = Util::getMSTime();
 
     // Socket loop!
     uint32 start;
     uint32 diff;
     uint32 last_time = now();
     uint32 etime;
-    uint32 next_printout = getMSTime(), next_send = getMSTime();
+    uint32 next_printout = Util::getMSTime(), next_send = Util::getMSTime();
 
     // Start Network Subsystem
     Log.Notice("Network", "Starting subsystem...");
@@ -348,7 +348,7 @@ bool Master::Run(int argc, char ** argv)
 
     sScriptMgr.LoadScripts();
 
-    LoadingTime = getMSTime() - LoadingTime;
+    LoadingTime = Util::getMSTime() - LoadingTime;
     Log.Notice("Server", "Ready for connections. Startup time: %ums\n", LoadingTime);
 
     Log.Notice("RemoteConsole", "Starting...");
@@ -448,7 +448,7 @@ bool Master::Run(int argc, char ** argv)
         etime = last_time - start;
         if (m_ShutdownEvent)
         {
-            if (getMSTime() >= next_printout)
+            if (Util::getMSTime() >= next_printout)
             {
                 if (m_ShutdownTimer > 60000.0f)
                 {
@@ -458,10 +458,10 @@ bool Master::Run(int argc, char ** argv)
                 else
                     Log.Notice("Server", "Shutdown in %i seconds.", (int)(m_ShutdownTimer / 1000.0f));
 
-                next_printout = getMSTime() + 500;
+                next_printout = Util::getMSTime() + 500;
             }
 
-            if (getMSTime() >= next_send)
+            if (Util::getMSTime() >= next_send)
             {
                 int time = m_ShutdownTimer / 1000;
                 if ((time % 30 == 0) || time < 10)
@@ -488,7 +488,7 @@ bool Master::Run(int argc, char ** argv)
                         sWorld.SendGlobalMessage(&data, NULL);
                     }
                 }
-                next_send = getMSTime() + 1000;
+                next_send = Util::getMSTime() + 1000;
             }
             if (diff >= m_ShutdownTimer)
                 break;
@@ -514,7 +514,7 @@ bool Master::Run(int argc, char ** argv)
     delete console;
 
     // begin server shutdown
-    Log.Notice("Shutdown", "Initiated at %s", ConvertTimeStampToDataTime((uint32)UNIXTIME).c_str());
+    Log.Notice("Shutdown", "Initiated at %s", Util::GetDateTimeStringFromTimeStamp((uint32)UNIXTIME).c_str());
 
     if (lootmgr.is_loading)
     {

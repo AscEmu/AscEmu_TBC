@@ -495,7 +495,7 @@ void Object::_BuildMovementUpdate(ByteBuffer * data, uint8 flags, uint32 flags2,
 
         *data << (uint8)0;
 
-        *data << getMSTime(); // this appears to be time in ms but can be any thing
+        *data << Util::getMSTime(); // this appears to be time in ms but can be any thing
 
         // this stuff:
         //   0x01 -> Enable Swimming?
@@ -593,10 +593,10 @@ void Object::_BuildMovementUpdate(ByteBuffer * data, uint8 flags, uint32 flags2,
             /*int32 m_time = TimeStamp() - target->GetSession()->m_clientTimeDelay;
             m_time += target->GetSession()->m_moveDelayTime;
             *data << m_time;*/
-            *data << getMSTime();
+            *data << Util::getMSTime();
         }
         else
-            *data << getMSTime();
+            *data << Util::getMSTime();
     }
 }
 

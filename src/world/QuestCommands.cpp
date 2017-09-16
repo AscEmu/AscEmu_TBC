@@ -82,7 +82,7 @@ bool ChatHandler::HandleQuestLookupCommand(const char * args, WorldSession * m_s
     if (!*args) return false;
 
     std::string x = std::string(args);
-    arcemu_TOLOWER(x);
+    Util::StringToLowerCase(x);
     if (x.length() < 4)
     {
         RedSystemMessage(m_session, "Your search string must be at least 5 characters long.");
@@ -90,7 +90,7 @@ bool ChatHandler::HandleQuestLookupCommand(const char * args, WorldSession * m_s
     }
 
     BlueSystemMessage(m_session, "Starting search of quests `%s`...", x.c_str());
-    uint32 t = getMSTime();
+    uint32 t = Util::getMSTime();
 
     StorageContainerIterator<Quest> * itr = QuestStorage.MakeIterator();
 
@@ -108,8 +108,8 @@ bool ChatHandler::HandleQuestLookupCommand(const char * args, WorldSession * m_s
 
         std::string liName = std::string(li ? li->Title : "");
 
-        arcemu_TOLOWER(liName);
-        arcemu_TOLOWER(y);
+        Util::StringToLowerCase(liName);
+        Util::StringToLowerCase(y);
 
         bool localizedFound = false;
         if (FindXinYString(x, liName))
@@ -144,7 +144,7 @@ bool ChatHandler::HandleQuestLookupCommand(const char * args, WorldSession * m_s
         SendMultilineMessage(m_session, recout.c_str());
     }
 
-    BlueSystemMessage(m_session, "Search completed in %u ms.", getMSTime() - t);
+    BlueSystemMessage(m_session, "Search completed in %u ms.", Util::getMSTime() - t);
 
     return true;
 }
@@ -1266,11 +1266,11 @@ bool ChatHandler::HandleQuestSpawnCommand(const char * args, WorldSession * m_se
 bool ChatHandler::HandleQuestLoadCommand(const char * args, WorldSession * m_session)
 {
     BlueSystemMessage(m_session, "Load of quests from the database has been initiated ...", "");
-    uint32 t = getMSTime();
+    uint32 t = Util::getMSTime();
 
     sQuestMgr.LoadExtraQuestStuff();
 
-    BlueSystemMessage(m_session, "Load completed in %u ms.", getMSTime() - t);
+    BlueSystemMessage(m_session, "Load completed in %u ms.", Util::getMSTime() - t);
 
     uint64 guid = m_session->GetPlayer()->GetSelection();
     if (guid == 0)

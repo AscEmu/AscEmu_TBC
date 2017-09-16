@@ -69,7 +69,7 @@ bool ChatHandler::HandleAccountMuteCommand(const char* args, WorldSession* m_ses
     *pDuration = 0;
     ++pDuration;
 
-    int32 timeperiod = GetTimePeriodFromString(pDuration);
+    int32 timeperiod = Util::GetTimePeriodFromString(pDuration);
     if (timeperiod <= 0)
         return false;
 
@@ -77,11 +77,11 @@ bool ChatHandler::HandleAccountMuteCommand(const char* args, WorldSession* m_ses
 
     sLogonCommHandler.Account_SetMute(pAccount, banned);
 
-    std::string tsstr = ConvertTimeStampToDataTime(timeperiod + (uint32)UNIXTIME);
+    std::string tsstr = Util::GetDateTimeStringFromTimeStamp(timeperiod + (uint32)UNIXTIME);
     GreenSystemMessage(m_session, "Account '%s' has been muted until %s. The change will be effective immediately.", pAccount,
                        tsstr.c_str());
 
-    sGMLog.writefromsession(m_session, "mutex account %s until %s", pAccount, ConvertTimeStampToDataTime(timeperiod + (uint32)UNIXTIME).c_str());
+    sGMLog.writefromsession(m_session, "mutex account %s until %s", pAccount, Util::GetDateTimeStringFromTimeStamp(timeperiod + (uint32)UNIXTIME).c_str());
 
     WorldSession* pSession = sWorld.FindSessionByName(pAccount);
     if (pSession != NULL)
@@ -149,7 +149,7 @@ bool ChatHandler::HandleAccountBannedCommand(const char* args, WorldSession* m_s
     int32 timeperiod = 0;
     if (pDuration != NULL)
     {
-        timeperiod = GetTimePeriodFromString(pDuration);
+        timeperiod = Util::GetTimePeriodFromString(pDuration);
         if (timeperiod < 0)
             return false;
     }
@@ -162,10 +162,10 @@ bool ChatHandler::HandleAccountBannedCommand(const char* args, WorldSession* m_s
     sLogonCommHandler.Account_SetBanned(pAccount, banned, pReason);
 
     GreenSystemMessage(m_session, "Account '%s' has been banned %s%s for reason : %s. The change will be effective immediately.", pAccount,
-                       timeperiod ? "until " : "forever", timeperiod ? ConvertTimeStampToDataTime(timeperiod + (uint32)UNIXTIME).c_str() : "", pReason);
+                       timeperiod ? "until " : "forever", timeperiod ? Util::GetDateTimeStringFromTimeStamp(timeperiod + (uint32)UNIXTIME).c_str() : "", pReason);
 
     sWorld.DisconnectUsersWithAccount(pAccount, m_session);
-    sGMLog.writefromsession(m_session, "banned account %s until %s", pAccount, timeperiod ? ConvertTimeStampToDataTime(timeperiod + (uint32)UNIXTIME).c_str() : "permanent");
+    sGMLog.writefromsession(m_session, "banned account %s until %s", pAccount, timeperiod ? Util::GetDateTimeStringFromTimeStamp(timeperiod + (uint32)UNIXTIME).c_str() : "permanent");
     return true;
 }
 

@@ -462,8 +462,8 @@ void LogonCommHandler::TestConsoleLogon(std::string & username, std::string & pa
     std::string newpass = password;
     std::string srpstr;
 
-    arcemu_TOUPPER(newuser);
-    arcemu_TOUPPER(newpass);
+    Util::StringToUpperCase(newuser);
+    Util::StringToUpperCase(newpass);
 
     srpstr = newuser + ":" + newpass;
 

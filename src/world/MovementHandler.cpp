@@ -292,7 +292,7 @@ void WorldSession::HandleMovementOpcodes(WorldPacket & recv_data)
             _player->moving = true;
 
             _player->ascendStartHeight = movement_info.z;
-            _player->ascendStartTime = getMSTime();
+            _player->ascendStartTime = Util::getMSTime();
         } break;
         case MSG_MOVE_START_BACKWARD:
         {
@@ -300,7 +300,7 @@ void WorldSession::HandleMovementOpcodes(WorldPacket & recv_data)
             _player->moving = true;
 
             _player->ascendStartHeight = movement_info.z;
-            _player->ascendStartTime = getMSTime();
+            _player->ascendStartTime = Util::getMSTime();
         } break;
         case MSG_MOVE_START_STRAFE_LEFT:
         case MSG_MOVE_START_STRAFE_RIGHT:
@@ -309,7 +309,7 @@ void WorldSession::HandleMovementOpcodes(WorldPacket & recv_data)
             _player->strafing = true;
 
             _player->ascendStartHeight = movement_info.z;
-            _player->ascendStartTime = getMSTime();
+            _player->ascendStartTime = Util::getMSTime();
         } break;
         case MSG_MOVE_JUMP:
         {
@@ -323,7 +323,7 @@ void WorldSession::HandleMovementOpcodes(WorldPacket & recv_data)
             _player->moving = false;
 
             _player->ascendStartHeight = movement_info.z;
-            _player->ascendStartTime = getMSTime();
+            _player->ascendStartTime = Util::getMSTime();
         } break;
         case MSG_MOVE_STOP_STRAFE:
         {
@@ -331,7 +331,7 @@ void WorldSession::HandleMovementOpcodes(WorldPacket & recv_data)
             _player->strafing = false;
 
             _player->ascendStartHeight = movement_info.z;
-            _player->ascendStartTime = getMSTime();
+            _player->ascendStartTime = Util::getMSTime();
         } break;
         case MSG_MOVE_FALL_LAND:
         {
@@ -343,7 +343,7 @@ void WorldSession::HandleMovementOpcodes(WorldPacket & recv_data)
         { // Dword added this case for swimming (up)
             _player->ascending = true;
             _player->ascendStartHeight = movement_info.z;
-            _player->ascendStartTime = getMSTime();
+            _player->ascendStartTime = Util::getMSTime();
             moved = false;
         } break;
         case MSG_MOVE_STOP_ASCEND:
@@ -386,7 +386,7 @@ void WorldSession::HandleMovementOpcodes(WorldPacket & recv_data)
         // simplified: just take the fastest speed. less chance of fuckups too
         float speed = (_player->flying_aura) ? _player->m_flySpeed : (_player->m_swimSpeed > _player->m_runSpeed) ? _player->m_swimSpeed : _player->m_runSpeed;
 
-        _player->SDetector->AddSample(movement_info.x, movement_info.y, getMSTime(), speed);
+        _player->SDetector->AddSample(movement_info.x, movement_info.y, Util::getMSTime(), speed);
 
         if (_player->SDetector->IsCheatDetected())
             _player->SDetector->ReportCheater(_player);
@@ -808,7 +808,7 @@ void MovementInfo::init(WorldPacket & data)
 
 void MovementInfo::write(WorldPacket & data)
 {
-    data << flags << unk_230 << getMSTime();
+    data << flags << unk_230 << Util::getMSTime();
 
     data << x << y << z << orientation;
 

@@ -21,7 +21,7 @@
 #define __SPELLSTORE_H
 
 #include "Common.h"
-#include "Util.h"
+#include "Util.hpp"
 
 #include "DBC/DBCGlobals.hpp"
 

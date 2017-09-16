@@ -35,7 +35,7 @@ WorldSession::WorldSession(uint32 id, std::string Name, WorldSocket *sock) : _pl
 _logoutTime(0), permissions(NULL), permissioncount(0), _loggingOut(false), instanceId(0)
 {
     memset(movement_packet, 0, sizeof(movement_packet));
-    m_currMsTime = getMSTime();
+    m_currMsTime = Util::getMSTime();
     bDeleted = false;
     m_bIsWLevelSet = false;
     floodLines = 0;
@@ -93,7 +93,7 @@ WorldSession::~WorldSession()
 
 int WorldSession::Update(uint32 InstanceID)
 {
-    m_currMsTime = getMSTime();
+    m_currMsTime = Util::getMSTime();
 
 #ifndef CLUSTERING
     if (!((++_updatecount) % 2) && _socket)

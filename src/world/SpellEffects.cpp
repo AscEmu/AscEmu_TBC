@@ -2804,7 +2804,7 @@ void Spell::SpellEffectLeap(uint32 i) // Leap
 
         WorldPacket data(SMSG_MOVE_KNOCK_BACK, 50);
         data << p_caster->GetNewGUID();
-        data << getMSTime();
+        data << Util::getMSTime();
         data << cosf(p_caster->GetOrientation()) << sinf(p_caster->GetOrientation());
         data << radius;
         data << float(-10.0f);
@@ -4285,7 +4285,7 @@ void Spell::SpellEffectInterruptCast(uint32 i) // Interrupt Cast
             if (DurationModifier >= -100)
                 duration = (duration*(100 + DurationModifier)) / 100;
         }
-        unitTarget->SchoolCastPrevent[school] = duration + getMSTime();
+        unitTarget->SchoolCastPrevent[school] = duration + Util::getMSTime();
         // TODO: visual!
     }
 }
@@ -5431,7 +5431,7 @@ void Spell::SpellEffectCharge(uint32 i)
     data << m_caster->GetPositionX();
     data << m_caster->GetPositionY();
     data << m_caster->GetPositionZ();
-    data << getMSTime();
+    data << Util::getMSTime();
     data << uint8(0x00);
     data << uint32(0x00000100);
     data << time;
@@ -5477,7 +5477,7 @@ void Spell::SpellEffectPlayerPull(uint32 i)
     WorldPacket data(SMSG_MONSTER_MOVE, 60);
     data << p_target->GetNewGUID();
     data << p_target->GetPositionX() << p_target->GetPositionY() << p_target->GetPositionZ();
-    data << getMSTime();
+    data << Util::getMSTime();
     data << uint8(4);
     data << pullO;
     data << uint32(0x00000100);
@@ -5568,7 +5568,7 @@ void Spell::SpellEffectKnockBack(uint32 i)
 
     WorldPacket data(SMSG_MOVE_KNOCK_BACK, 50);
     data << unitTarget->GetNewGUID();
-    data << getMSTime();
+    data << Util::getMSTime();
     data << dy << dx;
     data << value1;
     data << -value2;

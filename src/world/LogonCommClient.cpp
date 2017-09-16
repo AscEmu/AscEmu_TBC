@@ -137,11 +137,7 @@ void LogonCommClientSocket::HandleRegister(WorldPacket& recvData)
     std::string realmname;
     recvData >> error >> realmlid >> realmname;
 
-#ifdef WIN32
-    Log.Success("LogonCommClient", "Realm `%s` (UNICODE) registered as realm %u.", _StringToANSI(realmname.c_str()), realmlid);
-#else
-    Log.Success("LogonCommClient", "Realm `%s` registered as realm %u.", realmname.c_str(), realmlid);
-#endif
+    Log.Success("LogonCommClient", "Realm `%s` (UNICODE) registered as realm %u.", realmname.c_str(), realmlid);
 
     LogonCommHandler::getSingleton().AdditionAck(_id, realmlid);
     realm_ids.insert(realmlid);
@@ -172,13 +168,13 @@ void LogonCommClientSocket::HandleSessionInfo(WorldPacket& recvData)
 
 void LogonCommClientSocket::HandlePong(WorldPacket& recvData)
 {
-    latency = getMSTime() - pingtime;
+    latency = Util::getMSTime() - pingtime;
     last_pong = (uint32)UNIXTIME;
 }
 
 void LogonCommClientSocket::SendPing()
 {
-    pingtime = getMSTime();
+    pingtime = Util::getMSTime();
     WorldPacket data(LRCMSG_LOGON_PING_STATUS, 4);
     SendPacket(&data, false);
 
@@ -273,7 +269,7 @@ void LogonCommClientSocket::UpdateAccountCount(uint32 account_id, uint8 add)
 
 void LogonCommClientSocket::HandleRequestAccountMapping(WorldPacket& recvData)
 {
-    uint32 t = getMSTime();
+    uint32 t = Util::getMSTime();
     uint32 realm_id;
     uint32 account_id;
     QueryResult* result;
@@ -334,7 +330,7 @@ void LogonCommClientSocket::HandleRequestAccountMapping(WorldPacket& recvData)
 
         uncompressed.clear();
     }
-    Log.Notice("LogonCommClient", "Build character mapping in %ums. (%u)", getMSTime() - t, mapping_to_send.size());
+    Log.Notice("LogonCommClient", "Build character mapping in %ums. (%u)", Util::getMSTime() - t, mapping_to_send.size());
 }
 
 void LogonCommClientSocket::CompressAndSend(ByteBuffer& uncompressed)

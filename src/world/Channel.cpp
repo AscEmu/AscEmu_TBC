@@ -28,7 +28,7 @@ void Channel::LoadConfSettings()
 {
     std::string BannedChannels = Config.MainConfig.GetStringDefault("Channels", "BannedChannels", "");
     m_confSettingLock.Acquire();
-    m_bannedChannels = StrSplit(BannedChannels, ";");
+    m_bannedChannels = Util::SplitStringBySeperator(BannedChannels, ";");
     m_confSettingLock.Release();
 }
 
