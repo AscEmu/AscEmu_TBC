@@ -651,15 +651,15 @@ void LogonCommServerSocket::HandleRequestCheckAccount(WorldPacket & recvData)
     uint32 method;
     recvData >> method;
 
+    std::string account_name;           // account to check
+    std::string request_name;           // account request the check
+
+    WorldPacket data(LRSMSG_ACCOUNT_RESULT, 300);
+
     switch (method)
     {
         case 1:            // account exist?
         {
-            // Prepare our "send-back" packet
-            WorldPacket data(LRSMSG_ACCOUNT_RESULT, 300);
-
-            std::string account_name;           // account to check
-            std::string request_name;           // account request the check
             std::string additional;             // additional data
 
             recvData >> account_name;
@@ -673,14 +673,13 @@ void LogonCommServerSocket::HandleRequestCheckAccount(WorldPacket & recvData)
             // remember we expect this in uppercase
             arcemu_TOUPPER(account_name);
 
-            auto account_check = sAccountMgr.GetAccount(account_name);
+            Account* account_check = sAccountMgr.GetAccount(account_name);
             if (account_check == nullptr)
             {
                 // Send packet "account not available"
                 data << uint8(1);
                 data << account_name_save;  // requested account
                 data << request_name;       // account_name for receive the session
-                SendPacket(&data);
             }
             else if (!additional_data)
             {
@@ -688,7 +687,6 @@ void LogonCommServerSocket::HandleRequestCheckAccount(WorldPacket & recvData)
                 data << uint8(2);
                 data << account_name_save;  // requested account
                 data << request_name;       // account_name for receive the session
-                SendPacket(&data);
             }
             else
             {
@@ -697,11 +695,38 @@ void LogonCommServerSocket::HandleRequestCheckAccount(WorldPacket & recvData)
                 data << account_name_save;  // requested account
                 data << request_name;       // account_name for receive the session
                 data << additional;         // additional data
-                SendPacket(&data);
             }
-        }
-        break;
+        } break;
+        case 2:            // get account id
+        {
+            recvData >> account_name;
+            recvData >> request_name;
+
+            std::string account_name_save = account_name;  // save original account_name to check
+
+            // remember we expect this in uppercase
+            arcemu_TOUPPER(account_name);
+
+            Account* account_check = sAccountMgr.GetAccount(account_name);
+            if (account_check == nullptr)
+            {
+                // Send packet "account not available"
+                data << uint8(1);
+                data << account_name_save;  // requested account
+                data << request_name;       // account_name for receive the session
+            }
+            else
+            {
+                // Send packet "account id"
+                data << uint8(4);
+                data << account_name_save;  // requested account
+                data << request_name;       // account_name for receive the session
+                data << uint32(account_check->AccountId);
+            }
+        } break;
     }
+
+    SendPacket(&data);
 }
 
 void LogonCommServerSocket::HandlePopulationRespond(WorldPacket & recvData)
