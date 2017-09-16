@@ -1,4 +1,4 @@
-﻿# ![logo](http://ascemu.org/style/img/logo.png)
+﻿# ![logo](http://ascemu.org/images/logo.png)
 ﻿
 [![Travis Status](https://travis-ci.org/AscEmu/AscEmu_TBC.svg?branch=master)](https://travis-ci.org/AscEmu/AscEmu_TBC)
 [![Coverity Snac](https://scan.coverity.com/projects/9005/badge.svg)](https://scan.coverity.com/projects/9005)
