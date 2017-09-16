@@ -277,7 +277,7 @@ void WorldSocket::InformationRetreiveCallback(WorldPacket & recvData, uint32 req
     uint32 i;
 
     recvData >> AccountID >> AccountName >> GMFlags >> AccountFlags;
-    ForcedPermissions = sLogonCommHandler.GetForcedPermissions(AccountName);
+    ForcedPermissions = sLogonCommHandler.GetForcedPermissions(AccountID);
     if (ForcedPermissions != NULL)
         GMFlags.assign(ForcedPermissions->c_str());
 
