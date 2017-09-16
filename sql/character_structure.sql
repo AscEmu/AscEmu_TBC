@@ -1,7 +1,7 @@
 /*
 ********************************************************************
 AscEmu char structure
-Last update: 11/10/2015
+Last update: 9/13/2017
 *********************************************************************
 */
 
@@ -25,14 +25,14 @@ CREATE TABLE `account_data` (
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- ----------------------------
--- Table structure for account_forced_permissions
+-- Table structure for account_permissions
 -- ----------------------------
-DROP TABLE IF EXISTS `account_forced_permissions`;
-CREATE TABLE `account_forced_permissions` (
-  `login` varchar(50) NOT NULL,
+CREATE TABLE `account_permissions` (
+  `id` int(10) unsigned NOT NULL,
   `permissions` varchar(100) NOT NULL,
-  PRIMARY KEY (`login`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+  `name` varchar(50) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- ----------------------------
 -- Table structure for arenateams
